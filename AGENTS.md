@@ -1,3 +1,24 @@
+# BANDAL Personal Fork Scope
+
+This checkout belongs to `delimune04/blueprintreboot-bandal`, an independent
+personal demonstration fork. `Lilshawn-LSY/BluePrintReboot` is read-only upstream.
+Never commit, push, create a branch or PR, or change settings in the upstream
+repository. All requested personal edits belong only to this fork.
+
+The hosted demo is built with `cd frontend && npm run demo:build` and mounted at
+`https://bandal.app/ku-ai/`. The normal local Python/Vinext application remains
+the default runtime. Demo mode is opt-in and stores sample-workspace changes in
+this browser only; it must never claim server saves, real publication data, or
+an LLM integration. Preserve upstream author attribution.
+
+Do not reuse the upstream `frontend/.openai/hosting.json` Site identity. Hosting
+publication belongs to the BANDAL Site checkout, with current source fetched
+before a bounded update. Preserve the homepage and unrelated services.
+
+When opening this fork, configure `git config core.hooksPath .bandal-hooks`.
+The tracked pre-push hook permits only the personal repository. Connector API
+writes must independently verify the exact personal repository target.
+
 # BluePrintReboot Agent Guide
 
 

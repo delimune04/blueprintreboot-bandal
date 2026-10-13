@@ -13,6 +13,9 @@ import { StatusBadge } from "../components/StatusBadge";
 import { useApiResource } from "../hooks/useApiResource";
 import { useModalFocus } from "../hooks/useModalFocus";
 import { ApiClientError, apiClient } from "../lib/api/client";
+import { isDemoEnabled } from "../lib/demo/adapter.mjs";
+
+const DEMO_MODE = isDemoEnabled();
 import type { CanonicalTag, EditablePaperMetadata, MetadataEnrichmentPreview, PaperTagCommandResponse, ReaderSnapshot, TagCandidateCollection } from "../lib/api/types";
 import {
   applyMetadataEnrichmentCommandResult,
@@ -1210,7 +1213,7 @@ function ReaderWorkspace({ snapshot }: { snapshot: ReaderSnapshot }) {
               <button className="reader-control" type="button" disabled={!metadataChanged.length || mutationBusy || Boolean(editor.metadata.activeSave) || editor.metadata.saveState === "changed_elsewhere"} onClick={saveMetadata}>
                 <Save size={15} />{editor.metadata.saveState === "saving" ? "Saving…" : "Save Metadata"}
               </button>
-              <button ref={metadataTriggerRef} className="reader-control reader-control--secondary" type="button" disabled={enrichment.status === "saving" || mutationBusy} onClick={() => { setMetadataReviewOpen(true); void fetchMetadataCandidates(enrichment.status === "conflict"); }}><RotateCcw size={15} />{enrichment.status === "loading" ? "Checking…" : "Find updates"}</button>
+              <button ref={metadataTriggerRef} className="reader-control reader-control--secondary" type="button" disabled={DEMO_MODE || enrichment.status === "saving" || mutationBusy} title={DEMO_MODE ? "외부 메타데이터 조회는 로컬 앱에서 이용할 수 있습니다." : undefined} onClick={() => { setMetadataReviewOpen(true); void fetchMetadataCandidates(enrichment.status === "conflict"); }}><RotateCcw size={15} />{enrichment.status === "loading" ? "Checking…" : "Find updates"}</button>
               {editor.metadata.saveState === "changed_elsewhere" ? <>
                 <button className="reader-control reader-control--secondary" type="button" disabled={editor.metadata.remoteRevision === editor.metadata.revision} onClick={() => updateMetadata((current) => {
                   const kept = keepMyRevisionDraft(current);
@@ -1372,7 +1375,7 @@ function ReaderWorkspace({ snapshot }: { snapshot: ReaderSnapshot }) {
                     {editor.tags.status === "conflict" ? <button className="reader-control reader-control--secondary" type="button" onClick={reloadPaperTags}><RotateCcw size={15} />Reload tags</button> : null}
                   </div>
                   <div ref={candidateReviewSectionRef}>
-                    <div className="reader-note__heading"><h3>Review suggestions</h3><button className="reader-control reader-control--secondary" type="button" disabled={candidateReview.status === "loading" || mutationBusy} onClick={() => generateTagCandidates(false)}><RotateCcw size={15} />{candidateReview.status === "loading" ? "Finding…" : "Suggest tags"}</button></div>
+                    <div className="reader-note__heading"><h3>Review suggestions</h3><button className="reader-control reader-control--secondary" type="button" disabled={DEMO_MODE || candidateReview.status === "loading" || mutationBusy} title={DEMO_MODE ? "새 태그 추천 생성은 로컬 앱에서 이용할 수 있습니다." : undefined} onClick={() => generateTagCandidates(false)}><RotateCcw size={15} />{candidateReview.status === "loading" ? "Finding…" : "Suggest tags"}</button></div>
                     <p className="reader-editor__status" role="status" aria-live="polite">{candidateReview.message}</p>
                     {availableSuggestions.length ? (
                       <div className="reader-suggestion-list" aria-label="Suggested tags to review">

@@ -1,5 +1,6 @@
 import type { ArchivePaperResponse, CandidateSummary, CanonicalTagGovernanceResponse, CanonicalTagGovernanceSnapshot, DashboardSnapshot, EditableNoteBlockContent, EditablePaperMetadata, EditableProjectMetadata, FullTextDocument, FullTextStatus, HealthSummary, LibraryStatus, ManagedPdfImportResponse, ManagedPdfReconnectResponse, ManagedPdfScanResponse, MetadataCommandResponse, MetadataEnrichmentPreview, NoteBlockCollection, NoteBlockCommandResponse, NoteBlockLinkCommandResponse, PaginatedPaperList, PaginatedProjectList, PaginatedTagList, PaperDetail, PaperLinkCommandResponse, PaperTagCommandResponse, ProjectCommandResponse, ProjectDetail, ProjectLinkType, ReaderSnapshot, ReadingNoteCommandResponse, ReadingStatusCommandResponse, RemoveManagedPdfResponse, SettingsSummary, TagCandidateApplyResponse, TagCandidateCollection, TagCandidateReviewQueue } from "./types";
 import { collectAllPaginatedItems } from "./pagination.mjs";
+import { demoPdfUrl, demoRequest, isDemoEnabled } from "../demo/adapter.mjs";
 
 const API_BASE_URL = (process.env.NEXT_PUBLIC_BLUEPRINT_API_BASE_URL || "/api/blueprint").replace(/\/$/, "");
 
@@ -24,18 +25,25 @@ async function request<T>(
         ? options.body as FormData
         : JSON.stringify(options.body);
     if (options.body !== undefined && !isFormData) headers["Content-Type"] = "application/json";
-    response = await fetch(`${API_BASE_URL}${path}`, {
+    const init: RequestInit = {
       method: options.method ?? "GET",
       headers,
       body: requestBody,
       cache: "no-store",
       signal: options.signal,
-    });
+    };
+    response = isDemoEnabled()
+      ? await demoRequest(path, init)
+      : await fetch(`${API_BASE_URL}${path}`, init);
   } catch {
     throw new ApiClientError("The local BluePrintReboot API could not be reached.", "unavailable");
   }
 
   if (!response.ok) {
+    if (response.status === 501) {
+      const failure = await response.json().catch(() => ({})) as { detail?: string };
+      throw new ApiClientError(failure.detail || "This operation is unavailable in the browser demonstration.", "error", 501);
+    }
     if (response.status === 503) {
       const failureState = response.headers.get("X-Blueprint-Error-State");
       if (failureState === "api-unavailable") {
@@ -55,6 +63,10 @@ async function request<T>(
 }
 
 export function paperPdfUrl(paperId: string): string {
+  if (isDemoEnabled()) {
+    const base = (process.env.NEXT_PUBLIC_BANDAL_DEMO_BASE || "").replace(/\/$/, "");
+    return `${base}${demoPdfUrl(paperId)}`;
+  }
   return `${API_BASE_URL}/papers/${encodeURIComponent(paperId)}/pdf`;
 }
 

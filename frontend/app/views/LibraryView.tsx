@@ -12,6 +12,9 @@ import { Toolbar } from "../components/Toolbar";
 import { useApiResource } from "../hooks/useApiResource";
 import { useModalFocus } from "../hooks/useModalFocus";
 import { ApiClientError, apiClient } from "../lib/api/client";
+import { isDemoEnabled } from "../lib/demo/adapter.mjs";
+
+const DEMO_MODE = isDemoEnabled();
 import { patchReadingStatusCollection, readingStatusChangeRequiresCollectionRefresh } from "../lib/library/reading-status-collection.mjs";
 import type { EditablePaperMetadata, ManagedPdfImportResponse, ManagedPdfScanResponse, MetadataEnrichmentPreview } from "../lib/api/types";
 
@@ -127,10 +130,12 @@ export function LibraryView() {
     finally { setImportBusy(false); }
   };
   const onDragEnter = (event: DragEvent<HTMLDivElement>) => {
+    if (DEMO_MODE) { event.preventDefault(); return; }
     if (!event.dataTransfer.types.includes("Files")) return;
     event.preventDefault(); dragDepthRef.current += 1; setDragActive(true);
   };
   const onDragOver = (event: DragEvent<HTMLDivElement>) => {
+    if (DEMO_MODE) { event.preventDefault(); return; }
     if (event.dataTransfer.types.includes("Files")) event.preventDefault();
   };
   const onDragLeave = (event: DragEvent<HTMLDivElement>) => {
@@ -139,6 +144,7 @@ export function LibraryView() {
     if (dragDepthRef.current <= 0) { dragDepthRef.current = 0; setDragActive(false); }
   };
   const onDrop = (event: DragEvent<HTMLDivElement>) => {
+    if (DEMO_MODE) { event.preventDefault(); return; }
     if (!event.dataTransfer.files.length) return;
     event.preventDefault(); dragDepthRef.current = 0; setDragActive(false);
     void uploadPdfs(Array.from(event.dataTransfer.files));
@@ -195,7 +201,7 @@ export function LibraryView() {
 
   return (
     <div className="page-stack library-page" onDragEnter={onDragEnter} onDragOver={onDragOver} onDragLeave={onDragLeave} onDrop={onDrop}>
-      <PageHeader title="Library" actions={<button ref={importTriggerRef} className="reader-control" type="button" onClick={openImport} disabled={scanBusy || importBusy || Boolean(reconnectBusy)}>{scanBusy ? "Scanning PDFs…" : "Scan / import"}</button>} />
+      <PageHeader title="Library" actions={<button ref={importTriggerRef} className="reader-control" type="button" onClick={openImport} disabled={DEMO_MODE || scanBusy || importBusy || Boolean(reconnectBusy)} title={DEMO_MODE ? "웹 시연에서는 제공된 샘플 PDF를 사용합니다. PDF 가져오기는 로컬 앱에서 이용할 수 있습니다." : undefined}>{scanBusy ? "Scanning PDFs…" : "Scan / import"}</button>} />
       {importResult ? <div className="operation-result-strip" role="status"><span>Import completed · {importResult.imported_count} imported · {importResult.results.filter((item) => item.status === "already_registered" || item.status === "duplicate_content").length} duplicate{importResult.results.filter((item) => item.status === "already_registered" || item.status === "duplicate_content").length === 1 ? "" : "s"}</span><button className="text-link" type="button" onClick={() => setShowImport(true)}>Details</button><button className="icon-button" type="button" aria-label="Dismiss import result" onClick={() => setImportResult(null)}>×</button></div> : null}
       {dragActive ? <div className="library-drop-overlay" role="status" aria-live="polite"><strong>Drop PDFs to import</strong><span>PDF files only</span></div> : null}
       {attention ? <div className="library-attention" role="alert"><div><strong>Library needs attention</strong><p>{libraryAttentionMessage(resource.data)}</p></div><Link className="text-link" href="/settings/diagnostics">Review Diagnostics</Link></div> : null}

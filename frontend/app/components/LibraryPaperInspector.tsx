@@ -8,9 +8,12 @@ import { FirstPageThumbnail } from "./FirstPageThumbnail";
 import { StatusBadge } from "./StatusBadge";
 import { useApiResource } from "../hooks/useApiResource";
 import { apiClient } from "../lib/api/client";
+import { isDemoEnabled } from "../lib/demo/adapter.mjs";
 import { patchPaperReadingStatus } from "../lib/library/reading-status-collection.mjs";
 import { formatAuthorSummary } from "../lib/presentation";
 import { abstractDisplayParagraphs } from "../lib/abstract-display.mjs";
+
+const DEMO_MODE = isDemoEnabled();
 
 function projectContext(count: number): string {
   if (count === 0) return "Not linked to a project";
@@ -113,7 +116,7 @@ export function LibraryPaperInspector({ paperId, onDismiss, onEnrich, enrichment
               <div className="library-paper-inspector__actions">
                 {!resource.data.missing_pdf && resource.data.relative_pdf_path ? <Link className="reader-action" href={`/papers/${encodeURIComponent(resource.data.paper_id)}/reader`}><BookOpen size={16} />Open Reader</Link> : null}
                 <Link className="text-link" href={`/papers/${encodeURIComponent(resource.data.paper_id)}`}>View Paper Detail</Link>
-                <button className="reader-control reader-control--secondary" type="button" disabled={enrichmentBusy} onClick={() => onEnrich(resource.data.paper_id)}>{enrichmentBusy ? "Loading…" : "Find metadata"}</button>
+                <button className="reader-control reader-control--secondary" type="button" disabled={DEMO_MODE || enrichmentBusy} title={DEMO_MODE ? "외부 메타데이터 조회는 로컬 앱에서 이용할 수 있습니다." : undefined} onClick={() => onEnrich(resource.data.paper_id)}>{enrichmentBusy ? "Loading…" : "Find metadata"}</button>
               </div>
             </div>
           </div>
@@ -136,7 +139,7 @@ export function LibraryPaperInspector({ paperId, onDismiss, onEnrich, enrichment
           <section className="library-paper-inspector__section library-paper-inspector__removal" aria-labelledby="selected-paper-removal">
             <h3 id="selected-paper-removal">Remove safely</h3>
             <p>Remove PDF file creates a verified recovery copy first and leaves the Paper as Missing PDF.</p>
-            <button className="reader-control reader-control--secondary" type="button" disabled={removalBusy || resource.data.missing_pdf} onClick={() => void removePdf()}>{removalBusy ? "Working…" : "Remove PDF file"}</button>
+            <button className="reader-control reader-control--secondary" type="button" disabled={DEMO_MODE || removalBusy || resource.data.missing_pdf} title={DEMO_MODE ? "샘플 PDF는 웹 시연에서 삭제하지 않습니다." : undefined} onClick={() => void removePdf()}>{removalBusy ? "Working…" : "Remove PDF file"}</button>
             <p>Remove Paper from Library archives it from active views. It does not delete the managed PDF or any Paper-owned research.</p>
             <button className="reader-control reader-control--secondary" type="button" disabled={removalBusy || resource.data.archived} onClick={() => void archivePaper()}>{resource.data.archived ? "Archived" : "Remove Paper from Library"}</button>
             <p className="library-paper-inspector__context">Permanent deletion is intentionally unavailable in this release.</p>

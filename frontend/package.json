@@ -9,6 +9,8 @@
     "dev": "vinext dev",
     "build": "vinext build",
     "start": "vinext start",
+    "demo:build": "vite build --config demo.vite.config.ts",
+    "demo:test": "node --test tests/bandal-demo.test.mjs",
     "test": "npm run build && node --test tests/app-shell.test.mjs tests/rendered-html.test.mjs tests/api-bridge.test.mjs tests/library-paper-workflow.test.mjs tests/pdf-scan-import-workflow.test.mjs tests/projects-tags-read-parity.test.mjs tests/settings-health-read-parity.test.mjs tests/workspace-information-architecture.test.mjs tests/v163-reader-ux-polish.test.mjs tests/v164-visual-hierarchy-density.test.mjs tests/v165-visual-language-design-system.test.mjs tests/v165-final-polish-workflow.test.mjs tests/semantic-tones-and-library-status.test.mjs tests/first-page-thumbnail.test.mjs tests/pdf-reader-controller.test.mjs tests/full-text-workflow.test.mjs tests/reader-editor-state.test.mjs tests/revision-draft.test.mjs tests/note-formatting.test.mjs tests/project-editor-state.test.mjs tests/project-write-paper-links.test.mjs tests/note-block-editor-state.test.mjs tests/note-block-workflow.test.mjs tests/reliability-hardening.test.mjs tests/reader-workflow-interactions.test.mjs",
     "lint": "eslint . --ignore-pattern dist --ignore-pattern .next"
   },
