@@ -129,6 +129,34 @@ test("workflow displays missing units and frozen context, and exposes disabled a
   for (const expected of ["Fixture method", "Fixture conditions", "Fixture rationale", "42", "reported"]) assert.ok(frozen.includes(expected), expected);
 });
 
+test("comparison, action and originating-decision jumps scroll without replacing the hash-router route", t => {
+  const originalDocument = Object.getOwnPropertyDescriptor(globalThis, "document");
+  const originalWindow = Object.getOwnPropertyDescriptor(globalThis, "window");
+  const calls = [], route = "#/projects/demo-storage/review";
+  const location = {};
+  Object.defineProperty(location, "hash", { get: () => route, set() { assert.fail("A record jump must not replace the route hash"); } });
+  Object.defineProperty(globalThis, "window", { configurable: true, value: { location } });
+  Object.defineProperty(globalThis, "document", { configurable: true, value: { getElementById(id) { return { scrollIntoView(options) { calls.push({ id, options }); } }; } } });
+  t.after(() => {
+    if (originalDocument) Object.defineProperty(globalThis, "document", originalDocument); else delete globalThis.document;
+    if (originalWindow) Object.defineProperty(globalThis, "window", originalWindow); else delete globalThis.window;
+  });
+  const comparison = newWorkflowRow("comparison"), decision = newWorkflowRow("decision"), handoff = newWorkflowRow("handoff");
+  handoff.context.origin_decision_id = decision.id;
+  const props = { rows: [comparison, decision, handoff], readonly: false, ko: false, update() {}, add() {} };
+  const anchors = [...descendants(ReviewWorkflow(props)), ...descendants(ReviewContextEditor({ ...props, row: handoff }))].filter(node => node.type === "a");
+  assert.equal(anchors.length, 3);
+  for (const anchor of anchors) {
+    let prevented = false;
+    anchor.props.onClick({ preventDefault() { prevented = true; } });
+    assert.equal(prevented, true);
+    assert.equal(calls.at(-1).id, anchor.props.href.slice(1));
+    assert.deepEqual(calls.at(-1).options, { behavior: "smooth", block: "start" });
+    assert.equal(window.location.hash, route);
+  }
+  assert.deepEqual(calls.map(call => call.id), [comparison.id, handoff.id, decision.id].map(id => `review-${id}`));
+});
+
 test("archived guest projects reject workflow mutations without replacing saved data", async t => {
   const { core, session } = setup(t);
   const seed = JSON.parse(core.get(DEMO_STORAGE_KEY)); seed.projects[0].status = "archived";
