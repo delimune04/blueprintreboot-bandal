@@ -1014,16 +1014,28 @@ def adapt_settings_summary(source: Mapping[str, Any]) -> SettingsSummaryResponse
     )
     snapshot_available = backup_source.get("snapshot_available")
     last_updated_at = backup_source.get("last_updated_at")
+    evidence_state = backup_source.get("evidence_state")
+    snapshot_type = backup_source.get("snapshot_type")
+    if evidence_state is not None and evidence_state not in {"absent", "invalid", "stale", "verified_full", "verified_light", "unavailable"}:
+        raise SettingsContractError("Unsupported backup verification evidence.")
+    if snapshot_type is not None and snapshot_type not in {"full", "light"}:
+        raise SettingsContractError("Unsupported backup snapshot type.")
     if backup_state == "healthy":
         if snapshot_available is not True:
             raise SettingsContractError("Healthy backup evidence must be present.")
         safe_last_updated_at = _safe_utc_timestamp(last_updated_at)
-        backup_summary = "Backup snapshot evidence is available."
+        backup_summary = "A verified full backup snapshot is available." if evidence_state == "verified_full" else "Backup snapshot evidence is available."
     elif backup_state == "warning":
-        if snapshot_available is not False or last_updated_at is not None:
-            raise SettingsContractError("Absent backup evidence must not include a timestamp.")
-        safe_last_updated_at = None
-        backup_summary = "No backup snapshot evidence is available."
+        if evidence_state in {"stale", "verified_light"}:
+            if snapshot_available is not True:
+                raise SettingsContractError("Verified backup evidence must be present.")
+            safe_last_updated_at = _safe_utc_timestamp(last_updated_at)
+            backup_summary = "The verified backup is stale; create a current snapshot." if evidence_state == "stale" else "A verified light backup is available; PDF files are not included."
+        else:
+            if snapshot_available is not False or last_updated_at is not None:
+                raise SettingsContractError("Absent backup evidence must not include a timestamp.")
+            safe_last_updated_at = None
+            backup_summary = "No verified backup snapshot is available." if evidence_state == "invalid" else "No backup snapshot evidence is available."
     else:
         if snapshot_available is not None or last_updated_at is not None:
             raise SettingsContractError("Unavailable backup evidence must use null values.")
@@ -1054,6 +1066,8 @@ def adapt_settings_summary(source: Mapping[str, Any]) -> SettingsSummaryResponse
                 snapshot_available=snapshot_available,
                 last_updated_at=safe_last_updated_at,
                 summary=backup_summary,
+                evidence_state=evidence_state,
+                snapshot_type=snapshot_type,
             ),
         )
     except ValueError:

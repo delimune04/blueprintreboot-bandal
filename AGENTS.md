@@ -5,11 +5,21 @@ personal demonstration fork. `Lilshawn-LSY/BluePrintReboot` is read-only upstrea
 Never commit, push, create a branch or PR, or change settings in the upstream
 repository. All requested personal edits belong only to this fork.
 
-The hosted demo is built with `cd frontend && npm run demo:build` and mounted at
-`https://bandal.app/ku-ai/`. The normal local Python/Vinext application remains
-the default runtime. Demo mode is opt-in and stores sample-workspace changes in
-this browser only; it must never claim server saves, real publication data, or
-an LLM integration. Preserve upstream author attribution.
+The Labvium (랩비움) web build uses `cd frontend && npm run demo:build` and is
+mounted at `https://bandal.app/ku-ai/`. Its authenticated transport uses the
+owner-isolated Worker API under `/ku-ai/api`, D1 records, and private R2 PDFs.
+Anonymous browser workspaces use IndexedDB and stay separate from cloud data.
+Never claim cloud saves while using browser transport, invent publication or
+author metrics, or imply an AI model is connected without a configured key.
+The normal local Python/Vinext application remains supported. Preserve upstream
+author attribution, stable data IDs, existing note templates, and old drafts.
+
+The user authorized this personal fork's rebrand, bilingual interface, hosted
+feature parity, research pages, scholarly discovery, and handoff workflows.
+Those explicit requirements override upstream local-only scope restrictions
+below. Company expansion proposals remain proposals until implemented. Source
+updates, commits/pushes to this personal fork, and BANDAL publication are within
+this task's authorization; upstream remains strictly read-only.
 
 Do not reuse the upstream `frontend/.openai/hosting.json` Site identity. Hosting
 publication belongs to the BANDAL Site checkout, with current source fetched

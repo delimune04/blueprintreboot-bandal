@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { readFile } from "node:fs/promises";
+import { readFile } from "./ui-source.mjs";
 import test from "node:test";
 
 const sources = Promise.all([
@@ -47,7 +47,9 @@ test("Settings distinguishes verified empty and zero states from unavailable dia
   assert.match(view, /state === "empty"/);
   assert.match(view, /Workspace is empty/);
   assert.match(view, /state === "unavailable" \|\| count === null/);
-  assert.match(view, />Unavailable</);
+  assert.match(view, /<span className="muted-text">\{unavailableLabel\}<\/span>/);
+  assert.match(view, /displayedCount\(item\.state, item\.count, "Unavailable"\)/);
+  assert.match(view, /displayedCount\(issue\.state, issue\.count, "Unavailable"\)/);
   assert.match(view, /issue\.count/);
   assert.match(view, /issue\.state/);
 });

@@ -1,0 +1,20 @@
+import { copyFile, mkdir, readFile, readdir, writeFile } from "node:fs/promises";
+import { fileURLToPath } from "node:url";
+import path from "node:path";
+
+const root = fileURLToPath(new URL("../", import.meta.url));
+const target = path.join(root, "public", "ocr");
+const workerRoot = path.join(root, "node_modules", "tesseract.js");
+const coreRoot = path.join(root, "node_modules", "tesseract.js-core");
+const workerPackage = JSON.parse(await readFile(path.join(workerRoot, "package.json"), "utf8"));
+const corePackage = JSON.parse(await readFile(path.join(coreRoot, "package.json"), "utf8"));
+if (workerPackage.version !== "7.0.0" || corePackage.version !== "7.0.0") throw new Error("OCR assets must match the pinned Tesseract.js and core 7.0.0 dependencies.");
+await mkdir(path.join(target, "core"), { recursive: true });
+await copyFile(path.join(workerRoot, "dist", "worker.min.js"), path.join(target, "worker.min.js"));
+await copyFile(path.join(workerRoot, "LICENSE.md"), path.join(target, "TESSERACT-LICENSE.md"));
+await copyFile(path.join(coreRoot, "LICENSE"), path.join(target, "core", "LICENSE"));
+const assets = (await readdir(coreRoot)).filter((name) => /^tesseract-core(?:-(?:simd|relaxedsimd))?(?:-lstm)?\.wasm(?:\.js)?$/.test(name));
+for (const file of assets) await copyFile(path.join(coreRoot, file), path.join(target, "core", file));
+if (assets.length !== 12) throw new Error("The complete OCR core asset set was not found.");
+await writeFile(path.join(target, "assets.json"), JSON.stringify({ worker_version: workerPackage.version, core_version: corePackage.version, core_assets: assets, language_models: "Downloaded only on explicit OCR use from the Tesseract.js official language data CDN." }, null, 2) + "\n");
+process.stdout.write(`Prepared Tesseract.js ${workerPackage.version} worker and ${assets.length} local core assets.\n`);

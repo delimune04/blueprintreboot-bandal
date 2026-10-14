@@ -19,6 +19,7 @@ from services.reading_note_template import (
     LEGACY_READING_NOTE_TITLES,
     READING_NOTE_HEADER_FIELDS,
     READING_NOTE_SECTIONS,
+    READING_NOTE_SECTION_ALIASES,
     READING_NOTE_TEMPLATE_PATH,
     get_canonical_reading_note_template,
     reading_note_template_file_text,
@@ -26,6 +27,9 @@ from services.reading_note_template import (
 from storage.atomic_json import atomic_write_json, read_json_file, require_json_list
 from storage.note_block_store import create_note_block
 from storage.note_store import load_note_text, save_note_text
+from storage.note_store import note_path_for
+from storage.note_block_store import note_blocks_path
+from storage.file_transaction import file_transaction
 from storage.paths import NOTE_BLOCKS_DIR, NOTE_IMPORTS_JSON, NOTES_DIR
 from storage.workspace_lock import workspace_root_for_path, workspace_write_lock
 
@@ -118,6 +122,7 @@ def parse_external_note_text(
 
         section_name = _section_heading(stripped)
         if section_name:
+            section_name = READING_NOTE_SECTION_ALIASES.get(section_name, section_name)
             if section_name in sections:
                 current_section = section_name
                 seen_sections.add(section_name)
@@ -309,17 +314,26 @@ def apply_external_note_import(
     log_path: Path = NOTE_IMPORTS_JSON,
 ) -> dict[str, Any]:
     with workspace_write_lock(workspace_root_for_path(Path(log_path))):
-        return _apply_external_note_import_locked(
-            target_record,
-            parsed_note,
-            import_mode=import_mode,
-            append_raw_notes=append_raw_notes,
-            create_structured_blocks=create_structured_blocks,
-            force_reimport=force_reimport,
-            notes_dir=notes_dir,
-            note_blocks_dir=note_blocks_dir,
-            log_path=log_path,
-        )
+        # The history marker, Markdown, and all generated blocks succeed as one
+        # operation. A late failure restores the exact previous bytes, so retry
+        # cannot append an unlogged duplicate import.
+        paths = [
+            note_path_for(target_record, notes_dir),
+            note_blocks_path(str(target_record["paper_id"]), note_blocks_dir),
+            Path(log_path),
+        ]
+        with file_transaction(paths):
+            return _apply_external_note_import_locked(
+                target_record,
+                parsed_note,
+                import_mode=import_mode,
+                append_raw_notes=append_raw_notes,
+                create_structured_blocks=create_structured_blocks,
+                force_reimport=force_reimport,
+                notes_dir=notes_dir,
+                note_blocks_dir=note_blocks_dir,
+                log_path=log_path,
+            )
 
 
 def _apply_external_note_import_locked(

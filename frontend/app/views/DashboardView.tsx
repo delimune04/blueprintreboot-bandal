@@ -1,5 +1,7 @@
 "use client";
 
+import { useI18n } from "../lib/i18n/LocaleProvider";
+
 import { ArrowRight, BookOpen, FolderKanban, LibraryBig, PenLine } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
@@ -9,16 +11,19 @@ import { PageHeader } from "../components/PageHeader";
 import { Section } from "../components/Section";
 import { StatusBadge } from "../components/StatusBadge";
 import { useApiResource } from "../hooks/useApiResource";
-import { apiClient } from "../lib/api/client";
+import { apiClient, getWorkspaceMode, getWorkspaceStorageScope } from "../lib/api/client";
 import { formatUiDate } from "../lib/presentation";
 
 function localDraftCount(): number {
   if (typeof window === "undefined") return 0;
   try {
-    const prefix = "blueprint-reboot:draft:v1:";
+    const prefix = getWorkspaceMode() === "cloud"
+      ? `blueprint-reboot:draft:v1:cloud:${encodeURIComponent(getWorkspaceStorageScope())}:`
+      : "blueprint-reboot:draft:v1:";
     let count = 0;
     for (let index = 0; index < window.localStorage.length; index += 1) {
-      if ((window.localStorage.key(index) || "").startsWith(prefix)) count += 1;
+      const key = window.localStorage.key(index) || "";
+      if (key.startsWith(prefix) && (getWorkspaceMode() === "cloud" || !key.startsWith("blueprint-reboot:draft:v1:cloud:"))) count += 1;
     }
     return count;
   } catch {
@@ -27,6 +32,7 @@ function localDraftCount(): number {
 }
 
 export function DashboardView() {
+  const { t, locale } = useI18n();
   const resource = useApiResource("dashboard", apiClient.getDashboard);
   const [draftCount, setDraftCount] = useState(0);
   useEffect(() => {
@@ -48,21 +54,21 @@ export function DashboardView() {
 
   return (
     <div className="page-stack page-stack--dashboard">
-      <PageHeader title="Dashboard" description="Pick up the research work that is already in motion." />
-      {resource.status === "loading" ? <LoadingState label="Loading workspace overview" /> : null}
-      {resource.status === "unavailable" ? <UnavailableState description={resource.message} /> : null}
-      {resource.status === "error" || resource.status === "not-found" ? <ErrorState description={resource.message} /> : null}
+      <PageHeader title={t("Dashboard")} description={t("Pick up the research work that is already in motion.")} />
+      {resource.status === "loading" ? <LoadingState label={t("Loading workspace overview")} /> : null}
+      {resource.status === "unavailable" ? <UnavailableState description={t(resource.message)} /> : null}
+      {resource.status === "error" || resource.status === "not-found" ? <ErrorState description={t(resource.message)} /> : null}
       {resource.status === "success" ? <>
-        <Section title="Continue reading" actions={<Link className="text-link" href="/library">Open Library <ArrowRight size={14} /></Link>}>
-          {continueReading.length === 0 ? <div className="dashboard-empty-state"><EmptyState title="No papers marked Reading" description="Mark a paper as Reading in the Reader when you want it to appear here." /></div> : <DataTableShell label="Papers to continue reading"><table><thead><tr><th>Paper</th><th>Reading</th><th /></tr></thead><tbody>{continueReading.map((paper) => <tr key={paper.paper_id}><td><Link className="paper-link" href={`/papers/${encodeURIComponent(paper.paper_id)}/reader`}>{paper.title}<small>{paper.first_author || "Author unknown"}{paper.year ? ` · ${paper.year}` : ""}</small></Link></td><td><StatusBadge>{paper.status}</StatusBadge></td><td>{!paper.missing_pdf ? <Link className="text-link" href={`/papers/${encodeURIComponent(paper.paper_id)}/reader`}>Read</Link> : <StatusBadge tone="rose">Missing PDF</StatusBadge>}</td></tr>)}</tbody></table></DataTableShell>}
+        <Section title={t("Continue reading")} actions={<Link className="text-link" href="/library">{t("Open Library")} <ArrowRight size={14} /></Link>}>
+          {continueReading.length === 0 ? <div className="dashboard-empty-state"><EmptyState title={t("No papers marked Reading")} description={t("Mark a paper as Reading in the Reader when you want it to appear here.")} /></div> : <DataTableShell label={t("Papers to continue reading")}><table><thead><tr><th>{t("Paper")}</th><th>{t("Reading")}</th><th /></tr></thead><tbody>{continueReading.map((paper) => <tr key={paper.paper_id}><td><Link className="paper-link" href={`/papers/${encodeURIComponent(paper.paper_id)}/reader`}>{paper.title}<small>{paper.first_author || t("Author unknown")}{paper.year ? ` · ${paper.year}` : ""}</small></Link></td><td><StatusBadge>{paper.status}</StatusBadge></td><td>{!paper.missing_pdf ? <Link className="text-link" href={`/papers/${encodeURIComponent(paper.paper_id)}/reader`}>{t("Read paper")}</Link> : <StatusBadge tone="rose">{t("Missing PDF")}</StatusBadge>}</td></tr>)}</tbody></table></DataTableShell>}
         </Section>
         <div className="split-layout">
-          <Section title="Active projects" actions={<Link className="text-link" href="/projects">View projects <ArrowRight size={14} /></Link>}>
-            {activeProjects.length === 0 ? <EmptyState title="No active projects" description="Create a project when a group of papers or notes needs a shared home." /> : <div className="dashboard-project-list">{activeProjects.map((project) => <Link key={project.project_id} href={`/projects/${encodeURIComponent(project.project_id)}`}><FolderKanban size={18} /><span><strong>{project.name}</strong><small>{project.linked_paper_count} linked paper{project.linked_paper_count === 1 ? "" : "s"} · Updated {formatUiDate(project.updated_at)}</small></span><StatusBadge>{project.status}</StatusBadge></Link>)}</div>}
+          <Section title={t("Active projects")} actions={<Link className="text-link" href="/projects">{t("View projects")} <ArrowRight size={14} /></Link>}>
+            {activeProjects.length === 0 ? <EmptyState title={t("No active projects")} description={t("Create a project when a group of papers or notes needs a shared home.")} /> : <div className="dashboard-project-list">{activeProjects.map((project) => <Link key={project.project_id} href={`/projects/${encodeURIComponent(project.project_id)}`}><FolderKanban size={18} /><span><strong>{project.name}</strong><small>{t("{count} linked papers · Updated {date}", { count: project.linked_paper_count, date: formatUiDate(project.updated_at, locale) })}</small></span><StatusBadge>{project.status}</StatusBadge></Link>)}</div>}
           </Section>
-          {draftCount ? <Section title="Drafts to continue"><Link className="dashboard-draft-card" href="/library"><PenLine size={18} /><span><strong>{draftCount} locally preserved draft{draftCount === 1 ? "" : "s"}</strong><small>Open the related Paper or Project to continue and explicitly save when ready.</small></span><ArrowRight size={15} /></Link></Section> : <Section title="Recent library activity"><div className="entry-list"><Link href="/library"><BookOpen size={18} /><span><strong>Browse your library</strong><small>Search papers, inspect context, and open the Reader.</small></span><ArrowRight size={15} /></Link></div></Section>}
+          {draftCount ? <Section title={t("Drafts to continue")}><Link className="dashboard-draft-card" href="/library"><PenLine size={18} /><span><strong>{t("{count} locally preserved drafts", { count: draftCount })}</strong><small>{t("Open the related Paper or Project to continue and explicitly save when ready.")}</small></span><ArrowRight size={15} /></Link></Section> : <Section title={t("Recent library activity")}><div className="entry-list"><Link href="/library"><BookOpen size={18} /><span><strong>{t("Browse your library")}</strong><small>{t("Search papers, inspect context, and open the Reader.")}</small></span><ArrowRight size={15} /></Link></div></Section>}
         </div>
-        {needsAttention ? <Section title="Needs attention"><div className="library-attention"><div><strong>Library maintenance needs a review</strong><p>{resource.data.library.missing_count ? `${resource.data.library.missing_count} missing PDF${resource.data.library.missing_count === 1 ? "" : "s"}. ` : ""}{resource.data.library.duplicate_count ? `${resource.data.library.duplicate_count} duplicate${resource.data.library.duplicate_count === 1 ? "" : "s"}. ` : ""}{resource.data.library.quarantine_count ? `${resource.data.library.quarantine_count} quarantined item${resource.data.library.quarantine_count === 1 ? "" : "s"}.` : ""}</p></div><Link className="text-link" href="/settings/diagnostics"><LibraryBig size={15} />Open Diagnostics</Link></div></Section> : null}
+        {needsAttention ? <Section title={t("Needs attention")}><div className="library-attention"><div><strong>{t("Library maintenance needs a review")}</strong><p>{resource.data.library.missing_count ? t(`${resource.data.library.missing_count} missing PDF${resource.data.library.missing_count === 1 ? "" : "s"}. `) : ""}{resource.data.library.duplicate_count ? t(`${resource.data.library.duplicate_count} duplicate${resource.data.library.duplicate_count === 1 ? "" : "s"}. `) : ""}{resource.data.library.quarantine_count ? t(`${resource.data.library.quarantine_count} quarantined item${resource.data.library.quarantine_count === 1 ? "" : "s"}.`) : ""}</p></div><Link className="text-link" href="/settings/diagnostics"><LibraryBig size={15} />{t("Open Diagnostics")}</Link></div></Section> : null}
       </> : null}
     </div>
   );

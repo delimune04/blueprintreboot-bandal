@@ -1,14 +1,17 @@
 from __future__ import annotations
 
 import csv
+import hashlib
 import json
 import os
 from dataclasses import dataclass
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
-from typing import Any, Literal, Mapping, TypedDict
+from typing import Any, Literal, Mapping, NotRequired, TypedDict
+from zipfile import BadZipFile, ZipFile
 
 from config.contact import APP_VERSION
+from services.backup_snapshot import verify_backup_snapshot
 from services.tag_book import (
     DEFAULT_TAG_BOOK_DIR,
     LEGACY_CANONICAL_TAG_PATH,
@@ -25,6 +28,7 @@ from storage.paths import (
 )
 from storage.identities import is_safe_paper_id
 from storage.persistent_state import (
+    BACKUP_FILE_PATHS,
     PERSISTENT_JSON_STORES,
     json_shape_error,
     note_block_shape_error,
@@ -33,12 +37,17 @@ from storage.persistent_state import (
 
 SettingsState = Literal["healthy", "warning", "unavailable", "empty"]
 ProbeState = Literal["available", "missing", "corrupt", "unavailable"]
+BackupEvidenceState = Literal["absent", "invalid", "stale", "verified_full", "verified_light", "unavailable"]
 
 MAX_DISCOVERED_ENTRIES = 10_000
 MAX_INDEX_BYTES = 32 * 1024 * 1024
 MAX_INDEX_ROWS = 50_000
 MAX_JSON_BYTES = 8 * 1024 * 1024
 MAX_TOTAL_JSON_BYTES = 64 * 1024 * 1024
+MAX_SETTINGS_BACKUP_BYTES = 64 * 1024 * 1024
+MAX_SETTINGS_BACKUP_MEMBER_BYTES = 32 * 1024 * 1024
+MAX_SETTINGS_BACKUP_MEMBERS = 10_000
+BACKUP_STALE_AFTER = timedelta(days=7)
 
 WORKSPACE_RESOURCE_CODES = (
     "papers",
@@ -74,6 +83,8 @@ class SettingsBackupReadiness(TypedDict):
     state: Literal["healthy", "warning", "unavailable"]
     snapshot_available: bool | None
     last_updated_at: str | None
+    evidence_state: NotRequired[BackupEvidenceState]
+    snapshot_type: NotRequired[Literal["full", "light"] | None]
 
 
 class SettingsSummary(TypedDict):
@@ -238,7 +249,88 @@ def _issue(count: int | None) -> SettingsAggregate:
     return {"state": "warning" if count else "healthy", "count": count}
 
 
-def _snapshot_readiness(exports_dir: Path) -> SettingsBackupReadiness:
+def _backup_evidence(state: BackupEvidenceState, *, snapshot_type: Literal["full", "light"] | None = None, timestamp: str | None = None) -> SettingsBackupReadiness:
+    verified = state in {"stale", "verified_full", "verified_light"}
+    return {
+        "state": "unavailable" if state == "unavailable" else "healthy" if state == "verified_full" else "warning",
+        "snapshot_available": None if state == "unavailable" else verified,
+        "last_updated_at": timestamp if verified else None,
+        "evidence_state": state,
+        "snapshot_type": snapshot_type if verified else None,
+    }
+
+
+def _backup_live_files(root: Path) -> dict[str, Path]:
+    paths = [root / value for value in (*BACKUP_FILE_PATHS, "data/paper_index.csv", ".streamlit/config.toml")]
+    for directory in ("notes", "data/projects", "data/note_blocks"):
+        paths.extend(_bounded_files(root / directory, suffix="", recursive=True))
+    owned: dict[str, Path] = {}
+    for path in paths:
+        if path.is_symlink():
+            continue
+        if not path.is_file() or path.name in {".gitkeep", "secrets.toml"} or path.suffix.casefold() in {".tmp", ".log"}:
+            continue
+        if any(part.startswith(".") and part not in {".streamlit"} for part in path.relative_to(root).parts):
+            continue
+        try:
+            path.resolve(strict=False).relative_to(root.resolve(strict=False))
+        except ValueError:
+            raise OSError("Backup source ownership is unavailable.") from None
+        owned[path.relative_to(root).as_posix()] = path
+    return owned
+
+
+def _backup_matches_live_state(manifest: Mapping[str, Any], root: Path) -> bool:
+    archived = {
+        entry["path"]: entry for entry in manifest["included_files"]
+        if not entry["path"].startswith("papers/")
+    }
+    current = _backup_live_files(root)
+    if set(current) != set(archived):
+        return False
+    budget = _ReadBudget(MAX_SETTINGS_BACKUP_BYTES)
+    for relative_path, path in current.items():
+        before = path.stat()
+        expected = archived[relative_path]
+        if before.st_size != expected["size_bytes"]:
+            return False
+        budget.reserve(before.st_size)
+        if before.st_size > MAX_SETTINGS_BACKUP_MEMBER_BYTES:
+            raise RuntimeError("Backup state exceeds the bounded Settings read limit.")
+        digest = hashlib.sha256()
+        with path.open("rb") as source:
+            remaining = before.st_size
+            while remaining:
+                chunk = source.read(min(1024 * 1024, remaining))
+                if not chunk:
+                    raise OSError("Backup source changed during the read.")
+                digest.update(chunk)
+                remaining -= len(chunk)
+            if source.read(1):
+                raise OSError("Backup source changed during the read.")
+        after = path.stat()
+        if (before.st_size, before.st_mtime_ns, before.st_ino) != (after.st_size, after.st_mtime_ns, after.st_ino):
+            raise OSError("Backup source changed during the read.")
+        if digest.hexdigest() != expected["sha256"].casefold():
+            return False
+    return True
+
+
+def _backup_matches_live_pdf_inventory(manifest: Mapping[str, Any], root: Path, timestamp: datetime) -> bool:
+    """Check full-snapshot PDF coverage without opening current PDF contents."""
+    archived = {entry["path"]: entry for entry in manifest["included_files"] if entry["path"].startswith("papers/")}
+    current = {path.relative_to(root).as_posix(): path for path in _bounded_files(root / "papers", suffix=".pdf", recursive=True)}
+    if set(current) != set(archived):
+        return False
+    for relative_path, path in current.items():
+        info = path.stat()
+        # Snapshot timestamps use whole seconds; accept the creation second.
+        if info.st_size != archived[relative_path]["size_bytes"] or info.st_mtime >= timestamp.timestamp() + 1:
+            return False
+    return True
+
+
+def _snapshot_readiness(exports_dir: Path, *, workspace_root: Path | None = None, now: datetime | None = None) -> SettingsBackupReadiness:
     snapshot_result = _safe_call(
         lambda: [
             path
@@ -251,37 +343,50 @@ def _snapshot_readiness(exports_dir: Path) -> SettingsBackupReadiness:
         ]
     )
     if not snapshot_result.available:
-        return {
-            "state": "unavailable",
-            "snapshot_available": None,
-            "last_updated_at": None,
-        }
+        return _backup_evidence("unavailable")
     snapshots = list(snapshot_result.value)
     if not snapshots:
-        return {
-            "state": "warning",
-            "snapshot_available": False,
-            "last_updated_at": None,
-        }
+        return _backup_evidence("absent")
     try:
-        latest_timestamp = max(path.stat().st_mtime for path in snapshots)
-    except OSError:
-        return {
-            "state": "unavailable",
-            "snapshot_available": None,
-            "last_updated_at": None,
-        }
-    last_updated_at = (
-        datetime.fromtimestamp(latest_timestamp, timezone.utc)
-        .replace(microsecond=0)
-        .isoformat()
-        .replace("+00:00", "Z")
-    )
-    return {
-        "state": "healthy",
-        "snapshot_available": True,
-        "last_updated_at": last_updated_at,
-    }
+        latest = max(snapshots, key=lambda path: (path.stat().st_mtime_ns, path.name))
+        before = latest.stat()
+        if before.st_size > MAX_SETTINGS_BACKUP_BYTES:
+            return _backup_evidence("unavailable")
+        with ZipFile(latest, "r") as archive:
+            members = archive.infolist()
+            if len(members) > MAX_SETTINGS_BACKUP_MEMBERS or sum(member.file_size for member in members) > MAX_SETTINGS_BACKUP_BYTES or any(member.file_size > MAX_SETTINGS_BACKUP_MEMBER_BYTES for member in members):
+                return _backup_evidence("unavailable")
+        verified = verify_backup_snapshot(latest)
+        after = latest.stat()
+        if (before.st_size, before.st_mtime_ns, before.st_ino) != (after.st_size, after.st_mtime_ns, after.st_ino):
+            return _backup_evidence("unavailable")
+        if not verified.get("valid") or not isinstance(verified.get("manifest"), Mapping):
+            return _backup_evidence("invalid")
+        manifest = verified["manifest"]
+        created_at = manifest.get("created_at")
+        if not isinstance(created_at, str) or len(created_at) > 40:
+            return _backup_evidence("invalid")
+        timestamp = datetime.fromisoformat(created_at.replace("Z", "+00:00"))
+        if timestamp.tzinfo is None:
+            return _backup_evidence("invalid")
+        current_time = now or datetime.now(timezone.utc)
+        if current_time.tzinfo is None:
+            current_time = current_time.replace(tzinfo=timezone.utc)
+        timestamp = timestamp.astimezone(timezone.utc).replace(microsecond=0)
+        if timestamp > current_time + timedelta(minutes=1):
+            return _backup_evidence("invalid")
+        last_updated_at = timestamp.isoformat().replace("+00:00", "Z")
+        snapshot_type: Literal["full", "light"] = manifest["snapshot_type"]
+        root = Path(workspace_root) if workspace_root is not None else Path(exports_dir).parent
+        stale = current_time - timestamp > BACKUP_STALE_AFTER or not _backup_matches_live_state(manifest, root)
+        if not stale and snapshot_type == "full":
+            stale = not _backup_matches_live_pdf_inventory(manifest, root, timestamp)
+        evidence_state: BackupEvidenceState = "stale" if stale else "verified_full" if snapshot_type == "full" else "verified_light"
+        return _backup_evidence(evidence_state, snapshot_type=snapshot_type, timestamp=last_updated_at)
+    except (BadZipFile, ValueError, UnicodeDecodeError, json.JSONDecodeError):
+        return _backup_evidence("invalid")
+    except Exception:
+        return _backup_evidence("unavailable")
 
 
 def build_settings_summary(
@@ -604,5 +709,5 @@ def build_settings_summary(
         },
         "workspace": workspace,
         "data_integrity": integrity,
-        "backup_readiness": _snapshot_readiness(exports_dir),
+        "backup_readiness": _snapshot_readiness(exports_dir, workspace_root=workspace_root),
     }

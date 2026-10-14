@@ -5,6 +5,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { paperPdfUrl } from "../lib/api/client";
 import { createPdfLoadingTask, type PDFDocumentProxy } from "../lib/pdf/pdfjs-adapter";
 import { canvasRenderGeometry } from "../lib/pdf/reader-controller.mjs";
+import { useI18n } from "../lib/i18n/LocaleProvider";
 
 type ThumbnailSize = "inspector" | "detail";
 type ThumbnailState = "loading" | "ready" | "unavailable";
@@ -24,6 +25,7 @@ export function FirstPageThumbnail({
   available: boolean;
   size?: ThumbnailSize;
 }) {
+  const { t } = useI18n();
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [result, setResult] = useState<{ paperId: string; state: ThumbnailState }>({
     paperId,
@@ -96,11 +98,11 @@ export function FirstPageThumbnail({
   return (
     <figure className={`pdf-first-page-thumbnail pdf-first-page-thumbnail--${size}`} data-state={state} aria-busy={state === "loading" || undefined}>
       <div className="pdf-first-page-thumbnail__frame">
-        <canvas ref={canvasRef} className="pdf-first-page-thumbnail__canvas" role="img" aria-label="First page preview">A first page PDF preview is displayed here when available.</canvas>
-        {state === "loading" ? <><span className="pdf-first-page-thumbnail__skeleton" aria-hidden="true" /><span className="sr-only">Loading first page preview</span></> : null}
-        {state === "unavailable" ? <div className="pdf-first-page-thumbnail__fallback" role="img" aria-label="First page preview unavailable"><FileText size={size === "detail" ? 24 : 18} aria-hidden="true" /></div> : null}
+        <canvas ref={canvasRef} className="pdf-first-page-thumbnail__canvas" role="img" aria-label={t("First page preview")}>{t("A first page PDF preview is displayed here when available.")}</canvas>
+        {state === "loading" ? <><span className="pdf-first-page-thumbnail__skeleton" aria-hidden="true" /><span className="sr-only">{t("Loading first page preview")}</span></> : null}
+        {state === "unavailable" ? <div className="pdf-first-page-thumbnail__fallback" role="img" aria-label={t("First page preview unavailable")}><FileText size={size === "detail" ? 24 : 18} aria-hidden="true" /></div> : null}
       </div>
-      <figcaption className="sr-only">First page preview</figcaption>
+      <figcaption className="sr-only">{t("First page preview")}</figcaption>
     </figure>
   );
 }

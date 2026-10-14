@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#f8f8fb"/>
+  <path d="M0 78h1200M0 552h1200" stroke="#ddd6eb"/>
+  <rect x="65" y="62" width="8" height="32" fill="#7851ca"/>
+  <text x="92" y="87" fill="#6d617c" font-family="Arial,sans-serif" font-size="20">Bandal Studio</text>
+  <g transform="translate(85 190) scale(3.6)" fill="none">
+    <path d="M14 6h22l7 7v29H14V6Z" fill="#fff" stroke="#2b3032" stroke-width="2"/>
+    <path d="M36 6v8h7M20 24h16M20 30h12M20 36h16" stroke="#b8b0c9" stroke-width="2"/>
+    <path d="M21 3a17 17 0 1 0 0 34c-7-3-11-9-11-17S14 6 21 3Z" fill="#7851ca" stroke="none"/>
+    <path d="m23 18 4 4 7-8" stroke="#7851ca" stroke-width="3"/>
+  </g>
+  <!-- Geometric Korean wordmark: 랩비움. It remains crisp without a remote font. -->
+  <g transform="translate(315 190) scale(2.8)" fill="none" stroke="#25212f" stroke-width="5" stroke-linejoin="miter" stroke-linecap="square">
+    <path d="M2 6h18v10H3v10h18M30 4v23m0-12h9m5-11v23M5 37v23h31V37M5 47h31"/>
+    <path transform="translate(65 0)" d="M4 8v44h24V8M4 28h24M44 5v54"/>
+    <g transform="translate(132 0)"><circle cx="24" cy="12" r="10"/><path d="M3 31h42M24 31v10M8 48h32v17H8V48Z"/></g>
+  </g>
+  <text x="318" y="429" fill="#514a5b" font-family="Arial,sans-serif" font-size="30">Read papers. Connect evidence. Advance research.</text>
+  <g transform="translate(924 189)" fill="none" stroke="#ddd6eb" stroke-width="1.5">
+    <path d="M0 0h171v190H0zM16 24h108M16 42h140M16 76h92M16 94h140M16 112h140M16 154h70"/>
+    <path d="m112 127 13 13 31-35" stroke="#7851ca" stroke-width="4"/>
+  </g>
+  <text x="85" y="589" fill="#7a7385" font-family="Arial,sans-serif" font-size="18">Papers  /  Evidence notes  /  Research projects</text>
+  <text x="995" y="589" fill="#7851ca" font-family="Arial,sans-serif" font-size="18">bandal.app</text>
+</svg>

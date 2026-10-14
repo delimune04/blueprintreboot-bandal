@@ -43,7 +43,7 @@ def test_version_contract_is_consistent() -> None:
     assert "packageMetadata.version" not in shell
     assert "applicationVersion" not in shell
     assert "v{applicationVersion}" not in sidebar
-    assert "Research workspace</small>" in sidebar
+    assert 't("Research workspace")' in sidebar
     assert "Local workspace" not in shell
     assert "version-label" not in shell
     assert "v1.5.4" not in shell

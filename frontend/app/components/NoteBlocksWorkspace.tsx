@@ -1,9 +1,9 @@
 "use client";
 
-import { Edit3, Link2, Plus, RotateCcw, Save, Unlink, X } from "lucide-react";
+import { Edit3, Link2, Plus, RotateCcw, Save, Trash2, Unlink, X } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { FormEvent } from "react";
-import { ApiClientError, apiClient } from "../lib/api/client";
+import { ApiClientError, apiClient, getWorkspaceMode } from "../lib/api/client";
 import type {
   EditableNoteBlockContent,
   NoteBlock,
@@ -23,6 +23,8 @@ import { EmptyState, ErrorState, LoadingState, UnavailableState } from "./AsyncS
 import { StatusBadge } from "./StatusBadge";
 import { RelationshipLabel } from "./RelationshipLabel";
 import { SaveStatus } from "./SaveStatus";
+import { useI18n } from "../lib/i18n/LocaleProvider";
+import { createExclusiveMutationGate } from "../lib/reader/mutation-coordinator.mjs";
 import {
   applyLatestRevisionDraft,
   beginRevisionSave,
@@ -104,11 +106,28 @@ function replaceBlock(
 }
 
 function browserStorage(): Storage | null {
-  return typeof window === "undefined" ? null : window.localStorage;
+  try { return typeof window === "undefined" ? null : window.localStorage; } catch { return null; }
 }
 
 
-export function NoteBlocksWorkspace({ paperId, focusBlockId = "" }: { paperId: string; focusBlockId?: string }) {
+export function NoteBlocksWorkspace({ paperId, focusBlockId = "", refreshToken = 0, onJumpToPage, mutationBusy = false, acquireMutation, releaseMutation }: {
+  paperId: string; focusBlockId?: string; refreshToken?: number; onJumpToPage?: (page: number) => void;
+  mutationBusy?: boolean; acquireMutation?: () => number | null; releaseMutation?: (token: number) => void;
+}) {
+  const { t } = useI18n();
+  const localGate = useRef(createExclusiveMutationGate());
+  const [commandActive, setCommandActive] = useState(false);
+  const commandBusy = mutationBusy || commandActive;
+  const beginCommand = () => {
+    if (commandBusy) return null;
+    const token = acquireMutation ? acquireMutation() : localGate.current.tryAcquire();
+    if (token !== null) setCommandActive(true);
+    return token;
+  };
+  const finishCommand = (token: number) => {
+    if (releaseMutation) releaseMutation(token); else localGate.current.release(token);
+    setCommandActive(false);
+  };
   const [collection, setCollection] = useState<CollectionState>({ status: "loading" });
   const [editor, setEditor] = useState<NoteBlockEditorState | null>(null);
   const [expandedBlockId, setExpandedBlockId] = useState("");
@@ -119,6 +138,7 @@ export function NoteBlocksWorkspace({ paperId, focusBlockId = "" }: { paperId: s
   const [selectedLinkType, setSelectedLinkType] = useState<ProjectLinkType>("related");
   const [linkStatus, setLinkStatus] = useState<LinkStatus>("idle");
   const [linkMessage, setLinkMessage] = useState("");
+  const [deletingBlockId, setDeletingBlockId] = useState("");
   const focusedDeepLinkRef = useRef("");
   const editorTitleRef = useRef<HTMLInputElement | null>(null);
   const editorDraftKey = draftStorageKey("note-block", `${paperId}:${editor?.blockId || "new"}`);
@@ -213,7 +233,7 @@ export function NoteBlocksWorkspace({ paperId, focusBlockId = "" }: { paperId: s
         });
       });
     return () => { active = false; };
-  }, [paperId]);
+  }, [paperId, refreshToken]);
 
   useEffect(() => {
     if (!focusBlockId) {
@@ -295,6 +315,8 @@ export function NoteBlocksWorkspace({ paperId, focusBlockId = "" }: { paperId: s
     const activeEditor = editor;
     const started = beginRevisionSave(activeEditor);
     if (!started.request) return;
+    const commandToken = beginCommand();
+    if (commandToken === null) return;
     const request = started.request;
     updateEditor(() => ({ ...started.state, status: "saving", message: "Saving Note Block…" }));
     try {
@@ -366,12 +388,14 @@ export function NoteBlocksWorkspace({ paperId, focusBlockId = "" }: { paperId: s
               : "Save failed. Your Note Block draft remains preserved locally.",
         };
       });
-    }
+    } finally { finishCommand(commandToken); }
   }
 
   async function addProjectLink(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!linkingBlockId || !selectedProjectId) return;
+    const commandToken = beginCommand();
+    if (commandToken === null) return;
     setLinkStatus("saving");
     setLinkMessage("Linking Note Block to Project…");
     try {
@@ -419,11 +443,13 @@ export function NoteBlocksWorkspace({ paperId, focusBlockId = "" }: { paperId: s
       const failure = linkFailure(error);
       setLinkStatus(failure.status);
       setLinkMessage(failure.message);
-    }
+    } finally { finishCommand(commandToken); }
   }
 
   async function removeProjectLink(link: NoteBlockProjectLink) {
     if (!window.confirm(`Remove this Note Block link from “${link.project_name || link.project_id}”? The Note Block and Paper will remain.`)) return;
+    const commandToken = beginCommand();
+    if (commandToken === null) return;
     setLinkStatus("saving");
     setLinkMessage("Removing Note Block link…");
     try {
@@ -449,15 +475,43 @@ export function NoteBlocksWorkspace({ paperId, focusBlockId = "" }: { paperId: s
       const failure = linkFailure(error);
       setLinkStatus(failure.status);
       setLinkMessage(failure.message);
-    }
+    } finally { finishCommand(commandToken); }
   }
 
-  if (collection.status === "loading") return <LoadingState label="Loading structured Note Blocks" />;
+  async function deleteBlock(block: NoteBlock) {
+    if (collection.status !== "ready" || commandBusy || getWorkspaceMode() === "local") return;
+    const warning = t("Delete this Note Block and its Project links? The Paper and Paper Note remain. This block cannot be restored.")
+      + (editor?.blockId === block.id && dirty ? `\n\n${t("Unsaved edits for this block will also be discarded.")}` : "");
+    if (!window.confirm(warning)) return;
+    const commandToken = beginCommand();
+    if (commandToken === null) return;
+    setLinkStatus("saving");
+    setDeletingBlockId(block.id);
+    setLinkMessage("Deleting Note Block…");
+    try {
+      const response = await apiClient.deleteNoteBlock(paperId, block.id, collection.data.note_blocks_revision);
+      setCollection((current) => current.status === "ready" ? { status: "ready", data: {
+        ...current.data, items: current.data.items.filter((item) => item.id !== block.id),
+        project_links: current.data.project_links.filter((link) => link.note_block_id !== block.id),
+        total: response.total, note_blocks_revision: response.note_blocks_revision,
+      } } : current);
+      if (editor?.blockId === block.id) setEditor(null);
+      clearPersistentRevisionDraft(browserStorage(), draftStorageKey("note-block", `${paperId}:${block.id}`));
+      setExpandedBlockId("");
+      setLinkStatus("idle");
+      setLinkMessage("Note Block deleted. The Paper and Paper Note remain.");
+    } catch (error) {
+      setLinkStatus(error instanceof ApiClientError && error.kind === "conflict" ? "conflict" : "error");
+      setLinkMessage(error instanceof ApiClientError ? error.message : "The Note Block was not deleted. Reload the collection before retrying.");
+    } finally { setDeletingBlockId(""); finishCommand(commandToken); }
+  }
+
+  if (collection.status === "loading") return <LoadingState label={t("Loading structured Note Blocks")} />;
   if (collection.status === "unavailable") {
     return <UnavailableState description={collection.message} onRetry={() => { setCollection({ status: "loading" }); void loadCollection({ preserveDraft: true }); }} />;
   }
   if (collection.status === "error") {
-    return <ErrorState title="Note Blocks unavailable" description={collection.message} onRetry={() => { setCollection({ status: "loading" }); void loadCollection({ preserveDraft: true }); }} />;
+    return <ErrorState title={t("Note Blocks unavailable")} description={collection.message} onRetry={() => { setCollection({ status: "loading" }); void loadCollection({ preserveDraft: true }); }} />;
   }
 
   const writableProjects = projects.status === "ready"
@@ -468,25 +522,26 @@ export function NoteBlocksWorkspace({ paperId, focusBlockId = "" }: { paperId: s
     <section className="reader-editor reader-note-blocks" aria-labelledby="note-block-editor-title">
       <div className="reader-note__heading">
         <div>
-          <h2 id="note-block-editor-title">Note Blocks</h2>
+          <h2 id="note-block-editor-title">{t("Note Blocks")}</h2>
         </div>
         <StatusBadge tone={editor?.status === "conflict" || editor?.status === "error" ? "rose" : "slate"}>
-          {collection.data.total} blocks
+          {t("{count} blocks", { count: collection.data.total })}
         </StatusBadge>
       </div>
       <div className="reader-editor__actions">
-        <button className="reader-control" type="button" onClick={beginCreate} disabled={Boolean(editor?.activeSave)}><Plus size={15} />Add</button>
+        <button className="reader-control" type="button" onClick={beginCreate} disabled={commandBusy || Boolean(editor?.activeSave)}><Plus size={15} />{t("Add")}</button>
         <button
           className="reader-control reader-control--secondary"
           type="button"
+          disabled={commandBusy}
           onClick={() => { setCollection({ status: "loading" }); void loadCollection({ preserveDraft: true }); }}
-        ><RotateCcw size={15} />Reload collection</button>
+        ><RotateCcw size={15} />{t("Reload collection")}</button>
       </div>
       {collection.data.project_links_state === "unavailable" ? (
-        <p className="reader-editor__status">Project-link summaries are temporarily unavailable; Note Block editing remains available.</p>
+        <p className="reader-editor__status">{t("Project-link summaries are temporarily unavailable; Note Block editing remains available.")}</p>
       ) : null}
       {collection.data.items.length === 0 ? (
-        <EmptyState title="No structured Note Blocks" description="Create the first block explicitly; nothing is autosaved." />
+        <EmptyState title={t("No structured Note Blocks")} description={t("Create the first block explicitly; nothing is autosaved.")} />
       ) : (
         <div className="note-block-list">
           {collection.data.items.map((block) => {
@@ -494,38 +549,41 @@ export function NoteBlocksWorkspace({ paperId, focusBlockId = "" }: { paperId: s
             return (
               <article className={expandedBlockId === block.id ? "note-block-card is-expanded" : "note-block-card"} id={`note-block-${block.id}`} key={block.id} tabIndex={focusBlockId === block.id ? -1 : undefined}>
                 <div className="reader-note__heading">
-                  <div><strong>{block.title || block.block_type}</strong></div>
-                  <StatusBadge>{block.block_type}</StatusBadge>
+                  <div><strong>{block.title || t(block.block_type)}</strong></div>
+                  <StatusBadge>{t(block.block_type)}</StatusBadge>
                 </div>
-                {block.text ? <p>{block.text}</p> : <p className="muted-text">No block text.</p>}
-                <p className="muted-text">{[block.page && `Page ${block.page}`, block.figure && `Figure ${block.figure}`, block.tags.join(", ")].filter(Boolean).join(" · ")}</p>
+                {block.text ? <p>{block.text}</p> : <p className="muted-text">{t("No block text.")}</p>}
+                <p className="muted-text">{[block.page && t("Page {page}", { page: block.page }), block.figure && t("Figure {figure}", { figure: block.figure }), block.tags.join(", ")].filter(Boolean).join(" · ")}</p>
+                {block.quote ? <blockquote>{block.quote}</blockquote> : null}
+                {onJumpToPage && /^\d+$/.test(block.page) && Number(block.page) > 0 ? <button className="text-link" type="button" onClick={() => onJumpToPage(Number(block.page))}>{t("Go to PDF page {page}", { page: Number(block.page) })}</button> : null}
+                {block.provenance?.source === "pdf_selection" ? <p className="muted-text">{t("Cited PDF selection · page {page}", { page: block.provenance.page })}</p> : null}
                 {expandedBlockId === block.id && links.length ? (
                   <div className="tag-list">
                     {links.map((link) => (
                       <span className="note-block-project-link" key={link.link_id}>
                         <span className="note-block-project-link__summary"><span>{link.project_name || link.project_id}</span><RelationshipLabel type={link.link_type} /></span>
                         {link.project_status !== "archived" && link.project_status !== "unavailable" ? (
-                          <button className="reader-control reader-control--secondary" type="button" disabled={linkStatus === "saving"} onClick={() => removeProjectLink(link)}><Unlink size={14} />Unlink</button>
+                          <button className="reader-control reader-control--secondary" type="button" disabled={commandBusy || linkStatus === "saving"} onClick={() => removeProjectLink(link)}><Unlink size={14} />{t("Unlink")}</button>
                         ) : null}
                       </span>
                     ))}
                   </div>
-                ) : expandedBlockId === block.id ? <p className="muted-text">Not linked to a Project.</p> : null}
+                ) : expandedBlockId === block.id ? <p className="muted-text">{t("Not linked to a Project.")}</p> : null}
                 <div className="reader-editor__actions">
-                  <button className="reader-control reader-control--secondary" type="button" onClick={() => beginEdit(block)} disabled={Boolean(editor?.activeSave)}><Edit3 size={15} />Edit</button>
-                  <button className="reader-control reader-control--secondary" type="button" onClick={() => { setExpandedBlockId((current) => current === block.id ? "" : block.id); setLinkingBlockId((current) => current === block.id ? "" : current); }}>{expandedBlockId === block.id ? "Collapse" : "Details"}</button>
-                  {expandedBlockId === block.id ? <button className="reader-control reader-control--secondary" type="button" onClick={() => setLinkingBlockId((current) => current === block.id ? "" : block.id)}><Link2 size={15} />Link to Project</button> : null}
+                  <button className="reader-control reader-control--secondary" type="button" onClick={() => beginEdit(block)} disabled={commandBusy || Boolean(editor?.activeSave)}><Edit3 size={15} />{t("Edit")}</button>
+                  <button className="reader-control reader-control--secondary" type="button" onClick={() => { setExpandedBlockId((current) => current === block.id ? "" : block.id); setLinkingBlockId((current) => current === block.id ? "" : current); }}>{t(expandedBlockId === block.id ? "Collapse" : "Details")}</button>
+                  {expandedBlockId === block.id ? <><button className="reader-control reader-control--secondary" type="button" disabled={commandBusy} onClick={() => setLinkingBlockId((current) => current === block.id ? "" : block.id)}><Link2 size={15} />{t("Link to Project")}</button><button className="reader-control reader-control--danger" type="button" disabled={commandBusy || Boolean(editor?.activeSave) || getWorkspaceMode() === "local"} title={getWorkspaceMode() === "local" ? t("Block deletion requires the browser or cloud workspace.") : undefined} onClick={() => void deleteBlock(block)}><Trash2 size={15} />{t("Delete block")}</button></> : null}
                 </div>
                 {linkingBlockId === block.id ? (
                   <form className="project-link-form project-link-form--note-block" onSubmit={addProjectLink}>
-                    {projects.status === "loading" ? <span className="muted-text">Loading Projects…</span> : null}
+                    {projects.status === "loading" ? <span className="muted-text">{t("Loading Projects…")}</span> : null}
                     {projects.status === "error" ? <span className="reader-editor__status">{projects.message}</span> : null}
-                    {projects.status === "ready" && writableProjects.length === 0 ? <span className="muted-text">No writable Projects are available.</span> : null}
+                    {projects.status === "ready" && writableProjects.length === 0 ? <span className="muted-text">{t("No writable Projects are available.")}</span> : null}
                     {writableProjects.length ? (
                       <>
-                        <label className="reader-field"><span>Project</span><select value={selectedProjectId} onChange={(event) => setSelectedProjectId(event.target.value)}>{writableProjects.map((project) => <option key={project.project_id} value={project.project_id}>{project.name}</option>)}</select></label>
-                        <label className="reader-field"><span>Link type</span><select value={selectedLinkType} onChange={(event) => setSelectedLinkType(event.target.value as ProjectLinkType)}>{LINK_TYPES.map((type) => <option key={type} value={type}>{type}</option>)}</select></label>
-                        <button className="reader-control" type="submit" disabled={!selectedProjectId || linkStatus === "saving"}><Link2 size={15} />Link</button>
+                        <label className="reader-field"><span>{t("Project")}</span><select value={selectedProjectId} onChange={(event) => setSelectedProjectId(event.target.value)}>{writableProjects.map((project) => <option key={project.project_id} value={project.project_id}>{project.name}</option>)}</select></label>
+                        <label className="reader-field"><span>{t("Link type")}</span><select value={selectedLinkType} onChange={(event) => setSelectedLinkType(event.target.value as ProjectLinkType)}>{LINK_TYPES.map((type) => <option key={type} value={type}>{t(type)}</option>)}</select></label>
+                        <button className="reader-control" type="submit" disabled={commandBusy || !selectedProjectId || linkStatus === "saving"}><Link2 size={15} />{t("Link")}</button>
                       </>
                     ) : null}
                   </form>
@@ -535,37 +593,37 @@ export function NoteBlocksWorkspace({ paperId, focusBlockId = "" }: { paperId: s
           })}
         </div>
       )}
-      {linkMessage ? <p className="reader-editor__status" role="status">{linkMessage}</p> : null}
+      {linkMessage ? <p className="reader-editor__status" role="status">{t(linkMessage)}</p> : null}
       {linkStatus === "conflict" ? (
-        <button className="reader-control reader-control--secondary" type="button" onClick={() => void loadCollection({ preserveDraft: true })}><RotateCcw size={15} />Reload links and keep draft</button>
+        <button className="reader-control reader-control--secondary" type="button" onClick={() => void loadCollection({ preserveDraft: true })}><RotateCcw size={15} />{t("Reload links and keep draft")}</button>
       ) : null}
       {editor ? (
         <form className="note-block-form" onSubmit={saveBlock}>
           <div className="reader-note__heading">
-            <h3>{editor.mode === "create" ? "Create Note Block" : "Edit Note Block"}</h3>
+            <h3>{t(editor.mode === "create" ? "Create Note Block" : "Edit Note Block")}</h3>
             <SaveStatus state={editor.saveState} />
           </div>
-          <label className={`reader-field ${changedFields.includes("block_type") ? "reader-field--changed" : ""}`}><span>Block type{changedFields.includes("block_type") ? " (changed)" : ""}</span><select value={editor.draft.block_type} onChange={(event) => updateDraft("block_type", event.target.value as NoteBlockType)}>{BLOCK_TYPES.map((type) => <option key={type} value={type}>{type}</option>)}</select></label>
-          <label className={`reader-field ${changedFields.includes("title") ? "reader-field--changed" : ""}`}><span>Title{changedFields.includes("title") ? " (changed)" : ""}</span><input ref={editorTitleRef} maxLength={1000} value={editor.draft.title} onChange={(event) => updateDraft("title", event.target.value)} /></label>
-          <label className={`reader-field ${changedFields.includes("text") ? "reader-field--changed" : ""}`}><span>Text{changedFields.includes("text") ? " (changed)" : ""}</span><textarea rows={8} maxLength={100000} value={editor.draft.text} onChange={(event) => updateDraft("text", event.target.value)} /></label>
+          <label className={`reader-field ${changedFields.includes("block_type") ? "reader-field--changed" : ""}`}><span>{t("Block type")}{changedFields.includes("block_type") ? t(" (changed)") : ""}</span><select disabled={Boolean(deletingBlockId) && deletingBlockId === editor.blockId} value={editor.draft.block_type} onChange={(event) => updateDraft("block_type", event.target.value as NoteBlockType)}>{BLOCK_TYPES.map((type) => <option key={type} value={type}>{t(type)}</option>)}</select></label>
+          <label className={`reader-field ${changedFields.includes("title") ? "reader-field--changed" : ""}`}><span>{t("Title")}{changedFields.includes("title") ? t(" (changed)") : ""}</span><input disabled={Boolean(deletingBlockId) && deletingBlockId === editor.blockId} ref={editorTitleRef} maxLength={1000} value={editor.draft.title} onChange={(event) => updateDraft("title", event.target.value)} /></label>
+          <label className={`reader-field ${changedFields.includes("text") ? "reader-field--changed" : ""}`}><span>{t("Text")}{changedFields.includes("text") ? t(" (changed)") : ""}</span><textarea disabled={Boolean(deletingBlockId) && deletingBlockId === editor.blockId} rows={8} maxLength={100000} value={editor.draft.text} onChange={(event) => updateDraft("text", event.target.value)} /></label>
           <div className="project-form-grid">
-            <label className={`reader-field ${changedFields.includes("page") ? "reader-field--changed" : ""}`}><span>Page</span><input maxLength={100} value={editor.draft.page} onChange={(event) => updateDraft("page", event.target.value)} /></label>
-            <label className={`reader-field ${changedFields.includes("figure") ? "reader-field--changed" : ""}`}><span>Figure</span><input maxLength={500} value={editor.draft.figure} onChange={(event) => updateDraft("figure", event.target.value)} /></label>
+            <label className={`reader-field ${changedFields.includes("page") ? "reader-field--changed" : ""}`}><span>{t("Page")}</span><input disabled={Boolean(deletingBlockId) && deletingBlockId === editor.blockId} maxLength={100} value={editor.draft.page} onChange={(event) => updateDraft("page", event.target.value)} /></label>
+            <label className={`reader-field ${changedFields.includes("figure") ? "reader-field--changed" : ""}`}><span>{t("Figure")}</span><input disabled={Boolean(deletingBlockId) && deletingBlockId === editor.blockId} maxLength={500} value={editor.draft.figure} onChange={(event) => updateDraft("figure", event.target.value)} /></label>
           </div>
-          <label className={`reader-field ${changedFields.includes("quote") ? "reader-field--changed" : ""}`}><span>Quote</span><textarea rows={4} maxLength={100000} value={editor.draft.quote} onChange={(event) => updateDraft("quote", event.target.value)} /></label>
-          <label className={`reader-field ${changedFields.includes("tags") ? "reader-field--changed" : ""}`}><span>Tags (comma separated)</span><input value={tagDraft} onChange={(event) => { const value = event.target.value; setTagDraft(value); updateDraft("tags", value.split(",").map((tag) => tag.trim()).filter(Boolean)); }} /></label>
-          <p className="reader-editor__status" role="status">{editor.message || `${changedFields.length} changed field${changedFields.length === 1 ? "" : "s"}.`}</p>
+          <label className={`reader-field ${changedFields.includes("quote") ? "reader-field--changed" : ""}`}><span>{t("Quote")}</span><textarea disabled={Boolean(deletingBlockId) && deletingBlockId === editor.blockId} rows={4} maxLength={100000} value={editor.draft.quote} onChange={(event) => updateDraft("quote", event.target.value)} /></label>
+          <label className={`reader-field ${changedFields.includes("tags") ? "reader-field--changed" : ""}`}><span>{t("Tags (comma separated)")}</span><input disabled={Boolean(deletingBlockId) && deletingBlockId === editor.blockId} value={tagDraft} onChange={(event) => { const value = event.target.value; setTagDraft(value); updateDraft("tags", value.split(",").map((tag) => tag.trim()).filter(Boolean)); }} /></label>
+          <p className="reader-editor__status" role="status">{editor.message ? t(editor.message) : t("{count} changed fields", { count: changedFields.length })}</p>
           <div className="reader-editor__actions">
-            <button className="reader-control" type="submit" disabled={!dirty || Boolean(editor.activeSave) || editor.saveState === "changed_elsewhere"}><Save size={15} />{editor.saveState === "saving" ? "Saving…" : "Save Note Block"}</button>
-            <button className="reader-control reader-control--secondary" type="button" disabled={Boolean(editor.activeSave)} onClick={() => { setEditor(null); setTagDraft(""); }}><X size={15} />Cancel (keep draft)</button>
+            <button className="reader-control" type="submit" disabled={!dirty || commandBusy || Boolean(editor.activeSave) || editor.saveState === "changed_elsewhere"}><Save size={15} />{t(editor.saveState === "saving" ? "Saving…" : "Save Note Block")}</button>
+            <button className="reader-control reader-control--secondary" type="button" disabled={Boolean(editor.activeSave)} onClick={() => { setEditor(null); setTagDraft(""); }}><X size={15} />{t("Cancel (keep draft)")}</button>
             {editor.saveState === "changed_elsewhere" ? <>
-              <button className="reader-control reader-control--secondary" type="button" disabled={editor.remoteRevision === editor.revision} onClick={() => updateEditor((current) => ({ ...keepMyRevisionDraft(current), status: "dirty", message: "Your local draft will be saved against the latest collection." }))}>Keep my draft</button>
+              <button className="reader-control reader-control--secondary" type="button" disabled={editor.remoteRevision === editor.revision} onClick={() => updateEditor((current) => ({ ...keepMyRevisionDraft(current), status: "dirty", message: "Your local draft will be saved against the latest collection." }))}>{t("Keep my draft")}</button>
               <button className="reader-control reader-control--secondary" type="button" onClick={() => {
                 if (!window.confirm("Use the latest saved Note Block and discard the local draft?")) return;
                 updateEditor((current) => ({ ...applyLatestRevisionDraft(current), status: "clean", message: "Latest saved Note Block in use." }));
-              }}>Use latest saved version</button>
-              <button className="reader-control reader-control--secondary" type="button" onClick={() => void loadCollection({ preserveDraft: true })}><RotateCcw size={15} />Reload current collection</button>
-              <details className="reader-note__conflict-review"><summary>Review local and latest</summary><h3>My draft</h3><pre>{JSON.stringify(editor.draft, null, 2)}</pre><h3>Latest saved value</h3><pre>{JSON.stringify(editor.remote, null, 2)}</pre></details>
+              }}>{t("Use latest saved version")}</button>
+              <button className="reader-control reader-control--secondary" type="button" onClick={() => void loadCollection({ preserveDraft: true })}><RotateCcw size={15} />{t("Reload current collection")}</button>
+              <details className="reader-note__conflict-review"><summary>{t("Review local and latest")}</summary><h3>{t("My draft")}</h3><pre>{JSON.stringify(editor.draft, null, 2)}</pre><h3>{t("Latest saved value")}</h3><pre>{JSON.stringify(editor.remote, null, 2)}</pre></details>
             </> : null}
           </div>
         </form>

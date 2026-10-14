@@ -1,5 +1,7 @@
 "use client";
 
+import { LanguageToggle, useI18n } from "../lib/i18n/LocaleProvider";
+
 import Link from "next/link";
 import packageMetadata from "../../package.json";
 import { DataTableShell } from "../components/DataTableShell";
@@ -16,27 +18,29 @@ function stateTone(state: SettingsState | "available") {
   return systemStateTone(state);
 }
 
-function displayedCount(state: SettingsState, count: number | null) {
+function displayedCount(state: SettingsState, count: number | null, unavailableLabel: string) {
   return state === "unavailable" || count === null
-    ? <span className="muted-text">Unavailable</span>
+    ? <span className="muted-text">{unavailableLabel}</span>
     : <strong>{count}</strong>;
 }
 
 export function SettingsView() {
+  const { t } = useI18n();
   return (
     <div className="page-stack">
-      <PageHeader title="Settings" description="Workspace information and maintenance tools for this local application." />
-      <Section title="Workspace">
+      <PageHeader title={t("Settings")} description={t("Workspace information and maintenance tools for this local application.")} />
+      <Section title={t("Language")}><LanguageToggle /></Section>
+      <Section title={t("Workspace")}>
         <div className="settings-landing">
           <div>
-            <h2>Local research workspace</h2>
-            <p>This web workspace does not currently offer editable settings. Your papers, notes, projects, and tags stay on this device.</p>
+            <h2>{t("Local research workspace")}</h2>
+            <p>{t("This web workspace does not currently offer editable settings. Your papers, notes, projects, and tags stay on this device.")}</p>
           </div>
           <dl className="metadata-list metadata-list--compact">
-            <div><dt>Application version</dt><dd>{packageMetadata.version}</dd></div>
-            <div><dt>Maintenance information</dt><dd>Library health, store checks, and backup readiness are available in Diagnostics.</dd></div>
+            <div><dt>{t("Application version")}</dt><dd>{packageMetadata.version}</dd></div>
+            <div><dt>{t("Maintenance information")}</dt><dd>{t("Library health, store checks, and backup readiness are available in Diagnostics.")}</dd></div>
           </dl>
-          <Link className="reader-action" href="/settings/diagnostics">Open Diagnostics</Link>
+          <Link className="reader-action" href="/settings/diagnostics">{t("Open Diagnostics")}</Link>
         </div>
       </Section>
     </div>
@@ -44,43 +48,44 @@ export function SettingsView() {
 }
 
 export function DiagnosticsView() {
+  const { t } = useI18n();
   const resource = useApiResource("settings-summary", apiClient.getSettingsSummary);
   return (
     <div className="page-stack">
       <PageHeader
-        title="Diagnostics"
-        description="Review application, workspace, integrity, and backup information."
-        actions={<Link className="reader-control reader-control--secondary" href="/settings">Back to Settings</Link>}
+        title={t("Diagnostics")}
+        description={t("Review application, workspace, integrity, and backup information.")}
+        actions={<Link className="reader-control reader-control--secondary" href="/settings">{t("Back to Settings")}</Link>}
       />
-      {resource.status === "loading" ? <LoadingState label="Loading Settings summary" /> : null}
-      {resource.status === "unavailable" ? <UnavailableState description={resource.message} onRetry={resource.retry} /> : null}
-      {resource.status === "error" ? <ErrorState title="Settings couldn't be loaded" description={resource.message} onRetry={resource.retry} /> : null}
-      {resource.status === "not-found" ? <ErrorState description={resource.message} onRetry={resource.retry} /> : null}
+      {resource.status === "loading" ? <LoadingState label={t("Loading Settings summary")} /> : null}
+      {resource.status === "unavailable" ? <UnavailableState description={t(resource.message)} onRetry={resource.retry} /> : null}
+      {resource.status === "error" ? <ErrorState title={t("Settings couldn't be loaded")} description={t(resource.message)} onRetry={resource.retry} /> : null}
+      {resource.status === "not-found" ? <ErrorState description={t(resource.message)} onRetry={resource.retry} /> : null}
       {resource.status === "success" ? (
         <>
-          <Section title="Application" description={resource.data.application.summary}>
+          <Section title={t("Application")} description={t(resource.data.application.summary)}>
             <div className="summary-strip">
-              <div><span>Product version</span><strong>{resource.data.application.product_version}</strong></div>
-              <div><span>API state</span><StatusBadge tone={stateTone(resource.data.application.api_state)}>{resource.data.application.api_state}</StatusBadge></div>
-              <div><span>API contract</span><strong>{resource.data.application.api_contract_version}</strong></div>
-              <div><span>Section state</span><StatusBadge tone={stateTone(resource.data.application.state)}>{resource.data.application.state}</StatusBadge></div>
+              <div><span>{t("Product version")}</span><strong>{resource.data.application.product_version}</strong></div>
+              <div><span>{t("API state")}</span><StatusBadge tone={stateTone(resource.data.application.api_state)}>{resource.data.application.api_state}</StatusBadge></div>
+              <div><span>{t("API contract")}</span><strong>{resource.data.application.api_contract_version}</strong></div>
+              <div><span>{t("Section state")}</span><StatusBadge tone={stateTone(resource.data.application.state)}>{resource.data.application.state}</StatusBadge></div>
             </div>
           </Section>
 
-          <Section title="Workspace" description={resource.data.workspace.summary}>
+          <Section title={t("Workspace")} description={t(resource.data.workspace.summary)}>
             {resource.data.workspace.state === "empty" ? (
-              <EmptyState title="Workspace is empty" description="The safe API verified zero stored items across the available workspace stores." />
+              <EmptyState title={t("Workspace is empty")} description={t("The safe API verified zero stored items across the available workspace stores.")} />
             ) : (
-              <DataTableShell label="Workspace availability summary">
+              <DataTableShell label={t("Workspace availability summary")}>
                 <table>
-                  <thead><tr><th>Store</th><th>State</th><th>Count</th><th>Summary</th></tr></thead>
+                  <thead><tr><th>{t("Store")}</th><th>{t("State")}</th><th>{t("Count")}</th><th>{t("Summary")}</th></tr></thead>
                   <tbody>
                     {resource.data.workspace.resources.map((item) => (
                       <tr key={item.code}>
-                        <td><strong>{item.label}</strong></td>
+                        <td><strong>{t(item.label)}</strong></td>
                         <td><StatusBadge tone={stateTone(item.state)}>{item.state}</StatusBadge></td>
-                        <td>{displayedCount(item.state, item.count)}</td>
-                        <td>{item.summary}</td>
+                      <td>{displayedCount(item.state, item.count, t("Unavailable"))}</td>
+                        <td>{t(item.summary)}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -89,18 +94,18 @@ export function DiagnosticsView() {
             )}
           </Section>
 
-          <Section title="Data integrity" description={resource.data.data_integrity.summary}>
-            <DataTableShell label="Lightweight data integrity summary">
+          <Section title={t("Data integrity")} description={t(resource.data.data_integrity.summary)}>
+            <DataTableShell label={t("Lightweight data integrity summary")}>
               <table>
-                <thead><tr><th>Check</th><th>State</th><th>Count</th><th>Explanation</th><th>Next action</th></tr></thead>
+                <thead><tr><th>{t("Check")}</th><th>{t("State")}</th><th>{t("Count")}</th><th>{t("Explanation")}</th><th>{t("Next action")}</th></tr></thead>
                 <tbody>
                   {resource.data.data_integrity.issues.map((issue) => (
                     <tr key={issue.code}>
                       <td><strong>{issue.code.replaceAll("_", " ")}</strong><small className="settings-severity">{issue.severity}</small></td>
                       <td><StatusBadge tone={stateTone(issue.state)}>{issue.state}</StatusBadge></td>
-                      <td>{displayedCount(issue.state, issue.count)}</td>
-                      <td>{issue.explanation}</td>
-                      <td>{issue.next_action}</td>
+                      <td>{displayedCount(issue.state, issue.count, t("Unavailable"))}</td>
+                      <td>{t(issue.explanation)}</td>
+                      <td>{t(issue.next_action)}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -108,17 +113,17 @@ export function DiagnosticsView() {
             </DataTableShell>
           </Section>
 
-          <Section title="Backup readiness" description={resource.data.backup_readiness.summary}>
+          <Section title={t("Backup readiness")} description={t(resource.data.backup_readiness.summary)}>
             <div className="detail-panel">
               <dl className="metadata-list metadata-list--compact">
-                <div><dt>State</dt><dd><StatusBadge tone={stateTone(resource.data.backup_readiness.state)}>{resource.data.backup_readiness.state}</StatusBadge></dd></div>
-                <div><dt>Snapshot evidence</dt><dd>{resource.data.backup_readiness.snapshot_available === null ? "Unavailable" : resource.data.backup_readiness.snapshot_available ? "Available" : "Not found"}</dd></div>
-                <div><dt>Last updated</dt><dd>{resource.data.backup_readiness.last_updated_at ?? "Unavailable"}</dd></div>
+                <div><dt>{t("State")}</dt><dd><StatusBadge tone={stateTone(resource.data.backup_readiness.state)}>{resource.data.backup_readiness.state}</StatusBadge></dd></div>
+                <div><dt>{t("Snapshot evidence")}</dt><dd>{resource.data.backup_readiness.snapshot_available === null ? t("Unavailable") : resource.data.backup_readiness.snapshot_available ? t("Available") : t("Not found")}</dd></div>
+                <div><dt>{t("Last updated")}</dt><dd>{resource.data.backup_readiness.last_updated_at ?? t("Unavailable")}</dd></div>
               </dl>
-              <p className="deferred-note">Backup, restore, repair, and configuration actions remain in the existing Streamlit Settings workflow.</p>
+              <p className="deferred-note">{t("Backup, restore, repair, and configuration actions remain in the existing Streamlit Settings workflow.")}</p>
             </div>
           </Section>
-          <p className="purpose-copy">Only values returned by the safe summary API are shown; this page never generates sample counts or backup history.</p>
+          <p className="purpose-copy">{t("Only values returned by the safe summary API are shown; this page never generates sample counts or backup history.")}</p>
         </>
       ) : null}
     </div>

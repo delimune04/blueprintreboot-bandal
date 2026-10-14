@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { readFile } from "node:fs/promises";
+import { readFile } from "./ui-source.mjs";
 import test from "node:test";
 
 test("Library makes the paper collection primary and selects papers into a contextual inspector", async () => {
@@ -60,7 +60,7 @@ test("metadata enrichment remains explicit and contextual to the selected paper"
 
   assert.match(library, /previewMetadataEnrichment\(paperId\)/);
   assert.match(library, /saveReaderMetadata\(enrichment\.paper_id, changes, enrichment\.metadata_revision\)/);
-  assert.match(library, /Review and choose fields before applying\./);
+  assert.match(library, /Choose fields before applying\./);
   assert.match(library, /Apply selected fields/);
   assert.match(library, /checked=\{selectedFields\.includes\(field\.field\)\}/);
   assert.match(library, /Candidate details/);

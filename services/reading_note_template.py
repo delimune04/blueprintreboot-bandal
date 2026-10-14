@@ -9,7 +9,11 @@ from storage.paths import PROJECT_ROOT
 
 
 CANONICAL_READING_NOTE_TITLE = "# BluePrint Reading Note"
-LEGACY_READING_NOTE_TITLES = ("# BluePrint External Reading Note",)
+LEGACY_READING_NOTE_TITLES = (
+    "# BluePrint External Reading Note",
+    "# 랩비움 Reading Note",
+    "# 랩비움 읽기 노트",
+)
 READING_NOTE_TEMPLATE_VERSION = "1.0"
 READING_NOTE_TEMPLATE_PATH = PROJECT_ROOT / "docs" / "templates" / "blueprint_reading_note_template.md"
 READING_NOTE_HEADER_FIELDS = (
@@ -41,6 +45,23 @@ READING_NOTE_BULLET_SECTIONS = (
     "Ideas",
     "Limitations",
 )
+# Display translations are accepted on import without rewriting existing notes
+# or changing the canonical stored format, identifiers, or template version.
+READING_NOTE_SECTION_ALIASES = {
+    "한 줄 요약": "One-line Summary",
+    "한줄 요약": "One-line Summary",
+    "요약": "Summary",
+    "핵심 주장": "Key Claims",
+    "방법": "Methods",
+    "연구 방법": "Methods",
+    "근거 / 결과": "Evidence / Results",
+    "근거/결과": "Evidence / Results",
+    "질문": "Questions",
+    "아이디어": "Ideas",
+    "한계": "Limitations",
+    "원본 메모": "Raw Notes",
+    "자유 메모": "Raw Notes",
+}
 REFRESHABLE_READING_NOTE_HEADER_FIELDS = (
     "paper_id",
     "title",

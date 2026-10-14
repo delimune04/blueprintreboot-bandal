@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { readFile } from "node:fs/promises";
+import { readFile } from "./ui-source.mjs";
 import test from "node:test";
 
 const sources = Promise.all([
@@ -20,7 +20,9 @@ test("Reader exposes explicit structured Note Block create, edit, cancel, reload
   assert.match(client, /createNoteBlock/);
   assert.match(client, /updateNoteBlock/);
   assert.doesNotMatch(workspace, /autoSave\s*=|onBlur=.*(?:create|update)NoteBlock|setInterval/i);
-  assert.doesNotMatch(workspace, /deleteNoteBlock|reorder|drag/i);
+  assert.match(workspace, /apiClient\.deleteNoteBlock/);
+  assert.match(workspace, /window\.confirm/);
+  assert.doesNotMatch(workspace, /reorder|drag/i);
 });
 
 test("Reader distinguishes Note Block loading, empty, unavailable, error, and success states", async () => {

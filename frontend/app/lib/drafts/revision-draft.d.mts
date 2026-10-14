@@ -23,6 +23,7 @@ export interface RevisionDraftState<T> {
 export const SAVE_STATES: SaveState[];
 export function saveStateLabel(state: SaveState): string;
 export function draftStorageKey(scope: string, identity: string): string;
+export function configureDraftWorkspaceScope(scope?: string): void;
 export function revisionDraftEqual<T>(left: T, right: T): boolean;
 export function readPersistentRevisionDraft(storage: Storage | null | undefined, key: string): Record<string, unknown> | null;
 export function persistRevisionDraft<T>(storage: Storage | null | undefined, key: string, state: RevisionDraftState<T>): boolean;

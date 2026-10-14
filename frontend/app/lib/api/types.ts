@@ -141,6 +141,13 @@ export interface EditableNoteBlockContent {
   figure: string;
   quote: string;
   tags: string[];
+  provenance?: {
+    source: "pdf_selection";
+    page: number;
+    coordinate_space: "page-normalized";
+    rectangles: Array<{ x: number; y: number; width: number; height: number }>;
+    quote: string;
+  };
 }
 
 export interface NoteBlock extends EditableNoteBlockContent {
@@ -172,6 +179,11 @@ export interface NoteBlockCollection {
 export interface NoteBlockCommandResponse {
   status: "created" | "saved" | "no_op";
   block: NoteBlock;
+  note_blocks_revision: string;
+  total: number;
+}
+export interface DeleteNoteBlockResponse {
+  status: "deleted";
   note_blocks_revision: string;
   total: number;
 }
@@ -592,6 +604,8 @@ export interface SettingsSummary {
     snapshot_available: boolean | null;
     last_updated_at: string | null;
     summary: string;
+    evidence_state?: "absent" | "invalid" | "stale" | "verified_full" | "verified_light" | "unavailable" | null;
+    snapshot_type?: "full" | "light" | null;
   };
 }
 

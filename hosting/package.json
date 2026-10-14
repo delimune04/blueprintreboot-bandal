@@ -1,0 +1,17 @@
+{
+  "name": "labvium-sites-hosting",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node build-site.mjs",
+    "db:generate": "drizzle-kit generate",
+    "test": "node --test tests/worker.test.mjs",
+    "validate": "node validate-artifact.mjs"
+  },
+  "devDependencies": {
+    "drizzle-kit": "0.31.10",
+    "drizzle-orm": "0.45.2",
+    "esbuild": "0.27.3"
+  }
+}

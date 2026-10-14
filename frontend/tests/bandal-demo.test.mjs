@@ -232,17 +232,16 @@ test("archiving a demo paper requires confirmation and retains PDFs and notes", 
   assert.equal(snapshot.saved_note_content, baseline.saved_note_content);
 });
 
-test("unsupported filesystem and AI commands return 501 without inventing success", async () => {
+test("unsupported commands reject without pretending an AI or server filesystem operation succeeded", async () => {
   const { request, storage } = workspace();
   await read(request, "/papers");
   const saved = storage.getItem(DEMO_STORAGE_KEY);
-  for (const path of ["/papers/scan", "/papers/import", "/papers/upload", "/papers/reconnect", "/papers/demo-ccs/full-text/extract", "/papers/demo-ccs/metadata/enrichment-preview", "/papers/demo-ccs/tag-candidates/generate", "/papers/demo-ccs/remove-pdf"]) {
+  for (const path of ["/ai/summary", "/server-filesystem/scan", "/papers/demo-ccs/unknown-command"]) {
     const failure = await command(request, path, "POST", {}, 501);
     assert.match(failure.detail, /demo|sample|local/i);
   }
   assert.equal(storage.getItem(DEMO_STORAGE_KEY), saved);
-  const upload = new FormData(); upload.append("files", new Blob(["%PDF-1.4"]), "test.pdf");
-  assert.equal((await request("/papers/upload", { method: "POST", body: upload })).status, 501);
+  assert.equal((await request("/papers/upload", { method: "POST", body: "{}" })).status, 422);
 });
 
 test("corrupt saved browser state is preserved and never silently reset", async () => {

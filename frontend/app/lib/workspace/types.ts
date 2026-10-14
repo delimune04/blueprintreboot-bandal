@@ -1,0 +1,15 @@
+export type ResearchBlockType = "paragraph" | "heading" | "quote" | "checklist";
+export interface ResearchSource { paper_id: string; url: string; label: string }
+export interface ResearchBlock { id: string; type: ResearchBlockType; text: string; checked: boolean; provenance: "manual" | "ai"; source_links: ResearchSource[]; owner: string }
+export interface ResearchPageInput { parent_id: string | null; title: string; project_id: string; blocks: ResearchBlock[]; handoff: { verified_facts: string; open_questions: string; next_steps: string; owner: string } }
+export interface ResearchPage extends ResearchPageInput { id: string; archived: boolean; created_at: string; updated_at: string }
+export interface ResearchPages { items: ResearchPage[]; revision: string; workspace_revision?: string }
+export interface ResearchPageResponse { page: ResearchPage; revision: string; workspace_revision?: string }
+export interface ScholarlyAuthor { id: string; name: string; h_index: number | null; source?: string; updated_at?: string; url?: string }
+export interface ScholarlyWork { id: string; title: string; authors: string[]; year: string; doi: string; abstract: string; url: string; pdf_url: string; source: string; cited_by_count?: number | null; topics?: string[]; relation?: string; retrieved_at?: string; updated_at?: string; author_metrics?: ScholarlyAuthor[]; references?: string[]; score?: number }
+export interface DiscoveryResponse { items: ScholarlyWork[]; total: number; q: string; provider: string; next_cursor?: string; retrieved_at?: string; warnings?: string[]; relation?: string; authors?: ScholarlyAuthor[]; capabilities?: string[] }
+export interface BackupRecord { backup_id: string; created_at: string; kind: "light" | "full"; verified: boolean; pdf_count: number; size_bytes: number; download_url?: string; portable?: boolean; pdf_coverage?: "bytes" | "references" | "none"; message?: string }
+export interface BackupPreview { backup_id: string; verified: boolean; kind: "light" | "full"; paper_count: number; project_count: number; missing_pdf_count: number; workspace_revision: string; message: string; research_page_count?: number }
+export interface NoteImportPreview { source_sha256: string; header_fields: Record<string, string>; sections: Array<{ title?: string; heading?: string; text?: string; content?: string }>; block_candidates: Array<{ block_type?: string; title?: string; text?: string }>; matching_papers: Array<{ paper_id: string; title: string; score?: number; reason?: string }>; duplicate: boolean; workspace_revision: string }
+export interface RecoveryRecord { recovery_id: string; kind: string; created_at: string; summary: string; download_url?: string }
+export interface WorkspaceSnapshot { workspace_revision: string; mode: string; paper_count: number; project_count: number; pdf_count: number; capabilities: string[] | Record<string, boolean>; research_page_count?: number }

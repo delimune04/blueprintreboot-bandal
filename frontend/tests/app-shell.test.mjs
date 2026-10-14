@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { readFile } from "node:fs/promises";
+import { readFile } from "./ui-source.mjs";
 import test from "node:test";
 
 test("the shared shell preserves normal navigation preference independently from Reader overlay navigation", async () => {

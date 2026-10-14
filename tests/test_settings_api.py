@@ -15,6 +15,7 @@ from api.main import UNAVAILABLE_DETAIL, create_app
 from api.schemas import SettingsSummaryResponse
 from config.contact import APP_VERSION
 from services import settings_read_model
+from services.backup_snapshot import create_backup_snapshot
 
 
 def _write_json(path: Path, value: object) -> None:
@@ -216,12 +217,9 @@ def test_populated_settings_summary_is_strict_safe_and_uses_real_aggregates(
     assert _issue(body, "orphan_note_blocks")["count"] == 1
     assert _issue(body, "orphan_project_links")["count"] == 1
     assert _issue(body, "corrupt_json")["count"] == 1
-    assert body["backup_readiness"] == {
-        "state": "healthy",
-        "snapshot_available": True,
-        "last_updated_at": "2023-11-14T22:13:20Z",
-        "summary": "Backup snapshot evidence is available.",
-    }
+    assert body["backup_readiness"]["state"] == "warning"
+    assert body["backup_readiness"]["snapshot_available"] is False
+    assert body["backup_readiness"]["last_updated_at"] is None
     serialized = response.text
     for private_value in (
         "private-user",
@@ -291,8 +289,7 @@ def test_absent_and_present_backup_evidence_are_distinct(tmp_path: Path) -> None
     paths = _workspace_paths(tmp_path)
     absent = adapt_settings_summary(_build(tmp_path)).model_dump()
     paths["exports_dir"].mkdir(parents=True)
-    snapshot = paths["exports_dir"] / "blueprint_snapshot_safe.zip"
-    snapshot.write_bytes(b"not opened")
+    create_backup_snapshot(project_root=tmp_path, exports_dir=paths["exports_dir"], include_pdfs=True)
     present = adapt_settings_summary(_build(tmp_path)).model_dump()
 
     assert absent["backup_readiness"]["state"] == "warning"
@@ -381,18 +378,17 @@ def test_adapter_rejects_private_version_content_as_generic_503(tmp_path: Path) 
     assert "private-user" not in response.text
 
 
-def test_settings_read_does_not_open_pdf_or_snapshot_content(
+def test_settings_read_verifies_snapshot_without_opening_live_pdf_content(
     tmp_path: Path,
     monkeypatch,
 ) -> None:
     _seed_populated_workspace(tmp_path)
-    snapshot = tmp_path / "exports" / "blueprint_snapshot_safe.zip"
-    snapshot.write_bytes(b"private archive content")
+    create_backup_snapshot(project_root=tmp_path, exports_dir=tmp_path / "exports", include_pdfs=False)
     original_open = Path.open
 
     def guarded_open(path: Path, *args, **kwargs):
-        if path.suffix.casefold() in {".pdf", ".zip"}:
-            raise AssertionError("Settings attempted to open a heavy binary file.")
+        if path.suffix.casefold() == ".pdf":
+            raise AssertionError("Settings attempted to open a live PDF file.")
         return original_open(path, *args, **kwargs)
 
     monkeypatch.setattr(Path, "open", guarded_open)
@@ -400,6 +396,7 @@ def test_settings_read_does_not_open_pdf_or_snapshot_content(
     result = _build(tmp_path)
 
     assert result["backup_readiness"]["snapshot_available"] is True
+    assert result["backup_readiness"]["evidence_state"] == "verified_light"
     assert result["data_integrity"]["missing_pdfs"]["count"] == 1
 
 

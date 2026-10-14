@@ -396,6 +396,8 @@ class SettingsBackupReadinessSection(StrictResponseModel):
     snapshot_available: bool | None
     last_updated_at: str | None
     summary: str
+    evidence_state: Literal["absent", "invalid", "stale", "verified_full", "verified_light", "unavailable"] | None = None
+    snapshot_type: Literal["full", "light"] | None = None
 
 
 class SettingsSummaryResponse(StrictResponseModel):

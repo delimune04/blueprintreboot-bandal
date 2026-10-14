@@ -1,4 +1,7 @@
+"use client";
+
 import type { ProjectLinkType } from "../lib/api/types";
+import { useI18n } from "../lib/i18n/LocaleProvider";
 import { relationshipTone } from "../lib/semantic-tones.mjs";
 
 const RELATIONSHIP_LABELS: Record<ProjectLinkType, string> = {
@@ -15,5 +18,6 @@ export function relationshipLabel(type: ProjectLinkType | string): string {
 }
 
 export function RelationshipLabel({ type }: { type: ProjectLinkType | string }) {
-  return <span className="relationship-label" data-relationship={type} data-tone={relationshipTone(type)}>{relationshipLabel(type)}</span>;
+  const { t } = useI18n();
+  return <span className="relationship-label" data-relationship={type} data-tone={relationshipTone(type)}>{t(relationshipLabel(type))}</span>;
 }

@@ -1,4 +1,32 @@
-﻿# BluePrintReboot
+# 랩비움 · BANDAL personal fork
+
+Research reading, evidence capture, related-paper discovery and lab handoff on
+[bandal.app/ku-ai](https://bandal.app/ku-ai/). This independent repository belongs
+to `delimune04/blueprintreboot-bandal` and retains the work and attribution of
+Seoyeon Lee (Lilshawn-LSY) and Sanghyeon Park. The upstream repository is read-only.
+
+- KR/EN interface, PDF reading, source-linked evidence blocks and research pages.
+- Browser workspaces persist records and PDF bytes in IndexedDB. Authenticated
+  personal/team workspaces use D1 and private R2 objects; owner/editor/viewer
+  authorization is checked on the server. Sharing requires an explicit owner
+  action; creating a workspace does not share existing personal material.
+- Current scholarly discovery uses actual Crossref/arXiv/OpenAlex data. Missing
+  author h-index or citation counts are unavailable rather than estimated.
+- Explicit extraction/OCR, revision protection, verified backups and recoverable
+  operations preserve source identities and existing Reading Note formats.
+- Generative AI is optional and requires a server-side API key. With no key the
+  assistant reports that it is disconnected and does not generate sample answers.
+
+Build the hosted interface with `cd frontend && npm ci && npm run demo:build`.
+The build prepares pinned, self-hosted OCR worker/core assets. English/Korean
+recognition models download only after an explicit OCR action. See
+[feature parity](docs/LABVIUM_FEATURE_PARITY.md),
+[product direction](docs/LABVIUM_PRODUCT.md), and
+[hosting integration](hosting/ROOT_INTEGRATION.md) for supported workflows and
+platform limits. Never reuse the upstream Site identity for publication.
+
+The following documentation describes the retained original local application
+and its v1.6.5 release baseline; hosted extensions are documented above.
 
 ## What is BluePrintReboot?
 

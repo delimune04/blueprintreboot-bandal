@@ -1,4 +1,6 @@
 import { DEMO_PAPERS, DEMO_TAGS } from "./seed.mjs";
+import { cachedBrowserPdfUrl, configureBrowserWorkspace, getBrowserWorkspaceStorage, getBrowserPdfRecord, cacheBrowserPdfUrl, revokeBrowserPdfUrl } from "./browser-storage.mjs";
+import { handleBrowserCommand, validateBrowserPaper, validatePdfProvenance } from "./browser-commands.mjs";
 
 export const DEMO_STORAGE_KEY = "bandal.blueprint.demo.workspace.v1";
 const VERSION = 1;
@@ -110,12 +112,13 @@ function validateProject(input, partial = false) {
   return output;
 }
 function validateBlock(input, partial = false) {
-  strict(input, ["block_type", ...Object.keys(BLOCK_LIMITS), "tags"]);
+  strict(input, ["block_type", ...Object.keys(BLOCK_LIMITS), "tags", "provenance"]);
   if (partial && !Object.keys(input).length) fail(422, "At least one Note Block change is required.");
   const output = partial ? {} : { title: "", text: "", page: "", figure: "", quote: "", tags: [] };
   if (!partial || "block_type" in input) output.block_type = choice(input.block_type, BLOCK_TYPES);
   for (const [key, max] of Object.entries(BLOCK_LIMITS)) if (key in input) output[key] = textField(input[key], max);
   if ("tags" in input) output.tags = boundedTags(input.tags);
+  if ("provenance" in input) { try { output.provenance = validatePdfProvenance(input.provenance); } catch (error) { fail(422, error.message); } }
   return output;
 }
 function validateTag(input, partial = false) {
@@ -138,13 +141,14 @@ function validateState(state) {
     const unique = (rows, key) => rows.every((row) => object(row) && typeof row[key] === "string" && /^[a-z0-9-]{1,100}$/.test(row[key])) && new Set(rows.map((row) => row[key])).size === rows.length;
     if (!unique(state.papers, "paper_id") || !unique(state.projects, "project_id") || !unique(state.tags, "canonical_key")) throw new Error();
     for (const paper of state.papers) {
-      if (!DEMO_PAPERS.some((sample) => sample.paper_id === paper.paper_id) || typeof paper.archived !== "boolean" || typeof paper.noteExists !== "boolean" || ![paper.metadataRev, paper.tagsRev, paper.statusRev, paper.lifecycleRev, paper.blocksRev].every(counter) || !Array.isArray(paper.blocks) || paper.blocks.length > 1000 || !unique(paper.blocks, "id")) throw new Error();
+      if (!validateBrowserPaper(paper) || typeof paper.archived !== "boolean" || typeof paper.noteExists !== "boolean" || ![paper.metadataRev, paper.tagsRev, paper.statusRev, paper.lifecycleRev, paper.blocksRev].every(counter) || !Array.isArray(paper.blocks) || paper.blocks.length > 1000 || !unique(paper.blocks, "id")) throw new Error();
       validateMetadata(paper.metadata, false);
       if (Object.keys(paper.metadata).length !== Object.keys(METADATA_LIMITS).length) throw new Error();
       boundedTags(paper.tags); choice(paper.status, ["unread", "reading", "read", "finished"]); choice(paper.priority, ["low", "normal", "high"]); textField(paper.note, 2000000); textField(paper.fullText, 2000000);
       for (const block of paper.blocks) {
         if (block.paper_id !== paper.paper_id || typeof block.created_at !== "string" || typeof block.updated_at !== "string") throw new Error();
         validateBlock(Object.fromEntries(["block_type", ...Object.keys(BLOCK_LIMITS), "tags"].map((key) => [key, block[key]])));
+        if (block.provenance) validatePdfProvenance(block.provenance);
       }
     }
     for (const project of state.projects) {
@@ -168,17 +172,17 @@ function validateState(state) {
   }
 }
 function listItem(paper) {
-  return { paper_id: paper.paper_id, title: paper.metadata.title, first_author: authors(paper)[0] || "", year: paper.metadata.year, status: paper.status, priority: paper.priority, tags: [...paper.tags], archived: paper.archived, missing_pdf: false, health: [] };
+  return { paper_id: paper.paper_id, title: paper.metadata.title, first_author: authors(paper)[0] || "", year: paper.metadata.year, status: paper.status, priority: paper.priority, tags: [...paper.tags], archived: paper.archived, missing_pdf: Boolean(paper.pdfMissing), health: paper.pdfMissing ? ["missing_pdf"] : [] };
 }
 function paperDetail(paper, state) {
-  return { ...listItem(paper), authors: authors(paper), journal: paper.metadata.journal, abstract: paper.metadata.abstract, keywords: paper.metadata.keywords.split(/[;,]/).map((part) => part.trim()).filter(Boolean), arxiv_id: "", filename: `${paper.paper_id}.pdf`, relative_pdf_path: `bandal-demo/${paper.paper_id}.pdf`, doi: paper.metadata.doi, project_links: state.projects.flatMap((project) => project.links.filter((link) => link.paper_id === paper.paper_id && link.target_type === "paper").map((link) => ({ project_id: project.project_id, link_type: link.link_type, target_type: link.target_type }))), note_available: paper.noteExists, extracted_text_available: true, profile_available: false, lifecycle_state: paper.archived ? "archived" : "active", recoverable_warnings: [], reading_status_revision: revision(paper.statusRev), pdf_revision: revision(1), lifecycle_revision: revision(paper.lifecycleRev) };
+  return { ...listItem(paper), authors: authors(paper), journal: paper.metadata.journal, abstract: paper.metadata.abstract, keywords: paper.metadata.keywords.split(/[;,]/).map((part) => part.trim()).filter(Boolean), arxiv_id: "", filename: paper.filename || `${paper.paper_id}.pdf`, relative_pdf_path: paper.pdfMissing ? "" : paper.pdfId || `bandal-demo/${paper.paper_id}.pdf`, doi: paper.metadata.doi, project_links: state.projects.flatMap((project) => project.links.filter((link) => link.paper_id === paper.paper_id && link.target_type === "paper").map((link) => ({ project_id: project.project_id, link_type: link.link_type, target_type: link.target_type }))), note_available: paper.noteExists, extracted_text_available: Boolean(paper.fullText || paper.fullTextCache?.content), profile_available: false, lifecycle_state: paper.archived ? "archived" : "active", recoverable_warnings: paper.pdfMissing ? ["missing_pdf"] : [], reading_status_revision: revision(paper.statusRev), pdf_revision: revision(paper.pdfVersion || 1), priority_revision: revision(paper.priorityRev || 1), lifecycle_revision: revision(paper.lifecycleRev) };
 }
 async function persistedNote(paper) {
   return { exists: paper.noteExists, content: paper.note, sha256: await hash(paper.note), size_bytes: encoder.encode(paper.note).byteLength };
 }
 async function reader(paper, state) {
   const note = await persistedNote(paper);
-  return { paper: paperDetail(paper, state), editable_metadata: { ...paper.metadata }, metadata_revision: revision(paper.metadataRev), tags_revision: revision(paper.tagsRev), pdf_state: "available", saved_note_available: note.exists, saved_note_content: note.content, canonical_note_header: header(paper), saved_note_baseline: { exists: note.exists, sha256: note.sha256, size_bytes: note.size_bytes }, warnings: ["Authored demo material. Saved changes stay in this browser; they are not synced to GitHub or the original workspace."], unavailable_reason: "" };
+  return { paper: paperDetail(paper, state), editable_metadata: { ...paper.metadata }, metadata_revision: revision(paper.metadataRev), tags_revision: revision(paper.tagsRev), pdf_state: paper.pdfMissing ? "missing" : "available", saved_note_available: note.exists, saved_note_content: note.content, canonical_note_header: header(paper), saved_note_baseline: { exists: note.exists, sha256: note.sha256, size_bytes: note.size_bytes }, warnings: ["Browser workspace. Saved changes stay on this device until exported; they are not synced to GitHub."], unavailable_reason: paper.pdfMissing ? "This Paper's PDF attachment is missing. Saved notes and recovery copies are retained." : "" };
 }
 function projectItem(project) {
   return { project_id: project.project_id, name: project.name, description: project.description, status: project.status, priority: project.priority, tags: [...project.tags], created_at: project.created_at, updated_at: project.updated_at, project_revision: revision(project.projectRev), link_count: project.links.length, linked_paper_count: project.links.filter((link) => link.target_type === "paper").length, linked_note_block_count: project.links.filter((link) => link.target_type === "note_block").length };
@@ -206,28 +210,32 @@ function noteBlocks(paper, state) {
   return { source_paper: { paper_id: paper.paper_id, title: paper.metadata.title }, items: structuredClone(paper.blocks), total: paper.blocks.length, note_blocks_revision: revision(paper.blocksRev), project_links_state: "available", project_links: state.projects.flatMap((project) => project.links.filter((link) => link.target_type === "note_block" && link.paper_id === paper.paper_id).map((link) => ({ link_id: link.link_id, project_id: project.project_id, project_name: project.name, project_status: project.status, note_block_id: link.target_id, link_type: link.link_type, links_revision: revision(project.linksRev) }))) };
 }
 function fullText(paper, includeContent) {
-  return { paper_id: paper.paper_id, state: "cached", extraction_state: "success", source: "authored_demo", provider: "BANDAL sample text", provider_version: "1", content_format: "plain_text", classification: "text", page_count: 2, char_count: paper.fullText.length, ocr_needed_pages: [], extracted_at: STAMP, has_content: true, is_stale: false, can_extract: false, previous_cache_preserved: false, message: "Authored sample text supplied with this demo PDF. Browser demo mode does not run PDF extraction or AI.", ...(includeContent ? { content: paper.fullText } : {}) };
+  if (paper.fullTextCache) return { ...paper.fullTextCache, state: paper.fullTextCache.source_pdf_sha256 && paper.pdfSha256 !== paper.fullTextCache.source_pdf_sha256 ? "stale" : paper.fullTextCache.state, is_stale: Boolean(paper.fullTextCache.source_pdf_sha256 && paper.pdfSha256 !== paper.fullTextCache.source_pdf_sha256), can_extract: !paper.pdfMissing, ...(includeContent ? {} : { content: undefined }) };
+  if (!paper.fullText) return { paper_id: paper.paper_id, state: "not_extracted", extraction_state: "not_extracted", source: "", provider: "", provider_version: "", content_format: "plain_text", classification: "unknown", page_count: 0, char_count: 0, ocr_needed_pages: [], extracted_at: "", has_content: false, is_stale: false, can_extract: !paper.pdfMissing, previous_cache_preserved: false, message: "Extract selectable text from this PDF, then optionally run on-device English and Korean OCR for scanned pages.", ...(includeContent ? { content: "" } : {}) };
+  return { paper_id: paper.paper_id, state: "cached", extraction_state: "success", source: "authored_demo", provider: "BANDAL sample text", provider_version: "1", content_format: "plain_text", classification: "text", page_count: 2, char_count: paper.fullText.length, ocr_needed_pages: [], extracted_at: STAMP, has_content: true, is_stale: false, can_extract: !paper.pdfMissing, previous_cache_preserved: false, message: "Authored sample text supplied with this example PDF. Use Extract to read selectable text from the actual PDF; no OCR or AI is performed.", ...(includeContent ? { content: paper.fullText } : {}) };
 }
-function health() { return { overall_state: "healthy", blocking_issues: 0, warning_count: 0, corrupt_critical_state_count: 0, quarantine_count: 0, missing_pdf_count: 0, duplicate_review_count: 0 }; }
-function library(state) { return { active_count: state.papers.filter((paper) => !paper.archived).length, archived_count: state.papers.filter((paper) => paper.archived).length, missing_count: 0, duplicate_count: 0, corrupt_count: 0, quarantine_count: 0, degraded: false, workspace_warnings: [] }; }
+function health(state) { const missing = state.papers.filter((paper) => paper.pdfMissing).length; return { overall_state: missing ? "degraded" : "healthy", blocking_issues: 0, warning_count: missing, corrupt_critical_state_count: 0, quarantine_count: 0, missing_pdf_count: missing, duplicate_review_count: 0 }; }
+function library(state) { const missing = state.papers.filter((paper) => paper.pdfMissing).length; return { active_count: state.papers.filter((paper) => !paper.archived).length, archived_count: state.papers.filter((paper) => paper.archived).length, missing_count: missing, duplicate_count: 0, corrupt_count: 0, quarantine_count: 0, degraded: Boolean(missing), workspace_warnings: missing ? ["Some PDF attachments are missing. Notes are retained; use recovery/reconnect."] : [] }; }
 function settings(state) {
   const resources = [
-    ["papers", "Demo PDFs", state.papers.length], ["notes", "Saved Paper Notes", state.papers.filter((paper) => paper.noteExists).length], ["projects", "Projects", state.projects.length], ["tags", "Canonical tags", state.tags.length], ["note_blocks", "Note Blocks", state.papers.reduce((total, paper) => total + paper.blocks.length, 0)], ["project_links", "Project links", state.projects.reduce((total, project) => total + project.links.length, 0)], ["tag_candidate_reviews", "Candidate reviews", 0],
-  ].map(([code, label, count]) => ({ code, label, count, state: count ? "healthy" : "empty", summary: "This browser's isolated demonstration workspace." }));
-  return { application: { state: "healthy", product_version: "1.6.5 · BANDAL demo", api_state: "available", api_contract_version: "browser-demo-v1", summary: "Browser-local demo adapter. Original GitHub and the shared research workspace are untouched." }, workspace: { state: "healthy", resources, summary: "Explicit saves persist in this browser only. Different browsers and devices have independent copies." }, data_integrity: { state: "healthy", issues: [], summary: "The saved demo workspace passed validation. These are authored examples, not published research." }, backup_readiness: { state: "warning", snapshot_available: false, last_updated_at: null, summary: "Browser storage is not a backup. Clearing site data removes demo edits. Local PDF scanning, uploads, AI and filesystem recovery are unavailable in this hosted demo." } };
+    ["papers", "PDF Library", state.papers.length], ["notes", "Saved Paper Notes", state.papers.filter((paper) => paper.noteExists).length], ["projects", "Projects", state.projects.length], ["tags", "Canonical tags", state.tags.length], ["note_blocks", "Note Blocks", state.papers.reduce((total, paper) => total + paper.blocks.length, 0)], ["project_links", "Project links", state.projects.reduce((total, project) => total + project.links.length, 0)], ["tag_candidate_reviews", "Candidate reviews", state.papers.reduce((total, paper) => total + (paper.candidates?.length || 0), 0)],
+  ].map(([code, label, count]) => ({ code, label, count, state: count ? "healthy" : "empty", summary: "This browser's private research workspace." }));
+  const missing = state.papers.filter((paper) => paper.pdfMissing).length;
+  return { application: { state: "healthy", product_version: "1.6.5 · 랩비움", api_state: "available", api_contract_version: "browser-workspace-v1", summary: "Browser workspace with IndexedDB storage. GitHub holds application code, not your research data." }, workspace: { state: "healthy", resources, summary: "Explicit saves and PDFs persist on this device. Sign-in cloud workspaces remain separate; browser data is not automatically synchronized." }, data_integrity: { state: missing ? "warning" : "healthy", issues: missing ? [{ code: "missing_pdfs", state: "warning", count: missing, severity: "warning", explanation: "Some Paper attachments have been removed; research notes are retained.", next_action: "Use Maintenance to reconnect a verified recovery copy or select the same PDF again." }] : [], summary: "Saved research metadata passed schema validation. PDF checksums are verified during upload, reconnect and backup export." }, backup_readiness: { state: "warning", snapshot_available: false, last_updated_at: null, summary: "Use Maintenance to export a complete backup, including PDF bytes. Clearing site data removes this device's workspace. Browser storage is not an external backup." } };
 }
 
 /** PDF assets have a bounded stable allowlist, never a user-supplied path. */
 export function demoPdfUrl(paperId) {
+  if (cachedBrowserPdfUrl(paperId)) return cachedBrowserPdfUrl(paperId);
   return DEMO_PAPERS.some((paper) => paper.paper_id === paperId) ? `/bandal-demo/${paperId}.pdf` : "";
 }
 export function isDemoEnabled() { return process.env.NEXT_PUBLIC_BANDAL_DEMO === "1"; }
 
 /** A factory makes the persistence boundary deterministic in tests. */
-export function createDemoAdapter(storageProvider = () => window.localStorage) {
+export function createDemoAdapter(storageProvider = getBrowserWorkspaceStorage) {
   let pending = Promise.resolve();
   return function request(path, init = {}) {
-    const next = pending.then(() => execute(path, init));
+    const next = pending.then(() => globalThis.navigator?.locks ? globalThis.navigator.locks.request("labvium:browser-workspace", () => execute(path, init)) : execute(path, init));
     pending = next.catch(() => undefined);
     return next;
   };
@@ -236,16 +244,16 @@ export function createDemoAdapter(storageProvider = () => window.localStorage) {
     try {
       if (init.signal?.aborted) throw new DOMException("The operation was aborted.", "AbortError");
       let storage;
-      try { storage = typeof storageProvider === "function" ? storageProvider() : storageProvider; }
+      try { storage = await (typeof storageProvider === "function" ? storageProvider() : storageProvider); }
       catch { fail(503, "Browser storage is unavailable. Enable site storage to use this isolated demo."); }
       if (!storage || typeof storage.getItem !== "function" || typeof storage.setItem !== "function") fail(503, "Browser storage is unavailable.");
       let original;
-      try { original = storage.getItem(DEMO_STORAGE_KEY); }
+      try { original = await storage.getItem(DEMO_STORAGE_KEY); }
       catch { fail(503, "The saved browser demo workspace could not be read."); }
       let state;
       if (original === null) {
         state = createDemoSeed();
-        try { storage.setItem(DEMO_STORAGE_KEY, JSON.stringify(state)); original = storage.getItem(DEMO_STORAGE_KEY); }
+        try { if (storage.compareAndSet) await storage.compareAndSet(DEMO_STORAGE_KEY, null, JSON.stringify(state), {}); else await storage.setItem(DEMO_STORAGE_KEY, JSON.stringify(state)); original = await storage.getItem(DEMO_STORAGE_KEY); state = validateState(JSON.parse(original)); }
         catch { fail(503, "The demo workspace could not be saved. Check browser storage availability and quota."); }
       } else {
         try { state = validateState(JSON.parse(original)); }
@@ -256,7 +264,8 @@ export function createDemoAdapter(storageProvider = () => window.localStorage) {
       const parts = url.pathname.split("/").filter(Boolean).map((part) => decodeURIComponent(part));
       const method = (init.method || "GET").toUpperCase();
       let body = {};
-      if (init.body !== undefined && init.body !== null) {
+      if (typeof FormData !== "undefined" && init.body instanceof FormData && parts[0] === "papers" && parts[1] === "upload") body = init.body;
+      else if (init.body !== undefined && init.body !== null) {
         if (typeof init.body !== "string" || encoder.encode(init.body).byteLength > 2500000) {
           if (parts[0] === "papers" && parts[1] === "upload") fail(501, "PDF upload is unavailable in this browser demo. Use the three authored sample PDFs, or run the original app with its local Python backend.");
           fail(422, "Demo commands require a bounded JSON body.");
@@ -265,20 +274,33 @@ export function createDemoAdapter(storageProvider = () => window.localStorage) {
         if (!object(body)) fail(422, "The command body must be an object.");
       }
       const before = JSON.stringify(state);
-      const output = await route(parts, method, body, url.searchParams, state);
+      const effects = { putFiles: [], deleteFiles: [], revokedPaperIds: [] };
+      const output = await route(parts, method, body, url.searchParams, state, effects);
       if (init.signal?.aborted) throw new DOMException("The operation was aborted.", "AbortError");
       if (JSON.stringify(state) !== before) {
         // Preserve newer work if another tab saves during async SHA-256 work.
         try {
-          if (storage.getItem(DEMO_STORAGE_KEY) !== original) fail(409, "The browser workspace changed in another tab. Reload before saving.");
           const serialized = JSON.stringify(state);
-          storage.setItem(DEMO_STORAGE_KEY, serialized);
-          if (storage.getItem(DEMO_STORAGE_KEY) !== serialized) fail(503, "Browser storage did not confirm the save.");
+          if (storage.compareAndSet) {
+            if (!await storage.compareAndSet(DEMO_STORAGE_KEY, original, serialized, effects)) fail(409, "The browser workspace changed in another tab. Reload before saving.");
+          } else {
+            if (await storage.getItem(DEMO_STORAGE_KEY) !== original) fail(409, "The browser workspace changed in another tab. Reload before saving.");
+            if (effects.putFiles.length || effects.deleteFiles.length) fail(503, "PDF writes require IndexedDB transaction support.");
+            await storage.setItem(DEMO_STORAGE_KEY, serialized);
+          }
+          if (await storage.getItem(DEMO_STORAGE_KEY) !== serialized) fail(503, "Browser storage did not confirm the save.");
         } catch (error) {
           if (error instanceof DemoFailure) throw error;
           fail(503, "The demo change could not be saved. The previously saved workspace has been retained.");
         }
       }
+      for (const paperId of effects.revokedPaperIds) revokeBrowserPdfUrl(paperId);
+      for (const file of effects.putFiles.filter((file) => file.kind === "active")) cacheBrowserPdfUrl(file.paper_id, file.blob, file.sha256);
+      if (storage.compareAndSet) for (const paper of state.papers) if (paper.pdfId && !paper.pdfMissing && !cachedBrowserPdfUrl(paper.paper_id)) {
+        const file = await getBrowserPdfRecord(paper.pdfId);
+        if (file) cacheBrowserPdfUrl(paper.paper_id, file.blob, file.sha256);
+      }
+      if (JSON.stringify(state) !== before) globalThis.dispatchEvent?.(new Event("labvium:workspace-changed"));
       return reply(output);
     } catch (error) {
       if (error?.name === "AbortError") throw error;
@@ -288,10 +310,12 @@ export function createDemoAdapter(storageProvider = () => window.localStorage) {
   }
 }
 
-async function route(parts, method, body, params, state) {
+async function route(parts, method, body, params, state, effects) {
+  const handled = await handleBrowserCommand(parts, method, body, params, state, effects, { fail, guard, revision, canonicalNote, persistedNote, header, headerText, fullText, paperDetail, projectState, noteBlocks });
+  if (handled.handled) return handled.value;
   const path = parts.join("/");
   if (method === "GET") {
-    if (path === "health") return health();
+    if (path === "health") return health(state);
     if (path === "library/status") return library(state);
     if (path === "settings/summary") return settings(state);
     if (path === "papers") {
@@ -376,7 +400,7 @@ async function route(parts, method, body, params, state) {
     }
     if (action === "remove-pdf") fail(501, "The bundled sample PDFs cannot be removed. Filesystem removal and recovery require the original local app.");
     if (method === "POST" && action === "note-blocks") {
-      strict(body, ["expected_revision", "block_type", ...Object.keys(BLOCK_LIMITS), "tags"]); guard(body.expected_revision, paper.blocksRev);
+      strict(body, ["expected_revision", "block_type", ...Object.keys(BLOCK_LIMITS), "tags", "provenance"]); guard(body.expected_revision, paper.blocksRev);
       const input = { ...body }; delete input.expected_revision;
       const content = validateBlock(input);
       if (paper.blocks.length >= 1000) fail(422, "This demo's Note Block limit was reached.");
@@ -487,4 +511,5 @@ async function route(parts, method, body, params, state) {
   fail(501, "This operation is not implemented in the browser demo. Run the original local app for filesystem, AI or recovery operations.");
 }
 
+configureBrowserWorkspace({ seed: createDemoSeed, validate: validateState });
 export const demoRequest = createDemoAdapter();

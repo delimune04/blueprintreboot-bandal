@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { readFile } from "node:fs/promises";
+import { readFile } from "./ui-source.mjs";
 import test from "node:test";
 
 test("Reader removes duplicate chrome and keeps save state with the active editor", async () => {

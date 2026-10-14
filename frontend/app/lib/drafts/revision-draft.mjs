@@ -12,6 +12,8 @@ export const SAVE_STATES = [
   "changed_elsewhere",
   "offline",
 ];
+let workspaceScope = "";
+export function configureDraftWorkspaceScope(scope = "") { workspaceScope = String(scope); }
 
 export function saveStateLabel(state) {
   return {
@@ -25,7 +27,8 @@ export function saveStateLabel(state) {
 }
 
 export function draftStorageKey(scope, identity) {
-  return `blueprint-reboot:draft:v1:${encodeURIComponent(scope)}:${encodeURIComponent(identity)}`;
+  const namespace = workspaceScope ? `cloud:${encodeURIComponent(workspaceScope)}:` : "";
+  return `blueprint-reboot:draft:v1:${namespace}${encodeURIComponent(scope)}:${encodeURIComponent(identity)}`;
 }
 
 function copy(value) {

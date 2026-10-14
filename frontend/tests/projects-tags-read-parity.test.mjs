@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { readFile } from "node:fs/promises";
+import { readFile } from "./ui-source.mjs";
 import test from "node:test";
 
 const sources = Promise.all([
@@ -109,5 +109,9 @@ test("read parity contains no fabricated records and preserves existing views", 
   }
   assert.match(reader, /Nothing has been applied to this Paper/);
   assert.match(reader, /Apply selected/);
-  assert.doesNotMatch(reader, /Promote to canonical|candidate\.confidence|candidate\.score/);
+  for (const operation of ["approveTagCandidate", "rejectTagCandidate", "promoteTagCandidate"]) {
+    assert.match(reader, new RegExp(`apiClient\\.${operation}`));
+  }
+  assert.match(reader, /They are not LLM output/);
+  assert.doesNotMatch(reader, /candidate\.confidence|candidate\.score/);
 });

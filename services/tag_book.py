@@ -202,7 +202,9 @@ def normalize_tag_with_rules(value: Any, rules: dict[str, Any] | None = None) ->
     elif active_rules.get("lowercase", True):
         text = text.lower()
     if active_rules.get("collapse_non_alphanumeric_to_hyphen", True):
-        text = re.sub(r"[^a-zA-Z0-9]+", "-", text)
+        # Keep Unicode letters and digits (including Hangul). Existing ASCII
+        # canonical keys retain exactly the same normalization as before.
+        text = re.sub(r"[^\w]+|_+", "-", text, flags=re.UNICODE)
     else:
         text = re.sub(r"[\s_]+", "-", text)
     return text.strip("-")

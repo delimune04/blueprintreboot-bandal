@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { readFile } from "node:fs/promises";
+import { readFile } from "./ui-source.mjs";
 import test from "node:test";
 
 const sources = Promise.all([
@@ -35,8 +35,11 @@ test("relationship labels, tag cleanup, and final local brand mark retain the re
   assert.doesNotMatch(tags, /<th>Status<\/th>/);
   assert.match(tags, /Advanced lifecycle/);
   assert.match(sidebar, /<span className="brand__mark" aria-hidden="true" \/>/);
-  assert.match(sidebar, /href="\/dashboard" className="brand" aria-label="BluePrintReboot dashboard"/);
-  assert.match(css, /\.brand__mark \{[^}]*width: 2\.25rem;[^}]*height: 2\.25rem;[^}]*background: url\("\/brand\/blueprint-mark\.png"\) center \/ contain no-repeat;/);
+  assert.match(sidebar, /href="\/dashboard" className="brand" aria-label=\{`\$\{PRODUCT_NAME\} · /);
+  assert.match(css, /\.brand__mark \{[^}]*width: 2\.25rem;[^}]*height: 2\.25rem;[^}]*background: url\("\/brand\/labvium-mark\.svg"\) center \/ contain no-repeat;/);
+  const mark = await readFile(new URL("../public/brand/labvium-mark.svg", import.meta.url), "utf8");
+  assert.match(mark, /viewBox="0 0 48 48"/);
+  assert.match(mark, /fill="#7851ca"/);
   assert.match(css, /\.sidebar\[data-collapsed="true"\] \.brand \{ padding: var\(--space-1\); \}/);
   assert.match(css, /\.sidebar\[data-collapsed="true"\] \.brand__copy, \.sidebar\[data-collapsed="true"\] \.sidebar-toggle__label, \.sidebar\[data-collapsed="true"\] \.sidebar-link span \{ display: none; \}/);
   assert.doesNotMatch(sidebar, /<svg className="brand__mark"/);

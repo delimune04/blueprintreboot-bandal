@@ -11,15 +11,22 @@
     "start": "vinext start",
     "demo:build": "vite build --config demo.vite.config.ts",
     "demo:test": "node --test tests/bandal-demo.test.mjs",
-    "test": "npm run build && node --test tests/app-shell.test.mjs tests/rendered-html.test.mjs tests/api-bridge.test.mjs tests/library-paper-workflow.test.mjs tests/pdf-scan-import-workflow.test.mjs tests/projects-tags-read-parity.test.mjs tests/settings-health-read-parity.test.mjs tests/workspace-information-architecture.test.mjs tests/v163-reader-ux-polish.test.mjs tests/v164-visual-hierarchy-density.test.mjs tests/v165-visual-language-design-system.test.mjs tests/v165-final-polish-workflow.test.mjs tests/semantic-tones-and-library-status.test.mjs tests/first-page-thumbnail.test.mjs tests/pdf-reader-controller.test.mjs tests/full-text-workflow.test.mjs tests/reader-editor-state.test.mjs tests/revision-draft.test.mjs tests/note-formatting.test.mjs tests/project-editor-state.test.mjs tests/project-write-paper-links.test.mjs tests/note-block-editor-state.test.mjs tests/note-block-workflow.test.mjs tests/reliability-hardening.test.mjs tests/reader-workflow-interactions.test.mjs",
-    "lint": "eslint . --ignore-pattern dist --ignore-pattern .next"
+    "test": "npm run build && node --test tests/*.test.mjs app/lib/workspace/*.test.mjs ../hosting/tests/*.test.mjs",
+    "lint": "eslint . --ignore-pattern dist --ignore-pattern .next",
+    "prebuild": "node scripts/prepare-ocr-assets.mjs",
+    "predemo:build": "node scripts/prepare-ocr-assets.mjs",
+    "predev": "node scripts/prepare-ocr-assets.mjs",
+    "test:labvium": "node --test tests/bandal-demo.test.mjs tests/browser-workspace.test.mjs tests/reader-cited-evidence.test.mjs tests/workspace-scope-isolation.test.mjs tests/labvium-i18n.test.mjs tests/pdf-ocr.test.mjs app/lib/workspace/*.test.mjs ../hosting/tests/*.test.mjs"
   },
   "dependencies": {
+    "fflate": "0.8.2",
     "lucide-react": "1.24.0",
     "next": "16.2.6",
     "pdfjs-dist": "5.7.284",
     "react": "19.2.6",
-    "react-dom": "19.2.6"
+    "react-dom": "19.2.6",
+    "tesseract.js": "7.0.0",
+    "tesseract.js-core": "7.0.0"
   },
   "devDependencies": {
     "@cloudflare/vite-plugin": "1.37.1",
@@ -32,6 +39,7 @@
     "@vitejs/plugin-rsc": "0.5.26",
     "eslint": "9.39.4",
     "eslint-config-next": "16.2.6",
+    "fake-indexeddb": "6.2.5",
     "react-server-dom-webpack": "19.2.6",
     "tailwindcss": "4.2.1",
     "typescript": "5.9.3",

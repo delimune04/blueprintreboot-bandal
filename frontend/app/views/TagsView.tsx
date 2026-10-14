@@ -1,5 +1,7 @@
 "use client";
 
+import { useI18n } from "../lib/i18n/LocaleProvider";
+
 import { Plus, X } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -52,6 +54,7 @@ function browserStorage(): Storage | null {
 }
 
 export function TagsView() {
+  const { t } = useI18n();
   const { triggerRef: createTriggerRef, restoreTriggerFocus } = useDisclosureFocus<HTMLButtonElement>();
   const resource = useApiResource("tags", async () => {
     const [summary, governance, queue] = await Promise.all([
@@ -345,26 +348,26 @@ export function TagsView() {
 
   return (
     <div className="page-stack">
-      <PageHeader title="Tags" description="Review suggestions, browse the tag book, and manage one tag at a time." actions={<button ref={createTriggerRef} className="reader-control" type="button" onClick={() => setShowCreate((current) => !current)} aria-expanded={showCreate} aria-controls="create-canonical-tag"><Plus size={15} />Create tag</button>} />
-      {resource.status === "loading" ? <LoadingState label="Loading tags" /> : null}
-      {resource.status === "unavailable" ? <UnavailableState description={resource.message} onRetry={resource.retry} /> : null}
-      {resource.status === "error" ? <ErrorState title="Tag Book unavailable" description={resource.message} onRetry={resource.retry} /> : null}
-      {resource.status === "not-found" ? <ErrorState description={resource.message} onRetry={resource.retry} /> : null}
+      <PageHeader title={t("Tags")} description={t("Review suggestions, browse the tag book, and manage one tag at a time.")} actions={<button ref={createTriggerRef} className="reader-control" type="button" onClick={() => setShowCreate((current) => !current)} aria-expanded={showCreate} aria-controls="create-canonical-tag"><Plus size={15} />{t("Create tag")}</button>} />
+      {resource.status === "loading" ? <LoadingState label={t("Loading tags")} /> : null}
+      {resource.status === "unavailable" ? <UnavailableState description={t(resource.message)} onRetry={resource.retry} /> : null}
+      {resource.status === "error" ? <ErrorState title={t("Tag Book unavailable")} description={t(resource.message)} onRetry={resource.retry} /> : null}
+      {resource.status === "not-found" ? <ErrorState description={t(resource.message)} onRetry={resource.retry} /> : null}
       {resource.status === "success" ? (
         <>
-          <Section title="Review candidates" description="Review each Paper’s saved suggestions before you apply a tag.">
-            {resource.data.summary.availability === "unavailable" ? <p className="muted-text">Candidate summary unavailable.</p> : <p className="toolbar-note">{resource.data.summary.candidate_count === 0 ? "No candidate evidence yet." : `${resource.data.summary.candidate_count} saved candidate${resource.data.summary.candidate_count === 1 ? "" : "s"} across ${resource.data.summary.evaluated_paper_count} Paper${resource.data.summary.evaluated_paper_count === 1 ? "" : "s"}. ${resource.data.summary.quality_counts.high} high-confidence.`}</p>}
-            {resource.data.queue.items.length === 0 ? <EmptyState title="No candidates to review" description="Generate suggestions from a Paper when you are ready; nothing is generated from this page." /> : (
-              <DataTableShell label="Papers with tag candidates">
+          <Section title={t("Review candidates")} description={t("Review each Paper’s saved suggestions before you apply a tag.")}>
+            {resource.data.summary.availability === "unavailable" ? <p className="muted-text">{t("Candidate summary unavailable.")}</p> : <p className="toolbar-note">{resource.data.summary.candidate_count === 0 ? t("No candidate evidence yet.") : t(`${resource.data.summary.candidate_count} saved candidate${resource.data.summary.candidate_count === 1 ? "" : "s"} across ${resource.data.summary.evaluated_paper_count} Paper${resource.data.summary.evaluated_paper_count === 1 ? "" : "s"}. ${resource.data.summary.quality_counts.high} high-confidence.`)}</p>}
+            {resource.data.queue.items.length === 0 ? <EmptyState title={t("No candidates to review")} description={t("Generate suggestions from a Paper when you are ready; nothing is generated from this page.")} /> : (
+              <DataTableShell label={t("Papers with tag candidates")}>
                 <table>
-                  <thead><tr><th>Paper</th><th>To review</th><th>Progress</th><th>Suggestions</th><th /></tr></thead>
+                  <thead><tr><th>{t("Paper")}</th><th>{t("To review")}</th><th>{t("Progress")}</th><th>{t("Suggestions")}</th><th /></tr></thead>
                   <tbody>{resource.data.queue.items.map((item) => (
                     <tr key={item.paper_id}>
                       <td><strong>{item.title}</strong></td>
                       <td>{item.candidate_count}</td>
-                      <td>{item.unresolved_count} unresolved · {item.resolved_count} ready · {item.approved_count} approved</td>
-                      <td>{item.candidate_labels.length ? <div className="tag-list">{item.candidate_labels.map((label) => <StatusBadge presentation="chip" taxonomy="candidate" key={label}>{label}</StatusBadge>)}</div> : <span className="muted-text">No labels available</span>}</td>
-                      <td><Link className="reader-control" href={`/papers/${encodeURIComponent(item.paper_id)}/reader?utility=tags&review=tag-candidates`}>Review</Link></td>
+                      <td>{t("{unresolved} unresolved · {resolved} ready · {approved} approved", { unresolved: item.unresolved_count, resolved: item.resolved_count, approved: item.approved_count })}</td>
+                      <td>{item.candidate_labels.length ? <div className="tag-list">{item.candidate_labels.map((label) => <StatusBadge presentation="chip" taxonomy="candidate" key={label}>{label}</StatusBadge>)}</div> : <span className="muted-text">{t("No labels available")}</span>}</td>
+                      <td><Link className="reader-control" href={`/papers/${encodeURIComponent(item.paper_id)}/reader?utility=tags&review=tag-candidates`}>{t("Review")}</Link></td>
                     </tr>
                   ))}</tbody>
                 </table>
@@ -372,69 +375,69 @@ export function TagsView() {
             )}
           </Section>
 
-          <Section title="Tag registry" description={`${resource.data.governance.items.length} tag${resource.data.governance.items.length === 1 ? "" : "s"}.`}>
-            <Toolbar label="Tag registry search"><label className="search-shell tag-registry-search"><span className="sr-only">Search tags</span><input type="search" value={registrySearch} placeholder="Search label, category, or alias…" onChange={(event) => setRegistrySearch(event.target.value)} /></label></Toolbar>
+          <Section title={t("Tag registry")} description={t(`${resource.data.governance.items.length} tag${resource.data.governance.items.length === 1 ? "" : "s"}.`)}>
+            <Toolbar label={t("Tag registry search")}><label className="search-shell tag-registry-search"><span className="sr-only">{t("Search tags")}</span><input type="search" value={registrySearch} placeholder={t("Search label, category, or alias…")} onChange={(event) => setRegistrySearch(event.target.value)} /></label></Toolbar>
             {resource.data.governance.items.length === 0 ? (
-              <EmptyState title="Tag Book is empty" description="Create an explicit canonical tag to begin managing the registry." />
+              <EmptyState title={t("Tag Book is empty")} description={t("Create an explicit canonical tag to begin managing the registry.")} />
             ) : (
-              <DataTableShell label="Tag registry">
+              <DataTableShell label={t("Tag registry")}>
                 <table>
-                  <thead><tr><th>Tag</th><th>Category</th><th>Aliases</th><th /></tr></thead>
+                  <thead><tr><th>{t("Tag")}</th><th>{t("Category")}</th><th>{t("Aliases")}</th><th /></tr></thead>
                   <tbody>{resource.data.governance.items.filter((tag) => [tag.label, tag.category, ...tag.aliases].join(" ").toLocaleLowerCase().includes(registrySearch.trim().toLocaleLowerCase())).map((tag) => (
                     <tr key={tag.canonical_key}>
-                      <td><strong>{tag.label}</strong><details className="tag-advanced-details"><summary>Advanced details</summary><span className="mono-id">{tag.canonical_key}</span></details></td><td>{categoryLabel(tag.category)}</td>
-                      <td><div className="tag-list">{tag.aliases.length ? tag.aliases.map((value) => <StatusBadge presentation="chip" taxonomy="alias" key={value}>{value}</StatusBadge>) : <span className="muted-text">None stored</span>}</div></td>
-                      <td><button className="reader-control reader-control--secondary" type="button" disabled={busy || Boolean(tagEditor?.state.activeSave)} onClick={() => setSelectedKey(tag.canonical_key)}>Manage tag</button></td>
+                      <td><strong>{tag.label}</strong><details className="tag-advanced-details"><summary>{t("Advanced details")}</summary><span className="mono-id">{tag.canonical_key}</span></details></td><td>{t(categoryLabel(tag.category))}</td>
+                      <td><div className="tag-list">{tag.aliases.length ? tag.aliases.map((value) => <StatusBadge presentation="chip" taxonomy="alias" key={value}>{value}</StatusBadge>) : <span className="muted-text">{t("None stored")}</span>}</div></td>
+                      <td><button className="reader-control reader-control--secondary" type="button" disabled={busy || Boolean(tagEditor?.state.activeSave)} onClick={() => setSelectedKey(tag.canonical_key)}>{t("Manage tag")}</button></td>
                     </tr>
-                  ))}{resource.data.governance.items.filter((tag) => [tag.label, tag.category, ...tag.aliases].join(" ").toLocaleLowerCase().includes(registrySearch.trim().toLocaleLowerCase())).length === 0 ? <tr><td colSpan={5} className="muted-text">No tags match this search.</td></tr> : null}</tbody>
+                  ))}{resource.data.governance.items.filter((tag) => [tag.label, tag.category, ...tag.aliases].join(" ").toLocaleLowerCase().includes(registrySearch.trim().toLocaleLowerCase())).length === 0 ? <tr><td colSpan={5} className="muted-text">{t("No tags match this search.")}</td></tr> : null}</tbody>
                 </table>
               </DataTableShell>
             )}
           </Section>
 
-          {showCreate ? <Section title="Create tag" description="Create a registry entry when you need one.">
+          {showCreate ? <Section title={t("Create tag")} description={t("Create a registry entry when you need one.")}>
             <form id="create-canonical-tag" className="project-command-panel project-command-panel--disclosure" onSubmit={(event) => { event.preventDefault(); void createCanonicalTag(); }}>
               <div className="project-form-grid">
-                <label className="reader-field"><span>Label</span><input value={createDraft.draft.label} onChange={(event) => updateCreateDraft((current) => editRevisionDraft(current, { ...current.draft, label: event.target.value }))} required maxLength={200} /></label>
-                <label className="reader-field"><span>Category</span><select value={createDraft.draft.category} onChange={(event) => updateCreateDraft((current) => editRevisionDraft(current, { ...current.draft, category: event.target.value }))}>{CATEGORIES.map((category) => <option key={category} value={category}>{categoryLabel(category)}</option>)}</select></label>
-                <label className="reader-field project-form-wide"><span>Description (optional)</span><textarea value={createDraft.draft.description} onChange={(event) => updateCreateDraft((current) => editRevisionDraft(current, { ...current.draft, description: event.target.value }))} maxLength={2000} rows={2} /></label>
+                <label className="reader-field"><span>{t("Label")}</span><input value={createDraft.draft.label} onChange={(event) => updateCreateDraft((current) => editRevisionDraft(current, { ...current.draft, label: event.target.value }))} required maxLength={200} /></label>
+                <label className="reader-field"><span>{t("Category")}</span><select value={createDraft.draft.category} onChange={(event) => updateCreateDraft((current) => editRevisionDraft(current, { ...current.draft, category: event.target.value }))}>{CATEGORIES.map((category) => <option key={category} value={category}>{t(categoryLabel(category))}</option>)}</select></label>
+                <label className="reader-field project-form-wide"><span>{t("Description (optional)")}</span><textarea value={createDraft.draft.description} onChange={(event) => updateCreateDraft((current) => editRevisionDraft(current, { ...current.draft, description: event.target.value }))} maxLength={2000} rows={2} /></label>
               </div>
-              <div className="reader-editor__actions"><SaveStatus state={createDraft.saveState} /><button className="reader-action" type="submit" disabled={busy || Boolean(createDraft.activeSave) || !createDraft.draft.label.trim()}>Create tag</button><button className="reader-control reader-control--secondary" type="button" disabled={Boolean(createDraft.activeSave)} onClick={closeCreate}>Close</button></div>
-              {createDraft.lastError ? <p className="reader-editor__status" role="status">{createDraft.lastError} Your draft remains preserved locally.</p> : null}
-              {createDraft.saveState === "changed_elsewhere" ? <div className="reader-editor__actions"><button className="reader-control reader-control--secondary" type="button" onClick={() => void refreshCreateDraftAfterConflict()}>Refresh Tag Book and keep my draft</button></div> : null}
+              <div className="reader-editor__actions"><SaveStatus state={createDraft.saveState} /><button className="reader-action" type="submit" disabled={busy || Boolean(createDraft.activeSave) || !createDraft.draft.label.trim()}>{t("Create tag")}</button><button className="reader-control reader-control--secondary" type="button" disabled={Boolean(createDraft.activeSave)} onClick={closeCreate}>{t("Close")}</button></div>
+              {createDraft.lastError ? <p className="reader-editor__status" role="status">{t(createDraft.lastError)}{t("Your draft remains preserved locally.")}</p> : null}
+              {createDraft.saveState === "changed_elsewhere" ? <div className="reader-editor__actions"><button className="reader-control reader-control--secondary" type="button" onClick={() => void refreshCreateDraftAfterConflict()}>{t("Refresh Tag Book and keep my draft")}</button></div> : null}
             </form>
           </Section> : null}
 
-          {selected ? <Section title={`Manage ${selected.label}`} description="Update the selected tag, its aliases, or its availability.">
-            {!selectedEditor ? <p className="muted-text">Loading the locally preserved tag draft…</p> : <>
+          {selected ? <Section title={t(`Manage ${selected.label}`)} description={t("Update the selected tag, its aliases, or its availability.")}>
+            {!selectedEditor ? <p className="muted-text">{t("Loading the locally preserved tag draft…")}</p> : <>
               <form className="project-command-panel" onSubmit={(event) => {
                 event.preventDefault();
                 void saveCanonicalTagMetadata();
               }}>
                 <div className="project-form-grid">
-                  <label className="reader-field"><span>Label</span><input value={selectedEditor.draft.label} onChange={(event) => updateTagEditor((current) => editRevisionDraft(current, { ...current.draft, label: event.target.value }))} required maxLength={200} /></label>
-                  <label className="reader-field"><span>Category</span><select value={selectedEditor.draft.category} onChange={(event) => updateTagEditor((current) => editRevisionDraft(current, { ...current.draft, category: event.target.value }))}>{CATEGORIES.map((category) => <option key={category} value={category}>{categoryLabel(category)}</option>)}</select></label>
-                  <label className="reader-field"><span>Suggestion strength</span><input value={selectedEditor.draft.strength} onChange={(event) => updateTagEditor((current) => editRevisionDraft(current, { ...current.draft, strength: Number(event.target.value) }))} type="number" min="0" max="100" required /></label>
-                  <label className="reader-field project-form-wide"><span>Description</span><textarea value={selectedEditor.draft.description} onChange={(event) => updateTagEditor((current) => editRevisionDraft(current, { ...current.draft, description: event.target.value }))} rows={2} maxLength={2000} /></label>
+                  <label className="reader-field"><span>{t("Label")}</span><input value={selectedEditor.draft.label} onChange={(event) => updateTagEditor((current) => editRevisionDraft(current, { ...current.draft, label: event.target.value }))} required maxLength={200} /></label>
+                  <label className="reader-field"><span>{t("Category")}</span><select value={selectedEditor.draft.category} onChange={(event) => updateTagEditor((current) => editRevisionDraft(current, { ...current.draft, category: event.target.value }))}>{CATEGORIES.map((category) => <option key={category} value={category}>{t(categoryLabel(category))}</option>)}</select></label>
+                  <label className="reader-field"><span>{t("Suggestion strength")}</span><input value={selectedEditor.draft.strength} onChange={(event) => updateTagEditor((current) => editRevisionDraft(current, { ...current.draft, strength: Number(event.target.value) }))} type="number" min="0" max="100" required /></label>
+                  <label className="reader-field project-form-wide"><span>{t("Description")}</span><textarea value={selectedEditor.draft.description} onChange={(event) => updateTagEditor((current) => editRevisionDraft(current, { ...current.draft, description: event.target.value }))} rows={2} maxLength={2000} /></label>
                 </div>
-                <div className="reader-editor__actions"><SaveStatus state={selectedEditor.saveState} /><button className="reader-action" type="submit" disabled={busy || Boolean(selectedEditor.activeSave) || selectedEditor.saveState === "changed_elsewhere" || !selectedEditor.draft.label.trim()}>Save metadata</button></div>
-                {selectedEditor.lastError ? <p className="reader-editor__status" role="status">{selectedEditor.lastError}</p> : null}
+                <div className="reader-editor__actions"><SaveStatus state={selectedEditor.saveState} /><button className="reader-action" type="submit" disabled={busy || Boolean(selectedEditor.activeSave) || selectedEditor.saveState === "changed_elsewhere" || !selectedEditor.draft.label.trim()}>{t("Save metadata")}</button></div>
+                {selectedEditor.lastError ? <p className="reader-editor__status" role="status">{t(selectedEditor.lastError)}</p> : null}
                 {selectedEditor.saveState === "changed_elsewhere" ? <div className="reader-editor__actions">
-                  <button className="reader-control reader-control--secondary" type="button" onClick={() => updateTagEditor(keepMyRevisionDraft)}>Keep my draft</button>
-                  <button className="reader-control reader-control--secondary" type="button" onClick={() => updateTagEditor(applyLatestRevisionDraft)}>Use latest saved version</button>
+                  <button className="reader-control reader-control--secondary" type="button" onClick={() => updateTagEditor(keepMyRevisionDraft)}>{t("Keep my draft")}</button>
+                  <button className="reader-control reader-control--secondary" type="button" onClick={() => updateTagEditor(applyLatestRevisionDraft)}>{t("Use latest saved version")}</button>
                 </div> : null}
-                {selectedEditor.saveState === "changed_elsewhere" ? <details className="reader-conflict-review"><summary>Review local and latest server values</summary><p><strong>My draft:</strong> {selectedEditor.draft.label} · {selectedEditor.draft.category}</p><p><strong>Latest server value:</strong> {selectedEditor.remote.label} · {selectedEditor.remote.category}</p></details> : null}
+                {selectedEditor.saveState === "changed_elsewhere" ? <details className="reader-conflict-review"><summary>{t("Review local and latest server values")}</summary><p><strong>{t("My draft:")}</strong> {selectedEditor.draft.label} · {selectedEditor.draft.category}</p><p><strong>{t("Latest server value:")}</strong> {selectedEditor.remote.label} · {selectedEditor.remote.category}</p></details> : null}
               </form>
               <div className="project-command-panel">
-                <div className="reader-note__heading"><h3>Aliases</h3><StatusBadge>{selected.aliases.length}</StatusBadge></div>
-                <div className="tag-list alias-chip-list">{selected.aliases.length ? selected.aliases.map((value) => <span key={value} className="alias-chip"><span>{value}</span><button className="icon-button alias-chip__remove" type="button" disabled={busy} aria-label={`Remove alias ${value}`} onClick={() => { if (window.confirm(`Remove alias “${value}” from ${selected.label}? Historical Paper tags will remain.`)) void run(() => apiClient.removeCanonicalTagAlias(selected.canonical_key, value, resource.data.governance.registry_revision), `Alias “${value}” removed from the registry only.`); }}><X size={13} aria-hidden="true" /></button></span>) : <span className="muted-text">No aliases yet.</span>}</div>
-                <div className="project-link-form"><label className="reader-field"><span>New alias</span><input value={selectedEditor.draft.aliasText} onChange={(event) => updateTagEditor((current) => editRevisionDraft(current, { ...current.draft, aliasText: event.target.value }))} maxLength={200} /></label><button className="reader-control" type="button" disabled={busy || Boolean(selectedEditor.activeSave) || selectedEditor.saveState === "changed_elsewhere" || !selectedEditor.draft.aliasText.trim()} onClick={() => void addCanonicalAlias()}>Add alias</button></div>
-                <details className="tag-advanced-details"><summary>Advanced registry details</summary><span className="mono-id">Canonical key: {selected.canonical_key}</span></details>
-                <details className="tag-advanced-details"><summary>Advanced lifecycle</summary>{selected.status === "active" ? <button className="reader-control reader-control--danger" type="button" disabled={busy} onClick={() => { if (window.confirm(`Deprecate ${selected.label}? Historical Paper references will remain.`)) void run(() => apiClient.deprecateCanonicalTag(selected.canonical_key, resource.data.governance.registry_revision), "Tag deprecated. Historical references remain visible."); }}>Deprecate tag</button> : <p className="muted-text">Lifecycle: deprecated. This canonical tag remains available for historical inspection.</p>}</details>
+                <div className="reader-note__heading"><h3>{t("Aliases")}</h3><StatusBadge>{selected.aliases.length}</StatusBadge></div>
+                <div className="tag-list alias-chip-list">{selected.aliases.length ? selected.aliases.map((value) => <span key={value} className="alias-chip"><span>{value}</span><button className="icon-button alias-chip__remove" type="button" disabled={busy} aria-label={t(`Remove alias ${value}`)} onClick={() => { if (window.confirm(t(`Remove alias “${value}” from ${selected.label}? Historical Paper tags will remain.`))) void run(() => apiClient.removeCanonicalTagAlias(selected.canonical_key, value, resource.data.governance.registry_revision), `Alias “${value}” removed from the registry only.`); }}><X size={13} aria-hidden="true" /></button></span>) : <span className="muted-text">{t("No aliases yet.")}</span>}</div>
+                <div className="project-link-form"><label className="reader-field"><span>{t("New alias")}</span><input value={selectedEditor.draft.aliasText} onChange={(event) => updateTagEditor((current) => editRevisionDraft(current, { ...current.draft, aliasText: event.target.value }))} maxLength={200} /></label><button className="reader-control" type="button" disabled={busy || Boolean(selectedEditor.activeSave) || selectedEditor.saveState === "changed_elsewhere" || !selectedEditor.draft.aliasText.trim()} onClick={() => void addCanonicalAlias()}>{t("Add alias")}</button></div>
+                <details className="tag-advanced-details"><summary>{t("Advanced registry details")}</summary><span className="mono-id">{t("Canonical key:")} {selected.canonical_key}</span></details>
+                <details className="tag-advanced-details"><summary>{t("Advanced lifecycle")}</summary>{selected.status === "active" ? <button className="reader-control reader-control--danger" type="button" disabled={busy} onClick={() => { if (window.confirm(t(`Deprecate ${selected.label}? Historical Paper references will remain.`))) void run(() => apiClient.deprecateCanonicalTag(selected.canonical_key, resource.data.governance.registry_revision), "Tag deprecated. Historical references remain visible."); }}>{t("Deprecate tag")}</button> : <p className="muted-text">{t("Lifecycle: deprecated. This canonical tag remains available for historical inspection.")}</p>}</details>
               </div>
             </>}
           </Section> : null}
-          {notice ? <p className="reader-editor__status">{notice}</p> : null}
+          {notice ? <p className="reader-editor__status">{t(notice)}</p> : null}
         </>
       ) : null}
     </div>

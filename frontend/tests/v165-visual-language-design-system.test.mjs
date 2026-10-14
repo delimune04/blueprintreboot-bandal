@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { readFile } from "node:fs/promises";
+import { readFile } from "./ui-source.mjs";
 import test from "node:test";
 
 test("shared White, Ink, Blueprint Blue, rule, and geometry tokens define the v1.6.5 language", async () => {

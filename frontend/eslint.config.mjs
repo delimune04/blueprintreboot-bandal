@@ -12,6 +12,7 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "dist-demo/**",
+    "public/ocr/**", // Reproducibly copied third-party Worker/WASM distribution.
     "next-env.d.ts",
   ]),
 ]);

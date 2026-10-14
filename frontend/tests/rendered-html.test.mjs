@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
-import { readdir, readFile } from "node:fs/promises";
+import { readdir } from "node:fs/promises";
+import { readFile } from "./ui-source.mjs";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
 
@@ -30,13 +31,13 @@ test("server-renders the stable research workspace shell", async () => {
   assert.match(response.headers.get("content-type") ?? "", /^text\/html\b/i);
 
   const html = await response.text();
-  assert.match(html, /<title>BluePrintReboot<\/title>/i);
+  assert.match(html, /<title>랩비움<\/title>/i);
   assert.match(html, /class="app-shell"/);
-  assert.match(html, /aria-label="Primary navigation"/);
-  for (const label of ["Dashboard", "Library", "Projects", "Tags", "Settings"]) {
+  assert.match(html, /aria-label="주요 메뉴"/);
+  for (const label of ["연구 홈", "논문 보관함", "연구 프로젝트", "태그", "설정"]) {
     assert.match(html, new RegExp(`>${label}<`));
   }
-  assert.match(html, /Loading workspace overview/);
+  assert.match(html, /연구 현황을 불러오는 중/);
   assert.doesNotMatch(html, /codex-preview|react-loading-skeleton|Your site is taking shape/i);
 });
 
@@ -46,7 +47,7 @@ test("all required routes render inside the shared shell", async () => {
     assert.equal(response.status, 200, path);
     const html = await response.text();
     assert.match(html, /class="app-shell(?:\s|")/, path);
-    assert.match(html, /aria-label="Primary navigation"/, path);
+    assert.match(html, /aria-label="주요 메뉴"/, path);
   }
 });
 
@@ -110,7 +111,7 @@ test("uses a fixed Reader workspace with bounded PDF.js and explicit mutation co
   assert.match(reader, /Retry PDF\.js/);
   assert.match(reader, /Use native viewer fallback/);
   assert.match(reader, /if \(fallbackActive\)/);
-  assert.match(reader, /role="img" aria-label=\{`PDF page/);
+  assert.match(reader, /role="img" aria-label=\{t\("PDF page \{page\}"/);
   assert.match(reader, /Browser PDF viewer unavailable/);
   assert.match(reader, /<object[^>]+data=\{pdfUrl\}[^>]+type="application\/pdf"/s);
   assert.match(reader, /NEXT_PUBLIC_BLUEPRINT_READER_DIAGNOSTICS === "1"/);
@@ -123,8 +124,12 @@ test("uses a fixed Reader workspace with bounded PDF.js and explicit mutation co
   assert.match(readerView, /apiClient\.saveReaderMetadata/);
   assert.match(readerView, /applyMetadataEnrichmentCommandResult/);
   assert.match(readerView, /apiClient\.saveReadingNote/);
-  assert.doesNotMatch(readerView, /contentEditable|dangerouslySetInnerHTML|autosave|annotation|highlight/i);
-  assert.doesNotMatch(readerView, /candidate\.confidence|candidate\.score|Promote to canonical/);
+  assert.doesNotMatch(readerView, /contentEditable|dangerouslySetInnerHTML|autosave/i);
+  assert.match(readerView, /saveSelectionEvidence/);
+  assert.match(readerView, /approveTagCandidate/);
+  assert.match(readerView, /rejectTagCandidate/);
+  assert.match(readerView, /promoteTagCandidate/);
+  assert.doesNotMatch(readerView, /candidate\.confidence|candidate\.score/);
   assert.match(client, /getReaderSnapshot/);
   assert.match(client, /\/papers\/\$\{encodeURIComponent\(paperId\)\}\/reader/);
   assert.match(client, /\/papers\/\$\{encodeURIComponent\(paperId\)\}\/pdf/);

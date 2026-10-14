@@ -46,6 +46,7 @@ from storage.persistent_state import (
     json_shape_error,
     note_block_shape_error,
 )
+from storage.file_transaction import file_transaction
 from services.managed_pdf import (
     ManagedPdfState,
     indexed_pdf_candidate,
@@ -1347,8 +1348,9 @@ def reattach_orphan_note(
         target_text = existing + marker + orphan_text.strip() + "\n"
     else:
         target_text = orphan_text
-    _atomic_write_text(target_path, target_text)
-    source_path.unlink()
+    with file_transaction([source_path, target_path]):
+        _atomic_write_text(target_path, target_text)
+        source_path.unlink()
 
     result = dict(plan)
     result.update(
@@ -1485,8 +1487,11 @@ def reattach_orphan_note_blocks(
         existing_ids.add(str(updated["id"]))
         reattached_blocks.append(updated)
 
-    save_note_blocks(str(target_paper_id), [*target_blocks, *reattached_blocks], Path(note_blocks_dir))
-    Path(str(plan["source_path"])).unlink()
+    source_path = Path(str(plan["source_path"]))
+    target_path = Path(str(plan["target_path"]))
+    with file_transaction([source_path, target_path]):
+        save_note_blocks(str(target_paper_id), [*target_blocks, *reattached_blocks], Path(note_blocks_dir))
+        source_path.unlink()
     result = dict(plan)
     result.update(
         status="reattached_note_blocks",
