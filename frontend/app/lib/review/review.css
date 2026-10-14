@@ -20,3 +20,24 @@
 .review-frozen-input article { padding: 12px 0; border-bottom: 1px solid var(--color-rule-faint); }
 .review-frozen-input p { white-space: pre-wrap; overflow-wrap: anywhere; }
 @media (max-width: 700px) { .review-record-heading { grid-template-columns: 20px 1fr 32px; }.review-record-heading .reader-field:nth-of-type(2) { grid-column: 2; }.review-record-heading > button { grid-column: 3; grid-row: 1; }.review-record-fields { grid-template-columns: 1fr; }.review-actions > .reader-field { width: 100%; } }
+
+.review-workflow { border-top: 3px solid var(--color-accent, #2563eb); padding: 24px 0; }
+.review-workflow h2 { font-size: 1.35rem; margin-bottom: 8px; }
+.review-workflow-steps { display: flex; gap: 12px; padding: 0; list-style: none; margin: 20px 0; }
+.review-workflow-steps li { flex: 1; padding: 12px; border-bottom: 2px solid #cbd5e1; }
+.review-workflow-steps strong { float: right; }
+.review-table-scroll { overflow-x: auto; margin: 16px 0; }
+.review-comparison-table { width: 100%; min-width: 640px; border-collapse: collapse; text-align: left; font-size: .9rem; }
+.review-comparison-table th, .review-comparison-table td { padding: 12px; border-bottom: 1px solid #dce2e8; vertical-align: top; overflow-wrap: anywhere; max-width: 300px; }
+.review-comparison-table thead { background: #f3f6fa; }
+.review-context-fields { padding: 16px; border-left: 3px solid #7396c7; background: #f8fafc; display: grid; gap: 12px; margin: 12px 0; }
+.review-context-fields select[multiple] { min-height: 88px; }
+.review-handoff-list { margin-top: 24px; }
+.review-handoff-list article { padding: 14px 0; border-bottom: 1px solid #dce2e8; }
+.review-handoff-list p { margin: 6px 0; }
+.review-record { scroll-margin-top: 100px; }
+@media(max-width: 640px) { .review-workflow-steps { flex-direction: column; gap: 4px; } .review-context-fields { padding: 12px; } }
+.review-frozen-context { display:grid; gap:6px; font-size:.88rem; }
+.review-frozen-context div { display:grid; grid-template-columns:minmax(110px,1fr) 3fr; gap:12px; }
+.review-frozen-context dt { color:#526074; }
+.review-frozen-context dd { margin:0; overflow-wrap:anywhere; white-space:pre-wrap; }

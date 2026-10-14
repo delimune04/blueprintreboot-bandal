@@ -1,5 +1,6 @@
 /** Project-scoped human review. A source link is traceability, never proof. */
 export const REVIEW_KINDS = ["hypothesis", "decision", "failed_attempt", "question", "next_action"];
+export const REVIEW_STAGES = ["comparison", "decision", "handoff"];
 export const REVIEW_MAX_SNAPSHOTS = 20;
 const MAX_DOSSIER_BYTES = 4 * 1024 * 1024;
 const MAX_SOURCE_BYTES = 2 * 1024 * 1024;
@@ -16,6 +17,21 @@ function iso(value) { text(value, 40, true); if (!/^\d{4}-\d\d-\d\dT/.test(value
 export function blankReviewInput() { return { schema_version: 1, rows: [], checklist: Object.fromEntries(REVIEW_KINDS.map((kind) => [kind, false])) }; }
 export function reviewInput(dossier) { return clone({ schema_version: 1, rows: dossier.rows, checklist: dossier.checklist }); }
 export function newReviewRow(kind = "hypothesis") { return { id: `review-${crypto.randomUUID()}`, kind, text: "", owner: "", due_date: "", status: "open", provenance: "manual", source_links: [] }; }
+export function newWorkflowRow(stage = "comparison") {
+  if (!REVIEW_STAGES.includes(stage)) fail("Unsupported review workflow stage.");
+  return { ...newReviewRow({ comparison: "hypothesis", decision: "decision", handoff: "next_action" }[stage]), context: { stage, method: "", conditions: "", metric: "", value: "", unit: "", availability: "not_reported", disposition: "pending", rationale: "", comparison_ids: [], completed: false, origin_decision_id: "" } };
+}
+function validateReviewContext(value) {
+  keys(value, ["stage", "method", "conditions", "metric", "value", "unit", "availability", "disposition", "rationale", "comparison_ids", "completed", "origin_decision_id"]);
+  if (!REVIEW_STAGES.includes(value.stage) || !["reported", "not_reported", "unavailable", "extraction_failed"].includes(value.availability) || !["pending", "adopted", "rejected", "deferred"].includes(value.disposition) || typeof value.completed !== "boolean" || !Array.isArray(value.comparison_ids) || value.comparison_ids.length > 100) fail("Invalid review workflow context.");
+  const comparison_ids = value.comparison_ids.map((identity) => id(identity));
+  if (new Set(comparison_ids).size !== comparison_ids.length) fail("Duplicate comparison reference.");
+  const result = { stage: value.stage, method: text(value.method, 500), conditions: text(value.conditions, 2000), metric: text(value.metric, 200), value: text(value.value, 200), unit: text(value.unit, 100), availability: value.availability, disposition: value.disposition, rationale: text(value.rationale, 4000), comparison_ids, completed: value.completed, ...(Object.hasOwn(value, "origin_decision_id") ? { origin_decision_id: id(value.origin_decision_id, true) } : {}) };
+  if (result.origin_decision_id && result.stage !== "handoff") fail("Only a handoff record can link to its originating decision.");
+  if (result.availability === "reported" && !result.value.trim()) fail("Enter the reported value or choose its actual availability.");
+  if (result.availability !== "reported" && (result.value.trim() || result.unit.trim())) fail("Clear the value and unit when a measurement is not reported or unavailable.");
+  return result;
+}
 export function validateReviewSource(value) {
   keys(value, ["kind", "paper_id", "page", "block_id", "research_page_id"]);
   if (!["paper", "pdf_page", "note_block", "research_page"].includes(value.kind)) fail("Unsupported review source.");
@@ -33,13 +49,17 @@ export function validateReviewInput(value) {
   if (REVIEW_KINDS.some((kind) => typeof value.checklist[kind] !== "boolean")) fail("Complete the review checklist fields.");
   const ids = new Set();
   const rows = value.rows.map((row) => {
-    keys(row, ["id", "kind", "text", "owner", "due_date", "status", "provenance", "source_links"]);
+    keys(row, ["id", "kind", "text", "owner", "due_date", "status", "provenance", "source_links", "context"]);
     id(row.id); if (ids.has(row.id)) fail("Review record identities must be unique."); ids.add(row.id);
     if (!REVIEW_KINDS.includes(row.kind) || !["open", "reviewed"].includes(row.status) || !["manual", "ai"].includes(row.provenance) || !Array.isArray(row.source_links) || row.source_links.length > 10) fail("Invalid review record state.");
     const source_links = row.source_links.map(validateReviewSource);
     if (new Set(source_links.map(reviewSourceKey)).size !== source_links.length) fail("Duplicate source reference.");
-    return { id: row.id, kind: row.kind, text: text(row.text, 10000, true), owner: text(row.owner, 200), due_date: date(row.due_date), status: row.status, provenance: row.provenance, source_links };
+    return { id: row.id, kind: row.kind, text: text(row.text, 10000, true), owner: text(row.owner, 200), due_date: date(row.due_date), status: row.status, provenance: row.provenance, source_links, ...(Object.hasOwn(row, "context") ? { context: validateReviewContext(row.context) } : {}) };
   });
+  const comparisons = new Set(rows.filter((row) => row.context?.stage === "comparison").map((row) => row.id));
+  const decisions = new Set(rows.filter((row) => row.context?.stage === "decision").map((row) => row.id));
+  for (const row of rows) for (const reference of row.context?.comparison_ids || []) if (reference === row.id || !comparisons.has(reference)) fail("Comparison references must identify another comparison record in this review.");
+  for (const row of rows) if (row.context?.origin_decision_id && (row.context.origin_decision_id === row.id || !decisions.has(row.context.origin_decision_id))) fail("The originating decision must identify another decision record in this review.");
   return { schema_version: 1, rows, checklist: clone(value.checklist) };
 }
 export function validateReviewDossier(value) {
@@ -98,20 +118,40 @@ export function selectedReviewSources(input, sources, strict = false) {
   });
 }
 export async function reviewFingerprint(input, sources) { const encoded = new TextEncoder().encode(JSON.stringify(selectedReviewSources(input, sources))); const digest = await crypto.subtle.digest("SHA-256", encoded); return [...new Uint8Array(digest)].map((byte) => byte.toString(16).padStart(2, "0")).join(""); }
+function substantiveReviewRow(row) { return ["comparison", "decision"].includes(row.context?.stage) || !["question", "next_action"].includes(row.kind); }
 export function reviewCoverage(input, sources) {
-  const valid = new Set(sources.map((source) => source.key)), substantive = input.rows.filter((row) => !["question", "next_action"].includes(row.kind)), reviewed = substantive.filter((row) => row.status === "reviewed");
+  const valid = new Set(sources.map((source) => source.key)), substantive = input.rows.filter(substantiveReviewRow), reviewed = substantive.filter((row) => row.status === "reviewed");
   const linked = (row) => row.source_links.some((reference) => valid.has(reviewSourceKey(reference)));
   const missing_source_rows = input.rows.filter((row) => row.source_links.some((reference) => !valid.has(reviewSourceKey(reference)))).map((row) => row.id);
   const unsourced_reviewed_rows = reviewed.filter((row) => !linked(row)).map((row) => row.id);
-  return { total_rows: input.rows.length, substantive_rows: substantive.length, reviewed_claims: reviewed.length, sourced_reviewed_claims: reviewed.filter(linked).length, coverage_percent: reviewed.length ? Math.round(reviewed.filter(linked).length / reviewed.length * 100) : null, unsourced_reviewed_rows, missing_source_rows, open_rows: input.rows.filter((row) => row.status === "open").length, unsourced_questions_actions: input.rows.filter((row) => ["question", "next_action"].includes(row.kind) && !linked(row)).length, checklist_complete: REVIEW_KINDS.every((kind) => input.checklist[kind]), can_freeze: input.rows.length > 0 && REVIEW_KINDS.every((kind) => input.checklist[kind]) && !unsourced_reviewed_rows.length && !missing_source_rows.length };
+  return { total_rows: input.rows.length, substantive_rows: substantive.length, reviewed_claims: reviewed.length, sourced_reviewed_claims: reviewed.filter(linked).length, coverage_percent: reviewed.length ? Math.round(reviewed.filter(linked).length / reviewed.length * 100) : null, unsourced_reviewed_rows, missing_source_rows, open_rows: input.rows.filter((row) => row.status === "open").length, unsourced_questions_actions: input.rows.filter((row) => !substantiveReviewRow(row) && !linked(row)).length, checklist_complete: REVIEW_KINDS.every((kind) => input.checklist[kind]), can_freeze: input.rows.length > 0 && REVIEW_KINDS.every((kind) => input.checklist[kind]) && !unsourced_reviewed_rows.length && !missing_source_rows.length };
 }
 export function compareReviewSnapshots(previous, current) {
   const before = new Map((previous?.rows || []).map((row) => [row.id, row])), after = new Map((current?.rows || []).map((row) => [row.id, row]));
   return { added: [...after.values()].filter((row) => !before.has(row.id)), changed: [...after.values()].filter((row) => before.has(row.id) && JSON.stringify(row) !== JSON.stringify(before.get(row.id))), removed: [...before.values()].filter((row) => !after.has(row.id)), checklist_changed: JSON.stringify(previous?.checklist || {}) !== JSON.stringify(current?.checklist || {}) };
 }
+/** User-authored content is literal text, never Markdown links, HTML or headings. */
+function markdownText(value, continuation = "    ") {
+  return value.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replace(/[\\`*_{}\[\]()#+.!|=~-]/g, "\\$&").replace(/\r\n?/g, "\n").replaceAll("\n", `\n${continuation}`);
+}
+function workflowMarkdown(context) {
+  if (!context) return "";
+  const availability = context.availability.replaceAll("_", " ");
+  return [
+    `  - Workflow stage: ${context.stage}`,
+    ...[["Method", context.method], ["Conditions", context.conditions], ["Metric", context.metric]].map(([label, value]) => `  - ${label}: ${value ? markdownText(value) : "unspecified"}`),
+    ...[["Value", context.value], ["Unit", context.unit]].map(([label, value]) => `  - ${label}: ${context.availability === "reported" ? (value.trim() ? markdownText(value) : "unspecified") : availability}`),
+    `  - Availability: ${availability}`,
+    `  - Disposition: ${context.disposition}`,
+    `  - Rationale: ${context.rationale ? markdownText(context.rationale) : "unspecified"}`,
+    `  - Comparison record IDs: ${context.comparison_ids.length ? context.comparison_ids.map((identity) => `\`${identity}\``).join(", ") : "none linked"}`,
+    ...(context.stage === "handoff" ? [`  - Origin decision record ID: ${context.origin_decision_id ? `\`${context.origin_decision_id}\`` : "none linked"}`] : []),
+    `  - ${context.stage === "handoff" ? "First action completed" : "Completed"}: ${context.completed ? "yes" : "no"}`,
+  ].join("\n");
+}
 export function exportReviewMarkdown(snapshot, projectName = "Project") {
   const input = snapshot.input || snapshot, sources = snapshot.source_inputs || [];
-  const rows = REVIEW_KINDS.map((kind) => `## ${kind.replaceAll("_", " ")}\n\n${input.rows.filter((row) => row.kind === kind).map((row) => `- ${row.text}\n  - Status: ${row.status}; provenance: ${row.provenance === "ai" ? "AI origin, compare with human review status" : "manual"}; owner: ${row.owner || "unassigned"}; due: ${row.due_date || "unspecified"}\n${row.source_links.length ? row.source_links.map((reference) => { const found = sources.find((source) => reviewSourceKey(source.reference) === reviewSourceKey(reference)); return `  - Source: ${found?.label || "Evidence location"} — ${reviewSourceUrl(reference)}\n    - Stable reference: ${reviewSourceKey(reference)}`; }).join("\n") : "  - No source linked; not an established evidence-backed claim."}`).join("\n\n") || "No records."}`).join("\n\n");
+  const rows = REVIEW_KINDS.map((kind) => `## ${kind.replaceAll("_", " ")}\n\n${input.rows.filter((row) => row.kind === kind).map((row) => `- ${markdownText(row.text, "  ")}\n  - Record ID: \`${row.id}\`\n  - Status: ${row.status}; provenance: ${row.provenance === "ai" ? "AI origin, compare with human review status" : "manual"}; owner: ${markdownText(row.owner || "unassigned")}; due: ${row.due_date || "unspecified"}\n${row.context ? `${workflowMarkdown(row.context)}\n` : ""}${row.source_links.length ? row.source_links.map((reference) => { const found = sources.find((source) => reviewSourceKey(source.reference) === reviewSourceKey(reference)); return `  - Source: ${markdownText(found?.label || "Evidence location")} — ${reviewSourceUrl(reference)}\n    - Stable reference: \`${reviewSourceKey(reference)}\``; }).join("\n") : "  - No source linked; not an established evidence-backed claim."}`).join("\n\n") || "No records."}`).join("\n\n");
   const checklist = REVIEW_KINDS.map((kind) => `- [${input.checklist[kind] ? "x" : " "}] ${kind.replaceAll("_", " ")}`).join("\n");
-  return `# ${projectName} — research handoff\n\n${snapshot.version ? `Snapshot ${snapshot.version}; reviewed by ${snapshot.reviewed_by}; ${snapshot.created_at}\n\nEvidence fingerprint: ${snapshot.source_fingerprint}\n\n` : "Working draft\n\n"}Human review records judgment; source links do not prove that claims are correct. Open rows remain unreviewed. Source paths open within the same workspace.\n\n${rows}\n\n## Review checklist\n\n${checklist}\n`;
+  return `# ${markdownText(projectName.replace(/[\r\n]+/g, " "))} — research handoff\n\n${snapshot.version ? `Snapshot ${snapshot.version}; reviewed by ${markdownText(snapshot.reviewed_by)}; ${snapshot.created_at}\n\nEvidence fingerprint: ${snapshot.source_fingerprint}\n\n` : "Working draft\n\n"}Human review records judgment; source links do not prove that claims are correct. Open rows remain unreviewed. Source paths open within the same workspace.\n\n${rows}\n\n## Review checklist\n\n${checklist}\n`;
 }
