@@ -1,6 +1,14 @@
 import { fail, text, choice, metadata, METADATA_LIMITS, now } from "./core.mjs";
 
-const cache=new Map();let nextRequest=0;
+const cache=new Map();let nextRequest=0,cacheCost=0;
+const CACHE_BUDGET=12*1024*1024;
+function discardCached(key){const entry=cache.get(key);if(entry){cacheCost-=entry.cost;cache.delete(key);}}
+function cacheProviderValue(key,value,sourceLength){
+  for(const [old,entry] of cache)if(entry.expires<=Date.now())discardCached(old);
+  discardCached(key);const cost=sourceLength*4;if(cost>CACHE_BUDGET)return;
+  while(cache.size&&(cache.size>=64||cacheCost+cost>CACHE_BUDGET))discardCached(cache.keys().next().value);
+  cache.set(key,{value,cost,expires:Date.now()+300000});cacheCost+=cost;
+}
 const entities=value=>String(value||"").replace(/<[^>]*>/g," ").replace(/&amp;/g,"&").replace(/&lt;/g,"<").replace(/&gt;/g,">").replace(/&quot;/g,'"').replace(/&#39;/g,"'").replace(/\s+/g," ").trim();
 function xml(value,tag){const found=String(value).match(new RegExp(`<(?:(?:[\\w.-]+):)?${tag}(?:\\s[^>]*)?>([\\s\\S]*?)<\\/(?:(?:[\\w.-]+):)?${tag}>`,"i"));return entities(found?.[1]);}
 export async function providerGet(url,env,fetchImpl=fetch,options={}){
@@ -9,7 +17,7 @@ export async function providerGet(url,env,fetchImpl=fetch,options={}){
   const slot=Math.max(Date.now(),nextRequest);nextRequest=slot+120;const delay=slot-Date.now();if(delay>10000)fail(429,"Metadata lookup is busy. Retry shortly.");if(delay>0)await new Promise(resolve=>setTimeout(resolve,delay));
   if(parsed.hostname==="api.openalex.org"&&env.OPENALEX_API_KEY)parsed.searchParams.set("api_key",env.OPENALEX_API_KEY);
   const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),Math.min(10000,Math.max(1,options.timeoutMs||10000)));const abort=()=>controller.abort();options.signal?.addEventListener("abort",abort,{once:true});
-  try{if(options.signal?.aborted)fail(504,"The metadata lookup deadline was reached.","provider_timeout");options.onRequest?.();const response=await fetchImpl(parsed.toString(),{headers:{Accept:parsed.hostname==="export.arxiv.org"?"application/atom+xml":"application/json","User-Agent":"Labvium/1.0 (research metadata preview)"},signal:controller.signal});if(!response.ok)fail(response.status===429?429:502,"The metadata provider could not complete this request.","provider_unavailable");const source=await response.text();if(source.length>3000000)fail(502,"The metadata provider response exceeded the supported limit.");let value;if(parsed.hostname==="export.arxiv.org")value=source;else{try{value=JSON.parse(source);}catch{fail(502,"The metadata provider returned unreadable data.");}}if(cache.size>100)cache.delete(cache.keys().next().value);cache.set(key,{value,expires:Date.now()+300000});return value;}catch(error){if(controller.signal.aborted)fail(504,"The metadata provider exceeded the lookup deadline.","provider_timeout");throw error;}finally{clearTimeout(timer);options.signal?.removeEventListener("abort",abort);}
+  try{if(options.signal?.aborted)fail(504,"The metadata lookup deadline was reached.","provider_timeout");options.onRequest?.();const response=await fetchImpl(parsed.toString(),{headers:{Accept:parsed.hostname==="export.arxiv.org"?"application/atom+xml":"application/json","User-Agent":"Labvium/1.0 (research metadata preview)"},signal:controller.signal});if(!response.ok)fail(response.status===429?429:502,"The metadata provider could not complete this request.","provider_unavailable");const source=await response.text();if(source.length>3000000)fail(502,"The metadata provider response exceeded the supported limit.");let value;if(parsed.hostname==="export.arxiv.org")value=source;else{try{value=JSON.parse(source);}catch{fail(502,"The metadata provider returned unreadable data.");}}cacheProviderValue(key,value,source.length);return value;}catch(error){if(controller.signal.aborted)fail(504,"The metadata provider exceeded the lookup deadline.","provider_timeout");throw error;}finally{clearTimeout(timer);options.signal?.removeEventListener("abort",abort);}
 }
 const safeUrl=value=>{try{const parsed=new URL(value);return ["https:","http:"].includes(parsed.protocol)&&!parsed.username&&!parsed.password?parsed.toString():"";}catch{return "";}};
 export function canonicalDoi(value){return String(value||"").trim().replace(/^https?:\/\/(?:dx\.)?doi\.org\//i,"").toLowerCase();}

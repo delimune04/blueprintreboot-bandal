@@ -57,3 +57,32 @@ test("cache hits avoid repeat provider requests and provider deadlines abort pen
   assert.equal(first.coverage.requests, 1); assert.equal(second.coverage.requests, 0); assert.equal(second.coverage.cache_hits, 1); assert.equal(calls, 1);
   await assert.rejects(providerGet("https://api.openalex.org/works/W86002", {}, async (_url, { signal }) => new Promise((_resolve, reject) => signal.addEventListener("abort", () => reject(new Error("aborted")), { once: true })), { timeoutMs: 10 }), { status: 504, code: "provider_timeout" });
 });
+test("OpenAlex 429 preserves a bounded Crossref reference chain without fabricated citations", async () => {
+  const doi = suffix => `10.9876/910${suffix}`, make = (suffix, refs = []) => ({ DOI: doi(suffix), title: [`Measured caprock evidence ${suffix}`], published: { "date-parts": [[2010]] }, reference: refs.map(DOI => ({ DOI })) });
+  const records = { [doi("01")]: make("01", [doi("02"), doi("04"), doi("05"), doi("06"), doi("07")]), [doi("02")]: make("02", [doi("03")]), [doi("03")]: make("03"), [doi("04")]: make("99"), [doi("05")]: make("05"), [doi("06")]: make("06") }, calls = [];
+  const fetcher = async value => {
+    const url = new URL(value); calls.push(url);
+    if (url.hostname === "api.openalex.org") return new Response("rate limited", { status: 429 });
+    assert.equal(url.hostname, "api.crossref.org");
+    if (url.pathname.startsWith("/works/")) { const record = records[decodeURIComponent(url.pathname.slice(7))]; return record ? response({ message: record }) : new Response("not indexed", { status: 404 }); }
+    return response({ message: { items: [make("08")] } });
+  };
+  const result = await explore(new URLSearchParams({ seed: doi("01"), limit: "10" }), {}, fetcher);
+  assert.equal(calls.filter(url => url.hostname === "api.openalex.org").length, 1);
+  assert.ok(result.coverage.requests <= 8); assert.equal(result.coverage.reference_expansion.attempted, 4); assert.equal(result.coverage.reference_expansion.resolved, 3); assert.equal(result.coverage.reference_expansion.truncated, true); assert.equal(result.coverage.citation_graph, "partial");
+  const source = `https://doi.org/${doi("01")}`, child = `https://doi.org/${doi("02")}`, cites = result.graph.edges.filter(edge => edge.kind === "cites");
+  assert.ok(cites.some(edge => edge.source === source && edge.target === child)); assert.ok(cites.every(edge => edge.evidence.provider === "Crossref"));
+  assert.ok(!result.items.some(work => [doi("04"), doi("99"), doi("07")].includes(work.doi)));
+  assert.ok(!cites.some(edge => edge.target === `https://doi.org/${doi("08")}`));
+  assert.ok(result.warnings.some(warning => warning.includes("partial DOI-only bibliography")));
+  for (const item of [result.seed, ...result.items]) validateExplorationWork(item); for (const edge of result.graph.edges) validateExplorationEdge(edge);
+  const before = calls.length, next = await explore(new URLSearchParams({ seed: child, limit: "10" }), {}, fetcher);
+  assert.equal(next.seed.id, child); assert.ok(next.graph.edges.some(edge => edge.kind === "cites" && edge.source === child && edge.target === `https://doi.org/${doi("03")}` && edge.evidence.provider === "Crossref")); assert.equal(next.coverage.citation_graph, "partial"); assert.ok(next.coverage.lookups <= 8); assert.ok(calls.length - before <= 8);
+});
+
+test("large public provider responses evict older cache entries instead of accumulating without a byte budget", async()=>{
+ let calls=0;const fetcher=async()=>{calls++;return response({message:{note:"x".repeat(2*1024*1024)}});};
+ const first="https://api.crossref.org/works?query=cache-byte-budget-first",second="https://api.crossref.org/works?query=cache-byte-budget-second";
+ await providerGet(first,{},fetcher);await providerGet(first,{},fetcher);assert.equal(calls,1);
+ await providerGet(second,{},fetcher);await providerGet(first,{},fetcher);assert.equal(calls,3);
+});

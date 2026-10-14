@@ -216,9 +216,14 @@ function ExplorationWorkspace({ projectId, snapshot, projectName }: { projectId:
   }
   function warningText(warning: string) {
     if (locale === "en") return warning;
+    const referenceExpansion = /^Crossref forward-reference expansion resolved (\d+) of (\d+) requested DOI records from (\d+)/.exec(warning);
+    if (referenceExpansion) return `Crossref의 참고문헌 DOI ${referenceExpansion[3]}개 중 이번에 요청한 ${referenceExpansion[2]}개에서 ${referenceExpansion[1]}개 자료를 확인했습니다. 한 번에 최대 4개의 실제 참고문헌을 이어 탐색하며 전체 인용망을 의미하지는 않습니다.`;
     return ({
       "Citation and abstract coverage depends on provider indexing. A missing link does not establish that two papers are unrelated.": "인용과 초록의 범위는 제공처의 색인에 따라 달라집니다. 연결이 없다고 두 논문이 무관한 것은 아닙니다.",
       "Scores rank exploration candidates using metadata and reference evidence; they do not measure scientific quality, truth, or author reputation.": "순위는 메타데이터와 참고문헌 근거로 탐색 후보를 정렬한 결과입니다. 과학적 품질, 진위나 저자의 평판을 평가하지 않습니다.",
+      "No resolved OpenAlex seed is available. Crossref supplies actual DOI reference links where deposited; incoming citing-work expansion and OpenAlex topic retrieval are unavailable.": "OpenAlex 기준 논문을 확인하지 못해 Crossref에 등록된 실제 참고문헌 DOI를 따라갑니다. 이 모드에서는 후속 인용 논문과 OpenAlex 주제 분류를 가져오지 못합니다.",
+      "No resolved OpenAlex seed is available. Seed citation-neighborhood expansion and shared-reference retrieval are unavailable; choose a real returned DOI to continue.": "기준 논문을 확인하지 못했습니다. 검색 결과의 실제 DOI가 있는 자료를 선택하면 그 논문에서 탐색을 이어갈 수 있습니다.",
+      "Crossref fallback has partial DOI-only reference coverage, no OpenAlex topic IDs, and no incoming citing-work expansion. Citation counts are provider totals, not a verified complete citing-work list. Missing evidence remains unavailable.": "Crossref 대체 모드는 등록된 DOI 참고문헌 일부를 보여주며 OpenAlex 주제나 후속 인용 논문 목록은 제공하지 않습니다. 인용 수는 제공처 집계이며 완전한 목록을 검증한 결과는 아닙니다.",
       "No resolved OpenAlex seed is available. Citation-neighborhood expansion and shared-reference retrieval are unavailable; starter results use actual provider metadata only.": "OpenAlex에서 기준 논문을 확인하지 못했습니다. 인용 주변이나 공유 참고문헌을 확장할 수 없으며, 첫 후보는 실제 제공처 메타데이터로만 표시합니다.",
       "Crossref fallback has DOI-only reference coverage, no OpenAlex topic IDs, and no citing-work expansion. Missing evidence remains unavailable.": "Crossref 대체 검색은 DOI로 된 참고문헌만 다루며 OpenAlex 주제와 인용한 논문 확장을 제공하지 않습니다. 누락된 근거는 미상으로 남깁니다.",
       "The requested seed could not be resolved unambiguously. No placeholder or inferred original paper was created.": "요청한 기준 논문을 하나로 확인하지 못했습니다. 임의의 기준 논문을 만들지 않았습니다.",

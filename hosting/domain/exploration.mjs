@@ -22,14 +22,15 @@ export async function explore(params, env, fetchImpl = fetch) {
   const seedId = canonicalOpenAlexId(rawSeed), seedDoi = canonicalDoi(rawSeed), doiSeed = isDoi(seedDoi);
   if (rawSeed && !seedId && !doiSeed && (/^[a-z][a-z\d+.-]*:\/\//i.test(rawSeed) || /^W\d/i.test(rawSeed) || /^10\./.test(rawSeed))) fail(422, "Use an OpenAlex work ID, DOI, or seed title. Other URLs are unsupported.");
   const warnings = ["Citation and abstract coverage depends on provider indexing. A missing link does not establish that two papers are unrelated.", "Scores rank exploration candidates using metadata and reference evidence; they do not measure scientific quality, truth, or author reputation."], candidates = [], providers = new Set();
-  let requests = 0, lookups = 0, cacheHits = 0, truncated = false, seed = null, citedLookupSucceeded = false, openalexSucceeded = false;
+  let requests = 0, lookups = 0, cacheHits = 0, truncated = false, seed = null, citedLookupSucceeded = false, openalexSucceeded = false, openalexUnavailable = false;
+  const referenceExpansion = { provider: "Crossref", attempted: 0, resolved: 0, indexed_doi_references: 0, truncated: false };
   const controller = new AbortController(), deadline = Date.now() + 18000, timer = setTimeout(() => controller.abort(), 18000);
   async function lookup(url, label) {
     if (lookups >= BUDGET || controller.signal.aborted || Date.now() >= deadline) { truncated = true; warnings.push(`${label}: this expansion's lookup budget or deadline was reached.`); return null; }
     lookups++;
     try {
       return await providerGet(url, env, fetchImpl, { signal: controller.signal, timeoutMs: Math.min(8000, deadline - Date.now()), onRequest: () => { if (requests >= BUDGET) fail(429, "The exploration provider budget was reached."); requests++; }, onCache: () => { cacheHits++; } });
-    } catch (error) { warnings.push(`${label}: ${error?.code === "provider_timeout" ? "provider deadline exceeded" : error?.status === 429 ? "provider rate limit reached" : "provider unavailable"}; existing research is unchanged.`); return null; }
+    } catch (error) { if (new URL(url).hostname === "api.openalex.org") openalexUnavailable = true; warnings.push(`${label}: ${error?.code === "provider_timeout" ? "provider deadline exceeded" : error?.status === 429 ? "provider rate limit reached" : "provider unavailable"}; existing research is unchanged.`); return null; }
   }
   function collect(data, relation = null) {
     if (!data) return [];
@@ -43,6 +44,23 @@ export async function explore(params, env, fetchImpl = fetch) {
     if (!exact) { url.searchParams.set("query.bibliographic", query.slice(0, 300)); url.searchParams.set("query.title", query.slice(0, 300)); url.searchParams.set("rows", String(Math.min(40, limit * 2))); }
     const data = await lookup(url, "Crossref fallback"); if (!data) return [];
     const list = exact ? (data.message ? [data.message] : []) : (Array.isArray(data.message?.items) ? data.message.items.slice(0, 40) : []), found = list.map(crossrefItem).filter(usable).filter(researchItem); if (found.length) providers.add("Crossref"); candidates.push(...found); return found;
+  }
+  async function expandCrossrefReferences() {
+    if (seed?.source !== "Crossref" || seed.openalex_id) return;
+    const refs = [...new Set(seed.references.map(canonicalDoi).filter(isDoi))].filter(value => value !== canonicalDoi(seed.doi));
+    referenceExpansion.indexed_doi_references = refs.length;
+    const selected = refs.slice(0, Math.min(4, BUDGET - lookups));
+    referenceExpansion.attempted = selected.length; referenceExpansion.truncated = refs.length > selected.length;
+    if (referenceExpansion.truncated) truncated = true;
+    await Promise.all(selected.map(async ref => {
+      const data = await lookup(new URL(`https://api.crossref.org/works/${encodeURIComponent(ref)}`), "Crossref reference metadata");
+      if (!data?.message) return;
+      const work = crossrefItem(data.message);
+      // Never turn a fuzzy title result or a mismatched singleton into a citation.
+      if (!usable(work) || !researchItem(work) || canonicalDoi(work.doi) !== ref) return;
+      referenceExpansion.resolved++; providers.add("Crossref"); candidates.push(work);
+    }));
+    if (refs.length) warnings.push(`Crossref forward-reference expansion resolved ${referenceExpansion.resolved} of ${referenceExpansion.attempted} requested DOI records from ${refs.length} indexed seed reference DOIs. At most four references are fetched per explicit expansion; this is partial DOI-only bibliography coverage, not a complete citation graph.`);
   }
   try {
     if (seedId) {
@@ -68,21 +86,23 @@ export async function explore(params, env, fetchImpl = fetch) {
       const jobs = [];
       if (batch.length) jobs.push(lookup(workUrl({ filter: `openalex:${batch.map(id => id.split("/").at(-1)).join("|")}`, "per-page": 40 }), "Reference/related work metadata").then(data => collect(data)));
       const citingUrl = workUrl({ filter: `cites:${shortId}`, "per-page": 40 });
-      jobs.push(lookup(citingUrl, "Citing works").then(data => { if (data) citedLookupSucceeded = true; return collect(data, { kind: "cites", target: seed.id, url: citingUrl.toString() }); }));
+      jobs.push(lookup(citingUrl, "Citing works").then(data => { if (data) citedLookupSucceeded = true; return collect(data, { kind: "cites", target: seed.id, url: citingUrl.toString(), provider: "OpenAlex" }); }));
       if (refs.length) jobs.push(lookup(workUrl({ filter: `cites:${refs.slice(0, 6).map(id => id.split("/").at(-1)).join("|")}`, "per-page": 40 }), "Shared-reference candidates").then(data => collect(data)));
       if (topics.length) jobs.push(lookup(workUrl({ filter: `topics.id:${topics.join("|")}`, "per-page": 40 }), "Topic neighbors").then(data => collect(data)));
       jobs.push(lookup(workUrl({ search: q || seed.title.slice(0, 300), "per-page": 40 }), "Text neighbors").then(data => collect(data)));
       await Promise.all(jobs);
-    } else if (!rawSeed || q || seed) {
+    } else if ((!rawSeed || q || seed) && !openalexUnavailable) {
       const query = q || seed?.title || rawSeed, data = await lookup(workUrl({ search: query.slice(0, 300), "per-page": 40 }), "Topic starter search"); collect(data);
     }
     if (!candidates.some(work => !seed || work.id !== seed.id)) await crossrefFallback(q || seed?.title || (doiSeed ? seedDoi : rawSeed));
+    await expandCrossrefReferences();
     if (!openalexSucceeded && !providers.has("Crossref")) fail(503, "Scholarly providers are unavailable. Retry later; your saved research has been preserved.", "exploration_unavailable");
-    if (!seed?.openalex_id) warnings.push("No resolved OpenAlex seed is available. Citation-neighborhood expansion and shared-reference retrieval are unavailable; starter results use actual provider metadata only.");
-    if (providers.has("Crossref")) warnings.push("Crossref fallback has DOI-only reference coverage, no OpenAlex topic IDs, and no citing-work expansion. Missing evidence remains unavailable.");
+    if (!seed?.openalex_id) warnings.push(seed?.source === "Crossref" ? "No resolved OpenAlex seed is available. Crossref supplies actual DOI reference links where deposited; incoming citing-work expansion and OpenAlex topic retrieval are unavailable." : "No resolved OpenAlex seed is available. Seed citation-neighborhood expansion and shared-reference retrieval are unavailable; choose a real returned DOI to continue.");
+    if (providers.has("Crossref")) warnings.push("Crossref fallback has partial DOI-only reference coverage, no OpenAlex topic IDs, and no incoming citing-work expansion. Citation counts are provider totals, not a verified complete citing-work list. Missing evidence remains unavailable.");
     const ranked = rankExploration({ candidates: candidates.slice(0, 240), seed, q: q || (!seed ? rawSeed : ""), mode, limit });
     if (candidates.length > MAX_CANDIDATES) truncated = true;
-    const citationGraph = seed?.openalex_id && citedLookupSucceeded && seed.evidence.references !== "missing" ? "available" : openalexSucceeded ? "partial" : "unavailable";
-    return { items: ranked.items, seed: ranked.seed, q, mode, warnings: [...new Set(warnings)], retrieved_at: now(), graph: ranked.graph, coverage: { requests, lookups, cache_hits: cacheHits, budget: BUDGET, candidate_count: ranked.candidate_count, returned_count: ranked.items.length, citation_graph: citationGraph, providers: [...providers].sort(), truncated: truncated || ranked.truncated, bounded_paging: "First provider page only; no background crawling or automatic pagination." }, ranking: ranked.ranking };
+    const hasCitationEvidence = ranked.graph.edges.some(edge => edge.kind === "cites");
+    const citationGraph = seed?.openalex_id && citedLookupSucceeded && seed.evidence.references !== "missing" ? "available" : openalexSucceeded || hasCitationEvidence ? "partial" : "unavailable";
+    return { items: ranked.items, seed: ranked.seed, q, mode, warnings: [...new Set(warnings)], retrieved_at: now(), graph: ranked.graph, coverage: { requests, lookups, cache_hits: cacheHits, budget: BUDGET, candidate_count: ranked.candidate_count, returned_count: ranked.items.length, citation_graph: citationGraph, providers: [...providers].sort(), truncated: truncated || ranked.truncated, bounded_paging: "First provider page and at most four Crossref seed-reference singletons; no background crawling or automatic pagination.", ...(referenceExpansion.attempted ? { reference_expansion: referenceExpansion } : {}) }, ranking: ranked.ranking };
   } finally { clearTimeout(timer); }
 }

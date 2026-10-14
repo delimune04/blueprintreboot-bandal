@@ -53,7 +53,7 @@ const aliases = work => new Set([identity(work.id), oa(work.openalex_id), validD
 function citationEvidence(citing, cited) {
   const ids = aliases(cited); if (citing.references.some(id => ids.has(identity(id)))) return { provider: citing.source || "Provider", url: citing.openalex_id ? `https://api.openalex.org/works/${citing.openalex_id.split("/").at(-1)}` : citing.doi ? `https://api.crossref.org/works/${encodeURIComponent(citing.doi)}` : cited.url, method: "provider reference list (citing → cited)" };
   const proof = (citing._relations || []).find(r => r.kind === "cites" && ids.has(identity(r.target)));
-  return proof ? { provider: "OpenAlex", url: proof.url, method: "provider cites filter (citing → cited)" } : null;
+  return proof ? { provider: proof.provider || citing.source || "Provider", url: proof.url, method: "provider cites filter (citing → cited)" } : null;
 }
 function relationship(candidate, seed) { if (!seed) return []; const out = []; if (citationEvidence(seed, candidate)) out.push("seed_cites_work"); if (citationEvidence(candidate, seed)) out.push("work_cites_seed"); return out; }
 const yearOf = work => /^\d{4}$/.test(work.year) && Number(work.year) > 1400 ? Number(work.year) : null;
