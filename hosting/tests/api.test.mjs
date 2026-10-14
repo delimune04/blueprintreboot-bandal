@@ -7,6 +7,8 @@ import { emptyWorkspace, rev, sha256, provenance } from "../domain/core.mjs";
 import { loadWorkspace, saveWorkspace } from "../domain/store.mjs";
 import { validateArchive } from "../domain/maintenance.mjs";
 import { discover, related } from "../domain/providers.mjs";
+import { emptyExploration } from "../../frontend/app/lib/exploration/model.mjs";
+import { blankReviewInput, newReviewRow } from "../../frontend/app/lib/review/model.mjs";
 
 class DB {
  database=new DatabaseSync(":memory:");ambiguous=null;
@@ -54,3 +56,36 @@ test("profile rebuild is explicit deterministic evidence and keeps source revisi
 test("tag merge preview binds source revisions, rewrites owned references and preserves retired key",async()=>{const e=env(),identity=await imported(e);let registry=(await request(e,"/tags/governance")).data;let created=await request(e,"/tags",{method:"POST",body:{label:"Reservoir method A",category:"method",expected_revision:registry.registry_revision}});const source=created.data.tag.canonical_key;created=await request(e,"/tags",{method:"POST",body:{label:"Reservoir method B",category:"method",expected_revision:created.data.registry_revision}});const target=created.data.tag.canonical_key,reader=(await request(e,`/papers/${identity}/reader`)).data;await request(e,`/papers/${identity}/tags`,{method:"POST",body:{tag:source,expected_revision:reader.tags_revision}});let preview=(await request(e,`/tags/merge-preview?source_key=${source}&target_key=${target}`)).data;assert.equal(preview.affected_paper_count,1);await request(e,"/projects",{method:"POST",body:{name:"Changed workspace after preview"}});assert.equal((await request(e,"/tags/merge",{method:"POST",body:{source_key:source,target_key:target,expected_registry_revision:preview.expected_registry_revision,preview_token:preview.preview_token,confirm:true}})).status,409);preview=(await request(e,`/tags/merge-preview?source_key=${source}&target_key=${target}`)).data;const merged=await request(e,"/tags/merge",{method:"POST",body:{source_key:source,target_key:target,expected_registry_revision:preview.expected_registry_revision,preview_token:preview.preview_token,confirm:true}});assert.equal(merged.status,200,JSON.stringify(merged.data));assert.deepEqual((await request(e,`/papers/${identity}`)).data.tags,[target]);registry=(await request(e,"/tags/governance")).data;assert.equal(registry.items.find(tag=>tag.canonical_key===source).status,"deprecated");assert.equal((await request(e,"/tags/near-duplicates")).status,200);});
 test("backup is marked stale immediately after saved work changes",async()=>{const e=env();const current=await workspace(e);await request(e,"/backups",{method:"POST",body:{kind:"full",expected_revision:current.workspace_revision}});await request(e,"/projects",{method:"POST",body:{name:"Work after backup"}});const readiness=(await request(e,"/settings/summary")).data.backup_readiness;assert.equal(readiness.state,"warning");assert.equal(readiness.state_current,false);assert.equal(readiness.evidence_state,"verified_snapshot_differs_from_current");});
 test("corrupt saved state is preserved and can be exported without deserialization",async()=>{const e=env();await workspace(e);const owner=await sha256("alice");e.LABVIUM_DB.database.prepare("UPDATE labvium_workspaces SET state_json = ? WHERE owner_key = ?").run("{damaged-json",owner);assert.equal((await request(e,"/papers")).status,503);const response=await handleLabviumApi(new Request("https://bandal.app/ku-ai/api/exports/raw",{headers:{"oai-authenticated-user-id":"alice"}}),e);assert.equal(response.status,200);assert.equal(await response.text(),"{damaged-json");assert.equal(e.LABVIUM_DB.rows.get(owner).state_json,"{damaged-json");});
+
+test("project exploration persists with account isolation, guarded writes and verified backup restore", async () => {
+ const e=env(), project=(await request(e,"/projects",{method:"POST",body:{name:"CCS continuity"}})).data.project;
+ const path=`/projects/${project.project_id}/exploration`, initial=await request(e,path);
+ assert.equal(initial.status,200);assert.equal(initial.data.exploration.works.length,0);
+ const exploration={...emptyExploration("Caprock evidence"),updated_at:new Date().toISOString()};
+ const saved=await request(e,path,{method:"PUT",body:{exploration,expected_revision:initial.data.revision}});
+ assert.equal(saved.status,200,JSON.stringify(saved.data));assert.equal((await request(e,path,{user:"bob"})).status,404);
+ assert.equal((await request(e,path,{user:null})).status,401);
+ assert.equal((await request(e,path,{method:"PUT",body:{exploration,expected_revision:initial.data.revision}})).status,409);
+ const current=await workspace(e), backup=await request(e,"/backups",{method:"POST",body:{kind:"full",expected_revision:current.workspace_revision}});
+ assert.equal(backup.status,200);assert.match(JSON.stringify((await request(e,`/backups/${backup.data.backup_id}`)).data),/Caprock evidence/);
+ await request(e,path,{method:"PUT",body:{exploration:{...exploration,topic:"Later edit"},expected_revision:saved.data.revision}});
+ const preview=await request(e,`/backups/${backup.data.backup_id}/restore-preview`,{method:"POST",body:{}});
+ assert.equal((await request(e,`/backups/${backup.data.backup_id}/restore`,{method:"POST",body:{expected_revision:preview.data.workspace_revision,confirm:true}})).status,200);
+ assert.equal((await request(e,path)).data.exploration.topic,"Caprock evidence");
+});
+test("hosted review refuses unsupported reviewed claims and retains explicitly open handoff snapshot", async()=>{
+ const e=env(),project=(await request(e,"/projects",{method:"POST",body:{name:"Handoff"}})).data.project,path=`/projects/${project.project_id}/review`;
+ const input=blankReviewInput();input.rows=[{...newReviewRow("hypothesis"),text:"Unverified interpretation",status:"reviewed"}];for(const key of Object.keys(input.checklist))input.checklist[key]=true;
+ let review=await request(e,path),saved=await request(e,path,{method:"PUT",body:{dossier:input,expected_revision:review.data.revision}});
+ assert.equal(saved.status,200,JSON.stringify(saved.data));assert.equal((await request(e,`${path}/freeze`,{method:"POST",body:{expected_revision:saved.data.revision,reviewed_by:"Fixture reviewer",confirm:true}})).status,422);
+ input.rows[0].kind="question";input.rows[0].status="open";saved=await request(e,path,{method:"PUT",body:{dossier:input,expected_revision:saved.data.revision}});
+ const frozen=await request(e,`${path}/freeze`,{method:"POST",body:{expected_revision:saved.data.revision,reviewed_by:"Fixture reviewer",confirm:true}});
+ assert.equal(frozen.status,200,JSON.stringify(frozen.data));assert.equal(frozen.data.dossier.snapshots.length,1);assert.equal(frozen.data.dossier.snapshots[0].input.rows[0].status,"open");assert.equal((await request(e,path,{user:"bob"})).status,404);
+});
+test("AI source preview works without a key and generation remains disconnected",async()=>{
+ const e=env(),identity=await imported(e),paper=(await request(e,`/papers/${identity}`)).data;
+ await request(e,`/papers/${identity}/full-text/extract`,{method:"POST",body:{provider:"browser-pdfjs",source_pdf_sha256:paper.pdf_sha256,expected_pdf_revision:paper.pdf_revision,pages:[{page_number:1,text:"Measured caprock permeability is a source excerpt, not an AI answer."}]}});
+ const preview=await request(e,`/ai/sources?paper_ids=${identity}&q=caprock`);assert.equal(preview.status,200,JSON.stringify(preview.data));assert.equal(preview.data.sources[0].page,1);assert.equal(preview.data.coverage.semantic_search,false);
+ assert.equal((await request(e,`/ai/sources?paper_ids=${identity}&q=caprock`,{user:"bob"})).status,404);
+ assert.equal((await request(e,"/ai/answer",{method:"POST",body:{question:"caprock",paper_ids:[identity],source_ids:[preview.data.sources[0].id],sources_revision:preview.data.revision,task:"summary"}})).status,503);
+});

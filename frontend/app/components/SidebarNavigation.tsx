@@ -3,6 +3,7 @@
 import { Compass, FolderKanban, Gauge, LibraryBig, NotebookPen, PanelLeftClose, PanelLeftOpen, Pin, PinOff, Search, Settings, Sparkles, Tags, Users, Wrench, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import type { RefObject } from "react";
 import { LanguageToggle, useI18n } from "../lib/i18n/LocaleProvider";
 import { PRODUCT_NAME } from "../lib/i18n/catalog";
 import { getWorkspaceMode } from "../lib/api/client";
@@ -32,6 +33,10 @@ function isActive(pathname: string, href: string): boolean {
 type SidebarNavigationProps = {
   readerMode: boolean;
   collapsed: boolean;
+  overlayMode: boolean;
+  open: boolean;
+  navigationRef: RefObject<HTMLElement | null>;
+  onNavigate: () => void;
   onToggleCollapsed: () => void;
   readerPinned: boolean;
   onToggleReaderPinned: () => void;
@@ -43,6 +48,10 @@ type SidebarNavigationProps = {
 export function SidebarNavigation({
   readerMode,
   collapsed,
+  overlayMode,
+  open,
+  navigationRef,
+  onNavigate,
   onToggleCollapsed,
   readerPinned,
   onToggleReaderPinned,
@@ -57,23 +66,30 @@ export function SidebarNavigation({
   const pathname = usePathname();
   return (
     <aside
+      ref={navigationRef}
       className={readerMode ? "sidebar sidebar--reader" : "sidebar"}
       data-collapsed={collapsed}
+      data-overlay={overlayMode}
+      data-open={open}
+      role={overlayMode && open ? "dialog" : undefined}
+      aria-modal={overlayMode && open ? true : undefined}
+      inert={!open}
+      tabIndex={-1}
       aria-label={t("Primary navigation")}
-      onMouseEnter={readerMode ? onReaderEnter : undefined}
-      onMouseLeave={readerMode ? onReaderLeave : undefined}
+      onMouseEnter={readerMode && !overlayMode ? onReaderEnter : undefined}
+      onMouseLeave={readerMode && !overlayMode ? onReaderLeave : undefined}
     >
       <div className="sidebar__header">
-        <Link href="/dashboard" className="brand" aria-label={`${PRODUCT_NAME} · ${t("Dashboard")}`}>
+        <Link href="/dashboard" className="brand" aria-label={`${PRODUCT_NAME} · ${t("Dashboard")}`} onClick={onNavigate}>
           <span className="brand__mark" aria-hidden="true" />
           <span className="brand__copy"><strong>{PRODUCT_NAME}</strong><small>{t("Research workspace")}</small></span>
         </Link>
-        {readerMode ? (
+        {readerMode || overlayMode ? (
           <div className="sidebar__reader-actions">
-            <button className="sidebar-toggle" type="button" onClick={onToggleReaderPinned} aria-pressed={readerPinned} aria-label={t(readerPinned ? "Unpin navigation" : "Pin navigation")} title={t(readerPinned ? "Unpin navigation" : "Pin navigation")}>
+            {readerMode && !overlayMode ? <button className="sidebar-toggle" type="button" onClick={onToggleReaderPinned} aria-pressed={readerPinned} aria-label={t(readerPinned ? "Unpin navigation" : "Pin navigation")} title={t(readerPinned ? "Unpin navigation" : "Pin navigation")}>
               {readerPinned ? <PinOff aria-hidden="true" size={16} /> : <Pin aria-hidden="true" size={16} />}
               <span className="sidebar-toggle__label">{t(readerPinned ? "Unpin" : "Pin")}</span>
-            </button>
+            </button> : null}
             <button className="sidebar-toggle sidebar-toggle--icon" type="button" onClick={onReaderClose} aria-label={t("Close navigation")} title={t("Close navigation")}>
               <X aria-hidden="true" size={16} />
             </button>
@@ -88,7 +104,7 @@ export function SidebarNavigation({
         {visiblePrimary.map(({ href, label, icon: Icon }) => {
           const active = isActive(pathname, href);
           return (
-            <Link key={href} href={href} className="sidebar-link" data-active={active} aria-current={active ? "page" : undefined} aria-label={collapsed ? t(label) : undefined} title={collapsed ? t(label) : undefined}>
+            <Link key={href} href={href} onClick={onNavigate} className="sidebar-link" data-active={active} aria-current={active ? "page" : undefined} aria-label={collapsed ? t(label) : undefined} title={collapsed ? t(label) : undefined}>
               <Icon aria-hidden="true" size={17} strokeWidth={1.8} />
               <span>{t(label)}</span>
             </Link>
@@ -99,7 +115,7 @@ export function SidebarNavigation({
         {visibleSecondary.map(({ href, label, icon: Icon }) => {
           const active = isActive(pathname, href);
           return (
-            <Link key={href} href={href} className="sidebar-link" data-active={active} aria-current={active ? "page" : undefined} aria-label={collapsed ? t(label) : undefined} title={collapsed ? t(label) : undefined}>
+            <Link key={href} href={href} onClick={onNavigate} className="sidebar-link" data-active={active} aria-current={active ? "page" : undefined} aria-label={collapsed ? t(label) : undefined} title={collapsed ? t(label) : undefined}>
               <Icon aria-hidden="true" size={17} strokeWidth={1.8} />
               <span>{t(label)}</span>
             </Link>

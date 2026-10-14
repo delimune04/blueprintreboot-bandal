@@ -1,0 +1,22 @@
+.review-dossier { max-width: 1200px; }
+.review-fieldset { min-width: 0; padding: 0; margin: 0; border: 0; }
+.review-coverage, .review-actions { display: flex; flex-wrap: wrap; gap: 12px 20px; align-items: center; }
+.review-coverage { padding: 10px 0; border-bottom: 1px solid var(--color-rule-faint); }
+.review-warning { color: var(--state-amber); }
+.review-record { display: grid; gap: 12px; padding: 20px 0; border-bottom: 1px solid var(--color-rule-faint); }
+.review-record-heading { display: grid; grid-template-columns: 24px minmax(140px, 1fr) minmax(140px, 1fr) 32px; gap: 12px; align-items: end; }
+.review-number { align-self: center; color: var(--color-text-muted); font-variant-numeric: tabular-nums; }
+.review-record-fields { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+.review-record textarea, .review-record input, .review-record select { min-width: 0; width: 100%; }
+.review-source-list { display: grid; gap: 8px; }
+.review-source { display: flex; gap: 8px 16px; flex-wrap: wrap; align-items: baseline; padding: 8px 0; border-bottom: 1px solid var(--color-rule-faint); }
+.review-source a { color: var(--blue-700); overflow-wrap: anywhere; }
+.review-source details { flex-basis: 100%; }
+.review-dossier pre { max-height: 360px; overflow: auto; white-space: pre-wrap; overflow-wrap: anywhere; font-size: 12px; padding: 12px; background: var(--color-surface-subtle); }
+.review-checklist { display: grid; gap: 10px; }
+.review-checklist label { display: flex; gap: 10px; align-items: center; }
+.review-checklist input { accent-color: var(--blue-600); }
+.review-actions { margin-top: 16px; }
+.review-frozen-input article { padding: 12px 0; border-bottom: 1px solid var(--color-rule-faint); }
+.review-frozen-input p { white-space: pre-wrap; overflow-wrap: anywhere; }
+@media (max-width: 700px) { .review-record-heading { grid-template-columns: 20px 1fr 32px; }.review-record-heading .reader-field:nth-of-type(2) { grid-column: 2; }.review-record-heading > button { grid-column: 3; grid-row: 1; }.review-record-fields { grid-template-columns: 1fr; }.review-actions > .reader-field { width: 100%; } }

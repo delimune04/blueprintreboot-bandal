@@ -11,12 +11,12 @@
     "start": "vinext start",
     "demo:build": "vite build --config demo.vite.config.ts",
     "demo:test": "node --test tests/bandal-demo.test.mjs",
-    "test": "npm run build && node --test tests/*.test.mjs app/lib/workspace/*.test.mjs ../hosting/tests/*.test.mjs",
+    "test": "npm run build && node --test tests/*.test.mjs app/lib/workspace/*.test.mjs app/lib/exploration/*.test.mjs app/lib/review/*.test.mjs app/lib/ai/*.test.mjs ../hosting/tests/*.test.mjs",
     "lint": "eslint . --ignore-pattern dist --ignore-pattern .next",
     "prebuild": "node scripts/prepare-ocr-assets.mjs",
     "predemo:build": "node scripts/prepare-ocr-assets.mjs",
     "predev": "node scripts/prepare-ocr-assets.mjs",
-    "test:labvium": "node --test tests/bandal-demo.test.mjs tests/browser-workspace.test.mjs tests/reader-cited-evidence.test.mjs tests/workspace-scope-isolation.test.mjs tests/labvium-i18n.test.mjs tests/pdf-ocr.test.mjs app/lib/workspace/*.test.mjs ../hosting/tests/*.test.mjs"
+    "test:labvium": "node --test tests/bandal-demo.test.mjs tests/browser-workspace.test.mjs tests/reader-cited-evidence.test.mjs tests/workspace-scope-isolation.test.mjs tests/labvium-i18n.test.mjs tests/pdf-ocr.test.mjs app/lib/workspace/*.test.mjs app/lib/exploration/*.test.mjs app/lib/review/*.test.mjs app/lib/ai/*.test.mjs ../hosting/tests/*.test.mjs"
   },
   "dependencies": {
     "fflate": "0.8.2",

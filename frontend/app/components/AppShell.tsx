@@ -2,23 +2,40 @@
 
 import { usePathname } from "next/navigation";
 import { PanelLeftOpen } from "lucide-react";
-import { useEffect, useState, useSyncExternalStore, type ReactNode } from "react";
+import { useCallback, useEffect, useRef, useState, useSyncExternalStore, type ReactNode } from "react";
 import { SidebarNavigation } from "./SidebarNavigation";
 import { useI18n } from "../lib/i18n/LocaleProvider";
 import { PRODUCT_NAME } from "../lib/i18n/catalog";
+import { useModalFocus } from "../hooks/useModalFocus";
 
 const NORMAL_SIDEBAR_PREFERENCE_KEY = "blueprint.ui.normal-sidebar-collapsed";
 const NORMAL_SIDEBAR_PREFERENCE_EVENT = "blueprint.ui.normal-sidebar-changed";
 
 function getNormalSidebarPreference(): boolean {
   if (typeof window === "undefined") return false;
-  return window.sessionStorage.getItem(NORMAL_SIDEBAR_PREFERENCE_KEY) === "true";
+  try {
+    return window.sessionStorage.getItem(NORMAL_SIDEBAR_PREFERENCE_KEY) === "true";
+  } catch {
+    return false;
+  }
 }
 
 function subscribeToNormalSidebarPreference(onStoreChange: () => void): () => void {
   if (typeof window === "undefined") return () => {};
   window.addEventListener(NORMAL_SIDEBAR_PREFERENCE_EVENT, onStoreChange);
   return () => window.removeEventListener(NORMAL_SIDEBAR_PREFERENCE_EVENT, onStoreChange);
+}
+
+const NARROW_NAVIGATION_QUERY = "(max-width: 64rem)";
+
+function subscribeToNarrowNavigation(onStoreChange: () => void): () => void {
+  const query = window.matchMedia(NARROW_NAVIGATION_QUERY);
+  query.addEventListener("change", onStoreChange);
+  return () => query.removeEventListener("change", onStoreChange);
+}
+
+function getNarrowNavigation(): boolean {
+  return typeof window !== "undefined" && window.matchMedia(NARROW_NAVIGATION_QUERY).matches;
 }
 
 function isReaderRoute(pathname: string): boolean {
@@ -36,6 +53,39 @@ export function AppShell({ children }: { children: ReactNode }) {
   );
   const [readerSidebarOpen, setReaderSidebarOpen] = useState(false);
   const [readerSidebarPinned, setReaderSidebarPinned] = useState(false);
+  const [mobileSidebarPath, setMobileSidebarPath] = useState<string | null>(null);
+  const narrowNavigation = useSyncExternalStore(subscribeToNarrowNavigation, getNarrowNavigation, () => false);
+  const mobileSidebarOpen = mobileSidebarPath === pathname;
+  const sidebarOpen = readerRoute ? readerSidebarOpen : !narrowNavigation || mobileSidebarOpen;
+  const navigationModalOpen = narrowNavigation && sidebarOpen;
+  const navigationTriggerRef = useRef<HTMLButtonElement>(null);
+  const closeNavigation = useCallback(() => {
+    setMobileSidebarPath(null);
+    setReaderSidebarOpen(false);
+  }, []);
+  const navigationRef = useModalFocus<HTMLElement>({
+    active: navigationModalOpen,
+    onRequestClose: closeNavigation,
+    restoreFocusRef: navigationTriggerRef,
+  });
+
+  useEffect(() => {
+    if (!navigationModalOpen) return;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => { document.body.style.overflow = previousOverflow; };
+  }, [navigationModalOpen]);
+  useEffect(() => {
+    if (!readerRoute || !readerSidebarOpen || narrowNavigation) return;
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key !== "Escape") return;
+      event.preventDefault();
+      closeNavigation();
+      navigationTriggerRef.current?.focus();
+    };
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, [readerRoute, readerSidebarOpen, narrowNavigation, closeNavigation]);
   useEffect(() => {
     const key = pathname.split("/").filter(Boolean)[0] || "dashboard";
     const pages: Record<string, string> = { dashboard: "Dashboard", library: "Library", papers: readerRoute ? "Reader" : "Paper", projects: "Projects", tags: "Tags", settings: "Settings", workspace: "Research notes", discover: "Discover", assistant: "Research assistant", search: "Search research", maintenance: "Maintenance" };
@@ -45,8 +95,12 @@ export function AppShell({ children }: { children: ReactNode }) {
   }, [pathname, readerRoute, locale, t]);
 
   const toggleNormalSidebar = () => {
-    window.sessionStorage.setItem(NORMAL_SIDEBAR_PREFERENCE_KEY, String(!normalSidebarCollapsed));
-    window.dispatchEvent(new Event(NORMAL_SIDEBAR_PREFERENCE_EVENT));
+    try {
+      window.sessionStorage.setItem(NORMAL_SIDEBAR_PREFERENCE_KEY, String(!normalSidebarCollapsed));
+      window.dispatchEvent(new Event(NORMAL_SIDEBAR_PREFERENCE_EVENT));
+    } catch {
+      // Navigation remains available when browser storage is restricted.
+    }
   };
 
   return (
@@ -54,11 +108,27 @@ export function AppShell({ children }: { children: ReactNode }) {
       className={readerRoute ? "app-shell app-shell--reader" : "app-shell"}
       data-sidebar-collapsed={!readerRoute && normalSidebarCollapsed}
       data-reader-sidebar-open={readerRoute && readerSidebarOpen}
+      data-navigation-open={navigationModalOpen}
     >
-      <a className="skip-link" href="#main-content">{t("Skip to content")}</a>
+      <a className="skip-link" href="#main-content" onClick={(event) => { event.preventDefault(); document.getElementById("main-content")?.focus(); }}>{t("Skip to content")}</a>
+      {!readerRoute ? <header className="workspace-appbar">
+        <button
+          ref={navigationTriggerRef}
+          className="workspace-appbar__trigger"
+          type="button"
+          aria-label={t(mobileSidebarOpen ? "Close navigation" : "Open navigation")}
+          aria-expanded={mobileSidebarOpen}
+          aria-controls="primary-navigation"
+          onClick={() => setMobileSidebarPath(mobileSidebarOpen ? null : pathname)}
+        ><PanelLeftOpen aria-hidden="true" size={20} /></button>
+        <span className="workspace-appbar__brand"><span className="brand__mark" aria-hidden="true" /><strong>{PRODUCT_NAME}</strong></span>
+        <span className="workspace-appbar__context">{t("Research workspace")}</span>
+      </header> : null}
+      {navigationModalOpen ? <button className="navigation-backdrop" type="button" tabIndex={-1} aria-label={t("Close navigation")} onClick={closeNavigation} /> : null}
       {readerRoute ? (
         <div className="reader-navigation-zone">
           <button
+            ref={navigationTriggerRef}
             className="reader-navigation-trigger"
             type="button"
             aria-label={t(readerSidebarOpen ? "Close navigation" : "Open navigation")}
@@ -72,21 +142,28 @@ export function AppShell({ children }: { children: ReactNode }) {
       ) : null}
       <SidebarNavigation
         readerMode={readerRoute}
-        collapsed={readerRoute ? false : normalSidebarCollapsed}
+        collapsed={readerRoute || narrowNavigation ? false : normalSidebarCollapsed}
+        overlayMode={narrowNavigation}
+        open={sidebarOpen}
+        navigationRef={navigationRef}
+        onNavigate={closeNavigation}
         onToggleCollapsed={toggleNormalSidebar}
         readerPinned={readerSidebarPinned}
         onToggleReaderPinned={() => {
           setReaderSidebarPinned((current) => !current);
           setReaderSidebarOpen(true);
         }}
-        onReaderClose={() => setReaderSidebarOpen(false)}
+        onReaderClose={() => {
+          closeNavigation();
+          if (!narrowNavigation) navigationTriggerRef.current?.focus();
+        }}
         onReaderEnter={() => setReaderSidebarOpen(true)}
         onReaderLeave={() => {
-          if (!readerSidebarPinned) setReaderSidebarOpen(false);
+          if (!readerSidebarPinned && !navigationRef.current?.contains(document.activeElement)) setReaderSidebarOpen(false);
         }}
       />
-      <div className="workspace-frame">
-        <main id="main-content" className="main-content">{children}</main>
+      <div className="workspace-frame" inert={navigationModalOpen}>
+        <main id="main-content" className="main-content" tabIndex={-1}>{children}</main>
       </div>
     </div>
   );

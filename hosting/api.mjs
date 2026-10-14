@@ -9,6 +9,10 @@ import { generateCitedAnswer } from "./ai.mjs";
 import { resolveWorkspaceAccess, routeWorkspaceMembership } from "./membership.mjs";
 import { routeTagMaintenance } from "./domain/tag-maintenance.mjs";
 import { routeProfile } from "./domain/profile.mjs";
+import { explore } from "./domain/exploration.mjs";
+import { getProjectExplorationState, saveProjectExplorationState } from "../frontend/app/lib/exploration/model.mjs";
+import { routeReview } from "./domain/review.mjs";
+import { prepareAiSources, selectAiEvidence } from "../frontend/app/lib/ai/sources.mjs";
 
 const SIGN_IN_URL="/signin-with-chatgpt?return_to=%2Fku-ai%2F";
 export const HOSTED_CAPABILITIES={pdf_upload:true,pdf_read:true,client_pdf_extraction:true,server_pdf_extraction:false,ocr:true,client_ocr:true,server_ocr:false,metadata_enrichment:true,tag_review:true,tag_merge:true,near_duplicate_tags:true,profile_rebuild:true,rename_pdf:true,cache_quarantine:true,paper_priority:true,backup:true,restore:true,note_import:true,research_pages:true,full_text_search:true,private_cloud_storage:true};
@@ -20,12 +24,6 @@ async function commandBody(request,path){if(request.method==="GET"||request.meth
 async function pdfResponse(request,paper,state,ctx){if(!c.hasPdf(paper,state))c.fail(404,"The managed PDF is missing.");const file=state.files[paper.pdfPath];let range=null;const raw=request.headers.get("range");if(raw){const match=/^bytes=(\d*)-(\d*)$/.exec(raw);if(!match||(!match[1]&&!match[2]))return new Response(null,{status:416,headers:{"Content-Range":`bytes */${file.size_bytes}`}});let start,end;if(!match[1]){const suffix=Number(match[2]);if(!Number.isSafeInteger(suffix)||suffix<1)return new Response(null,{status:416,headers:{"Content-Range":`bytes */${file.size_bytes}`}});start=Math.max(0,file.size_bytes-suffix);end=file.size_bytes-1;}else{start=Number(match[1]);end=match[2]?Number(match[2]):file.size_bytes-1;}if(!Number.isSafeInteger(start)||!Number.isSafeInteger(end)||start<0||start>=file.size_bytes||end<start)return new Response(null,{status:416,headers:{"Content-Range":`bytes */${file.size_bytes}`}});end=Math.min(end,file.size_bytes-1);range={offset:start,length:end-start+1};}
  if(typeof file.key!=="string"||!file.key.startsWith(`labvium/${ctx.owner}/pdfs/`))c.fail(409,"Invalid private PDF reference.");const object=await ctx.env.LABVIUM_PDFS.get(file.key,range?{range}:undefined);if(!object)c.fail(404,"The managed PDF object is missing.");const headers={"Content-Type":"application/pdf","Cache-Control":"private, no-store","X-Content-Type-Options":"nosniff","Accept-Ranges":"bytes","Content-Length":String(range?range.length:file.size_bytes),"Content-Disposition":`inline; filename="paper.pdf"; filename*=UTF-8''${encodeURIComponent(paper.pdfPath.split("/").at(-1))}`,"Vary":"oai-authenticated-user-id","X-Labvium-Pdf-Sha256":file.sha256};if(range)headers["Content-Range"]=`bytes ${range.offset}-${range.offset+range.length-1}/${file.size_bytes}`;return new Response(object.body,{status:range?206:200,headers});
 }
-function aiSources(state,body){c.strict(body,["question","locale","paper_ids","project_id"]);const question=c.text(body.question,4000,true),locale=c.choice(body.locale||"ko",["ko","en"]);if(body.paper_ids!==undefined&&(!Array.isArray(body.paper_ids)||body.paper_ids.length>100))c.fail(422,"Select a bounded Paper collection.");let paperIds=body.paper_ids?new Set(body.paper_ids.map(c.safeId)):null;if(body.project_id){const project=c.projectById(state,c.safeId(body.project_id));const linked=new Set(project.links.map(link=>link.paper_id));paperIds=paperIds?new Set([...paperIds].filter(identity=>linked.has(identity))):linked;}if(paperIds)for(const identity of paperIds)c.paperById(state,identity);const sources=[];for(const paper of state.papers.filter(row=>!row.archived&&(!paperIds||paperIds.has(row.paper_id)))){
-  for(const page of paper.fullTextCache?.pages||[])if(page.text.trim())sources.push({id:`${paper.paper_id}:page:${page.page_number}`,paper_id:paper.paper_id,title:paper.metadata.title,page:page.page_number,text:page.text.slice(0,2000),kind:"pdf-page"});
-  for(const block of paper.blocks)if(block.text.trim())sources.push({id:`${paper.paper_id}:block:${block.id}`,paper_id:paper.paper_id,title:paper.metadata.title,page:Number(block.page)||null,block_id:block.id,text:block.text.slice(0,2000),kind:"note-block"});
-  if(paper.noteExists&&paper.note.trim())sources.push({id:`${paper.paper_id}:note`,paper_id:paper.paper_id,title:paper.metadata.title,page:null,text:paper.note.slice(0,2000),kind:"reading-note"});
- }if(!sources.length)c.fail(422,"Upload and extract a PDF or save research notes before asking for a cited answer.","sources_required");return{question,locale,sources:sources.slice(0,30)};
-}
 export async function handleLabviumApi(request,env){
  let loaded,owner;const created=[];
  try{
@@ -34,6 +32,7 @@ export async function handleLabviumApi(request,env){
   if(path==="session"&&method==="GET"){const authenticated=Boolean(request.headers.get("oai-authenticated-user-id"));return reply({authenticated,storage:authenticated?"cloud":"browser",user:authenticated?{}:null,capabilities:HOSTED_CAPABILITIES,ai:{configured:Boolean(env.OPENAI_API_KEY),provider:env.OPENAI_API_KEY?"openai":null,model:env.OPENAI_API_KEY?(env.OPENAI_MODEL||null):null},sign_in_url:SIGN_IN_URL});}
   if(path==="discover"&&method==="GET")return reply(await discover(url.searchParams,env));
   if(path==="discover/related"&&method==="GET")return reply(await related(url.searchParams,env));
+  if(path==="discover/explore"&&method==="GET")return reply(await explore(url.searchParams,env));
   if(parts[0]==="workspaces"){const body=await commandBody(request,path);return reply(await routeWorkspaceMembership(request,env,parts,body));}
   const access=await resolveWorkspaceAccess(request,env);owner=access.workspace_key;
   if(path==="exports/raw"&&method==="GET"){const row=await env.LABVIUM_DB.prepare("SELECT revision, state_json FROM labvium_workspaces WHERE owner_key = ?").bind(owner).first();if(!row)c.fail(404,"No saved workspace exists.");let value;try{value=JSON.parse(row.state_json);}catch{}if(value?.storage==="r2"){const object=await readPrivateObject(env,owner,value.key);if(!object)c.fail(503,"The retained raw state object is missing.");return new Response(object.body,{headers:{"Content-Type":"application/json","Content-Disposition":"attachment; filename=\"labvium-raw-state.json\"","Cache-Control":"private, no-store"}});}return new Response(row.state_json,{headers:{"Content-Type":"application/json","Content-Disposition":"attachment; filename=\"labvium-raw-state.json\"","Cache-Control":"private, no-store"}});}
@@ -42,11 +41,17 @@ export async function handleLabviumApi(request,env){
   if(path==="workspace"&&method==="GET")return reply({mode:"cloud",storage:"cloud",workspace_id:access.workspace_key,role:access.role,title:access.title,permissions_revision:c.rev(access.permissions_revision),revision:c.rev(loaded.revision),paper_count:state.papers.length,project_count:state.projects.length,research_page_count:state.researchPages.length,pdf_count:Object.keys(state.files).length,capabilities:HOSTED_CAPABILITIES,limits:{structured_state_bytes:c.MAX_STATE_BYTES,pdf_bytes:25*1024*1024,portable_backup_pdf_bytes:20*1024*1024}},200,loaded.revision);
   if(parts[0]==="papers"&&parts.length===3&&parts[2]==="pdf"&&method==="GET")return await pdfResponse(request,c.paperById(state,parts[1]),state,ctx);
   if(path==="settings/summary"&&method==="GET"){const summary=c.settings(state);summary.backup_readiness=await backupReadiness(state,ctx);return reply(summary,200,loaded.revision);}
+  if(path==="ai/sources"&&method==="GET")return reply(await prepareAiSources(state,{question:url.searchParams.get("q")||"",...(url.searchParams.get("project_id")?{project_id:url.searchParams.get("project_id")}:{paper_ids:(url.searchParams.get("paper_ids")||"").split(",").filter(Boolean)})}),200,loaded.revision);
   const body=await commandBody(request,path);
-  if(path==="ai/answer"&&method==="POST"){if(!env.OPENAI_API_KEY)c.fail(503,"Connect a server API key to enable cited AI answers. Your saved research remains available.","ai_not_configured");const output=await generateCitedAnswer(env,aiSources(state,body));return reply(output,200,loaded.revision);}
+  if(path==="ai/answer"&&method==="POST"){if(!env.OPENAI_API_KEY)c.fail(503,"Connect a server API key to enable cited AI answers. Your saved research remains available.","ai_not_configured");c.strict(body,["question","locale","paper_ids","project_id","source_ids","sources_revision","task"]);const output=await generateCitedAnswer(env,await selectAiEvidence(state,body));return reply({...output,evidence_revision:body.sources_revision},200,loaded.revision);}
   let output;
   if(path==="papers/upload"&&method==="POST")output=await stageUploads(state,body.getAll("files"),ctx);
-  else output=await routeMaintenance(parts,method,body,state,ctx)??routeResearch(parts,method,body,state)??await routeTagMaintenance(parts,method,body,url.searchParams,state,ctx)??await routeProfile(parts,method,body,state)??await routeCommands(parts,method,body,url.searchParams,state,ctx);
+  else if(parts[0]==="projects"&&parts.length===3&&parts[2]==="exploration"){
+    if(method==="GET")output=getProjectExplorationState(state,parts[1]);
+    else if(method==="PUT")output=saveProjectExplorationState(state,parts[1],body);
+    else c.fail(405,"Unsupported research exploration command.");
+  }
+  else output=await routeReview(parts,method,body,state,ctx)??await routeMaintenance(parts,method,body,state,ctx)??routeResearch(parts,method,body,state)??await routeTagMaintenance(parts,method,body,url.searchParams,state,ctx)??await routeProfile(parts,method,body,state)??await routeCommands(parts,method,body,url.searchParams,state,ctx);
   if(output instanceof Response)return output;
   const revision=await saveWorkspace(env,owner,loaded);
   return reply(output,200,revision);

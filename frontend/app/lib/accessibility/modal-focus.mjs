@@ -30,3 +30,35 @@ export function trapModalFocus(event, dialog) {
   }
   return false;
 }
+
+
+/** Tracks nested overlays so only the top one owns keyboard focus. */
+export function createModalFocusStack() {
+  const entries = [];
+  return {
+    push(dialog) {
+      const entry = { dialog };
+      entries.push(entry);
+      return entry;
+    },
+    current() {
+      return entries.at(-1) ?? null;
+    },
+    isTop(entry) {
+      return entries.at(-1) === entry;
+    },
+    remove(entry) {
+      const index = entries.indexOf(entry);
+      const wasTop = index !== -1 && index === entries.length - 1;
+      if (index !== -1) entries.splice(index, 1);
+      return { wasTop, next: entries.at(-1) ?? null };
+    },
+  };
+}
+
+export function modalRestoreTarget(dialog, requestedTarget, previousTarget) {
+  if (!dialog) return requestedTarget ?? previousTarget ?? null;
+  if (requestedTarget && dialog.contains(requestedTarget)) return requestedTarget;
+  if (previousTarget && dialog.contains(previousTarget)) return previousTarget;
+  return modalFocusableElements(dialog)[0] ?? dialog;
+}

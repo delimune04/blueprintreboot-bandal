@@ -25,6 +25,8 @@ const MaintenanceView = lazy(() => import("../app/views/MaintenanceView").then((
 const AssistantView = lazy(() => import("../app/views/AssistantView").then((module) => ({ default: module.AssistantView })));
 const SearchView = lazy(() => import("../app/views/SearchView").then((module) => ({ default: module.SearchView })));
 const TeamWorkspaceView = lazy(() => import("../app/views/TeamWorkspaceView").then((module) => ({ default: module.TeamWorkspaceView })));
+const ProjectResearchView = lazy(() => import("../app/views/ProjectResearchView").then((module) => ({ default: module.ProjectResearchView })));
+const ProjectReviewView = lazy(() => import("../app/views/ProjectReviewView").then((module) => ({ default: module.ProjectReviewView })));
 
 function WorkspaceFailure() {
   const { t } = useI18n();
@@ -92,6 +94,10 @@ function RouteView({ pathname }: { pathname: string }) {
   if (pathname === "/assistant") return <AssistantView />;
   if (pathname === "/search") return <SearchView />;
   if (pathname === "/team") return <TeamWorkspaceView />;
+  const projectResearch = /^\/projects\/([^/]+)\/research\/?$/.exec(pathname);
+  if (projectResearch) return <ProjectResearchView projectId={decodeURIComponent(projectResearch[1])} />;
+  const projectReview = /^\/projects\/([^/]+)\/review\/?$/.exec(pathname);
+  if (projectReview) return <ProjectReviewView projectId={decodeURIComponent(projectReview[1])} />;
   const reader = /^\/papers\/([^/]+)\/reader\/?$/.exec(pathname);
   if (reader) return <ReaderView paperId={decodeURIComponent(reader[1])} />;
   const paper = /^\/papers\/([^/]+)\/?$/.exec(pathname);

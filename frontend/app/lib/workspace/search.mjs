@@ -22,7 +22,7 @@ export function searchWorkspace(state, researchPages, query, projectId = "", lim
     append({ ...base, id: `note:${paper.paper_id}`, kind: "reading-note" }, paper.note);
     for (const block of paper.blocks || []) append({ ...base, id: `block:${block.id}`, kind: "note-block", block_id: block.id,
       page: /^\d+$/.test(String(block.page)) ? Number(block.page) : null,
-      url: `${base.url}?block=${encodeURIComponent(block.id)}`,
+      url: `${base.url}?noteBlock=${encodeURIComponent(block.id)}`,
     }, [block.title, block.text, block.quote, ...(block.tags || [])].join(" "));
     const pages = paper.fullTextCache?.pages || paper.extraction?.pages || paper.fullTextPages || paper.pages || [];
     if (pages.length) {

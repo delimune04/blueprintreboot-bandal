@@ -1,6 +1,11 @@
 import { DEMO_PAPERS, DEMO_TAGS } from "./seed.mjs";
 import { cachedBrowserPdfUrl, configureBrowserWorkspace, getBrowserWorkspaceStorage, getBrowserPdfRecord, cacheBrowserPdfUrl, revokeBrowserPdfUrl } from "./browser-storage.mjs";
 import { handleBrowserCommand, validateBrowserPaper, validatePdfProvenance } from "./browser-commands.mjs";
+import { getProjectExplorationState, saveProjectExplorationState, validateExploration, explorationRevision } from "../exploration/model.mjs";
+import { getReviewDossier, reviewRevision } from "../review/model.mjs";
+import { getProjectReview, saveProjectReview, freezeProjectReview } from "../../../../hosting/domain/review.mjs";
+import { createResearchPagesStore, RESEARCH_PAGES_KEY } from "../workspace/pages.mjs";
+import { prepareAiSources } from "../ai/sources.mjs";
 
 export const DEMO_STORAGE_KEY = "bandal.blueprint.demo.workspace.v1";
 const VERSION = 1;
@@ -152,6 +157,8 @@ function validateState(state) {
       }
     }
     for (const project of state.projects) {
+      if (project.researchTrail !== undefined) validateExploration(project.researchTrail);
+      explorationRevision(project); getReviewDossier(project); reviewRevision(project);
       validateProject({ name: project.name, description: project.description, status: project.status === "archived" ? "active" : project.status, priority: project.priority, tags: project.tags });
       choice(project.status, ["active", "paused", "done", "archived"]);
       if (!counter(project.projectRev) || !counter(project.linksRev) || !Array.isArray(project.links) || project.links.length > 1000 || !unique(project.links, "link_id") || typeof project.created_at !== "string" || typeof project.updated_at !== "string") throw new Error();
@@ -235,12 +242,19 @@ export function isDemoEnabled() { return process.env.NEXT_PUBLIC_BANDAL_DEMO ===
 export function createDemoAdapter(storageProvider = getBrowserWorkspaceStorage) {
   let pending = Promise.resolve();
   return function request(path, init = {}) {
-    const next = pending.then(() => globalThis.navigator?.locks ? globalThis.navigator.locks.request("labvium:browser-workspace", () => execute(path, init)) : execute(path, init));
+    const next = pending.then(() => {
+      const locks = globalThis.navigator?.locks;
+      const reviewWrite = (init.method || "GET").toUpperCase() !== "GET" && /^\/projects\/[^/?]+\/review(?:\/freeze)?\/?(?:\?|$)/.test(path);
+      const run = (pagesLocked = false) => locks?.request ? locks.request("labvium:browser-workspace", () => execute(path, init, pagesLocked)) : execute(path, init, pagesLocked);
+      // Lock order is pages, then core: backups/page commands also enter the
+      // page lock before reading core state. Hold it through the IDB CAS.
+      return reviewWrite && locks?.request ? locks.request("labvium:research-pages", { mode: "exclusive", ...(init.signal ? { signal: init.signal } : {}) }, () => run(true)) : run();
+    });
     pending = next.catch(() => undefined);
     return next;
   };
 
-  async function execute(path, init) {
+  async function execute(path, init, reviewPagesLocked = false) {
     try {
       if (init.signal?.aborted) throw new DOMException("The operation was aborted.", "AbortError");
       let storage;
@@ -266,7 +280,8 @@ export function createDemoAdapter(storageProvider = getBrowserWorkspaceStorage) 
       let body = {};
       if (typeof FormData !== "undefined" && init.body instanceof FormData && parts[0] === "papers" && parts[1] === "upload") body = init.body;
       else if (init.body !== undefined && init.body !== null) {
-        if (typeof init.body !== "string" || encoder.encode(init.body).byteLength > 2500000) {
+        const commandLimit = parts[0] === "projects" && parts.length === 3 && parts[2] === "exploration" && method === "PUT" ? 8 * 1024 * 1024 : 2500000;
+        if (typeof init.body !== "string" || encoder.encode(init.body).byteLength > commandLimit) {
           if (parts[0] === "papers" && parts[1] === "upload") fail(501, "PDF upload is unavailable in this browser demo. Use the three authored sample PDFs, or run the original app with its local Python backend.");
           fail(422, "Demo commands require a bounded JSON body.");
         }
@@ -275,12 +290,23 @@ export function createDemoAdapter(storageProvider = getBrowserWorkspaceStorage) 
       }
       const before = JSON.stringify(state);
       const effects = { putFiles: [], deleteFiles: [], revokedPaperIds: [] };
+      const reviewWrite = parts[0] === "projects" && parts[2] === "review" && method !== "GET";
+      const pagesRaw = reviewWrite ? window.localStorage.getItem(RESEARCH_PAGES_KEY) : null;
+      if (reviewWrite && !reviewPagesLocked && method === "POST" && parts[3] === "freeze") {
+        const project = state.projects.find((row) => row.project_id === parts[1]);
+        if (project?.reviewDossier?.rows.some((row) => row.source_links.some((source) => source.kind === "research_page"))) fail(503, "This browser cannot safely freeze research-page evidence across tabs. Use a browser with Web Locks support or an account workspace. Your saved review remains unchanged.");
+      }
       const output = await route(parts, method, body, url.searchParams, state, effects);
       if (init.signal?.aborted) throw new DOMException("The operation was aborted.", "AbortError");
       if (JSON.stringify(state) !== before) {
         // Preserve newer work if another tab saves during async SHA-256 work.
         try {
           const serialized = JSON.stringify(state);
+          // Without Web Locks this synchronous check protects ordinary draft
+          // saves from observed page edits; page-backed freezing is refused
+          // above because localStorage and the IDB CAS cannot be one atomic
+          // transaction. Never describe that fallback as an atomic freeze.
+          if (reviewWrite && window.localStorage.getItem(RESEARCH_PAGES_KEY) !== pagesRaw) fail(409, "Research pages changed while reviewing. Reload the sources before saving or freezing.");
           if (storage.compareAndSet) {
             if (!await storage.compareAndSet(DEMO_STORAGE_KEY, original, serialized, effects)) fail(409, "The browser workspace changed in another tab. Reload before saving.");
           } else {
@@ -311,6 +337,25 @@ export function createDemoAdapter(storageProvider = getBrowserWorkspaceStorage) 
 }
 
 async function route(parts, method, body, params, state, effects) {
+  if (parts.join("/") === "ai/sources" && method === "GET") {
+    try { return await prepareAiSources(state, { question: params.get("q") || "", ...(params.get("project_id") ? { project_id: params.get("project_id") } : { paper_ids: (params.get("paper_ids") || "").split(",").filter(Boolean) }) }); }
+    catch (error) { fail(Number.isInteger(error.status) ? error.status : 503, error.message); }
+  }
+  if (parts[0] === "projects" && parts.length >= 3 && ["exploration", "review"].includes(parts[2])) {
+    try {
+      if (parts[2] === "exploration" && parts.length === 3) {
+        if (method === "GET") return getProjectExplorationState(state, parts[1]);
+        if (method === "PUT") return saveProjectExplorationState(state, parts[1], body);
+      }
+      if (parts[2] === "review") {
+        const reviewState = { ...state, researchPages: createResearchPagesStore().list().items };
+        if (parts.length === 3 && method === "GET") return await getProjectReview(reviewState, parts[1]);
+        if (parts.length === 3 && method === "PUT") return await saveProjectReview(reviewState, parts[1], body);
+        if (parts.length === 4 && parts[3] === "freeze" && method === "POST") return await freezeProjectReview(reviewState, parts[1], body);
+      }
+      fail(405, "Unsupported project research command.");
+    } catch (error) { fail(Number.isInteger(error.status) ? error.status : 503, error.message || "The project research operation failed. Saved data was preserved."); }
+  }
   const handled = await handleBrowserCommand(parts, method, body, params, state, effects, { fail, guard, revision, canonicalNote, persistedNote, header, headerText, fullText, paperDetail, projectState, noteBlocks });
   if (handled.handled) return handled.value;
   const path = parts.join("/");

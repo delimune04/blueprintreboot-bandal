@@ -92,5 +92,7 @@ test("requested workflow changes remain lazy, focused, and bounded to the select
   assert.match(paperDetail, /Review diagnostics/);
   assert.match(modalHook, /trapModalFocus/);
   assert.match(modalHook, /event\.key === "Escape"/);
-  assert.match(modalHook, /restoreTarget\?\.focus\(\)/);
+  assert.match(modalHook, /modalRestoreTarget\(next\?\.dialog, restoreTarget, previousTarget\)/);
+  assert.match(modalHook, /target\?\.focus\(\)/);
+  assert.match(modalHook, /if \(!modalFocusStack\.isTop\(entry\)\) return/);
 });

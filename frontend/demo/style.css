@@ -19,13 +19,14 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--space-3) var(--space-6);
+  gap: var(--space-2) var(--space-4);
+  flex-wrap: wrap;
   min-height: 3rem;
   padding: var(--space-2) var(--space-4);
   border-bottom: 1px solid #d3c5eb;
   background: #f6f1ff;
   color: #44355d;
-  font-size: var(--font-size-xs);
+  font-size: 0.8125rem;
 }
 
 [data-bandal-demo="true"] .bandal-demo-banner p,
@@ -45,7 +46,9 @@
   font-weight: 700;
 }
 
-[data-bandal-demo="true"] .bandal-demo-banner nav { flex-shrink: 0; }
+[data-bandal-demo="true"] .bandal-demo-banner > p { flex: 1 1 28rem; min-width: 0; max-width: 100%; }
+[data-bandal-demo="true"] .bandal-demo-banner > p > span:last-child { min-width: 0; overflow-wrap: anywhere; }
+[data-bandal-demo="true"] .bandal-demo-banner nav { flex: 0 1 auto; min-width: 0; max-width: 100%; }
 [data-bandal-demo="true"] .bandal-demo-banner a { padding-block: var(--space-1); text-underline-offset: 3px; }
 [data-bandal-demo="true"] .bandal-demo-banner a:hover { color: var(--color-accent); text-decoration: underline; }
 [data-bandal-demo="true"] .bandal-demo-about { position: relative; }
@@ -69,18 +72,26 @@
   [data-bandal-demo="true"] .bandal-demo-banner a { transition: background-color 160ms ease, color 160ms ease, border-color 160ms ease; }
 }
 
-@media (max-width: 70rem) {
-  [data-bandal-demo="true"] .bandal-demo-banner { align-items: flex-start; }
-  [data-bandal-demo="true"] .bandal-demo-banner p { align-items: flex-start; flex-direction: column; gap: var(--space-1); }
-  [data-bandal-demo="true"] .bandal-demo-banner__brand { padding-right: 0; border-right: 0; }
+@media (max-width: 80rem) {
+  [data-bandal-demo="true"] .bandal-demo-banner { align-items: center; }
+  [data-bandal-demo="true"] .bandal-demo-banner > p { flex-basis: 100%; gap: var(--space-2) var(--space-3); }
+  [data-bandal-demo="true"] .bandal-demo-banner nav { width: 100%; justify-content: flex-start; gap: var(--space-1) var(--space-4); }
+}
+
+@media (max-width: 64rem) {
+  [data-bandal-demo="true"] .bandal-demo-banner { padding: var(--space-1) var(--content-padding); }
+  [data-bandal-demo="true"] .bandal-demo-banner nav a,
+  [data-bandal-demo="true"] .bandal-demo-about summary { min-height: 2.75rem; display: inline-flex; align-items: center; }
+  [data-bandal-demo="true"] .bandal-demo-banner .language-toggle button { min-height: 2.5rem; }
+  [data-bandal-demo="true"] .sidebar { height: calc(100dvh - var(--bandal-banner-height)); }
 }
 
 @media (max-width: 48rem) {
-  [data-bandal-demo="true"] .bandal-demo-banner { flex-direction: column; gap: var(--space-1); }
-  [data-bandal-demo="true"] .bandal-demo-banner p { font-size: 0.6875rem; }
-  [data-bandal-demo="true"] .bandal-demo-about__content { right: auto; left: -10rem; }
-  [data-bandal-demo="true"] .sidebar:not(.sidebar--reader) { height: auto; }
-  [data-bandal-demo="true"] .sidebar:not(.sidebar--reader) .sidebar-nav { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-  [data-bandal-demo="true"] .sidebar:not(.sidebar--reader) .sidebar-nav--secondary { grid-template-columns: 1fr; }
-  [data-bandal-demo="true"] .sidebar:not(.sidebar--reader) .sidebar-link { gap: var(--space-1); font-size: 0.6875rem; }
+  [data-bandal-demo="true"] .bandal-demo-banner { gap: 0; font-size: 0.8125rem; line-height: 1.4; }
+  [data-bandal-demo="true"] .bandal-demo-banner > p { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: start; gap: var(--space-2); padding-block: var(--space-2); }
+  [data-bandal-demo="true"] .bandal-demo-banner__brand { padding-right: var(--space-2); }
+  [data-bandal-demo="true"] .bandal-demo-banner nav { gap: 0 var(--space-3); font-size: 0.8125rem; }
+  [data-bandal-demo="true"] .bandal-demo-banner nav > * { flex: 0 1 auto; }
+  [data-bandal-demo="true"] .bandal-demo-banner .language-toggle { font-size: 0.8125rem; }
+  [data-bandal-demo="true"] .bandal-demo-about__content { position: fixed; top: var(--bandal-banner-height); right: var(--space-3); left: var(--space-3); width: auto; max-height: calc(100dvh - var(--bandal-banner-height) - var(--space-6)); overflow-y: auto; overscroll-behavior: contain; }
 }

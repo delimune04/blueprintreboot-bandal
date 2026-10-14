@@ -14,7 +14,7 @@ import { StatusBadge } from "../components/StatusBadge";
 import { RelationshipLabel } from "../components/RelationshipLabel";
 import { SaveStatus } from "../components/SaveStatus";
 import { useApiResource } from "../hooks/useApiResource";
-import { ApiClientError, apiClient } from "../lib/api/client";
+import { ApiClientError, apiClient, getWorkspaceMode } from "../lib/api/client";
 import { systemStateTone } from "../lib/semantic-tones.mjs";
 import { formatUiDate } from "../lib/presentation";
 import {
@@ -449,6 +449,7 @@ function ProjectWorkspace({ snapshot }: { snapshot: ProjectDetail }) {
     <>
       <Breadcrumbs items={[{ label: "Projects", href: "/projects" }, { label: project.name || "Project" }]} />
       <PageHeader title={project.name} description={project.description || t("No description yet.")} actions={!archived && !editing ? <div className="project-header-actions"><button className="reader-control" type="button" onClick={() => setEditing(true)}><Edit3 size={15} />{t("Edit Project")}</button><details className="project-secondary-actions"><summary aria-label={t("More Project actions")} title={t("More Project actions")}>{t("More")}</summary><div><button className="reader-control reader-control--secondary" type="button" onClick={() => void reloadProject()}><RotateCcw size={15} />{t("Reload current Project")}</button><button className="reader-control reader-control--danger" type="button" onClick={archiveProject}><Archive size={15} />{t("Archive Project")}</button></div></details></div> : null} />
+      {getWorkspaceMode() !== "local" ? <Section title={locale === "ko" ? "이 프로젝트에서 연구 이어가기" : "Continue this research"} description={locale === "ko" ? "논문에서 다음 논문으로 탐색하고, 판단과 인수인계 근거를 남기세요." : "Follow connected papers and preserve decisions with their sources."}><div className="reader-editor__actions"><Link className="reader-control" href={`/projects/${encodeURIComponent(project.project_id)}/research`}>{locale === "ko" ? "논문 탐색과 연관 지도" : "Explore papers and relationship map"}</Link><Link className="reader-control reader-control--secondary" href={`/projects/${encodeURIComponent(project.project_id)}/review`}>{locale === "ko" ? "검토와 인수인계 기록" : "Review and handoff dossier"}</Link></div></Section> : null}
       <div className="compact-metadata-row project-metadata-summary" aria-label={t("Project metadata")}>
         <span><small>{t("Status")}</small><StatusBadge>{project.status}</StatusBadge></span>
         <span><small>{t("Priority")}</small><StatusBadge>{project.priority}</StatusBadge></span>
