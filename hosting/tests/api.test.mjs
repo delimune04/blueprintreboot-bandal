@@ -9,6 +9,7 @@ import { validateArchive } from "../domain/maintenance.mjs";
 import { discover, related } from "../domain/providers.mjs";
 import { emptyExploration } from "../../frontend/app/lib/exploration/model.mjs";
 import { blankReviewInput, newReviewRow } from "../../frontend/app/lib/review/model.mjs";
+import { blankRun } from "../../frontend/app/lib/continuity/model.mjs";
 
 class DB {
  database=new DatabaseSync(":memory:");ambiguous=null;
@@ -88,4 +89,23 @@ test("AI source preview works without a key and generation remains disconnected"
  const preview=await request(e,`/ai/sources?paper_ids=${identity}&q=caprock`);assert.equal(preview.status,200,JSON.stringify(preview.data));assert.equal(preview.data.sources[0].page,1);assert.equal(preview.data.coverage.semantic_search,false);
  assert.equal((await request(e,`/ai/sources?paper_ids=${identity}&q=caprock`,{user:"bob"})).status,404);
  assert.equal((await request(e,"/ai/answer",{method:"POST",body:{question:"caprock",paper_ids:[identity],source_ids:[preview.data.sources[0].id],sources_revision:preview.data.revision,task:"summary"}})).status,503);
+});
+
+test("account reproduction records survive new requests, reject foreign accounts and remain in portable backups", async()=>{
+ const environment=env(),paperId=await imported(environment),project=(await request(environment,"/projects",{method:"POST",body:{name:"Cross-device project"}})).data.project;
+ const owner=await sha256("alice"),loaded=await loadWorkspace(environment,owner),entry=loaded.state.projects.find(p=>p.project_id===project.project_id);
+ entry.links.push({link_id:"link-cloud-fixture",paper_id:paperId,target_id:paperId,target_type:"paper",link_type:"related",note:"Fixture source",created_at:new Date().toISOString()});await saveWorkspace(environment,owner,loaded);
+ const path=`/projects/${project.project_id}/continuity`,first=await request(environment,path),run={...blankRun(),title:"Caprock reproduction",paper_ids:[paperId],dataset:"measurements.csv",data_version:"2026-10-17",commit_sha:"a".repeat(40),result:"Recorded result"};
+ const saved=await request(environment,`${path}/run`,{method:"POST",body:{expected_revision:first.data.revision,run}});assert.equal(saved.status,200,JSON.stringify(saved.data));
+ const otherDevice=await request(environment,path,{headers:{"User-Agent":"Different tablet session"}});assert.equal(otherDevice.data.dossier.runs[0].data_version,"2026-10-17");
+ assert.equal((await request(environment,path,{user:"bob"})).status,404);
+ assert.equal((await request(environment,`${path}/run`,{method:"POST",body:{expected_revision:first.data.revision,run:{...run,data_version:"stale edit"}}})).status,409);
+ const notice=await request(environment,`${path}/signal`,{method:"POST",body:{expected_revision:otherDevice.data.revision,paper_id:paperId,kind:"contradictory",summary:"A different result requires review.",url:"https://example.org/fixture"}});assert.equal(notice.status,200,JSON.stringify(notice.data));
+ const portable=await request(environment,"/exports/workspace");assert.equal(portable.data.workspace.projects[0].continuity.runs.length,1);assert.equal(portable.data.workspace.projects[0].continuity.signals.length,1);
+ const preview=await request(environment,"/backups/import-preview",{method:"POST",body:{archive:portable.data}});assert.equal(preview.status,200,JSON.stringify(preview.data));
+ const restore=await request(environment,`/backups/${preview.data.backup_id}/restore`,{method:"POST",body:{expected_revision:preview.data.workspace_revision,confirm:true}});assert.equal(restore.status,200,JSON.stringify(restore.data));assert.equal((await request(environment,path)).data.dossier.runs[0].result,"Recorded result");
+});
+test("session displays only platform-supplied account labels and decodes the signed-in name",async()=>{
+ const r=await request(env(),"/session",{headers:{"oai-authenticated-user-email":"fixture@lab.test","oai-authenticated-user-full-name":encodeURIComponent("연구 담당자"),"oai-authenticated-user-full-name-encoding":"percent-encoded-utf-8"}});
+ assert.equal(r.data.user.email,"fixture@lab.test");assert.equal(r.data.user.name,"연구 담당자");assert.equal(r.response.headers.get("cache-control"),"private, no-store");
 });

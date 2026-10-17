@@ -1,3 +1,4 @@
+import { continuityResponse, continuityCommand, getContinuity, continuityRevision } from "../continuity/model.mjs";
 import { DEMO_PAPERS, DEMO_TAGS } from "./seed.mjs";
 import { cachedBrowserPdfUrl, configureBrowserWorkspace, getBrowserWorkspaceStorage, getBrowserPdfRecord, cacheBrowserPdfUrl, revokeBrowserPdfUrl } from "./browser-storage.mjs";
 import { handleBrowserCommand, validateBrowserPaper, validatePdfProvenance } from "./browser-commands.mjs";
@@ -158,7 +159,7 @@ function validateState(state) {
     }
     for (const project of state.projects) {
       if (project.researchTrail !== undefined) validateExploration(project.researchTrail);
-      explorationRevision(project); getReviewDossier(project); reviewRevision(project);
+      explorationRevision(project); getReviewDossier(project); reviewRevision(project); getContinuity(project); continuityRevision(project);
       validateProject({ name: project.name, description: project.description, status: project.status === "archived" ? "active" : project.status, priority: project.priority, tags: project.tags });
       choice(project.status, ["active", "paused", "done", "archived"]);
       if (!counter(project.projectRev) || !counter(project.linksRev) || !Array.isArray(project.links) || project.links.length > 1000 || !unique(project.links, "link_id") || typeof project.created_at !== "string" || typeof project.updated_at !== "string") throw new Error();
@@ -341,8 +342,13 @@ async function route(parts, method, body, params, state, effects) {
     try { return await prepareAiSources(state, { question: params.get("q") || "", ...(params.get("project_id") ? { project_id: params.get("project_id") } : { paper_ids: (params.get("paper_ids") || "").split(",").filter(Boolean) }) }); }
     catch (error) { fail(Number.isInteger(error.status) ? error.status : 503, error.message); }
   }
-  if (parts[0] === "projects" && parts.length >= 3 && ["exploration", "review"].includes(parts[2])) {
+  if (parts[0] === "projects" && parts.length >= 3 && ["exploration", "review", "continuity"].includes(parts[2])) {
     try {
+      if (parts[2] === "continuity") {
+        if (parts.length === 3 && method === "GET") return continuityResponse(state, parts[1]);
+        if (parts.length === 4 && parts[3] === "check") fail(401, "Sign in to check publisher updates. Manual notices are available in this browser.");
+        if (parts.length === 4 && method === "POST" && ["run", "signal", "resolve"].includes(parts[3])) return continuityCommand(state, parts[1], parts[3], body, "Browser researcher");
+      }
       if (parts[2] === "exploration" && parts.length === 3) {
         if (method === "GET") return getProjectExplorationState(state, parts[1]);
         if (method === "PUT") return saveProjectExplorationState(state, parts[1], body);

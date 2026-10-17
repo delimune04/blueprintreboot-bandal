@@ -176,7 +176,7 @@ export async function exportBrowserWorkspace() {
     const response = await fetch(`${prefix}/bandal-demo/${paper.paper_id}.pdf`);
     if (!response.ok) throw new Error("A bundled example PDF could not be included. No incomplete backup was produced.");
     const blob = await response.blob(), verified = await validatePdfFile(blob);
-    const key = `sample-${paper.paper_id}`;
+    const key = `pdf-sample-${paper.paper_id}`;
     files.push({ key, paper_id: paper.paper_id, filename: `${paper.paper_id}.pdf`, sha256: verified.sha256, kind: "active", created_at: new Date().toISOString(), blob });
     paper.pdfId = key; paper.pdfSha256 = verified.sha256;
   }

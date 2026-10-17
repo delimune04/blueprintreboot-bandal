@@ -259,3 +259,17 @@ test("PDF extraction counts real page text, reports OCR needs and releases docum
   assert.equal(destroyed, 1);
   assert.match(extractedPagesContent(extracted.pages), /--- Page 2 ---/);
 });
+
+test("the browser export, including bundled sample PDF bytes, is accepted by the cloud import contract", async()=>{
+  await reset();
+  const originalFetch=globalThis.fetch;
+  try{
+    const {readFile}=await import("node:fs/promises");
+    globalThis.fetch=async url=>new Response(await readFile(new URL(`../public/bandal-demo/${String(url).split('/').at(-1)}`,import.meta.url)),{headers:{"Content-Type":"application/pdf"}});
+    const archive=await exportBrowserWorkspace();
+    const {validateArchive}=await import("../../hosting/domain/maintenance.mjs");
+    const checked=await validateArchive(archive);
+    assert.equal(checked.workspace.papers.length,3);assert.equal(checked.files.length,3);
+    assert.ok(archive.pdfs.every(pdf=>pdf.key.startsWith("pdf-")));
+  }finally{globalThis.fetch=originalFetch;}
+});

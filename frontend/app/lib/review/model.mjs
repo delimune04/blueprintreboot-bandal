@@ -22,11 +22,12 @@ export function newWorkflowRow(stage = "comparison") {
   return { ...newReviewRow({ comparison: "hypothesis", decision: "decision", handoff: "next_action" }[stage]), context: { stage, method: "", conditions: "", metric: "", value: "", unit: "", availability: "not_reported", disposition: "pending", rationale: "", comparison_ids: [], completed: false, origin_decision_id: "" } };
 }
 function validateReviewContext(value) {
-  keys(value, ["stage", "method", "conditions", "metric", "value", "unit", "availability", "disposition", "rationale", "comparison_ids", "completed", "origin_decision_id"]);
+  keys(value, ["stage", "method", "conditions", "metric", "value", "unit", "availability", "disposition", "rationale", "comparison_ids", "completed", "origin_decision_id", "first_reading", "reading_reason", "required_files", "first_task", "open_questions"]);
   if (!REVIEW_STAGES.includes(value.stage) || !["reported", "not_reported", "unavailable", "extraction_failed"].includes(value.availability) || !["pending", "adopted", "rejected", "deferred"].includes(value.disposition) || typeof value.completed !== "boolean" || !Array.isArray(value.comparison_ids) || value.comparison_ids.length > 100) fail("Invalid review workflow context.");
   const comparison_ids = value.comparison_ids.map((identity) => id(identity));
   if (new Set(comparison_ids).size !== comparison_ids.length) fail("Duplicate comparison reference.");
   const result = { stage: value.stage, method: text(value.method, 500), conditions: text(value.conditions, 2000), metric: text(value.metric, 200), value: text(value.value, 200), unit: text(value.unit, 100), availability: value.availability, disposition: value.disposition, rationale: text(value.rationale, 4000), comparison_ids, completed: value.completed, ...(Object.hasOwn(value, "origin_decision_id") ? { origin_decision_id: id(value.origin_decision_id, true) } : {}) };
+  for (const key of ["first_reading", "reading_reason", "required_files", "first_task", "open_questions"]) if (Object.hasOwn(value, key)) { if (value.stage !== "handoff") fail("Onboarding fields belong to handoff records."); result[key] = text(value[key], 5000); }
   if (result.origin_decision_id && result.stage !== "handoff") fail("Only a handoff record can link to its originating decision.");
   if (result.availability === "reported" && !result.value.trim()) fail("Enter the reported value or choose its actual availability.");
   if (result.availability !== "reported" && (result.value.trim() || result.unit.trim())) fail("Clear the value and unit when a measurement is not reported or unavailable.");
@@ -146,6 +147,7 @@ function workflowMarkdown(context) {
     `  - Rationale: ${context.rationale ? markdownText(context.rationale) : "unspecified"}`,
     `  - Comparison record IDs: ${context.comparison_ids.length ? context.comparison_ids.map((identity) => `\`${identity}\``).join(", ") : "none linked"}`,
     ...(context.stage === "handoff" ? [`  - Origin decision record ID: ${context.origin_decision_id ? `\`${context.origin_decision_id}\`` : "none linked"}`] : []),
+    ...[["First reading", context.first_reading], ["Reading rationale", context.reading_reason], ["Required files", context.required_files], ["First task", context.first_task], ["Open questions", context.open_questions]].filter(([,value]) => value).map(([label,value]) => `  - ${label}: ${markdownText(value)}`),
     `  - ${context.stage === "handoff" ? "First action completed" : "Completed"}: ${context.completed ? "yes" : "no"}`,
   ].join("\n");
 }

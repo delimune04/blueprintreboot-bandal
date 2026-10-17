@@ -1,6 +1,6 @@
 export type ReviewKind = 'hypothesis' | 'decision' | 'failed_attempt' | 'question' | 'next_action';
 export type ReviewStage = 'comparison' | 'decision' | 'handoff';
-export interface ReviewContext { stage:ReviewStage;method:string;conditions:string;metric:string;value:string;unit:string;availability:'reported'|'not_reported'|'unavailable'|'extraction_failed';disposition:'pending'|'adopted'|'rejected'|'deferred';rationale:string;comparison_ids:string[];completed:boolean;origin_decision_id?:string }
+export interface ReviewContext { stage:ReviewStage;method:string;conditions:string;metric:string;value:string;unit:string;availability:'reported'|'not_reported'|'unavailable'|'extraction_failed';disposition:'pending'|'adopted'|'rejected'|'deferred';rationale:string;comparison_ids:string[];completed:boolean;origin_decision_id?:string;first_reading?:string;reading_reason?:string;required_files?:string;first_task?:string;open_questions?:string }
 export interface ReviewSource { kind:'paper'|'pdf_page'|'note_block'|'research_page';paper_id:string;page:number|null;block_id:string;research_page_id:string }
 export interface ReviewRow { id:string;kind:ReviewKind;text:string;owner:string;due_date:string;status:'open'|'reviewed';provenance:'manual'|'ai';source_links:ReviewSource[];context?:ReviewContext }
 export interface ReviewInput { schema_version:1;rows:ReviewRow[];checklist:Record<ReviewKind,boolean> }
@@ -9,7 +9,7 @@ export interface ReviewSnapshot { snapshot_id:string;version:number;created_at:s
 export interface ReviewDossier extends ReviewInput { source_fingerprint:string;snapshots:ReviewSnapshot[] }
 export interface ReviewSourceDescriptor { key:string;reference:ReviewSource;label:string;url:string;excerpt:string;content?:string }
 export interface ReviewCoverage { total_rows:number;substantive_rows:number;reviewed_claims:number;sourced_reviewed_claims:number;coverage_percent:number|null;unsourced_reviewed_rows:string[];missing_source_rows:string[];open_rows:number;unsourced_questions_actions:number;checklist_complete:boolean;can_freeze:boolean }
-export interface ProjectReviewResponse { project_id:string;project_name:string;project_status:string;dossier:ReviewDossier;revision:string;sources:ReviewSourceDescriptor[];source_fingerprint:string;coverage:ReviewCoverage;draft_sources_stale:boolean;latest_snapshot_stale:boolean;draft_differs_from_snapshot:boolean;status?:'saved'|'frozen';snapshot?:ReviewSnapshot }
+export interface ProjectReviewResponse { evidence_change_count?:number;evidence_affected_rows?:Array<{row_id:string;kind:string;text:string;signal_ids:string[]}>; project_id:string;project_name:string;project_status:string;dossier:ReviewDossier;revision:string;sources:ReviewSourceDescriptor[];source_fingerprint:string;coverage:ReviewCoverage;draft_sources_stale:boolean;latest_snapshot_stale:boolean;draft_differs_from_snapshot:boolean;status?:'saved'|'frozen';snapshot?:ReviewSnapshot }
 export const REVIEW_KINDS: ReviewKind[];
 export const REVIEW_STAGES: ReviewStage[];
 export const REVIEW_MAX_SNAPSHOTS:number;

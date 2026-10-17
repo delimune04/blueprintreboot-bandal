@@ -2,7 +2,7 @@ import { useMemo, useSyncExternalStore } from "react";
 
 export const DEMO_BASE = "/ku-ai/";
 const NAVIGATION_EVENT = "bandal-demo:navigation";
-let lastRoute = "/dashboard";
+let lastRoute = "/";
 
 function subscribe(listener: () => void) {
   window.addEventListener("hashchange", listener);
@@ -18,7 +18,7 @@ function subscribe(listener: () => void) {
 function readRoute() {
   if (typeof window === "undefined") return "/dashboard";
   const hash = window.location.hash.slice(1);
-  if (!hash) lastRoute = "/dashboard";
+  if (!hash) lastRoute = "/";
   if (hash.startsWith("/")) lastRoute = hash;
   return lastRoute;
 }

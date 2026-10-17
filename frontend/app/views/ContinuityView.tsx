@@ -1,0 +1,80 @@
+"use client";
+import Link from "next/link";
+import { useEffect, useState, type FormEvent } from "react";
+import { Download, GitBranch, RefreshCw, Save } from "lucide-react";
+import { Breadcrumbs } from "../components/Breadcrumbs";
+import { PageHeader } from "../components/PageHeader";
+import { Section } from "../components/Section";
+import { ErrorState, LoadingState } from "../components/AsyncStates";
+import { useApiResource } from "../hooks/useApiResource";
+import { getWorkspaceMode, getWorkspaceRole, labviumRequest } from "../lib/api/client";
+import { useI18n } from "../lib/i18n/LocaleProvider";
+import { blankRun, exportContinuity } from "../lib/continuity/model.mjs";
+import type { ContinuityResponse, ReproductionRun, EvidenceSignal } from "../lib/continuity/model.mjs";
+
+function ContinuityEditor({ initial }: { initial: ContinuityResponse }) {
+  const { locale } = useI18n(), ko = locale === "ko", tr = (a: string, b: string) => ko ? a : b;
+  const [saved, setSaved] = useState(initial), [run, setRun] = useState<ReproductionRun>(blankRun), [baseline, setBaseline] = useState<ReproductionRun | null>(null);
+  const [notice, setNotice] = useState(""), [busy, setBusy] = useState(false), [paperId, setPaperId] = useState(initial.papers[0]?.paper_id || "");
+  const [signalKind, setSignalKind] = useState<EvidenceSignal["kind"]>("correction"), [summary, setSummary] = useState(""), [sourceUrl, setSourceUrl] = useState("");
+  const [checkIds, setCheckIds] = useState(initial.papers.slice(0, 6).map(p => p.paper_id)), [resolutions, setResolutions] = useState<Record<string,string>>({});
+  const path = `/projects/${encodeURIComponent(saved.project_id)}/continuity`, viewOnly = getWorkspaceRole() === "viewer" || saved.project_status === "archived", disabled = viewOnly || busy;
+  const dirty = baseline ? JSON.stringify(run) !== JSON.stringify(baseline) : Boolean(run.title || run.dataset || run.data_version || run.data_url || run.data_sha256 || run.repository_url || run.commit_sha || run.environment || run.procedure || run.result || run.artifact_url || run.paper_ids.length || run.review_row_ids.length);
+  const anyDirty = dirty || Boolean(summary || sourceUrl || Object.values(resolutions).some(value => value.trim()));
+  useEffect(() => {
+    if (!anyDirty) return;
+    const unload = (event: BeforeUnloadEvent) => { event.preventDefault(); event.returnValue = ""; };
+    const navigate = (event: MouseEvent) => { const a = event.target instanceof Element ? event.target.closest("a[href]") : null; if (!a || event.defaultPrevented || event.button !== 0) return; if (!window.confirm(ko ? "저장하지 않은 기록이 있습니다. 페이지를 이동할까요?" : "There are unsaved records. Leave this page?")) { event.preventDefault(); event.stopPropagation(); } };
+    window.addEventListener("beforeunload", unload); document.addEventListener("click", navigate, true);
+    return () => { window.removeEventListener("beforeunload", unload); document.removeEventListener("click", navigate, true); };
+  }, [anyDirty, ko]);
+  async function command(action: string, body: Record<string,unknown>) {
+    if (disabled) return null; setBusy(true); setNotice("");
+    try { const data = await labviumRequest<ContinuityResponse>(`${path}/${action}`, { method: "POST", body: { ...body, expected_revision: saved.revision } }); setSaved(data); setNotice(tr("저장했습니다.", "Saved.")); return data; }
+    catch (error) { setNotice(error instanceof Error ? error.message : tr("저장하지 못했습니다. 입력 내용은 유지됩니다.", "Could not save. Your input is preserved.")); return null; }
+    finally { setBusy(false); }
+  }
+  async function saveRun(event: FormEvent) { event.preventDefault(); const data = await command("run", { run }); if (data) { const latest = data.dossier.runs.find(r => r.id === run.id)!; setRun(latest); setBaseline(latest); } }
+  async function addSignal(event: FormEvent) { event.preventDefault(); if (await command("signal", { paper_id: paperId, kind: signalKind, summary, url: sourceUrl })) { setSummary(""); setSourceUrl(""); } }
+  async function reload() { if (dirty && !window.confirm(tr("입력한 재현 기록을 저장한 뒤 새로고침해 주세요. 저장본을 다시 읽을까요?", "Save your unfinished record first. Reload the saved history?"))) return; setBusy(true); try { const data = await labviumRequest<ContinuityResponse>(path); setSaved(data); setRun(blankRun()); setBaseline(null); setNotice(tr("최신 저장본을 열었습니다.", "Latest saved history loaded.")); } catch (e) { setNotice(e instanceof Error ? e.message : "Unable to refresh"); } finally { setBusy(false); } }
+  function editRun(value: ReproductionRun | null) { if (dirty && !window.confirm(tr("저장하지 않은 입력을 닫고 다른 기록을 열까요?", "Discard unsaved input and open another record?"))) return; setRun(value ? structuredClone(value) : blankRun()); setBaseline(value ? structuredClone(value) : null); }
+  function download() { const url = URL.createObjectURL(new Blob([exportContinuity(saved)], {type:"text/markdown;charset=utf-8"})); const a = document.createElement("a"); a.href = url; a.download = `labvium-${saved.project_id}-continuity.md`; a.click(); setTimeout(() => URL.revokeObjectURL(url), 1000); }
+  async function resolveSignal(signalId:string) {
+    if (!window.confirm(tr("관련 근거와 판단을 검토했으며, 이 결론을 저장할까요?","Confirm that you reviewed the affected evidence and decisions and save this outcome?"))) return;
+    if (await command("resolve",{signal_id:signalId,resolution:resolutions[signalId],confirm:true})) setResolutions(previous=>Object.fromEntries(Object.entries(previous).filter(([key])=>key!==signalId)));
+  }
+  function field(key: keyof ReproductionRun, koLabel: string, enLabel: string, max: number, multiline = false) { return <label className="reader-field"><span>{tr(koLabel,enLabel)}</span>{multiline ? <textarea rows={3} maxLength={max} value={String(run[key])} onChange={e => setRun({...run,[key]:e.target.value})} /> : <input maxLength={max} value={String(run[key])} onChange={e => setRun({...run,[key]:e.target.value})} />}</label>; }
+  const kinds = { retraction: tr("철회", "Retraction"), correction: tr("정정", "Correction"), contradictory: tr("반대 결과", "Conflicting finding"), other: tr("기타 근거 변경", "Other evidence change") };
+  return <div className="page-stack lv-continuity">
+    <Breadcrumbs items={[{label:tr("프로젝트","Projects"),href:"/projects"},{label:saved.project_name,href:`/projects/${saved.project_id}`},{label:tr("재현·근거 변경","Reproduction and evidence changes")}]} />
+    <PageHeader title={tr("재현 기록과 근거 변경","Reproduction and evidence changes")} description={saved.project_name} actions={<button className="reader-control reader-control--secondary" disabled={busy} onClick={() => void reload()}><RefreshCw size={15}/>{tr("새로고침","Refresh")}</button>} />
+    <div className="lv-actions"><Link href={`/projects/${saved.project_id}/research`} className="text-link">{tr("논문 탐색·관계 지도","Explore literature")}</Link><Link href={`/projects/${saved.project_id}/review`} className="text-link">{tr("조건 비교·결정·인수인계","Comparison, decisions and handoff")}</Link><button className="text-link" onClick={download}><Download size={14}/>{tr("저장본 내보내기","Export saved records")}</button></div>
+    {viewOnly ? <p className="lv-notice">{tr("현재 읽기 전용입니다. 저장된 기록을 확인하거나 내보낼 수 있습니다.","This history is read only. You can read or export saved records.")}</p> : null}
+    {notice ? <p role="status" className="lv-notice">{notice}</p> : null}
+    {saved.affected_rows.length ? <Section title={tr("재검토가 필요한 기록","Records requiring review")}><p>{tr("열린 변경 공지와 연결된 근거를 사용하는 기록입니다. 연결된 비교·결정·인수인계까지 표시합니다.","These records depend on open evidence notices, including connected decisions and handoff actions.")}</p><ul>{saved.affected_rows.map(row => <li key={row.row_id}><Link href={`/projects/${saved.project_id}/review`}>{row.text}</Link></li>)}</ul></Section> : null}
+    <Section title={tr("데이터와 코드, 결과를 연결하기","Connect data, code and results")} description={tr("저장한 기록은 아래 목록에서 다시 열어 수정할 수 있습니다. 실행 자체는 기록에 적힌 환경에서 진행합니다.","Open a saved record below to edit it. Execute experiments in the environment you document here.")}>
+      <div className="lv-run-list">{saved.dossier.runs.map(item => <button className="lv-record-button" key={item.id} disabled={busy} onClick={() => editRun(item)}><GitBranch size={16}/><span>{item.title}<small>{item.status} · {new Date(item.updated_at).toLocaleString(ko?"ko-KR":"en-US")}</small></span></button>)}</div>
+      <button type="button" className="text-link" disabled={busy} onClick={() => editRun(null)}>{tr("+ 새 재현 기록","+ New reproduction record")}</button>
+      <form onSubmit={event => void saveRun(event)}><fieldset className="lv-fieldset" disabled={disabled}><div className="lv-form-grid">{field("title","기록 제목 *","Record title *",300)}<label className="reader-field"><span>{tr("진행 상태","Status")}</span><select value={run.status} onChange={e=>setRun({...run,status:e.target.value as ReproductionRun['status']})}>{Object.entries({planned:tr("계획","Planned"),running:tr("진행 중","Running"),completed:tr("완료","Completed"),failed:tr("실패","Failed")}).map(([v,l])=><option value={v} key={v}>{l}</option>)}</select></label>
+      <label className="reader-field"><span>{tr("근거 논문","Source papers")}</span><select multiple value={run.paper_ids} onChange={e=>setRun({...run,paper_ids:Array.from(e.target.selectedOptions,o=>o.value)})}>{saved.papers.map(p=><option key={p.paper_id} value={p.paper_id}>{p.title}</option>)}</select></label><label className="reader-field"><span>{tr("연결할 비교·결정·인수인계 기록","Linked review records")}</span><select multiple value={run.review_row_ids} onChange={e=>setRun({...run,review_row_ids:Array.from(e.target.selectedOptions,o=>o.value)})}>{saved.review_rows.map(r=><option key={r.id} value={r.id}>{r.text}</option>)}</select></label>
+      {field("dataset","데이터·필요 파일 이름","Dataset / required files",500)}{field("data_version","데이터 버전","Dataset version",300)}{field("data_url","데이터·파일 주소","Data / file link",2048)}{field("data_sha256","데이터 SHA-256 (선택)","Data SHA-256 (optional)",64)}{field("repository_url","코드 저장소 주소","Repository URL",2048)}{field("commit_sha","Git 커밋 해시","Git commit hash",64)}{field("environment","장비·실행 환경·의존성","Equipment, environment and dependencies",5000,true)}{field("procedure","재현할 작업과 순서","Procedure and steps to reproduce",10000,true)}{field("result","실행 결과·실패 조건·남은 질문","Results, failure conditions and open questions",10000,true)}{field("artifact_url","실험 결과·산출물 주소","Result / artifact URL",2048)}</div><div className="lv-actions"><button className="reader-control" disabled={disabled || !run.title.trim() || !dirty}><Save size={15}/>{tr("재현 기록 저장","Save reproduction record")}</button><span className="muted-text">{tr(dirty?"저장하지 않은 변경 있음":"저장된 내용",dirty?"Unsaved changes":"Saved content")}</span></div></fieldset></form>
+      {!saved.papers.length ? <p><Link href={`/projects/${saved.project_id}`}>{tr("프로젝트에 논문을 연결하면 근거 논문을 선택할 수 있습니다.","Link papers to this project to select evidence.")}</Link></p> : null}
+    </Section>
+    <Section title={tr("정정·철회·반대 결과 확인","Check corrections, retractions and conflicting findings")} description={tr("선택한 DOI의 공개 메타데이터를 확인합니다. 자동 확인은 정정·철회 공지에 한정되며, 반대 결과는 직접 등록합니다.","Check public DOI metadata for deposited corrections and retractions. Register conflicting findings manually.")}>
+      <label className="reader-field"><span>{tr("이번에 확인할 논문 (최대 6편)","Papers to check (up to six)")}</span><select multiple value={checkIds} disabled={disabled} onChange={e=>setCheckIds(Array.from(e.target.selectedOptions,o=>o.value))}>{saved.papers.map(p=><option key={p.paper_id} value={p.paper_id}>{p.title}</option>)}</select></label><button className="reader-control reader-control--secondary" disabled={disabled || getWorkspaceMode()!=="cloud" || !checkIds.length || checkIds.length>6} onClick={()=>void command("check",{paper_ids:checkIds})}>{tr("근거 변경 확인","Check evidence changes")}</button>
+      {getWorkspaceMode()!=="cloud" ? <p className="muted-text">{tr("자동 공지 확인은 로그인 후 사용할 수 있습니다. 이 브라우저에서는 변경 공지를 직접 기록할 수 있습니다.","Sign in to check provider notices. You can register a notice manually in this browser.")}</p> : null}
+      {saved.dossier.checked_at ? <p className="muted-text">{tr("최근 확인","Last check")}: {new Date(saved.dossier.checked_at).toLocaleString(ko?"ko-KR":"en-US")}</p> : null}
+      {saved.dossier.checks.map(check=><div className="lv-check-row" key={check.paper_id}><strong>{check.title}</strong><p>{check.message}</p></div>)}
+      <p className="muted-text">{tr("‘변경 공지 없음’은 응답한 제공처에서 공지를 찾지 못했다는 뜻입니다. 원문의 타당성이나 모든 변경의 부재를 보증하지 않습니다.","No notice found means none was present in the returned provider records. It does not certify the paper or establish that no changes exist.")}</p>
+    </Section>
+    <Section title={tr("변경 공지 직접 등록","Register an evidence notice")}><form onSubmit={event=>void addSignal(event)}><fieldset className="lv-fieldset" disabled={disabled}><div className="lv-form-grid"><label className="reader-field"><span>{tr("관련 논문","Related paper")}</span><select value={paperId} onChange={e=>setPaperId(e.target.value)} required><option value="">{tr("논문 선택","Select a paper")}</option>{saved.papers.map(p=><option key={p.paper_id} value={p.paper_id}>{p.title}</option>)}</select></label><label className="reader-field"><span>{tr("변경 종류","Notice type")}</span><select value={signalKind} onChange={e=>setSignalKind(e.target.value as EvidenceSignal['kind'])}>{Object.entries(kinds).map(([v,l])=><option key={v} value={v}>{l}</option>)}</select></label><label className="reader-field"><span>{tr("공지·반대 논문 주소 (선택)","Notice / conflicting paper URL (optional)")}</span><input type="url" value={sourceUrl} maxLength={2048} onChange={e=>setSourceUrl(e.target.value)}/></label><label className="reader-field"><span>{tr("확인한 내용과 검토할 점 *","Observed change and review question *")}</span><textarea required maxLength={4000} rows={3} value={summary} onChange={e=>setSummary(e.target.value)}/></label></div><button className="reader-control" disabled={disabled || !paperId || !summary.trim()}>{tr("변경 공지 저장","Save evidence notice")}</button></fieldset></form></Section>
+    <Section title={tr("저장된 변경 공지와 검토 결론","Evidence notices and review outcomes")}>{saved.dossier.signals.length ? saved.dossier.signals.slice().reverse().map(signal=><article className="lv-signal" key={signal.id}><div className="lv-section-heading"><h3>{kinds[signal.kind]} · {saved.papers.find(p=>p.paper_id===signal.paper_id)?.title || signal.paper_id}</h3><span>{tr(signal.status==="open"?"재검토 필요":"검토 완료",signal.status==="open"?"Review needed":"Reviewed")}</span></div><p>{signal.summary}</p><p className="muted-text">{signal.source} · {new Date(signal.observed_at).toLocaleString(ko?"ko-KR":"en-US")}{signal.url ? <> · <a href={signal.url} target="_blank" rel="noopener noreferrer">{tr("원문 공지 열기","Open source notice")}</a></> : null}</p>{signal.status==="reviewed" ? <p>{signal.resolution} <small>· {signal.resolved_by}</small></p> : <fieldset className="lv-fieldset" disabled={disabled}><label className="reader-field"><span>{tr("관련 결정을 검토한 결론","Review outcome")}</span><textarea rows={2} maxLength={4000} value={resolutions[signal.id]||""} onChange={e=>setResolutions({...resolutions,[signal.id]:e.target.value})}/></label><button className="reader-control reader-control--secondary" disabled={disabled || !resolutions[signal.id]?.trim()} onClick={()=>void resolveSignal(signal.id)}>{tr("검토 결론 저장","Save review outcome")}</button></fieldset>}</article>) : <p className="muted-text">{tr("아직 등록된 변경 공지가 없습니다.","No evidence notices registered yet.")}</p>}</Section>
+  </div>;
+}
+export function ContinuityView({ projectId }: { projectId:string }) {
+  const {locale}=useI18n();
+  const resource=useApiResource(`continuity:${projectId}`,()=>labviumRequest<ContinuityResponse>(`/projects/${encodeURIComponent(projectId)}/continuity`));
+  if(resource.status==="loading")return <LoadingState label={locale==="ko"?"연구 기록을 불러오는 중":"Loading research history"}/>;
+  if(resource.status!=="success")return <ErrorState description={resource.message} onRetry={resource.retry}/>;
+  return <ContinuityEditor key={projectId} initial={resource.data}/>;
+}

@@ -1,6 +1,7 @@
 import { DEMO_TAGS } from "../../frontend/app/lib/demo/seed.mjs";
 import { validateExploration, explorationRevision } from "../../frontend/app/lib/exploration/model.mjs";
 import { getReviewDossier, reviewRevision } from "../../frontend/app/lib/review/model.mjs";
+import { getContinuity, continuityRevision } from "../../frontend/app/lib/continuity/model.mjs";
 
 export const SCHEMA_VERSION = 1;
 export const MAX_STATE_BYTES = 16 * 1024 * 1024;
@@ -30,7 +31,7 @@ export function validateWorkspace(state) {
   if (!object(state) || state.version !== SCHEMA_VERSION || ![state.papers, state.projects, state.tags, state.imports, state.recovery, state.backups, state.researchPages, state.decisions].every(Array.isArray) || !object(state.files) || !Number.isSafeInteger(state.registryRev) || state.registryRev < 1) fail(503, "The saved workspace is unreadable; its contents have been preserved.", "corrupt_state");
   for (const project of state.projects) {
     if (project?.researchTrail !== undefined) validateExploration(project.researchTrail);
-    explorationRevision(project); getReviewDossier(project); reviewRevision(project);
+    explorationRevision(project); getReviewDossier(project); reviewRevision(project); getContinuity(project); continuityRevision(project);
   }
   for (const [rows, key] of [[state.papers, "paper_id"], [state.projects, "project_id"], [state.tags, "canonical_key"], [state.researchPages, "id"]]) {
     if (rows.length > 1000 || new Set(rows.map(row => row?.[key])).size !== rows.length) fail(503, "The saved workspace identities are invalid.", "corrupt_state");

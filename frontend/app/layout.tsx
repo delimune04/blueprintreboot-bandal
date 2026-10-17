@@ -4,6 +4,7 @@ import { AppShell } from "./components/AppShell";
 import { LocaleProvider } from "./lib/i18n/LocaleProvider";
 import { PRODUCT_NAME } from "./lib/i18n/catalog";
 import "./globals.css";
+import "./lib/continuity/continuity.css";
 
 export async function generateMetadata(): Promise<Metadata> {
   const requestHeaders = await headers();

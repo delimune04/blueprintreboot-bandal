@@ -31,7 +31,8 @@ export async function resolveWorkspaceAccess(request, env) {
   const url = new URL(request.url);
   const isScopedDownload = /\/papers\/[^/]+\/pdf$/.test(url.pathname)
     || /\/recovery\/[^/]+\/download$/.test(url.pathname)
-    || /\/backups\/[^/]+$/.test(url.pathname);
+    || /\/backups\/[^/]+$/.test(url.pathname)
+    || /\/exports\/(workspace|raw)$/.test(url.pathname);
   const downloadScope = request.method === "GET" && isScopedDownload ? url.searchParams.get("workspace") : null;
   const selected = request.headers.get("X-Labvium-Workspace") || downloadScope || actor.actor_key;
   if (!WORKSPACE_KEY.test(selected)) fail(422, "Invalid workspace identity.");
@@ -72,6 +73,25 @@ export async function routeWorkspaceMembership(request, env, parts, body) {
   if (!WORKSPACE_KEY.test(selected || "")) fail(422, "Invalid workspace identity.");
   const workspace = await env.LABVIUM_DB.prepare("SELECT owner_user_key, permissions_revision FROM labvium_workspace_access WHERE workspace_key = ?").bind(selected).first();
   if (!workspace || workspace.owner_user_key !== actor.actor_key) fail(403, "Only the workspace owner can manage access.");
+  if (parts.length === 3 && parts[2] === "transfer" && method === "POST") {
+    strict(body, ["email", "expected_revision", "confirm"]); confirm(body); checkExpected(body.expected_revision, workspace.permissions_revision);
+    if (selected === actor.actor_key) fail(422, "Personal workspaces cannot be transferred. Use a separate team workspace.");
+    if (!actor.email) fail(422, "A verified account email is required for ownership transfer.");
+    const email = normalizeMemberEmail(body.email), email_key = await sha256(email);
+    if (email === actor.email) fail(422, "Select another accepted team member.");
+    const member = await env.LABVIUM_DB.prepare("SELECT member_user_key FROM labvium_workspace_members WHERE workspace_key = ? AND email_key = ?").bind(selected, email_key).first();
+    if (!member || member.member_user_key === actor.actor_key) fail(422, "The recipient must already have signed in and joined this workspace.");
+    const expected = workspace.permissions_revision, previousEmail = await sha256(actor.email);
+    const guard = "EXISTS (SELECT 1 FROM labvium_workspace_access a WHERE a.workspace_key = ? AND a.owner_user_key = ? AND a.permissions_revision = ? AND EXISTS (SELECT 1 FROM labvium_workspace_members m WHERE m.workspace_key = a.workspace_key AND m.member_user_key = ? AND m.email_key = ?))";
+    const args = [selected, actor.actor_key, expected, member.member_user_key, email_key];
+    const results = await env.LABVIUM_DB.batch([
+      env.LABVIUM_DB.prepare(`INSERT INTO labvium_workspace_members (workspace_key, member_user_key, email_key, role, joined_at) SELECT ?, ?, ?, 'editor', ? WHERE ${guard} ON CONFLICT(workspace_key, member_user_key) DO UPDATE SET role = 'editor', email_key = excluded.email_key`).bind(selected, actor.actor_key, previousEmail, now(), ...args),
+      env.LABVIUM_DB.prepare(`INSERT INTO labvium_workspace_email_grants (workspace_key, email_key, email_label, role, created_by, created_at) SELECT ?, ?, ?, 'editor', ?, ? WHERE ${guard} ON CONFLICT(workspace_key, email_key) DO UPDATE SET role = 'editor', email_label = excluded.email_label`).bind(selected, previousEmail, actor.email, actor.actor_key, now(), ...args),
+      env.LABVIUM_DB.prepare(`UPDATE labvium_workspace_access SET owner_user_key = ?, permissions_revision = permissions_revision + 1 WHERE workspace_key = ? AND ${guard}`).bind(member.member_user_key, selected, ...args),
+    ]);
+    if (results[2].meta?.changes !== 1) fail(409, "Access changed before ownership transfer. Reload and try again.", "conflict");
+    return { status: "transferred", email, previous_owner_role: "editor", permissions_revision: rev(expected + 1) };
+  }
   if (parts[2] === "members" && parts.length === 3 && method === "GET") {
     const grants = await env.LABVIUM_DB.prepare("SELECT email_key, email_label, role, created_at FROM labvium_workspace_email_grants WHERE workspace_key = ? ORDER BY created_at").bind(selected).all();
     return { items: grants.results.map((row) => ({ member_id: row.email_key, email: row.email_label, role: row.role, created_at: row.created_at })), permissions_revision: rev(workspace.permissions_revision) };

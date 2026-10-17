@@ -29,6 +29,9 @@ async function serveAssets(request, env, url) {
     return new Response("Method not allowed", { status: 405, headers: { Allow: "GET, HEAD" } });
   }
   if (url.pathname === "/ku-ai") return Response.redirect(new URL("/ku-ai/", url), 308);
+  if (url.hostname === "labvium.bandal.app" && url.pathname === "/") {
+    return env.ASSETS.fetch(assetRequest(request, "/ku-ai/index.html"));
+  }
   let response = await env.ASSETS.fetch(request);
   if (response.status !== 404) return response;
   // Preserve the existing static site's directory-index routes, including the

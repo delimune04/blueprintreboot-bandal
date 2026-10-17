@@ -1,3 +1,4 @@
+import { getContinuity, affectedReviewRows } from "../../frontend/app/lib/continuity/model.mjs";
 import { getReviewDossier, reviewInput, validateReviewInput, validateReviewDossier, reviewRevision, collectProjectReviewSources, selectedReviewSources, reviewFingerprint, reviewCoverage } from "../../frontend/app/lib/review/model.mjs";
 
 function fail(status, message) { const error = new Error(message); error.status = status; throw error; }
@@ -6,7 +7,8 @@ function projectById(state, id) { const project = state.projects.find((row) => r
 function guard(project, expected) { if (typeof expected !== "string" || !/^[a-f0-9]{64}$/.test(expected)) fail(422, "An expected review revision is required."); if (expected !== reviewRevision(project)) fail(409, "The review changed. Reload before saving or freezing."); if ((project.reviewRev || 1) >= Number.MAX_SAFE_INTEGER) fail(503, "The review revision limit was reached; existing history has been preserved."); if (project.status === "archived") fail(409, "Restore this project before editing its review."); }
 export async function getProjectReview(state, projectId) {
   const project = projectById(state, projectId), dossier = getReviewDossier(project), sources = collectProjectReviewSources(state, projectId), source_fingerprint = await reviewFingerprint(dossier, sources), latest = dossier.snapshots.at(-1);
-  return { project_id: projectId, project_name: project.name, project_status: project.status, dossier, revision: reviewRevision(project), sources: sources.map(({ content: _content, ...source }) => source), source_fingerprint, coverage: reviewCoverage(dossier, sources), draft_sources_stale: Boolean(dossier.source_fingerprint && dossier.source_fingerprint !== source_fingerprint), latest_snapshot_stale: latest ? latest.source_fingerprint !== await reviewFingerprint(latest.input, sources) : false, draft_differs_from_snapshot: latest ? JSON.stringify(latest.input) !== JSON.stringify(reviewInput(dossier)) : Boolean(dossier.rows.length) };
+  const affected = affectedReviewRows(project, getContinuity(project).signals);
+  return { evidence_affected_rows: affected, evidence_change_count: affected.length, project_id: projectId, project_name: project.name, project_status: project.status, dossier, revision: reviewRevision(project), sources: sources.map(({ content: _content, ...source }) => source), source_fingerprint, coverage: reviewCoverage(dossier, sources), draft_sources_stale: Boolean(dossier.source_fingerprint && dossier.source_fingerprint !== source_fingerprint), latest_snapshot_stale: latest ? latest.source_fingerprint !== await reviewFingerprint(latest.input, sources) : false, draft_differs_from_snapshot: latest ? JSON.stringify(latest.input) !== JSON.stringify(reviewInput(dossier)) : Boolean(dossier.rows.length) };
 }
 export async function saveProjectReview(state, projectId, command) {
   strict(command, ["dossier", "expected_revision"]); const project = projectById(state, projectId); guard(project, command.expected_revision);
@@ -19,6 +21,7 @@ export async function saveProjectReview(state, projectId, command) {
 export async function freezeProjectReview(state, projectId, command, context = {}) {
   strict(command, ["expected_revision", "reviewed_by", "confirm"]); const project = projectById(state, projectId); guard(project, command.expected_revision);
   if (command.confirm !== true || typeof command.reviewed_by !== "string" || !command.reviewed_by.trim() || command.reviewed_by.length > 200 || command.reviewed_by.includes("\0")) fail(422, "Confirm the snapshot and provide the human reviewer's name.");
+  if (affectedReviewRows(project, getContinuity(project).signals).length) fail(422, "Review the open evidence-change notices and record their outcomes before freezing a new handoff snapshot.");
   const dossier = getReviewDossier(project), sources = collectProjectReviewSources(state, projectId), coverage = reviewCoverage(dossier, sources);
   if (!coverage.can_freeze) fail(422, "Review all five checklist sections and link project evidence to every reviewed hypothesis, decision and failed attempt. Missing references must be resolved.");
   const fingerprint = await reviewFingerprint(dossier, sources);

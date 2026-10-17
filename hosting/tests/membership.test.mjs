@@ -81,6 +81,26 @@ function stagedProject(loaded) {
   loaded.state.projects.push({ project_id: "project-staged", name: "Candidate reservoir", description: "", status: "active", priority: "normal", tags: [], created_at: new Date().toISOString(), updated_at: new Date().toISOString(), projectRev: 1, linksRev: 1, links: [] });
 }
 
+test("ownership transfer keeps the same workspace and files, and the previous owner becomes an editor", async()=>{
+  const env=await environment(),workspace=await createShared(env),granted=await grant(env,workspace,EDITOR,"editor");
+  await resolveWorkspaceAccess(request(EDITOR,"GET",workspace.workspace_id),env);
+  const loaded=await loadWorkspace(env,workspace.workspace_id);stagedProject(loaded);await saveWorkspace(env,workspace.workspace_id,loaded);
+  const transferred=await routeWorkspaceMembership(request(OWNER,"POST"),env,["workspaces",workspace.workspace_id,"transfer"],{email:EDITOR.email,expected_revision:granted.permissions_revision,confirm:true});
+  assert.equal(transferred.status,"transferred");assert.equal((await resolveWorkspaceAccess(request(EDITOR,"GET",workspace.workspace_id),env)).role,"owner");assert.equal((await resolveWorkspaceAccess(request(OWNER,"POST",workspace.workspace_id),env)).role,"editor");
+  assert.equal((await loadWorkspace(env,workspace.workspace_id)).state.projects[0].project_id,"project-staged");
+  await assert.rejects(()=>routeWorkspaceMembership(request(OWNER,"POST"),env,["workspaces",workspace.workspace_id,"transfer"],{email:VIEWER.email,expected_revision:transferred.permissions_revision,confirm:true}),e=>e.status===403);
+});
+test("ownership transfer rejects unaccepted recipients, personal spaces and stale permission revisions",async()=>{
+  const env=await environment(),workspace=await createShared(env),granted=await grant(env,workspace,EDITOR,"editor");
+  const transfer=(email,revision=granted.permissions_revision)=>routeWorkspaceMembership(request(OWNER,"POST"),env,["workspaces",workspace.workspace_id,"transfer"],{email,expected_revision:revision,confirm:true});
+  await assert.rejects(()=>transfer(EDITOR.email),e=>e.status===422);
+  await resolveWorkspaceAccess(request(EDITOR,"GET",workspace.workspace_id),env);
+  await assert.rejects(()=>transfer(EDITOR.email,workspace.permissions_revision),e=>e.status===409);
+  const personal=await resolveWorkspaceAccess(request(OWNER),env);
+  await assert.rejects(()=>routeWorkspaceMembership(request(OWNER,"POST"),env,["workspaces",personal.workspace_key,"transfer"],{email:EDITOR.email,expected_revision:rev(1),confirm:true}),e=>e.status===422);
+  assert.equal((await resolveWorkspaceAccess(request(OWNER,"GET",workspace.workspace_id),env)).role,"owner");
+});
+
 test("unselected accounts default to independent private workspaces", async () => {
   const env = await environment();
   const owner = await resolveWorkspaceAccess(request(OWNER), env);
@@ -260,4 +280,16 @@ test("write publication rechecks actual editor membership even with unchanged re
   env.LABVIUM_DB.database.prepare("UPDATE labvium_workspace_members SET role = 'viewer' WHERE workspace_key = ? AND member_user_key = ?").run(workspace.workspace_id, access.actor_key);
   await assert.rejects(() => saveWorkspace(env, workspace.workspace_id, loaded), (error) => error.status === 409 || error.status === 403);
   assert.equal((await loadWorkspace(env, workspace.workspace_id)).state.projects.length, 0);
+});
+
+test("a permission race or transaction failure leaves ownership and previous-owner grants unchanged",async()=>{
+  for(const failure of ["race","transaction"]){
+    const env=await environment(),workspace=await createShared(env),granted=await grant(env,workspace,EDITOR,"editor");
+    await resolveWorkspaceAccess(request(EDITOR,"GET",workspace.workspace_id),env);
+    if(failure==="race")env.LABVIUM_DB.beforeBatch=db=>db.prepare("UPDATE labvium_workspace_access SET permissions_revision=permissions_revision+1 WHERE workspace_key=?").run(workspace.workspace_id);
+    else env.LABVIUM_DB.failBatchAt=2;
+    await assert.rejects(()=>routeWorkspaceMembership(request(OWNER,"POST"),env,["workspaces",workspace.workspace_id,"transfer"],{email:EDITOR.email,expected_revision:granted.permissions_revision,confirm:true}));
+    assert.equal((await resolveWorkspaceAccess(request(OWNER,"GET",workspace.workspace_id),env)).role,"owner");
+    assert.equal(env.LABVIUM_DB.database.prepare("SELECT COUNT(*) AS n FROM labvium_workspace_members WHERE workspace_key=? AND member_user_key=?").get(workspace.workspace_id,await sha256(OWNER.id)).n,0);
+  }
 });

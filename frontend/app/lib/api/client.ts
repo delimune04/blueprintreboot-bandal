@@ -24,6 +24,8 @@ let workspaceScope = "";
 let workspaceActor = "";
 let workspaceRole: "owner" | "editor" | "viewer" = "owner";
 let sessionPromise: Promise<WorkspaceSession> | null = null;
+let activeSession: WorkspaceSession | null = null;
+export function getWorkspaceSession(): WorkspaceSession | null { return activeSession; }
 export function getWorkspaceMode(): WorkspaceMode { return workspaceMode; }
 export function getWorkspaceScope(): string { return workspaceScope; }
 export function getWorkspaceStorageScope(): string { return `${workspaceActor}:${workspaceScope}`; }
@@ -58,7 +60,7 @@ export function initializeWorkspaceTransport(): Promise<WorkspaceSession> {
   if (sessionPromise) return sessionPromise;
   sessionPromise = (async () => {
     if (!isDemoEnabled()) return { authenticated: false, storage: "browser" } as WorkspaceSession;
-    let session: WorkspaceSession;
+    let session: WorkspaceSession = { authenticated: false, storage: "browser" };
     try {
       const response = await fetch(`${HOSTED_API_BASE}/session`, { credentials: "same-origin", cache: "no-store" });
       if (!response.ok) throw new Error("Workspace session unavailable");
@@ -78,9 +80,12 @@ export function initializeWorkspaceTransport(): Promise<WorkspaceSession> {
         session.workspace_id = workspaceScope; session.role = workspaceRole;
       }
     } catch {
-      workspaceMode = "browser";
-      session = { authenticated: false, storage: "browser", connection_error: true };
+      // A failed identity/access lookup must never look like a successful guest
+      // session. The app blocks editing until a fresh connection succeeds.
+      workspaceMode = session.authenticated ? "cloud" : "browser";
+      session = { ...session, storage: session.authenticated ? "cloud" : "browser", connection_error: true };
     }
+    activeSession = session;
     window.dispatchEvent(new CustomEvent("labvium:workspace-mode", { detail: { ...session, mode: workspaceMode } }));
     configureDraftWorkspaceScope(workspaceMode === "cloud" ? getWorkspaceStorageScope() : "");
     configureReaderWorkspaceScope(workspaceMode === "cloud" ? getWorkspaceStorageScope() : "");
@@ -161,7 +166,11 @@ async function request<T>(
     if (response.status === 422 || response.status === 413) throw new ApiClientError(detail || "The submitted command data is invalid.", "invalid", response.status);
     throw new ApiClientError(detail || `The workspace returned HTTP ${response.status}.`, "error", response.status);
   }
-  return response.json() as Promise<T>;
+  const data = await response.json() as T;
+  if (workspaceMode === "cloud" && options.method && options.method !== "GET") {
+    window.dispatchEvent(new CustomEvent("labvium:cloud-save", { detail: { revision: response.headers.get("X-Labvium-Workspace-Revision"), at: new Date().toISOString() } }));
+  }
+  return data;
 }
 
 export function paperPdfUrl(paperId: string): string {

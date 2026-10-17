@@ -12,11 +12,11 @@ export function requireWriteOrigin(request) {
 }
 export async function loadWorkspace(env, owner) {
   if (!env.LABVIUM_DB || !env.LABVIUM_PDFS) fail(503, "Cloud workspace storage is not configured.", "storage_unavailable");
-  let row = await env.LABVIUM_DB.prepare("SELECT revision, state_json FROM labvium_workspaces WHERE owner_key = ?").bind(owner).first();
+  let row = await env.LABVIUM_DB.prepare("SELECT revision, state_json, updated_at FROM labvium_workspaces WHERE owner_key = ?").bind(owner).first();
   if (!row) {
     const state = emptyWorkspace();
     await env.LABVIUM_DB.prepare("INSERT OR IGNORE INTO labvium_workspaces (owner_key, revision, state_json, updated_at) VALUES (?, 1, ?, ?)").bind(owner, JSON.stringify(state), now()).run();
-    row = await env.LABVIUM_DB.prepare("SELECT revision, state_json FROM labvium_workspaces WHERE owner_key = ?").bind(owner).first();
+    row = await env.LABVIUM_DB.prepare("SELECT revision, state_json, updated_at FROM labvium_workspaces WHERE owner_key = ?").bind(owner).first();
   }
   if (!row || !Number.isSafeInteger(row.revision) || row.revision < 1) fail(503, "The saved workspace revision is unreadable.");
   let state; try { state = JSON.parse(row.state_json); } catch { fail(503, "The saved workspace is unreadable; no reset was performed.", "corrupt_state"); }
@@ -29,7 +29,7 @@ export async function loadWorkspace(env, owner) {
     try { state = JSON.parse(new TextDecoder().decode(bytes)); } catch { fail(503, "The retained workspace is unreadable."); }
   }
   try { validateWorkspace(state); } catch { fail(503, "The saved workspace failed its storage contract; no reset was performed.", "corrupt_state"); }
-  return { state, revision: row.revision, original: JSON.stringify(state) };
+  return { state, revision: row.revision, updated_at:row.updated_at, original: JSON.stringify(state) };
 }
 export async function saveWorkspace(env, owner, loaded) {
   validateWorkspace(loaded.state);

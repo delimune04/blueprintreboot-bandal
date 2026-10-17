@@ -7,6 +7,7 @@ export type TranslationValues = Record<string, string | number>;
 export const PRODUCT_NAME = "랩비움";
 
 const REVIEW_KO: Record<string, string> = {
+  "LabVium home":"서비스 홈", "Account and storage":"계정과 저장", "User guide":"사용 안내",
   "Decision and handoff review": "의사결정·인수인계 검토",
   "Current hypothesis": "현재 가설", "Key decisions": "주요 결정", "Failed attempts": "실패한 시도", "Next actions": "다음 행동",
   "Record why the project changed direction. Review the original evidence yourself; a linked source does not prove a claim.": "프로젝트의 방향을 바꾼 이유를 기록하세요. 출처 연결만으로 주장이 입증되지는 않으므로 원문 근거를 직접 확인하세요.",

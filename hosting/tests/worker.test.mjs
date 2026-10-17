@@ -55,3 +55,8 @@ test("ku-ai canonical redirect preserves mounted path", async () => {
 test("static assets never accept writes", async () => {
   assert.equal((await worker.fetch(request("/", { method: "POST", body: "ignored" }), assetEnv())).status, 405);
 });
+test("the dedicated LabVium hostname opens the research product without changing the BANDAL homepage",async()=>{
+  const env=assetEnv({"/index.html":"bandal","/ku-ai/index.html":"labvium"});
+  assert.equal(await(await worker.fetch(new Request("https://labvium.bandal.app/"),env)).text(),"labvium");
+  assert.equal(await(await worker.fetch(new Request("https://bandal.app/"),env)).text(),"bandal");
+});

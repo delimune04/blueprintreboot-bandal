@@ -1,6 +1,6 @@
 "use client";
 
-import { Compass, FolderKanban, Gauge, LibraryBig, NotebookPen, PanelLeftClose, PanelLeftOpen, Pin, PinOff, Search, Settings, Sparkles, Tags, Users, Wrench, X } from "lucide-react";
+import { CircleHelp, Cloud, Home, Compass, FolderKanban, Gauge, LibraryBig, NotebookPen, PanelLeftClose, PanelLeftOpen, Pin, PinOff, Search, Settings, Sparkles, Tags, Users, Wrench, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { RefObject } from "react";
@@ -9,6 +9,7 @@ import { PRODUCT_NAME } from "../lib/i18n/catalog";
 import { getWorkspaceMode } from "../lib/api/client";
 
 const primaryNavigation = [
+  { href: "/", label: "LabVium home", icon: Home },
   { href: "/dashboard", label: "Dashboard", icon: Gauge },
   { href: "/library", label: "Library", icon: LibraryBig },
   { href: "/workspace", label: "Research notes", icon: NotebookPen },
@@ -20,13 +21,16 @@ const primaryNavigation = [
 ];
 
 const secondaryNavigation = [
+  { href: "/account", label: "Account and storage", icon: Cloud },
+  { href: "/guide", label: "User guide", icon: CircleHelp },
   { href: "/team", label: "Team workspaces", icon: Users },
   { href: "/maintenance", label: "Maintenance", icon: Wrench },
   { href: "/settings", label: "Settings", icon: Settings },
 ];
 
 function isActive(pathname: string, href: string): boolean {
-  if (href === "/dashboard") return pathname === "/" || pathname === "/dashboard";
+  if (href === "/") return pathname === "/";
+  if (href === "/dashboard") return pathname === "/dashboard";
   return pathname === href || pathname.startsWith(`${href}/`);
 }
 
