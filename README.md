@@ -28,6 +28,18 @@ platform limits. Never reuse the upstream Site identity for publication.
 The following documentation describes the retained original local application
 and its v1.6.5 release baseline; hosted extensions are documented above.
 
+## Interactive paper relationship map
+
+The project research map now uses a dark 3D sphere-and-link view with rotation,
+zoom, pan, paper selection and current-view SVG export. Available scholarly
+metadata drives approximate 3D distances; no generative model or API key is
+required. See [3D map usage and distance method](docs/LABVIUM_3D_MAP.md).
+
+Additional sign-in methods are documented in [the authentication rollout plan](docs/LABVIUM_AUTH_ROLLOUT.md).
+They are configuration proposals. ChatGPT remains the only activated hosted
+sign-in method until dedicated provider applications and authentication settings
+are supplied and verified. Existing account ownership is unchanged.
+
 ## What is BluePrintReboot?
 
 BluePrintReboot is a local-first research workspace with an established Streamlit interface, a bounded FastAPI layer, and a desktop-first web Reader. It keeps PDFs, metadata, BluePrint Reading Notes, structured note blocks, project links, tags, and extracted text on the local machine.

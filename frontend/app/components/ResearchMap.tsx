@@ -1,7 +1,9 @@
 "use client";
 
-import { useEffect, useId, useMemo, useRef, useState, type KeyboardEvent, type PointerEvent } from "react";
-import { fitMapBounds, layoutResearchMap, mapDisplayBounds, mapLabelIds, nearestMapNode, relationshipCategory, zoomMapView, type MapBounds } from "../lib/exploration/map-layout.mjs";
+import { lazy, Suspense, useId, useMemo, useRef, useState } from "react";
+import { layoutResearchMap3D } from "../lib/exploration/map-3d.mjs";
+import type { ResearchMap3DControls } from "./ResearchMap3D";
+import "./research-map-3d.css";
 
 export interface ResearchMapWork {
   id: string;
@@ -9,6 +11,13 @@ export interface ResearchMapWork {
   authors?: readonly string[];
   year?: string | number | null;
   score?: number | null;
+  abstract?: string;
+  topics?: readonly string[];
+  topic_ids?: readonly string[];
+  references?: readonly string[];
+  referenced_works?: readonly string[];
+  reference_ids?: readonly string[];
+  citation_count?: number | null;
 }
 
 export interface ResearchMapEdge {
@@ -16,15 +25,9 @@ export interface ResearchMapEdge {
   target: string;
   kind: string;
   directed?: boolean;
-  score?: number | null;
-  weight?: number | null;
-  evidence?: {
-    provider?: string;
-    url?: string;
-    shared_reference_ids?: readonly string[];
-    topic_ids?: readonly string[];
-    method?: string;
-  };
+  score?: number;
+  weight?: number;
+  evidence?: { provider?: string; url?: string; shared_reference_ids?: readonly string[]; topic_ids?: readonly string[]; method?: string; score?: number };
 }
 
 export interface ResearchMapProps {
@@ -36,223 +39,86 @@ export interface ResearchMapProps {
   height?: number;
 }
 
-const EDGE_APPEARANCE: Record<string, { color: string; dash?: string; className: string }> = {
-  cites: { color: "#596164", className: "cites" },
-  shares_references: { color: "#7452A8", dash: "7 4", className: "shares-references" },
-  shares_topics: { color: "#2E7D32", dash: "2 5", className: "shares-topics" },
-  text_similarity: { color: "#B26A00", dash: "9 3 2 3", className: "text-similarity" },
-};
-const OTHER_EDGE = { color: "#7A8386", dash: "2 4", className: "other" };
-const controlStyle = { minWidth: 44, minHeight: 44 };
-const shorten = (text: string, limit: number) => Array.from(text).length > limit ? `${Array.from(text).slice(0, limit - 1).join("")}…` : text;
+export const MAP_CLUSTER_COLORS = ["#329ee8", "#6edfe0", "#edbd73", "#6ab9ee", "#ca8132", "#a4d9f0", "#a5b2f2", "#67c8af"];
+export function mapClusterColor(cluster: number) { return MAP_CLUSTER_COLORS[Math.abs(cluster) % MAP_CLUSTER_COLORS.length]; }
+const ResearchMap3D = lazy(() => import("./ResearchMap3D").then((module) => ({ default: module.ResearchMap3D })));
 
-/** Relationships are supplied evidence; the layout itself makes no scholarly claims. */
-export function ResearchMap({ works, edges, selectedId, onSelect, locale, height = 520 }: ResearchMapProps) {
+/** A stable scholarly layout; selecting a paper changes emphasis, never the camera. */
+export function ResearchMap({ works, edges, selectedId, onSelect, locale, height = 560 }: ResearchMapProps) {
   const ko = locale === "ko";
-  const titleId = useId();
-  const descriptionId = useId();
-  const arrowId = useId().replace(/:/g, "");
-  const stageRef = useRef<HTMLDivElement | null>(null);
-  const svgRef = useRef<SVGSVGElement | null>(null);
-  const nodeRefs = useRef(new Map<string, SVGGElement>());
-  const dragRef = useRef<{ pointerId: number; x: number; y: number; view: MapBounds } | null>(null);
-  const [viewportWidth, setViewportWidth] = useState(1000);
-  const [customView, setCustomView] = useState<{ key: string; value: MapBounds } | null>(null);
-  const [focusedId, setFocusedId] = useState<string | null>(null);
-  const [dragging, setDragging] = useState(false);
+  const helpId = useId();
+  const controls = useRef<ResearchMap3DControls | null>(null);
+  const [zoom, setZoom] = useState(100);
   const [exportStatus, setExportStatus] = useState("");
-  const stageHeight = Math.max(280, Math.min(900, Number.isFinite(height) ? height : 520));
-  const layout = useMemo(() => layoutResearchMap(works, edges, { selectedId }), [works, edges, selectedId]);
+  const sliceSelection = works.length > 200 ? selectedId : null;
+  const layout = useMemo(() => layoutResearchMap3D(works, edges, { selectedId: sliceSelection }), [works, edges, sliceSelection]);
   const byId = useMemo(() => new Map(works.map((work) => [work.id, work])), [works]);
-  const positions = useMemo(() => new Map(layout.nodes.map((node) => [node.id, node])), [layout]);
+  const positions = useMemo(() => new Map(layout.nodes.map((node) => [node.id, node])), [layout.nodes]);
   const selectionId = selectedId && positions.has(selectedId) ? selectedId : null;
-  const fittedView = useMemo(() => fitMapBounds(mapDisplayBounds(layout.nodes, works), viewportWidth, stageHeight, 50), [layout.nodes, works, viewportWidth, stageHeight]);
-  const viewKey = JSON.stringify([layout.nodes, layout.edges, fittedView]);
-  const view = customView?.key === viewKey ? customView.value : fittedView;
-  const zoom = fittedView.width / view.width;
-  const activeFocusId = focusedId && positions.has(focusedId) ? focusedId : selectionId ?? layout.nodes[0]?.id ?? null;
-  const labels = mapLabelIds(layout.nodes, layout.edges, selectionId, activeFocusId, zoom);
-  const neighborhood = new Set<string>(selectionId ? [selectionId] : []);
-  for (const edge of layout.edges) {
-    if (edge.source === selectionId) neighborhood.add(edge.target);
-    if (edge.target === selectionId) neighborhood.add(edge.source);
-  }
-  const edgeLabel = (kind: string) => ({
-    cites: ko ? "인용 (화살표: 인용한 논문 → 인용된 논문)" : "Citation (citing → cited work)",
-    shares_references: ko ? "공통 참고문헌" : "Shared references",
-    shares_topics: ko ? "공통 주제" : "Shared topics",
-    text_similarity: ko ? "텍스트 유사도" : "Text similarity",
-  })[kind] ?? (ko ? "기타 관계" : "Other relationship");
-  const kinds = [...new Set(layout.edges.map((edge) => edge.kind))].sort();
-  const mapTitle = ko ? "논문 관계 지도" : "Research relationship map";
-  const mapHelp = ko ? "빈 공간을 드래그해 이동하세요. 논문에서 방향키로 이동하고 Enter로 선택하세요. +/− 또는 Ctrl+휠로 확대·축소, 0으로 전체 보기를 합니다." : "Drag empty space to pan. On a paper, use arrow keys to move and Enter to select. +/− or Ctrl+wheel zoom; 0 fits the map.";
-  const totalWorks = layout.nodes.length + layout.omittedCount;
-  const countText = ko ? `전체 ${totalWorks}편 중 ${layout.nodes.length}편 표시 · 관계 ${layout.edges.length}개` : `${layout.nodes.length} of ${totalWorks} works shown · ${layout.edges.length} relationships`;
-
-  useEffect(() => {
-    const element = stageRef.current;
-    if (!element || typeof ResizeObserver === "undefined") return;
-    const observer = new ResizeObserver((entries) => {
-      const width = entries[0]?.contentRect.width;
-      if (width && Number.isFinite(width)) setViewportWidth(Math.max(1, Math.round(width)));
-    });
-    observer.observe(element);
-    return () => observer.disconnect();
-  }, []);
-
-  useEffect(() => {
-    const svg = svgRef.current;
-    if (!svg) return;
-    const onWheel = (event: WheelEvent) => {
-      if (!event.ctrlKey && !event.metaKey) return;
-      event.preventDefault();
-      const rect = svg.getBoundingClientRect();
-      if (!rect.width || !rect.height) return;
-      const current = { x: view.x, y: view.y, width: view.width, height: view.height };
-      const anchor = { x: current.x + (event.clientX - rect.left) / rect.width * current.width, y: current.y + (event.clientY - rect.top) / rect.height * current.height };
-      setCustomView({ key: viewKey, value: zoomMapView(current, event.deltaY < 0 ? 1.15 : 1 / 1.15, anchor, fittedView.width / 5, fittedView.width * 2) });
-    };
-    svg.addEventListener("wheel", onWheel, { passive: false });
-    return () => svg.removeEventListener("wheel", onWheel);
-  }, [view.x, view.y, view.width, view.height, viewKey, fittedView.width]);
-
-  function setView(value: MapBounds) { setCustomView({ key: viewKey, value }); }
-  function fit() { setCustomView(null); }
-  function zoomBy(factor: number, anchor?: { x: number; y: number }) {
-    setView(zoomMapView(view, factor, anchor, fittedView.width / 5, fittedView.width * 2));
-  }
-  function onPointerDown(event: PointerEvent<SVGSVGElement>) {
-    if (event.button !== 0 || (event.target as Element).closest("[data-map-node]")) return;
-    event.preventDefault();
-    svgRef.current?.focus();
-    event.currentTarget.setPointerCapture(event.pointerId);
-    dragRef.current = { pointerId: event.pointerId, x: event.clientX, y: event.clientY, view };
-    setDragging(true);
-  }
-  function onPointerMove(event: PointerEvent<SVGSVGElement>) {
-    const drag = dragRef.current;
-    const rect = event.currentTarget.getBoundingClientRect();
-    if (!drag || drag.pointerId !== event.pointerId || !rect.width || !rect.height) return;
-    setView({ ...drag.view, x: drag.view.x - (event.clientX - drag.x) / rect.width * drag.view.width, y: drag.view.y - (event.clientY - drag.y) / rect.height * drag.view.height });
-  }
-  function stopDragging(event: PointerEvent<SVGSVGElement>) {
-    if (dragRef.current?.pointerId !== event.pointerId) return;
-    dragRef.current = null;
-    setDragging(false);
-    if (event.currentTarget.hasPointerCapture(event.pointerId)) event.currentTarget.releasePointerCapture(event.pointerId);
-  }
-  function revealNode(id: string) {
-    const node = positions.get(id);
-    setFocusedId(id);
-    if (node && (node.x < view.x + 35 || node.x > view.x + view.width - 35 || node.y < view.y + 35 || node.y > view.y + view.height - 35)) {
-      setView({ ...view, x: node.x - view.width / 2, y: node.y - view.height / 2 });
+  const selectedWork = selectionId ? byId.get(selectionId) : null;
+  const clusters = [...new Set(layout.nodes.map((node) => node.cluster))].sort((a, b) => a - b);
+  const neighbors = useMemo(() => {
+    const result = new Map<string, { id: string; similarity: number | null; kinds: string[] }>();
+    if (!selectionId) return [];
+    for (const edge of layout.edges) {
+      const id = edge.source === selectionId ? edge.target : edge.target === selectionId ? edge.source : null;
+      if (!id) continue;
+      const existing = result.get(id);
+      const score = typeof edge.similarity === "number" ? edge.similarity : null;
+      if (existing) {
+        if (score !== null) existing.similarity = Math.max(existing.similarity ?? 0, score);
+        if (!existing.kinds.includes(edge.kind)) existing.kinds.push(edge.kind);
+      } else result.set(id, { id, similarity: score, kinds: [edge.kind] });
     }
-  }
-  function focusNode(id: string) {
-    revealNode(id);
-    nodeRefs.current.get(id)?.focus();
-  }
-  function onNodeKey(event: KeyboardEvent<SVGGElement>, id: string) {
-    if (event.key.startsWith("Arrow")) {
-      event.preventDefault(); event.stopPropagation();
-      const next = nearestMapNode(layout.nodes, id, event.key);
-      if (next) focusNode(next);
-    } else if (event.key === "Enter" || event.key === " ") {
-      event.preventDefault(); event.stopPropagation(); onSelect(id);
-    } else if (event.key === "Home" || event.key === "End") {
-      event.preventDefault(); event.stopPropagation();
-      const next = event.key === "Home" ? layout.nodes[0] : layout.nodes[layout.nodes.length - 1];
-      if (next) focusNode(next.id);
-    } else if (event.key === "Escape") {
-      event.preventDefault(); event.stopPropagation(); svgRef.current?.focus();
-    }
-  }
-  function onMapKey(event: KeyboardEvent<SVGSVGElement>) {
-    const nodeId = (event.target as Element).closest("[data-map-node]")?.getAttribute("data-map-node");
-    const anchor = nodeId ? positions.get(nodeId) : undefined;
-    if (event.key === "+" || event.key === "=") { event.preventDefault(); zoomBy(1.25, anchor); }
-    else if (event.key === "-" || event.key === "−") { event.preventDefault(); zoomBy(0.8, anchor); }
-    else if (event.key === "0") { event.preventDefault(); fit(); }
-    else if (event.key.startsWith("Arrow")) {
-      event.preventDefault();
-      const amount = view.width * 0.08;
-      setView({ ...view, x: view.x + (event.key === "ArrowLeft" ? -amount : event.key === "ArrowRight" ? amount : 0), y: view.y + (event.key === "ArrowUp" ? -amount : event.key === "ArrowDown" ? amount : 0) });
-    }
-  }
+    return [...result.values()].sort((a, b) => (b.similarity ?? -1) - (a.similarity ?? -1) || a.id.localeCompare(b.id));
+  }, [layout.edges, selectionId]);
+  const stageHeight = Math.max(320, Math.min(900, Number.isFinite(height) ? height : 560));
+  const edgeLabel = (kind: string) => ({ cites: ko ? "인용" : "Citation", shares_references: ko ? "공통 참고문헌" : "Shared references", shares_topics: ko ? "공통 주제" : "Shared topics", text_similarity: ko ? "제목·초록 유사성" : "Title/abstract similarity", similarity: ko ? "메타데이터 유사성" : "Metadata similarity", inferred_similarity: ko ? "메타데이터 유사성" : "Metadata similarity" })[kind] ?? (ko ? "관련 근거" : "Related evidence");
+  const paperLabel = (id: string) => {
+    const work = byId.get(id);
+    return `${work?.title || (ko ? "제목 없음" : "Untitled work")}${work?.year ? ` · ${work.year}` : ""}`;
+  };
+  const countText = ko ? `논문 ${layout.nodes.length}편 · 연결 ${layout.edges.length}개` : `${layout.nodes.length} papers · ${layout.edges.length} connections`;
+
   function exportSvg() {
-    const svg = svgRef.current;
-    if (!svg) return;
     try {
-      const snapshot = svg.cloneNode(true) as SVGSVGElement;
-      snapshot.setAttribute("xmlns", "http://www.w3.org/2000/svg");
-      snapshot.setAttribute("width", "1200");
-      snapshot.setAttribute("height", String(Math.round(1200 * stageHeight / viewportWidth)));
-      snapshot.removeAttribute("tabindex");
-      snapshot.querySelectorAll("[tabindex]").forEach((element) => element.removeAttribute("tabindex"));
-      const bytes = new XMLSerializer().serializeToString(snapshot);
-      const url = URL.createObjectURL(new Blob([bytes], { type: "image/svg+xml;charset=utf-8" }));
+      const source = controls.current?.snapshotSvg();
+      if (!source) return;
+      const url = URL.createObjectURL(new Blob([source], { type: "image/svg+xml;charset=utf-8" }));
       const link = document.createElement("a");
-      link.href = url; link.download = "labvium-research-map.svg";
+      link.href = url; link.download = "labvium-research-map-3d.svg";
       document.body.appendChild(link); link.click(); link.remove();
       window.setTimeout(() => URL.revokeObjectURL(url), 1000);
-      setExportStatus(ko ? "현재 지도 보기를 SVG로 내보냈습니다." : "Exported the current map view as SVG.");
-    } catch {
-      setExportStatus(ko ? "지도를 내보내지 못했습니다. 다시 시도하세요." : "The map could not be exported. Try again.");
-    }
+      setExportStatus(ko ? "현재 3D 시점의 지도를 SVG로 내보냈습니다." : "Exported an SVG of the current 3D view.");
+    } catch { setExportStatus(ko ? "지도를 내보내지 못했습니다. 다시 시도하세요." : "The map could not be exported. Try again."); }
   }
 
-  return <section className="research-map" aria-label={mapTitle}>
-    <div className="research-map__toolbar" role="group" aria-label={ko ? "지도 보기" : "Map view"}>
-      <button type="button" className="button-secondary research-map__control" style={controlStyle} aria-label={ko ? "지도 축소" : "Zoom map out"} disabled={zoom <= 0.5001 || !layout.nodes.length} onClick={() => zoomBy(0.8)}>−</button>
-      <span className="research-map__zoom" aria-label={ko ? `지도 확대 ${Math.round(zoom * 100)}%` : `Map zoom ${Math.round(zoom * 100)}%`}>{Math.round(zoom * 100)}%</span>
-      <button type="button" className="button-secondary research-map__control" style={controlStyle} aria-label={ko ? "지도 확대" : "Zoom map in"} disabled={zoom >= 4.999 || !layout.nodes.length} onClick={() => zoomBy(1.25)}>+</button>
-      <button type="button" className="button-secondary research-map__control" style={controlStyle} disabled={!layout.nodes.length} onClick={fit}>{ko ? "전체 보기" : "Fit map"}</button>
-      <button type="button" className="button-secondary research-map__control" style={controlStyle} disabled={!layout.nodes.length} onClick={exportSvg}>{ko ? "SVG 내보내기" : "Export SVG"}</button>
+  return <section className="research-map research-map--3d" aria-label={ko ? "3D 논문 연관 지도" : "3D paper relationship map"}>
+    <div className="research-map__toolbar" role="group" aria-label={ko ? "3D 지도 보기" : "3D map view"}>
+      <span className="research-map__dimension">3D</span>
+      <button type="button" className="research-map__control" aria-label={ko ? "지도 축소" : "Zoom map out"} disabled={!layout.nodes.length} onClick={() => controls.current?.zoomBy(0.8)}>−</button>
+      <span className="research-map__zoom" aria-label={ko ? `지도 확대 ${zoom}%` : `Map zoom ${zoom}%`}>{zoom}%</span>
+      <button type="button" className="research-map__control" aria-label={ko ? "지도 확대" : "Zoom map in"} disabled={!layout.nodes.length} onClick={() => controls.current?.zoomBy(1.25)}>+</button>
+      <button type="button" className="research-map__control" disabled={!layout.nodes.length} onClick={() => controls.current?.reset()}>{ko ? "전체 보기" : "Fit map"}</button>
+      <button type="button" className="research-map__control" disabled={!selectionId} onClick={() => { if (selectionId) controls.current?.focus(selectionId); }}>{ko ? "선택 논문 중심" : "Focus selected"}</button>
+      <button type="button" className="research-map__control" disabled={!layout.nodes.length} onClick={exportSvg}>{ko ? "SVG 내보내기" : "Export SVG"}</button>
       <span className="research-map__count">{countText}</span>
     </div>
-    <div ref={stageRef} className={`research-map__stage${dragging ? " research-map__stage--dragging" : ""}`} style={{ height: stageHeight, minHeight: stageHeight, minWidth: 0, overflow: "hidden" }}>
-      <svg ref={svgRef} className="research-map__svg" width="100%" height="100%" viewBox={`${view.x} ${view.y} ${view.width} ${view.height}`} role="group" aria-labelledby={titleId} aria-describedby={descriptionId} tabIndex={0} onKeyDown={onMapKey} onPointerDown={onPointerDown} onPointerMove={onPointerMove} onPointerUp={stopDragging} onPointerCancel={stopDragging} onLostPointerCapture={stopDragging} style={{ display: "block", background: "#FAFBFB", touchAction: "none", cursor: dragging ? "grabbing" : "grab" }}>
-        <title id={titleId}>{mapTitle}</title>
-        <desc id={descriptionId}>{countText}. {ko ? "실선 화살표는 인용, 점선은 유사 관계입니다. 거리는 인용 수나 관련도 점수를 나타내지 않습니다." : "Solid arrows show citations; dashed lines show similarity relationships. Distance does not represent citation counts or relevance scores."} {mapHelp}</desc>
-        <defs><marker id={arrowId} viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse" markerUnits="userSpaceOnUse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#596164" /></marker></defs>
-        <rect x={view.x} y={view.y} width={view.width} height={view.height} fill="#FAFBFB" pointerEvents="none" />
-        {layout.edges.map((edge) => {
-          const source = positions.get(edge.source)!;
-          const target = positions.get(edge.target)!;
-          const appearance = EDGE_APPEARANCE[edge.kind] ?? OTHER_EDGE;
-          const dx = target.x - source.x; const dy = target.y - source.y;
-          const distance = Math.max(1, Math.hypot(dx, dy));
-          const related = edge.source === selectionId || edge.target === selectionId;
-          const evidence = edges.find((item) => item.source === edge.source && item.target === edge.target && item.kind === edge.kind)?.evidence;
-          return <line key={edge.id} className={`research-map__edge research-map__edge--${appearance.className}${related ? " research-map__edge--selected" : selectionId ? " research-map__edge--dimmed" : ""}`} x1={source.x + dx / distance * (source.radius + 2)} y1={source.y + dy / distance * (source.radius + 2)} x2={target.x - dx / distance * (target.radius + 3)} y2={target.y - dy / distance * (target.radius + 3)} stroke={appearance.color} strokeWidth={related ? 2.1 : 1.3} strokeDasharray={appearance.dash} opacity={selectionId && !related ? 0.2 : 0.75} vectorEffect="non-scaling-stroke" markerEnd={edge.kind === "cites" && edge.directed ? `url(#${arrowId})` : undefined}>
-            <title>{byId.get(edge.source)?.title ?? edge.source}{edge.directed ? " → " : " — "}{byId.get(edge.target)?.title ?? edge.target}: {edgeLabel(edge.kind)}{evidence?.provider ? ` · ${evidence.provider}` : ""}</title>
-          </line>;
-        })}
-        {layout.nodes.map((node) => {
-          const work = byId.get(node.id)!;
-          const selected = node.id === selectionId;
-          const dimmed = !!selectionId && !neighborhood.has(node.id);
-          const title = work.title || (ko ? "제목 없음" : "Untitled work");
-          const label = `${title}${work.year ? ` (${work.year})` : ""}`;
-          const hitRadius = Math.max(node.radius + 5, 22 * view.width / viewportWidth);
-          const labelOnLeft = node.x > layout.bounds.x + layout.bounds.width / 2;
-          return <g key={node.id} ref={(element) => { if (element) nodeRefs.current.set(node.id, element); else nodeRefs.current.delete(node.id); }} data-map-node={node.id} className={`research-map__node${selected ? " research-map__node--selected" : ""}${dimmed ? " research-map__node--dimmed" : ""}`} role="button" aria-label={label} aria-pressed={selected} tabIndex={node.id === activeFocusId ? 0 : -1} transform={`translate(${node.x} ${node.y})`} onFocus={() => revealNode(node.id)} onKeyDown={(event) => onNodeKey(event, node.id)} onClick={() => { setFocusedId(node.id); onSelect(node.id); }} style={{ cursor: "pointer", outline: "none" }}>
-            <title>{label}{work.authors?.length ? ` · ${work.authors.join(", ")}` : ""}</title>
-            <circle className="research-map__node-hit" r={hitRadius} fill="transparent" />
-            <circle className="research-map__node-focus" r={node.radius + 5} fill="none" stroke="#1A73E8" strokeWidth="2" opacity={node.id === focusedId ? 1 : 0} vectorEffect="non-scaling-stroke" pointerEvents="none" />
-            <circle className="research-map__node-dot" r={node.radius} fill={selected ? "#1A73E8" : "#FFFFFF"} stroke={selected ? "#1769AA" : "#596164"} strokeWidth={selected ? 2.5 : 1.5} opacity={dimmed ? 0.45 : 1} vectorEffect="non-scaling-stroke" pointerEvents="none" />
-            {labels.has(node.id) ? <text className="research-map__node-label" x={(node.radius + 6) * (labelOnLeft ? -1 : 1)} y="4" textAnchor={labelOnLeft ? "end" : "start"} fill={selected ? "#1769AA" : "#2B3032"} fontFamily="system-ui, sans-serif" fontSize={selected ? 13 : 11.5} fontWeight={selected ? 600 : 400} stroke="#FAFBFB" strokeWidth="3" paintOrder="stroke" opacity={dimmed ? 0.6 : 1} pointerEvents="none">{shorten(title, selected ? 42 : 28)}{work.year ? ` · ${work.year}` : ""}</text> : null}
-          </g>;
-        })}
-        {!layout.nodes.length ? <text x={view.x + view.width / 2} y={view.y + view.height / 2} textAnchor="middle" fill="#596164" fontFamily="system-ui, sans-serif" fontSize="16">{ko ? "논문을 검색해 관계 지도를 시작하세요." : "Search for papers to start a relationship map."}</text> : null}
-      </svg>
+    <Suspense fallback={<div className="research-map__stage research-map__stage--3d" style={{ height: stageHeight }} role="status"><p className="research-map__stage-empty">{ko ? "3D 지도를 준비하고 있습니다…" : "Preparing the 3D map…"}</p></div>}><ResearchMap3D ref={controls} layout={layout} works={byId} selectedId={selectionId} onSelect={onSelect} locale={locale} height={stageHeight} descriptionId={helpId} onZoomChange={setZoom} /></Suspense>
+    <div className="research-map__legend research-map__legend--3d" aria-label={ko ? "지도 범례" : "Map legend"}>
+      <span>{ko ? "점 1개 = 논문 1편" : "One point = one paper"}</span>
+      <span className="research-map__cluster-legend">{clusters.slice(0, 8).map((cluster) => <i key={cluster} style={{ background: mapClusterColor(cluster) }} />)}{ko ? "색: 유사도 그룹" : "Color: similarity groups"}</span>
+      <span>{ko ? "선: 인용·공통 근거·유사성" : "Lines: citations, shared evidence and similarity"}</span>
     </div>
-    {kinds.length ? <ul className="research-map__legend" aria-label={ko ? "관계 범례" : "Relationship legend"}>{kinds.map((kind) => {
-      const appearance = EDGE_APPEARANCE[kind] ?? OTHER_EDGE;
-      return <li key={kind} className="research-map__legend-item"><svg width="36" height="14" viewBox="0 0 36 14" aria-hidden="true"><line x1="1" y1="7" x2="33" y2="7" stroke={appearance.color} strokeWidth="2" strokeDasharray={appearance.dash} />{relationshipCategory(kind) === "citation" ? <path d="M 28 3 L 35 7 L 28 11" fill="none" stroke={appearance.color} strokeWidth="1.5" /> : null}</svg><span>{edgeLabel(kind)}</span></li>;
-    })}</ul> : null}
-    <p className="research-map__help">{mapHelp}</p>
-    {layout.omittedCount > 0 ? <p className="research-map__help">{ko ? `선택 논문과 연결된 논문을 우선해 최대 100편을 표시합니다. 나머지 ${layout.omittedCount}편은 목록에서 확인하세요.` : `The map shows up to 100 works, prioritizing the selected work and its neighbors. Find ${layout.omittedCount} additional works in the list.`}</p> : null}
+    <p id={helpId} className="research-map__help">{ko ? "드래그로 회전 · 휠/두 손가락으로 확대·축소 · 우클릭 드래그/두 손가락 이동 · 점 클릭으로 선택 · 두 번 클릭으로 중심 이동. 지도에 초점을 두고 방향키로 회전, Shift+방향키로 이동, +/−로 확대·축소, 0으로 전체 보기를 합니다." : "Drag to rotate · wheel/pinch to zoom · right-drag/two-finger drag to pan · click a point to select · double-click to focus. Focus the map and use arrows to rotate, Shift+arrows to pan, +/− to zoom, and 0 to fit."}</p>
+    <p className="research-map__help">{ko ? "3D 공간의 거리는 공통 참고문헌·주제·제목/초록과 인용 관계에서 계산한 관련도를 근사합니다. 가까울수록 관련 근거가 많으며, 통계적 상관계수나 논문의 품질을 뜻하지 않습니다. 자료가 부족한 논문의 위치는 해석에 주의하세요." : "Distances in 3D approximate relatedness from shared references, topics, title/abstract and citations. Shorter distances indicate stronger evidence of relatedness, not a statistical correlation or paper quality. Treat positions with incomplete metadata cautiously."}</p>
+    {layout.omittedCount > 0 ? <p className="research-map__help">{ko ? `선택 논문과 연결된 논문을 우선해 최대 200편을 표시합니다. 나머지 ${layout.omittedCount}편은 검색 결과 목록에서 확인하세요.` : `Up to 200 papers are shown, prioritizing the selected paper and its neighbors. Find ${layout.omittedCount} remaining papers in the search results.`}</p> : null}
+    {selectedWork ? <div className="research-map__selection">
+      <div className="research-map__selection-heading"><span className="research-map__paper-marker" style={{ background: mapClusterColor(positions.get(selectionId!)!.cluster) }} /><strong>{paperLabel(selectionId!)}</strong><span>{ko ? `연결 ${neighbors.length}편` : `${neighbors.length} neighbors`}</span></div>
+      {neighbors.length ? <ul className="research-map__neighbors">{neighbors.slice(0, 5).map((item) => <li key={item.id}><button type="button" onClick={() => onSelect(item.id)}>{paperLabel(item.id)}</button><span title={item.kinds.map(edgeLabel).join(" · ")}>{item.similarity === null ? (ko ? "관련도 자료 부족" : "Insufficient data") : `${ko ? "관련도" : "Relatedness"} ${Math.round(item.similarity * 100)}/100`}</span></li>)}</ul> : <p className="research-map__help">{ko ? "표시된 논문에서 확인된 연결이 없습니다. 검색으로 관련 논문을 더 추가하세요." : "No confirmed connections among displayed papers. Add related papers through search."}</p>}
+    </div> : null}
+    <details className="research-map__paper-list"><summary>{ko ? `지도에 표시된 논문 목록 (${layout.nodes.length})` : `Papers in this map (${layout.nodes.length})`}</summary><ol>{layout.nodes.map((node) => <li key={node.id}><button type="button" aria-pressed={node.id === selectionId} onClick={() => onSelect(node.id)} onDoubleClick={() => controls.current?.focus(node.id)}><span className="research-map__paper-marker" style={{ background: mapClusterColor(node.cluster) }} /><span>{paperLabel(node.id)}</span></button><button className="research-map__list-focus" type="button" onClick={() => controls.current?.focus(node.id)} aria-label={ko ? `${paperLabel(node.id)} 중심으로 보기` : `Focus ${paperLabel(node.id)}`}>{ko ? "중심 보기" : "Focus"}</button></li>)}</ol></details>
+    <details className="research-map__method"><summary>{ko ? "관련도와 거리 산정 기준" : "How relatedness and distance are calculated"}</summary><dl>{Object.entries(layout.method.weights).map(([kind, weight]) => <div key={kind}><dt>{({ shared_references: ko ? "공통 참고문헌" : "Shared references", topic_overlap: ko ? "주제 중복" : "Topic overlap", text_similarity: ko ? "제목·초록 텍스트" : "Title/abstract text", citation: ko ? "직접 인용" : "Direct citations" })[kind]}</dt><dd>{Math.round(weight * 100)}%</dd></div>)}</dl><p>{ko ? "사용 가능한 메타데이터 항목의 가중치를 다시 배분합니다(합계 92%). 확인된 직접 인용은 최대 8%를 더합니다. 자료가 부족한 쌍의 관련도는 알 수 없음으로 표시합니다." : "Available metadata weights are redistributed to a total of 92%. Confirmed direct citations add up to 8%. Relatedness is unknown where pairwise data is insufficient."}</p><p>{ko ? `비교 자료가 있는 논문 쌍 ${layout.method.knownPairCount}개 · 자료가 부족한 쌍 ${layout.method.unknownPairCount}개. 모든 쌍의 거리를 동시에 만족시키기 어려워 3D 배치는 근삿값입니다. 점의 크기는 표시된 연결 수를 반영합니다.` : `${layout.method.knownPairCount} paper pairs have comparison data; ${layout.method.unknownPairCount} have insufficient data. The 3D arrangement is approximate because all pairwise distances cannot be satisfied at once. Point size reflects the number of displayed connections.`}</p></details>
     <p className="research-map__status sr-only" role="status" aria-live="polite">{exportStatus}</p>
   </section>;
 }

@@ -1,0 +1,60 @@
+/* The dark 3D instrument is confined to the map stage; surrounding work stays white. */
+.research-map--3d { min-width: 0; }
+.research-map--3d .research-map__toolbar { gap: 4px; padding: 8px; }
+.research-map--3d .research-map__control { min-height: 44px; min-width: 44px; padding: 8px 10px; background: var(--color-surface, #fff); }
+.research-map__dimension { display: inline-flex; justify-content: center; align-items: center; height: 30px; padding: 0 9px; font-family: var(--font-mono, monospace); font-size: 12px; font-weight: 650; color: var(--blue-700, #1769aa); border-right: 1px solid var(--color-rule-faint, #e3e6e6); margin-right: 4px; }
+.research-map--3d .research-map__zoom { width: 46px; text-align: center; font-family: var(--font-mono, monospace); font-size: 11px; }
+.research-map--3d .research-map__count { margin-left: auto; font-family: var(--font-mono, monospace); font-size: 11px; color: var(--color-text-secondary, #596164); padding: 4px; }
+.research-map__stage--3d { isolation: isolate; position: relative; width: 100%; background: #0c0d16; overflow: hidden; color: #dce8f4; outline: none; cursor: grab; touch-action: none; }
+.research-map__stage--3d:active { cursor: grabbing; }
+.research-map__stage--3d:focus-visible { outline: 2px solid var(--blue-500, #4285f4); outline-offset: -3px; }
+.research-map__webgl, .research-map__fallback { position: absolute; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; }
+.research-map__fallback { z-index: 0; }
+.research-map__webgl { z-index: 1; }
+.research-map__stage-status { position: absolute; z-index: 3; top: 16px; left: 16px; color: #8c9eb2; font-size: 10px; letter-spacing: .06em; pointer-events: none; }
+.research-map__stage-hint { position: absolute; z-index: 3; bottom: 16px; right: 18px; display: flex; align-items: center; gap: 14px; color: #91a4ba; font-size: 10px; pointer-events: none; }
+.research-map__stage-hint > span { font-size: 16px; color: #d0e8f6; }
+.research-map__stage-empty { position: absolute; inset: 0; display: grid; place-content: center; color: #9eb0c3; font-size: 14px; text-align: center; padding: 24px; }
+.research-map__floating-label { position: absolute; z-index: 4; width: max-content; max-width: min(300px, calc(100% - 24px)); pointer-events: none; background: rgba(15, 24, 39, .93); border-left: 2px solid #70dce6; padding: 8px 10px; line-height: 1.4; }
+.research-map__floating-label strong { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; color: #eff8ff; font-size: 11px; font-weight: 500; }
+.research-map__floating-label span { display: block; margin-top: 3px; color: #9fbed3; font-size: 10px; }
+.research-map__floating-label--selected { border-left-color: #edbd73; }
+.research-map--3d .research-map__legend { padding: 10px 12px; gap: 8px 16px; font-size: 11px; }
+.research-map__cluster-legend { display: inline-flex; align-items: center; gap: 4px; }
+.research-map__cluster-legend i { width: 7px; height: 7px; display: inline-block; border-radius: 50%; }
+.research-map__cluster-legend i:last-of-type { margin-right: 5px; }
+.research-map--3d .research-map__help { line-height: 1.7; font-size: 11px; }
+.research-map__selection { border-top: 1px solid var(--color-rule-faint, #e3e6e6); padding: 12px; }
+.research-map__selection-heading { display: flex; align-items: baseline; gap: 8px; font-size: 12px; }
+.research-map__selection-heading strong { flex: 1; font-weight: 600; }
+.research-map__selection-heading > span:last-child { white-space: nowrap; color: var(--color-text-secondary, #596164); font-family: var(--font-mono, monospace); font-size: 10px; }
+.research-map__paper-marker { display: inline-block; width: 8px; height: 8px; flex: 0 0 8px; border-radius: 50%; }
+.research-map__neighbors { list-style: none; margin: 8px 0 0; padding: 0; }
+.research-map__neighbors li { display: flex; align-items: baseline; gap: 12px; border-top: 1px solid var(--color-rule-faint, #e3e6e6); padding: 7px 0; }
+.research-map__neighbors button { flex: 1; min-width: 0; text-align: left; color: var(--blue-700, #1769aa); font-size: 11px; line-height: 1.5; }
+.research-map__neighbors li > span { color: var(--color-text-secondary, #596164); white-space: nowrap; font-family: var(--font-mono, monospace); font-size: 10px; }
+.research-map__paper-list { padding: 8px 12px 10px; border-top: 1px solid var(--color-rule-faint, #e3e6e6); font-size: 11px; }
+.research-map__paper-list summary { cursor: pointer; min-height: 36px; padding: 8px 0; color: var(--color-text-secondary, #596164); }
+.research-map__paper-list ol { list-style: none; max-height: 300px; overflow-y: auto; margin: 0; padding: 0; }
+.research-map__paper-list li { display: flex; border-top: 1px solid var(--color-rule-faint, #e3e6e6); align-items: stretch; }
+.research-map__paper-list li > button { min-height: 44px; display: flex; gap: 8px; align-items: baseline; flex: 1; min-width: 0; padding: 10px 6px; text-align: left; line-height: 1.5; }
+.research-map__paper-list li > button[aria-pressed="true"] { background: var(--blue-050, #f3f7ff); box-shadow: inset 2px 0 var(--blue-600, #1a73e8); }
+.research-map__paper-list li > .research-map__list-focus { color: var(--blue-700, #1769aa); flex: 0 0 auto; padding: 10px; font-size: 10px; }
+.research-map__method { padding: 0 12px 10px; font-size: 11px; color: var(--color-text-secondary, #596164); }
+.research-map__method summary { cursor: pointer; padding: 8px 0; min-height: 36px; }
+.research-map__method dl { margin: 4px 0 8px; max-width: 360px; }
+.research-map__method dl > div { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid var(--color-rule-faint, #e3e6e6); }
+.research-map__method dd { font-family: var(--font-mono, monospace); margin: 0; }
+.research-map__method p { margin: 0; line-height: 1.7; }
+.research-map--3d button:focus-visible, .research-map__paper-list summary:focus-visible { outline: 2px solid var(--blue-500, #4285f4); outline-offset: -2px; }
+@media (max-width: 600px) {
+  .research-map--3d .research-map__toolbar { gap: 3px; }
+  .research-map--3d .research-map__control { padding: 8px; font-size: 10px; }
+  .research-map--3d .research-map__count { flex: 1 0 100%; margin-left: 0; }
+  .research-map__selection-heading { flex-wrap: wrap; }
+  .research-map__selection-heading > strong { flex-basis: calc(100% - 20px); }
+  .research-map__selection-heading > span:last-child { padding-left: 16px; }
+  .research-map__neighbors li { flex-wrap: wrap; gap: 2px 8px; }
+  .research-map__neighbors li > button { flex-basis: 100%; min-height: 36px; }
+  .research-map__stage-hint { bottom: 12px; right: 12px; }
+}
