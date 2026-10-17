@@ -1,6 +1,7 @@
 import { createResearchPagesStore, validateResearchPagesState } from "./pages.mjs";
 import { BROWSER_WORKSPACE_KEY, exportBrowserWorkspace, getBrowserWorkspaceStorage, getMaintenanceSnapshot, previewBrowserWorkspaceRestore, restoreBrowserWorkspace } from "../demo/browser-storage.mjs";
 import { searchWorkspace } from "./search.mjs";
+import { demoRequest } from "../demo/adapter.mjs";
 
 const stagedBackups = new Map();
 const PAGE_RECOVERY_KEY = "labvium.research-pages.recovery.v1";
@@ -60,7 +61,6 @@ async function executeBrowserWorkspaceRequest(path, init = {}) {
     const method = (init.method || "GET").toUpperCase();
     const body = init.body == null ? {} : JSON.parse(init.body);
     if (ownedRecovery && parts.length === 1 && method === "GET") {
-      const { demoRequest } = await import("../demo/adapter.mjs");
       const response = await demoRequest(path, init); if (!response.ok) return response;
       const data = await response.json();
       return reply({ ...data, items: [...pageRecoveries().map((row) => ({ recovery_id: row.recovery_id, kind: row.kind, created_at: row.created_at, summary: row.summary })), ...data.items] });
