@@ -3,6 +3,7 @@
 import { Bold, ChevronLeft, ChevronRight, Eye, FileText, Heading2, Italic, Link2, List, ListOrdered, ListTodo, Pencil, Quote, RotateCcw, Save, Tags, X } from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties, type KeyboardEvent as ReactKeyboardEvent, type MouseEvent as ReactMouseEvent, type PointerEvent as ReactPointerEvent, type ReactNode } from "react";
 import { useSearchParams } from "next/navigation";
+import Link from "next/link";
 import { EmptyState, ErrorState, LoadingState, UnavailableState } from "../components/AsyncStates";
 import { Breadcrumbs } from "../components/Breadcrumbs";
 import { PdfJsReader } from "../components/PdfJsReader";
@@ -116,17 +117,21 @@ function ReaderPdf({
   selectionActions?: ReactNode;
   annotationActions?: ReactNode;
 }) {
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   if (snapshot.pdf_state === "missing" || snapshot.paper.missing_pdf || !snapshot.paper.relative_pdf_path) {
     return (
+      <div className="reader-missing-pdf">
       <EmptyState
-        title={t("Managed PDF missing")}
-        description={snapshot.unavailable_reason || "This paper record does not currently have an accessible PDF in the managed library."}
+        title={snapshot.paper.metadata_only ? (locale === "ko" ? "논문 보관함에 저장된 논문입니다" : "This paper is saved in your library") : t("Managed PDF missing")}
+        description={snapshot.paper.metadata_only ? (locale === "ko" ? "공개 원문 PDF를 찾아 웹에서 읽기를 시작하세요. 가지고 있는 PDF 파일도 같은 논문에 연결할 수 있습니다." : "Find the open full-text PDF to start reading on the web. You can also connect a PDF file you already have to this paper.") : snapshot.unavailable_reason || "This paper record does not currently have an accessible PDF in the managed library."}
       />
+      <Link className="reader-control" href={`/papers/${encodeURIComponent(snapshot.paper.paper_id)}${snapshot.paper.metadata_only ? "?open=reader" : ""}`}>{snapshot.paper.metadata_only ? (locale === "ko" ? "원문 PDF 찾아 읽기" : "Find the full PDF and read") : (locale === "ko" ? "논문 정보에서 원본 PDF 다시 연결" : "Reconnect the original PDF from paper details")}</Link>
+      </div>
     );
   }
   return <PdfJsReader
     paperId={snapshot.paper.paper_id}
+    paperTitle={snapshot.paper.title}
     layoutResizeActive={layoutResizeActive}
     layoutResizeVersion={layoutResizeVersion}
     onCaptureLayoutAnchor={onCaptureLayoutAnchor}

@@ -317,10 +317,13 @@ test("explicit source import attaches only the saved trusted open-access URL to 
 });
 
 test("source PDF import blocks untrusted hosts and redirect escapes before any untrusted fetch", async () => {
-  for (const sourceUrl of ["http://127.0.0.1/private.pdf", "https://attacker.example/paper.pdf", "https://arxiv.org/pdf/1706.03762"]) {
-    const env = environment(), first = await saved(env, work({ pdf_url: sourceUrl })), calls = [], originalFetch = globalThis.fetch;
+  for (const [index, sourceUrl] of ["http://127.0.0.1/private.pdf", "https://attacker.example/paper.pdf", "https://arxiv.org/pdf/1706.03762"].entries()) {
+    const doi = `10.1234/host-validation-${index}`;
+    const env = environment(), first = await saved(env, work({ id: doi, doi, url: `https://doi.org/${doi}`, pdf_url: sourceUrl })), calls = [], originalFetch = globalThis.fetch;
     globalThis.fetch = async (url, options) => {
       calls.push(String(url));
+      if (new URL(url).hostname === "api.openalex.org") return Response.json({ id: `https://openalex.org/W901${index}`, doi: `https://doi.org/${doi}`, open_access: { is_oa: false }, best_oa_location: null, locations: [] });
+      if (new URL(url).hostname === "api.crossref.org") return Response.json({ message: { DOI: doi, URL: `https://doi.org/${doi}`, link: [] } });
       assert.equal(String(url), "https://arxiv.org/pdf/1706.03762");
       assert.equal(options.redirect, "manual");
       return new Response(null, { status: 302, headers: { Location: "http://127.0.0.1/private.pdf" } });
@@ -328,7 +331,8 @@ test("source PDF import blocks untrusted hosts and redirect escapes before any u
     try {
       const result = await request(env, `/papers/${first.paper_id}/import-source-pdf`, { method: "POST", body: { expected_pdf_revision: first.paper.pdf_revision } });
       assert.equal(result.status, 422, JSON.stringify(result.data));
-      assert.equal(calls.length, sourceUrl.startsWith("https://arxiv.org/") ? 1 : 0);
+      assert.equal(calls.length, sourceUrl.startsWith("https://arxiv.org/") ? 1 : 2);
+      assert.equal(calls.some(url => !["api.openalex.org", "api.crossref.org", "arxiv.org"].includes(new URL(url).hostname)), false);
       assert.equal((await request(env, `/papers/${first.paper_id}`)).data.missing_pdf, true);
       assert.equal(env.LABVIUM_PDFS.files.size, 0);
     } finally { globalThis.fetch = originalFetch; }

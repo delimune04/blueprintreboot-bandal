@@ -1,5 +1,6 @@
 import * as c from "./core.mjs";
 import { discoveryKeys, paperDiscoveryKeys, normalizeDiscoveryDoi, normalizeDiscoveryArxiv, normalizeDiscoveryOpenalex, validateDiscoveryIdentifiers } from "../../frontend/app/lib/workspace/discovery-identity.mjs";
+import { paperPdfAccess, trustedPdfUrl } from "./pdf-access.mjs";
 
 const TEXT = { id: 2048, title: 1000, year: 4, doi: 2048, abstract: 100000, url: 4096, pdf_url: 4096, source: 100, journal: 1000, arxiv_id: 200, openalex_id: 200, retrieved_at: 100, updated_at: 100, publication_date: 100, relation: 100 };
 function list(value, max, limit) {
@@ -87,12 +88,6 @@ export async function attachDiscoveryPdf(state, paperId, form, ctx) {
   return { status: "attached", paper_id: paper.paper_id, paper: c.paperDetail(paper, state), pdf_revision: c.rev(paper.pdfRev) };
 }
 
-const OA_PDF_HOSTS = new Set(["arxiv.org", "export.arxiv.org", "aclanthology.org", "openaccess.thecvf.com", "proceedings.neurips.cc", "pmc.ncbi.nlm.nih.gov", "europepmc.org"]);
-function trustedPdfUrl(value) {
-  let parsed; try { parsed = new URL(value); } catch { c.fail(422, "This saved source does not provide a supported open-access PDF URL. Attach a PDF file instead."); }
-  if (parsed.protocol !== "https:" || !OA_PDF_HOSTS.has(parsed.hostname) || parsed.username || parsed.password || parsed.port) c.fail(422, "This publisher cannot be imported directly. Open its source and attach the PDF file; your library entry is already saved.");
-  return parsed;
-}
 async function readPdfBytes(response, signal) {
   const maximum = 25 * 1024 * 1024;
   if (Number(response.headers.get("content-length") || 0) > maximum) c.fail(413, "The source PDF exceeds the 25 MiB hosted limit. Attach a smaller PDF or use the local application.");
@@ -116,7 +111,9 @@ export async function importSourcePdf(state, paperId, body, ctx) {
   c.strict(body, ["expected_pdf_revision"]);
   const paper = c.paperById(state, paperId); c.guard(body.expected_pdf_revision, paper.pdfRev || 1);
   if (c.hasPdf(paper, state)) return { status: "already_attached", paper_id: paper.paper_id, paper: c.paperDetail(paper, state), pdf_revision: c.rev(paper.pdfRev || 1) };
-  let source = trustedPdfUrl(paper.external_source?.pdf_url || "");
+  const access = await paperPdfAccess(paper, state, ctx.env || {}, ctx.fetch || fetch);
+  if (!access.can_import || !access.pdf_url) c.fail(422, access.reason === "provider_unavailable" ? "The public full-text lookup is temporarily unavailable. Open the source or attach the PDF file; your saved research was retained." : "No directly importable open-access PDF was found for this exact work. Open the source or attach the PDF file; your saved research was retained.");
+  let source = trustedPdfUrl(access.pdf_url);
   const controller = new AbortController(), timer = setTimeout(() => controller.abort(), 12000);
   try {
     let response;

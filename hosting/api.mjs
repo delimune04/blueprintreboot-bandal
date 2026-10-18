@@ -16,6 +16,7 @@ import { routeReview } from "./domain/review.mjs";
 import { routeContinuity } from "./domain/continuity.mjs";
 import { prepareAiSources, selectAiEvidence } from "../frontend/app/lib/ai/sources.mjs";
 import { attachDiscoveryPdf, discoveryIndex, importSourcePdf, saveDiscoveryPaper } from "./domain/discovery-library.mjs";
+import { paperPdfAccess, pdfAccessQuery, resolvePdfAccess } from "./domain/pdf-access.mjs";
 
 const SIGN_IN_URL="/signin-with-chatgpt?return_to=%2Fku-ai%2F";
 export const HOSTED_CAPABILITIES={pdf_upload:true,pdf_read:true,client_pdf_extraction:true,server_pdf_extraction:false,ocr:true,client_ocr:true,server_ocr:false,metadata_enrichment:true,tag_review:true,tag_merge:true,near_duplicate_tags:true,profile_rebuild:true,rename_pdf:true,cache_quarantine:true,paper_priority:true,backup:true,restore:true,note_import:true,research_pages:true,full_text_search:true,private_cloud_storage:true};
@@ -37,6 +38,7 @@ export async function handleLabviumApi(request,env){
   if(path==="discover"&&method==="GET")return reply(await discover(url.searchParams,env));
   if(path==="discover/related"&&method==="GET")return reply(await related(url.searchParams,env));
   if(path==="discover/explore"&&method==="GET")return reply(await explore(url.searchParams,env));
+  if(path==="discover/pdf-access"&&method==="GET")return reply(await resolvePdfAccess(pdfAccessQuery(url.searchParams),env));
   if(parts[0]==="workspaces"){const body=await commandBody(request,path);return reply(await routeWorkspaceMembership(request,env,parts,body));}
   const access=await resolveWorkspaceAccess(request,env);owner=access.workspace_key;
   if(path==="exports/raw"&&method==="GET"){const row=await env.LABVIUM_DB.prepare("SELECT revision, state_json FROM labvium_workspaces WHERE owner_key = ?").bind(owner).first();if(!row)c.fail(404,"No saved workspace exists.");let value;try{value=JSON.parse(row.state_json);}catch{}if(value?.storage==="r2"){const object=await readPrivateObject(env,owner,value.key);if(!object)c.fail(503,"The retained raw state object is missing.");return new Response(object.body,{headers:{"Content-Type":"application/json","Content-Disposition":"attachment; filename=\"labvium-raw-state.json\"","Cache-Control":"private, no-store"}});}return new Response(row.state_json,{headers:{"Content-Type":"application/json","Content-Disposition":"attachment; filename=\"labvium-raw-state.json\"","Cache-Control":"private, no-store"}});}
@@ -45,6 +47,7 @@ export async function handleLabviumApi(request,env){
   if(path==="workspace"&&method==="GET")return reply({mode:"cloud",storage:"cloud",workspace_id:access.workspace_key,role:access.role,title:access.title,permissions_revision:c.rev(access.permissions_revision),revision:c.rev(loaded.revision),paper_count:state.papers.length,project_count:state.projects.length,research_page_count:state.researchPages.length,pdf_count:Object.keys(state.files).length,updated_at:loaded.updated_at,capabilities:HOSTED_CAPABILITIES,limits:{structured_state_bytes:c.MAX_STATE_BYTES,pdf_bytes:25*1024*1024,portable_backup_pdf_bytes:20*1024*1024}},200,loaded.revision);
   if(parts[0]==="papers"&&parts.length===3&&parts[2]==="pdf"&&method==="GET")return await pdfResponse(request,c.paperById(state,parts[1]),state,ctx);
   if(path==="papers/discovery-index"&&method==="GET")return reply(discoveryIndex(state),200,loaded.revision);
+  if(parts[0]==="papers"&&parts.length===3&&parts[2]==="pdf-access"&&method==="GET")return reply(await paperPdfAccess(c.paperById(state,parts[1]),state,env),200,loaded.revision);
   if(path==="settings/summary"&&method==="GET"){const summary=c.settings(state);summary.backup_readiness=await backupReadiness(state,ctx);return reply(summary,200,loaded.revision);}
   if(path==="ai/sources"&&method==="GET")return reply(await prepareAiSources(state,{question:url.searchParams.get("q")||"",...(url.searchParams.get("project_id")?{project_id:url.searchParams.get("project_id")}:{paper_ids:(url.searchParams.get("paper_ids")||"").split(",").filter(Boolean)})}),200,loaded.revision);
   const body=await commandBody(request,path);

@@ -2,6 +2,7 @@
 
 import { ExternalLink, Search, BookOpen, Network, ArrowLeft, Plus, Check, LibraryBig } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { PageHeader } from "../components/PageHeader";
 import { Section } from "../components/Section";
@@ -69,7 +70,7 @@ export function savedDiscoveryPaper(work: ScholarlyWork, savedPapers: Record<str
   return matches.length === 1 ? matches[0] : "";
 }
 
-export function DiscoveryResults({ results, criteria, relatedTitle = "", busy = false, savingId = "", savedPapers = {}, onRelated, onSave, onReturn }: { results: SearchResults; criteria: SearchCriteria; relatedTitle?: string; busy?: boolean; savingId?: string; savedPapers?: Record<string, string>; onRelated: (work: ScholarlyWork, relation: "references" | "cited_by") => void; onSave: (work: ScholarlyWork) => void; onReturn: () => void }) {
+export function DiscoveryResults({ results, criteria, relatedTitle = "", busy = false, savingId = "", openingId = "", savedPapers = {}, onRelated, onSave, onOpen, onReturn }: { results: SearchResults; criteria: SearchCriteria; relatedTitle?: string; busy?: boolean; savingId?: string; openingId?: string; savedPapers?: Record<string, string>; onRelated: (work: ScholarlyWork, relation: "references" | "cited_by") => void; onSave: (work: ScholarlyWork) => void; onOpen?: (work: ScholarlyWork, action?: "reader" | "download") => void; onReturn: () => void }) {
   const { t, locale } = useI18n();
   const say = (ko: string, en: string) => textFor(locale, ko, en);
   const actualSort = results.sort && results.sort in sortLabels ? sortLabels[results.sort as DiscoverySort][locale === "ko" ? 0 : 1] : "";
@@ -85,7 +86,7 @@ export function DiscoveryResults({ results, criteria, relatedTitle = "", busy = 
     {relatedTitle ? <button className="reader-control reader-control--secondary" onClick={onReturn} disabled={busy}><ArrowLeft size={14} />{t("Return to topic search")}</button> : null}
     {results.warnings?.map((warning, index) => <p role="status" className="muted-text" key={index}>{discoveryWarningMessage(warning, locale)}</p>)}
     {!results.items.length ? <EmptyState title={t("No matching research found")} description={say("저자명을 줄이거나, 제목 정확히 일치를 해제하거나, 다른 제공처를 선택해 보세요.", "Try a shorter author name, turn off exact-title matching, or choose another source.")} /> : <div className="lab-discovery-list">{results.items.map((item) => isWork(item) ? <article key={item.id} className="lab-discovery-row discovery-work">
-      <h3>{safeResearchUrl(item.url) ? <a href={safeResearchUrl(item.url)} target="_blank" rel="noreferrer">{item.title} <ExternalLink size={15} /></a> : item.title}</h3>
+      <h3><button type="button" className="discovery-paper-title" disabled={Boolean(openingId) || Boolean(savingId) || (getWorkspaceRole() === "viewer" && !savedDiscoveryPaper(item, savedPapers))} onClick={() => onOpen?.(item, "reader")}>{item.title} <BookOpen size={16}/></button></h3>
       <p className="discovery-author-line">{item.authors?.join(", ") || t("Authors unavailable")}</p>
       <div className="discovery-identity"><span>{say("출판", "Published")}: {(item as DisplayWork).publication_date || item.year || t("Unavailable")}</span>{(item as DisplayWork).journal ? <span>{(item as DisplayWork).journal}</span> : null}</div>
       {(item as DisplayWork).affiliations?.length ? <p className="discovery-affiliations">{say("소속", "Affiliations")}: {(item as DisplayWork).affiliations!.join(" · ")}</p> : null}
@@ -93,7 +94,7 @@ export function DiscoveryResults({ results, criteria, relatedTitle = "", busy = 
       <div className="lab-result-metadata"><span>{t("Source")}: {item.providers?.length ? item.providers.join(" · ") : item.source || results.provider}</span><span>{t("Citations")} ({item.source || results.provider}): {item.cited_by_count == null ? t("Unavailable") : item.cited_by_count.toLocaleString()}</span>{results.sort === "popularity" ? <span>{say("연평균 인용수", "Annual citations")}: {(item as DisplayWork).popularity_score == null ? t("Unavailable") : (item as DisplayWork).popularity_score!.toLocaleString(undefined, { maximumFractionDigits: 1 })}</span> : null}{item.updated_at ? <span>{t("Source updated")}: {item.updated_at}</span> : null}</div>
       {item.doi || arxivId(item) ? <p className="discovery-identifiers">{item.doi ? <span>DOI: <a href={`https://doi.org/${encodeURIComponent(item.doi)}`} target="_blank" rel="noreferrer">{item.doi}</a></span> : null}{arxivId(item) ? <span>arXiv: {arxivId(item)}</span> : null}</p> : null}
       {item.topics?.length ? <div className="tag-list">{item.topics.map((topic) => <StatusBadge key={topic} presentation="chip">{topic}</StatusBadge>)}</div> : null}
-      <div className="lab-result-actions"><button className={`reader-control reader-control--secondary${savedDiscoveryPaper(item, savedPapers) ? " discovery-save--complete" : ""}`} disabled={Boolean(savingId) || Boolean(savedDiscoveryPaper(item, savedPapers)) || getWorkspaceRole() === "viewer"} onClick={() => onSave(item)}>{savedDiscoveryPaper(item, savedPapers) ? <Check size={14} /> : <Plus size={14} />}{savedDiscoveryPaper(item, savedPapers) ? say("저장 완료 ✔️", "Saved ✔") : savingId === item.id ? t("Saving…") : say("논문 보관함에 저장", "Save to paper library")}</button>{savedDiscoveryPaper(item, savedPapers) ? <Link className="reader-control" href={`/papers/${encodeURIComponent(savedDiscoveryPaper(item, savedPapers))}`}><BookOpen size={14} />{say("저장한 논문 열기", "Open saved paper")}</Link> : null}{openAlexId(item.openalex_id || item.id) ? <><button className="reader-control reader-control--secondary" disabled={busy} onClick={() => onRelated(item, "references")}><Network size={14} />{t("References")}</button><button className="reader-control reader-control--secondary" disabled={busy} onClick={() => onRelated(item, "cited_by")}>{t("Citing works")}</button></> : null}{safeResearchUrl(item.pdf_url) ? <a className="text-link" href={safeResearchUrl(item.pdf_url)} target="_blank" rel="noreferrer">{t("Source PDF")} <ExternalLink size={14} /></a> : null}</div>
+      <div className="lab-result-actions"><button className="reader-control" type="button" disabled={Boolean(openingId) || Boolean(savingId) || (getWorkspaceRole() === "viewer" && !savedDiscoveryPaper(item, savedPapers))} onClick={() => onOpen?.(item, "reader")}><BookOpen size={14}/>{openingId === item.id ? say("PDF 여는 중…", "Opening PDF…") : say("웹에서 PDF 읽기", "Read PDF on web")}</button><button className="reader-control reader-control--secondary" type="button" disabled={Boolean(openingId) || Boolean(savingId) || (getWorkspaceRole() === "viewer" && !savedDiscoveryPaper(item, savedPapers))} onClick={() => onOpen?.(item, "download")}>{say("PDF 다운로드", "Download PDF")}</button><button className={`reader-control reader-control--secondary${savedDiscoveryPaper(item, savedPapers) ? " discovery-save--complete" : ""}`} disabled={Boolean(openingId) || Boolean(savingId) || Boolean(savedDiscoveryPaper(item, savedPapers)) || getWorkspaceRole() === "viewer"} onClick={() => onSave(item)}>{savedDiscoveryPaper(item, savedPapers) ? <Check size={14} /> : <Plus size={14} />}{savedDiscoveryPaper(item, savedPapers) ? say("저장 완료 ✔️", "Saved ✔") : savingId === item.id ? t("Saving…") : say("논문 보관함에 저장", "Save to paper library")}</button>{savedDiscoveryPaper(item, savedPapers) ? <Link className="text-link" href={`/papers/${encodeURIComponent(savedDiscoveryPaper(item, savedPapers))}?open=reader`}>{say("저장한 논문 열기", "Open saved paper")}</Link> : null}{openAlexId(item.openalex_id || item.id) ? <><button className="reader-control reader-control--secondary" disabled={busy} onClick={() => onRelated(item, "references")}><Network size={14} />{t("References")}</button><button className="reader-control reader-control--secondary" disabled={busy} onClick={() => onRelated(item, "cited_by")}>{t("Citing works")}</button></> : null}{safeResearchUrl(item.pdf_url) ? <a className="text-link" href={safeResearchUrl(item.pdf_url)} target="_blank" rel="noreferrer">{t("Source PDF")} <ExternalLink size={14} /></a> : null}{safeResearchUrl(item.url) ? <a className="text-link" href={safeResearchUrl(item.url)} target="_blank" rel="noreferrer">{say("출판사·원문 사이트", "Publisher or source site")} <ExternalLink size={14}/></a> : null}</div>
       {savedDiscoveryPaper(item, savedPapers) ? <p className="discovery-save-location" role="status">{say("저장 위치: 논문 보관함", "Saved in: paper library")} · <Link href="/library">{say("보관함 보기", "View library")}</Link></p> : null}
     </article> : <article key={item.id} className="lab-discovery-row"><h3>{safeResearchUrl(item.url) ? <a href={safeResearchUrl(item.url)} target="_blank" rel="noreferrer">{item.name}</a> : item.name}</h3><p>{t("Verify this author identity before using the metrics. Names alone may refer to different researchers.")}</p>{item.affiliations?.length ? <p>{say("소속", "Affiliations")}: {item.affiliations.join(" · ")}</p> : null}<div className="lab-result-metadata"><span>OpenAlex h-index: {item.h_index == null ? t("Unavailable") : item.h_index}</span><span>{t("Works")}: {item.works_count ?? t("Unavailable")}</span><span>{t("Citations")}: {item.cited_by_count ?? t("Unavailable")}</span><span>{t("Source updated")}: {item.updated_date || item.updated_at || t("Unavailable")}</span></div><p className="muted-text">{t("This author-level metric does not establish the quality or correctness of an individual paper.")}</p></article>)}</div>}
   </Section>;
@@ -101,6 +102,7 @@ export function DiscoveryResults({ results, criteria, relatedTitle = "", busy = 
 
 export function DiscoverView() {
   const { t, locale } = useI18n();
+  const router = useRouter();
   const say = (ko: string, en: string) => textFor(locale, ko, en);
   const [criteria, setCriteria] = useState<SearchCriteria>(initialCriteria);
   const [submitted, setSubmitted] = useState<SearchCriteria | null>(null);
@@ -110,6 +112,7 @@ export function DiscoverView() {
   const [relatedTitle, setRelatedTitle] = useState("");
   const [savingId, setSavingId] = useState("");
   const [savedPapers, setSavedPapers] = useState<Record<string, string>>({});
+  const [openingId, setOpeningId] = useState("");
   const saveLock = useRef(false);
   const sequence = useRef(0);
   const requestController = useRef<AbortController | null>(null);
@@ -163,15 +166,33 @@ export function DiscoverView() {
       const saved = await labviumRequest<{paper_id: string; keys: string[]}>("/papers/from-discovery", { method: "POST", body: { work }, signal: controller.signal });
       if (mounted.current) {
         setSavedPapers((current) => ({ ...current, ...Object.fromEntries([...discoveryKeys(work), ...saved.keys].map((key) => [key, saved.paper_id])) }));
-        setNotice(say("논문 보관함에 저장했습니다. ‘저장한 논문 열기’에서 원문 PDF를 연결하고 읽기·메모·프로젝트 정리를 이어가세요.", "Saved to your paper library. Open the saved paper to connect its PDF, read, annotate, and link it to a project."));
+        setNotice(say("논문 보관함에 저장했습니다. ‘저장한 논문 열기’에서 공개 PDF를 찾아 바로 읽기·메모·프로젝트 정리를 이어가세요.", "Saved to your paper library. Open the saved paper to connect its PDF, read, annotate, and link it to a project."));
       }
     } catch (error) { if (mounted.current && !controller.signal.aborted) setNotice(error instanceof Error ? error.message : t("The source could not be saved.")); }
     finally { saveLock.current = false; if (mounted.current) setSavingId(""); }
   }
+  async function openPaper(work: ScholarlyWork, action: "reader" | "download" = "reader") {
+    if (saveLock.current) return;
+    let paperId = savedDiscoveryPaper(work, savedPapers);
+    if (!paperId && getWorkspaceRole() === "viewer") return;
+    saveLock.current = true; setOpeningId(work.id); setNotice("");
+    const navigationGeneration = sequence.current;
+    const controller = new AbortController(); saveController.current = controller;
+    try {
+      if (!paperId) {
+        const saved = await labviumRequest<{paper_id: string; keys: string[]}>("/papers/from-discovery", {method:"POST", body:{work}, signal:controller.signal});
+        if (!mounted.current || controller.signal.aborted) return;
+        paperId = saved.paper_id;
+        setSavedPapers(current => ({...current, ...Object.fromEntries([...discoveryKeys(work), ...saved.keys].map(key => [key, saved.paper_id]))}));
+      }
+      if (mounted.current && !controller.signal.aborted && navigationGeneration === sequence.current) router.push(`/papers/${encodeURIComponent(paperId)}?open=${action}`);
+    } catch (error) { if (mounted.current && !controller.signal.aborted && navigationGeneration === sequence.current) setNotice(error instanceof Error ? error.message : say("논문을 열지 못했습니다. 다시 시도해 주세요.", "The paper could not be opened. Please retry.")); }
+    finally { saveLock.current = false; if (mounted.current) setOpeningId(""); }
+  }
   const pending = submitted && criteriaKey(submitted) !== criteriaKey(criteria);
   return <div className="page-stack discovery-page">
     <PageHeader title={t("Discover research")} description={say("논문 제목과 저자를 함께 검색하고, 인용수·출판일을 비교해 원하는 원문을 찾으세요.", "Search by title and author together, then compare citations and publication dates to identify the original paper.")} />
-    <div className="discovery-library-guide"><LibraryBig size={20} aria-hidden="true" /><div><strong>{say("찾은 논문은 논문 보관함에 모입니다", "Your saved papers live in the paper library")}</strong><p>{say("검색 → 논문 보관함 → PDF 읽기·하이라이트·메모 → 관련 논문 탐색. 프로젝트에는 필요한 논문을 연결하세요. 저장 시에는 서지정보와 초록을 보관하며, 원문 PDF는 논문을 열어 연결합니다.", "Search → paper library → PDF reading, highlights and notes → related papers. Link the papers you need to a project. Saving retains metadata and abstract; connect the full PDF from the saved paper.")}</p><p>{say("이전에 ‘연구 페이지로 저장’한 항목은 ", "Items previously saved as research pages are in ")}<Link href="/workspace">{say("연구 노트", "research notes")}</Link>{say("에서 볼 수 있어요.", ".")}</p></div><Link className="reader-control reader-control--secondary" href="/library">{say("논문 보관함", "Paper library")}</Link></div>
+    <div className="discovery-library-guide"><LibraryBig size={20} aria-hidden="true" /><div><strong>{say("찾은 논문은 논문 보관함에 모입니다", "Your saved papers live in the paper library")}</strong><p>{say("논문 제목이나 ‘웹에서 PDF 읽기’를 누르면 보관함에 저장한 뒤 공개 원문을 찾아 리더로 엽니다. ‘PDF 다운로드’로 파일을 받을 수도 있습니다. 공개 원문이 없는 경우 출판사 링크로 안내합니다.", "Choose a paper title or Read PDF on web to save it and open its public PDF in the reader. Choose Download PDF to keep the file. When no open PDF is available, use the publisher link.")}</p><p>{say("이전에 ‘연구 페이지로 저장’한 항목은 ", "Items previously saved as research pages are in ")}<Link href="/workspace">{say("연구 노트", "research notes")}</Link>{say("에서 볼 수 있어요.", ".")}</p></div><Link className="reader-control reader-control--secondary" href="/library">{say("논문 보관함", "Paper library")}</Link></div>
     <Section title={t("Find related work")}>
       <form className="discovery-search-form" onSubmit={(event) => void search(event)}>
         <div className="discovery-search-options">
@@ -193,7 +214,7 @@ export function DiscoverView() {
     {pending ? <p className="discovery-pending" role="status">{say("검색 조건이 변경되었습니다. 아래는 이전 검색 결과입니다. ‘검색’을 눌러 새 조건을 적용하세요.", "Search criteria changed. The results below are from the previous search. Choose Search to apply the new criteria.")}</p> : null}
     {notice ? <p className="reader-editor__status" role="status">{notice}</p> : null}
     {busy ? <p role="status" className="muted-text">{t("Searching…")}{results ? say(" 이전 결과를 표시하고 있습니다.", " Previous results remain visible.") : ""}</p> : null}
-    {results && submitted ? <DiscoveryResults results={results} criteria={submitted} relatedTitle={relatedTitle} busy={busy} savingId={savingId} savedPapers={savedPapers} onRelated={(work, relation) => void related(work, relation)} onSave={(work) => void saveToLibrary(work)} onReturn={() => void search(undefined, submitted)} /> : !busy ? <EmptyState title={t("Start with a research question")} description={t("Results come from the selected scholarly source when you run a search.")} /> : null}
+    {results && submitted ? <DiscoveryResults results={results} criteria={submitted} relatedTitle={relatedTitle} busy={busy} savingId={savingId} openingId={openingId} savedPapers={savedPapers} onRelated={(work, relation) => void related(work, relation)} onSave={(work) => void saveToLibrary(work)} onOpen={(work, action) => void openPaper(work, action)} onReturn={() => void search(undefined, submitted)} /> : !busy ? <EmptyState title={t("Start with a research question")} description={t("Results come from the selected scholarly source when you run a search.")} /> : null}
     <details className="tag-advanced-details"><summary>{t("Sources and metric interpretation")}</summary><p><a href="https://help.openalex.org/data/authors/" target="_blank" rel="noreferrer">OpenAlex author metrics</a> · <a href="https://www.crossref.org/documentation/retrieve-metadata/rest-api/" target="_blank" rel="noreferrer">Crossref REST API</a> · <a href="https://doi.org/10.1038/520429a" target="_blank" rel="noreferrer">Leiden Manifesto</a></p><p>{t("Provider omissions remain unavailable. No missing citation count or h-index is replaced with a guess.")}</p><p>{t("Relevance and citation connections guide discovery. Author h-index is supplementary context, affected by discipline, career length, and database coverage.")}</p></details>
   </div>;
 }

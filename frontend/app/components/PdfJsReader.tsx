@@ -10,6 +10,7 @@ import { readPageSelection, type PdfPageSelection } from "../lib/pdf/selection-c
 import { readReaderPreferences, updateReaderPreferences, type ReaderHighlight } from "../lib/reader/browser-reader-state.mjs";
 import { useI18n } from "../lib/i18n/LocaleProvider";
 import { visiblePdfPage } from "../lib/reader/visible-pdf-page.mjs";
+import { ReaderPdfDownload } from "./ReaderPdfDownload";
 
 type PdfReaderUiState = {
   mode: "loading" | "ready" | "error";
@@ -77,7 +78,7 @@ function readPdfViewPreference(): { mode: PdfViewMode; zoom: number } {
   }
 }
 
-function NativePdfFallback({ pdfUrl, onRetry }: { pdfUrl: string; onRetry: () => void }) {
+function NativePdfFallback({ pdfUrl, paperId, paperTitle, onRetry }: { pdfUrl: string; paperId: string; paperTitle: string; onRetry: () => void }) {
   const { t } = useI18n();
   return (
     <div className="reader-native-fallback-shell" role="region" aria-label={t("Native browser PDF fallback")}>
@@ -92,7 +93,7 @@ function NativePdfFallback({ pdfUrl, onRetry }: { pdfUrl: string; onRetry: () =>
           <a className="text-link" href={pdfUrl} target="_blank" rel="noreferrer"><ExternalLink size={15} />{t("Open the managed PDF in a browser tab")}</a>
         </div>
       </object>
-      <div className="reader-fallback-actions"><button className="reader-control" type="button" onClick={onRetry}>{t("Retry PDF.js Reader")}</button></div>
+      <div className="reader-fallback-actions"><button className="reader-control" type="button" onClick={onRetry}>{t("Retry PDF.js Reader")}</button><ReaderPdfDownload key={paperId} paperId={paperId} title={paperTitle} /></div>
     </div>
   );
 }
@@ -235,6 +236,7 @@ function ContinuousPdfPage({
 
 export function PdfJsReader({
   paperId,
+  paperTitle = paperId,
   onSelectionChange,
   layoutResizeActive = false,
   layoutResizeVersion = 0,
@@ -246,6 +248,7 @@ export function PdfJsReader({
   annotationActions,
 }: {
   paperId: string;
+  paperTitle?: string;
   onSelectionChange?: (selection: PdfPageSelection | null) => void;
   layoutResizeActive?: boolean;
   layoutResizeVersion?: number;
@@ -494,7 +497,7 @@ export function PdfJsReader({
     return () => { viewportRoot.removeEventListener("scroll", schedule); if (frame !== null) window.cancelAnimationFrame(frame); };
   }, [onVisible, state.mode, viewportRoot]);
 
-  if (fallbackActive) return <NativePdfFallback pdfUrl={pdfUrl} onRetry={() => { setFallbackActive(false); setLoadAttempt((value) => value + 1); }} />;
+  if (fallbackActive) return <NativePdfFallback pdfUrl={pdfUrl} paperId={paperId} paperTitle={paperTitle} onRetry={() => { setFallbackActive(false); setLoadAttempt((value) => value + 1); }} />;
 
   const controlsReady = state.mode === "ready";
   return (
@@ -513,6 +516,7 @@ export function PdfJsReader({
           <button className="reader-control" type="button" aria-label={t("Zoom in")} title={t("Zoom in")} disabled={!controlsReady || state.zoom >= MAX_ZOOM} onClick={() => setManualZoom(state.zoom + ZOOM_STEP)}><ZoomIn size={16} /><span className="sr-only">{t("Zoom in")}</span></button>
           <button className="reader-control reader-control--secondary" type="button" aria-label={t("Set manual zoom to 100 percent")} title={t("Set manual zoom to 100 percent")} disabled={!controlsReady || (viewMode === "manual" && state.zoom === DEFAULT_ZOOM)} onClick={() => setManualZoom(DEFAULT_ZOOM)}><RotateCcw size={16} /><span className="sr-only">{t("Manual 100 percent")}</span></button>
         </div>
+        <ReaderPdfDownload key={paperId} paperId={paperId} title={paperTitle} />
       </div>
       {selectionActions}
       {annotationActions}

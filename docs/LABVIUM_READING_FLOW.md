@@ -32,3 +32,8 @@ until the workspace reports a configured provider.
 Validation uses disposable SQLite/IndexedDB workspaces and synthetic PDFs;
 private account research is not used as test input. Real iOS touch interaction
 requires device QA. The managed environment had no supported browser preview.
+
+Search titles and explicit Read PDF / Download actions now resolve exact paper
+identifiers and prepare the PDF automatically. Resolution never substitutes a
+similar title. Publisher access remains explicit when no open PDF is found.
+Managed downloads use verified actual PDF bytes and scoped authenticated URLs.

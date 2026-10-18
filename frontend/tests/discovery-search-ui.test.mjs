@@ -9,7 +9,7 @@ import { renderToStaticMarkup } from "react-dom/server";
 import ts from "typescript";
 
 const require = createRequire(import.meta.url);
-function createSurface({ request = async () => { throw new Error("Rendering must not run a search"); }, locale = "ko", hooks = React } = {}) {
+function createSurface({ request = async () => { throw new Error("Rendering must not run a search"); }, locale = "ko", hooks = React, router = {push(){}} } = {}) {
   const cache = new Map();
   function load(path) {
     if (cache.has(path)) return cache.get(path);
@@ -18,6 +18,7 @@ function createSurface({ request = async () => { throw new Error("Rendering must
     function localRequire(name) {
       if (name.endsWith(".css")) return {};
       if (name === "react") return hooks;
+      if (name === "next/navigation") return {useRouter:()=>router};
       if (name === "next/link") return {default: ({children, ...props}) => React.createElement("a", props, children)};
       if (name.endsWith("/api/client")) return { labviumRequest: request, getWorkspaceRole: () => "owner", apiClient: { getAllPapers: async () => [] } };
       if (name.endsWith("/i18n/LocaleProvider")) return { useI18n: () => ({ locale, t: value => value }) };
@@ -75,14 +76,14 @@ test("popularity uses supplied annual citation score and never invents unavailab
 });
 
 function hookController(request, index = { items: [] }) {
-  const values = []; const cleanups = []; let cursor = 0;
+  const values = []; const cleanups = []; const routes = []; let cursor = 0;
   const hooks = { ...React,
     useState(initial) { const index = cursor++; if (!(index in values)) values[index] = typeof initial === "function" ? initial() : initial; return [values[index], next => { values[index] = typeof next === "function" ? next(values[index]) : next; }]; },
     useRef(initial) { const index = cursor++; if (!(index in values)) values[index] = { current: initial }; return values[index]; },
     useEffect(effect) { const index = cursor++; if (!(index in values)) { values[index] = true; cleanups.push(effect()); } },
   };
-  const ui = createSurface({ request: (path, options) => path === "/papers/discovery-index" ? Promise.resolve(index) : request(path, options), hooks });
-  return { render() { cursor = 0; return ui.DiscoverView(); }, unmount() { cleanups.forEach(cleanup => cleanup?.()); } };
+  const ui = createSurface({ request: (path, options) => path === "/papers/discovery-index" ? Promise.resolve(index) : request(path, options), hooks, router:{push:path=>routes.push(path)} });
+  return { routes, render() { cursor = 0; return ui.DiscoverView(); }, unmount() { cleanups.forEach(cleanup => cleanup?.()); } };
 }
 function nodes(tree, predicate) {
   const found = [];
@@ -188,7 +189,7 @@ test("saving creates an actual library paper, shows a stable saved check and dir
   requests[0].resolve({paper_id: "paper-original", keys: ["doi:10.5555/original"]}); await settle(); tree = controller.render();
   results = nodes(tree, node => node.type?.name === "DiscoveryResults")[0];
   const html = renderToStaticMarkup(React.createElement(surface.DiscoveryResults, results.props));
-  assert.match(html, /저장 완료 ✔️/); assert.match(html, /저장 위치: 논문 보관함/); assert.match(html, /href="\/papers\/paper-original"/); assert.ok(!html.includes("Save as research page"));
+  assert.match(html, /저장 완료 ✔️/); assert.match(html, /저장 위치: 논문 보관함/); assert.match(html, /href="\/papers\/paper-original\?open=reader"/); assert.ok(!html.includes("Save as research page"));
   results.props.onSave({...work, id: "other-provider", doi: "https://doi.org/10.5555/ORIGINAL"}); assert.equal(requests.length, 1);
   controller.unmount();
 });
@@ -210,4 +211,21 @@ test("ambiguous saved identifiers never point at an arbitrary library paper", ()
   const map = surface.discoverySavedMap([{paper_id:"one",keys:["doi:10.5555/original"]},{paper_id:"two",keys:["doi:10.5555/original"]}]);
   assert.equal(surface.savedDiscoveryPaper(work,map),"");
   assert.equal(surface.savedDiscoveryPaper(work,{"doi:10.5555/original":"one","arxiv:1706.03762":"two"}),"");
+});
+
+test("paper title opens its actual saved Paper into the automatic PDF reader flow", async()=>{
+  const calls=[];const h=hookController(async(path,options)=>{calls.push({path,options});return path.startsWith('/discover?')?response:{paper_id:'open-paper',keys:['doi:10.5555/original']};});
+  let tree=h.render();paperInput(tree).props.onChange({target:{value:work.title}});tree=h.render();form(tree).props.onSubmit({preventDefault(){}});await settle();tree=h.render();
+  const row=nodes(tree,node=>node.type?.name==='DiscoveryResults')[0];row.props.onOpen(work,'reader');row.props.onOpen(work,'reader');await settle();
+  assert.equal(calls.filter(call=>call.path==='/papers/from-discovery').length,1);assert.deepEqual(h.routes,['/papers/open-paper?open=reader']);
+  h.unmount();
+});
+test("download request reuses saved identity and routes directly to PDF preparation without another save",async()=>{
+  const calls=[];const h=hookController(async(path)=>{calls.push(path);return response;},{items:[{paper_id:'kept-paper',keys:['doi:10.5555/original']}]});
+  let tree=h.render();await settle();paperInput(tree).props.onChange({target:{value:work.title}});tree=h.render();form(tree).props.onSubmit({preventDefault(){}});await settle();tree=h.render();
+  nodes(tree,node=>node.type?.name==='DiscoveryResults')[0].props.onOpen(work,'download');await settle();assert.deepEqual(h.routes,['/papers/kept-paper?open=download']);assert.ok(!calls.includes('/papers/from-discovery'));h.unmount();
+});
+
+test("changing the search while a paper opens retains its save but cancels the old automatic navigation",async()=>{
+  let complete;const h=hookController((path)=>path.startsWith('/discover?')?Promise.resolve(response):new Promise(resolve=>complete=resolve));let tree=h.render();paperInput(tree).props.onChange({target:{value:work.title}});tree=h.render();form(tree).props.onSubmit({preventDefault(){}});await settle();tree=h.render();nodes(tree,node=>node.type?.name==='DiscoveryResults')[0].props.onOpen(work,'reader');paperInput(tree).props.onChange({target:{value:'a newer research question'}});complete({paper_id:'saved-old-result',keys:['doi:10.5555/original']});await settle();tree=h.render();assert.equal(h.routes.length,0);assert.equal(nodes(tree,node=>node.type?.name==='DiscoveryResults')[0].props.savedPapers['doi:10.5555/original'],'saved-old-result');h.unmount();
 });
