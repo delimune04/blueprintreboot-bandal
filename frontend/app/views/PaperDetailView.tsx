@@ -10,6 +10,7 @@ import { Breadcrumbs } from "../components/Breadcrumbs";
 import { DetailPanel } from "../components/DetailPanel";
 import { FirstPageThumbnail } from "../components/FirstPageThumbnail";
 import { PaperDocumentAccess } from "../components/PaperDocumentAccess";
+import { PaperReferenceActions } from "../components/PaperReferenceActions";
 import { PaperNextSteps } from "../components/PaperNextSteps";
 import { QuickIdeaButton } from "../components/QuickIdeaButton";
 import { PageHeader } from "../components/PageHeader";
@@ -58,6 +59,7 @@ export function PaperDetailView({ paperId }: { paperId: string }) {
                   <div><dt>{t("DOI")}</dt><dd className="paper-identifier">{resource.data.doi || t("Not recorded")}</dd></div>
                   <div><dt>{t("arXiv")}</dt><dd className="paper-identifier">{resource.data.arxiv_id || t("Not recorded")}</dd></div>
                 </dl>
+                <PaperReferenceActions key={`${paperId}:${locale}`} paper={resource.data} />
               </Section>
             </div>
             <aside className="paper-detail-context" aria-label={t("Paper context")}>
