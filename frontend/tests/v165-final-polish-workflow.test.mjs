@@ -36,7 +36,7 @@ test("relationship labels, tag cleanup, and final local brand mark retain the re
   assert.match(tags, /Advanced lifecycle/);
   assert.match(sidebar, /<span className="brand__mark" aria-hidden="true" \/>/);
   assert.match(sidebar, /href="\/dashboard" className="brand" aria-label=\{`\$\{PRODUCT_NAME\} · /);
-  assert.match(css, /\.brand__mark \{[^}]*width: 2\.25rem;[^}]*height: 2\.25rem;[^}]*background: url\("\/brand\/labvium-mark\.svg"\) center \/ contain no-repeat;/);
+  assert.match(css, /\.brand__mark \{[^}]*width: 2rem;[^}]*height: 2rem;[^}]*background: url\("\/brand\/labvium-symbol-v1\.png"\) center \/ contain no-repeat;/);
   const mark = await readFile(new URL("../public/brand/labvium-mark.svg", import.meta.url), "utf8");
   assert.match(mark, /viewBox="0 0 48 48"/);
   assert.match(mark, /fill="#7851ca"/);

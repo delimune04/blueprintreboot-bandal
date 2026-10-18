@@ -11,6 +11,7 @@ import { readReaderPreferences, updateReaderPreferences, type ReaderHighlight } 
 import { useI18n } from "../lib/i18n/LocaleProvider";
 import { visiblePdfPage } from "../lib/reader/visible-pdf-page.mjs";
 import { ReaderPdfDownload } from "./ReaderPdfDownload";
+import "./ReaderMemoRails.css";
 
 type PdfReaderUiState = {
   mode: "loading" | "ready" | "error";
@@ -246,6 +247,7 @@ export function PdfJsReader({
   onRemoveHighlight,
   selectionActions,
   annotationActions,
+  memoRailsVisible = false,
 }: {
   paperId: string;
   paperTitle?: string;
@@ -258,8 +260,9 @@ export function PdfJsReader({
   onRemoveHighlight?: (id: string) => void;
   selectionActions?: ReactNode;
   annotationActions?: ReactNode;
+  memoRailsVisible?: boolean;
 }) {
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   const pdfUrl = useMemo(() => paperPdfUrl(paperId), [paperId]);
   const [state, setState] = useState<PdfReaderUiState>(INITIAL_STATE);
   const [diagnostics, setDiagnostics] = useState<PdfReaderDiagnostics>(INITIAL_DIAGNOSTICS);
@@ -267,6 +270,9 @@ export function PdfJsReader({
   const [pageInput, setPageInput] = useState("1");
   const [viewportRoot, setViewportRoot] = useState<HTMLDivElement | null>(null);
   const viewportRootRef = useRef<HTMLDivElement | null>(null);
+  const documentWorkspaceRef = useRef<HTMLDivElement | null>(null);
+  const memoLayoutRef = useRef<"side" | "bottom">("bottom");
+  const [memoLayout, setMemoLayout] = useState<"side" | "bottom">("bottom");
   const [pageSize, setPageSize] = useState({ width: 0, height: 0 });
   const viewPreferenceRef = useRef(readPdfViewPreference());
   const [viewMode, setViewMode] = useState<PdfViewMode>(() => viewPreferenceRef.current.mode);
@@ -370,11 +376,35 @@ export function PdfJsReader({
       pageTop: viewport.scrollTop + targetRect.top - viewportRect.top,
       pageHeight: targetRect.height,
       relativePageOffset: anchor.relativePageOffset,
-      viewportAnchorOffset: anchor.viewportAnchorOffset,
+      // Bottom notes change viewport height. Keep the same source point at
+      // the new viewport center, rather than at an obsolete pixel offset.
+      viewportAnchorOffset: viewport.clientHeight / 2,
     });
     pendingLayoutAnchorRef.current = null;
     return true;
   }, []);
+
+  useEffect(() => {
+    const workspace = documentWorkspaceRef.current;
+    if (!workspace) return;
+    const update = () => {
+      // Measure this PDF workspace, rather than the window that may also hold
+      // the research panel. The page always retains a real center column.
+      const next = workspace.clientWidth >= 900 ? "side" : "bottom";
+      if (next === memoLayoutRef.current) return;
+      captureLayoutAnchor();
+      memoLayoutRef.current = next;
+      setMemoLayout(next);
+    };
+    update();
+    if (typeof ResizeObserver === "undefined") {
+      window.addEventListener("resize", update);
+      return () => window.removeEventListener("resize", update);
+    }
+    const observer = new ResizeObserver(update);
+    observer.observe(workspace);
+    return () => observer.disconnect();
+  }, [captureLayoutAnchor]);
 
   useEffect(() => {
     onCaptureLayoutAnchor?.(captureLayoutAnchor);
@@ -414,6 +444,18 @@ export function PdfJsReader({
     observer.observe(viewportRoot);
     return () => observer.disconnect();
   }, [applyFitMode, layoutResizeActive, pageSize.width, viewMode, viewportRoot]);
+
+  useEffect(() => {
+    if (layoutResizeActive || fallbackActive || !pendingLayoutAnchorRef.current) return;
+    let restoreFrame: number | null = null;
+    const frame = window.requestAnimationFrame(() => {
+      if (viewMode !== "manual") applyFitMode(viewMode);
+      // PDF page surfaces take their geometry directly from zoom. Restore
+      // after that geometry commits; no PDF load is started for note layout.
+      restoreFrame = window.requestAnimationFrame(() => restoreLayoutAnchor());
+    });
+    return () => { window.cancelAnimationFrame(frame); if (restoreFrame !== null) window.cancelAnimationFrame(restoreFrame); };
+  }, [applyFitMode, fallbackActive, layoutResizeActive, memoLayout, memoRailsVisible, restoreLayoutAnchor, viewMode]);
 
   useEffect(() => {
     if (layoutResizeActive || !pendingLayoutAnchorRef.current) return;
@@ -497,12 +539,13 @@ export function PdfJsReader({
     return () => { viewportRoot.removeEventListener("scroll", schedule); if (frame !== null) window.cancelAnimationFrame(frame); };
   }, [onVisible, state.mode, viewportRoot]);
 
-  if (fallbackActive) return <NativePdfFallback pdfUrl={pdfUrl} paperId={paperId} paperTitle={paperTitle} onRetry={() => { setFallbackActive(false); setLoadAttempt((value) => value + 1); }} />;
+  let fallbackContent: ReactNode = null;
+  if (fallbackActive) fallbackContent = <NativePdfFallback pdfUrl={pdfUrl} paperId={paperId} paperTitle={paperTitle} onRetry={() => { setFallbackActive(false); setLoadAttempt((value) => value + 1); }} />;
 
   const controlsReady = state.mode === "ready";
   return (
     <div className="pdfjs-reader">
-      <div className="reader-toolbar" role="toolbar" aria-label={t("PDF page and zoom controls")}>
+      {!fallbackActive ? <div className="reader-toolbar" role="toolbar" aria-label={t("PDF page and zoom controls")}>
         <div className="reader-toolbar__group" aria-label={t("Page navigation")}>
           <button className="reader-control" type="button" aria-label={t("Previous PDF page")} disabled={!controlsReady || state.pageNumber <= 1} onClick={() => setPage(state.pageNumber - 1)}><ChevronLeft size={16} />{t("Previous")}</button>
           <label className="reader-page-field"><span>{t("Page")}</span><input aria-label={t("PDF page number")} type="number" inputMode="numeric" min={1} max={Math.max(1, state.totalPages)} value={pageInput} disabled={!controlsReady} onChange={(event) => setPageInput(event.target.value)} onBlur={commitPageInput} onKeyDown={(event) => { if (event.key === "Enter") commitPageInput(); }} /><span aria-live="polite">{t("of {count}", { count: state.totalPages || "?" })}</span></label>
@@ -517,16 +560,22 @@ export function PdfJsReader({
           <button className="reader-control reader-control--secondary" type="button" aria-label={t("Set manual zoom to 100 percent")} title={t("Set manual zoom to 100 percent")} disabled={!controlsReady || (viewMode === "manual" && state.zoom === DEFAULT_ZOOM)} onClick={() => setManualZoom(DEFAULT_ZOOM)}><RotateCcw size={16} /><span className="sr-only">{t("Manual 100 percent")}</span></button>
         </div>
         <ReaderPdfDownload key={paperId} paperId={paperId} title={paperTitle} />
-      </div>
-      {selectionActions}
+      </div> : null}
+      {!fallbackActive ? selectionActions : null}
       {annotationActions}
+      <div ref={documentWorkspaceRef} className="reader-document-workspace" data-memo-layout={memoLayout} data-memo-visible={memoRailsVisible} data-memo-paper-id={paperId} data-native-fallback={fallbackActive}>
+      <aside className="reader-memo-rail reader-memo-rail--left" data-memo-rail="left" aria-label={locale === "ko" ? "논문 왼쪽 여백 메모" : "Notes in the left paper margin"} />
       <div ref={setViewportElement} className="reader-canvas-viewport">
-        {pdfDocument ? <div className="reader-pdf-page-stack">{Array.from({ length: state.totalPages }, (_, index) => index + 1).map((pageNumber) => <ContinuousPdfPage key={pageNumber} document={pdfDocument} pageNumber={pageNumber} zoom={state.zoom} viewportRoot={viewportRoot} active={state.pageNumber === pageNumber} defaultPageSize={pageSize.width ? pageSize : { width: 612, height: 792 }} highlights={highlights.filter((highlight) => highlight.pageNumber === pageNumber)} onRendered={onRendered} onRenderError={onRenderError} onSelectionChange={onSelectionChange} />)}</div> : null}
-        {state.mode === "loading" ? <div className="reader-render-state" role="status"><LoaderCircle className="loading-icon" size={22} aria-hidden="true" /><div><h2>{t("Loading PDF.js Reader")}</h2><p>{t("Loading the managed PDF through the local same-origin endpoint.")}</p></div></div> : null}
-        {state.mode === "ready" && state.rendering ? <div className="reader-render-progress" role="status">{t("Rendering page {page}…", { page: state.pageNumber })}</div> : null}
-        {state.mode === "error" ? <div className="reader-render-state" role="alert"><AlertCircle size={22} aria-hidden="true" /><div><h2>{state.errorKind === "unavailable" ? "Local PDF service unavailable" : state.errorKind === "not-found" ? "Managed PDF missing" : "PDF.js Reader unavailable"}</h2><p>{state.message || "The managed PDF could not be displayed."}</p><div className="reader-error-actions"><button className="reader-control" type="button" onClick={() => setLoadAttempt((value) => value + 1)}>{t("Retry PDF.js")}</button><button className="reader-control reader-control--secondary" type="button" onClick={() => setFallbackActive(true)}>{t("Use native viewer fallback")}</button></div></div></div> : null}
+        {fallbackContent}
+        {!fallbackActive && pdfDocument ? <div className="reader-pdf-page-stack">{Array.from({ length: state.totalPages }, (_, index) => index + 1).map((pageNumber) => <ContinuousPdfPage key={pageNumber} document={pdfDocument} pageNumber={pageNumber} zoom={state.zoom} viewportRoot={viewportRoot} active={state.pageNumber === pageNumber} defaultPageSize={pageSize.width ? pageSize : { width: 612, height: 792 }} highlights={highlights.filter((highlight) => highlight.pageNumber === pageNumber)} onRendered={onRendered} onRenderError={onRenderError} onSelectionChange={onSelectionChange} />)}</div> : null}
+        {!fallbackActive && state.mode === "loading" ? <div className="reader-render-state" role="status"><LoaderCircle className="loading-icon" size={22} aria-hidden="true" /><div><h2>{t("Loading PDF.js Reader")}</h2><p>{t("Loading the managed PDF through the local same-origin endpoint.")}</p></div></div> : null}
+        {!fallbackActive && state.mode === "ready" && state.rendering ? <div className="reader-render-progress" role="status">{t("Rendering page {page}…", { page: state.pageNumber })}</div> : null}
+        {!fallbackActive && state.mode === "error" ? <div className="reader-render-state" role="alert"><AlertCircle size={22} aria-hidden="true" /><div><h2>{state.errorKind === "unavailable" ? "Local PDF service unavailable" : state.errorKind === "not-found" ? "Managed PDF missing" : "PDF.js Reader unavailable"}</h2><p>{state.message || "The managed PDF could not be displayed."}</p><div className="reader-error-actions"><button className="reader-control" type="button" onClick={() => setLoadAttempt((value) => value + 1)}>{t("Retry PDF.js")}</button><button className="reader-control reader-control--secondary" type="button" onClick={() => setFallbackActive(true)}>{t("Use native viewer fallback")}</button></div></div></div> : null}
       </div>
-      {highlights.length ? <details className="reader-highlight-list"><summary>{t("Highlights ({count})", { count: highlights.length })}</summary>{highlights.map((highlight) => <div key={highlight.id}><button className="text-link" type="button" onClick={() => setPage(highlight.pageNumber)}>{t("Page {page}", { page: highlight.pageNumber })}: {highlight.text.slice(0, 100)}</button>{highlight.id.startsWith("block:") ? <span className="muted-text">{t("Saved in this paper’s Blocks")}</span> : onRemoveHighlight ? <button className="reader-control reader-control--secondary" type="button" onClick={() => onRemoveHighlight(highlight.id)}>{t("Remove highlight")}</button> : null}</div>)}</details> : null}
+      <aside className="reader-memo-rail reader-memo-rail--right" data-memo-rail="right" aria-label={locale === "ko" ? "논문 오른쪽 여백 메모" : "Notes in the right paper margin"} />
+      <aside className="reader-memo-rail reader-memo-rail--mobile" data-memo-rail="mobile" aria-label={locale === "ko" ? "논문 아래 메모 공간" : "Notes below the paper"} />
+      </div>
+      {!fallbackActive && highlights.length ? <details className="reader-highlight-list"><summary>{t("Highlights ({count})", { count: highlights.length })}</summary>{highlights.map((highlight) => <div key={highlight.id}><button className="text-link" type="button" onClick={() => setPage(highlight.pageNumber)}>{t("Page {page}", { page: highlight.pageNumber })}: {highlight.text.slice(0, 100)}</button>{highlight.id.startsWith("block:") ? <span className="muted-text">{t("Saved in this paper’s Blocks")}</span> : onRemoveHighlight ? <button className="reader-control reader-control--secondary" type="button" onClick={() => onRemoveHighlight(highlight.id)}>{t("Remove highlight")}</button> : null}</div>)}</details> : null}
       {preferenceMessage ? <p className="reader-editor__status" role="status">{t(preferenceMessage)}</p> : null}
       {diagnosticsEnabled ? <ReaderDiagnostics diagnostics={diagnostics} /> : null}
     </div>

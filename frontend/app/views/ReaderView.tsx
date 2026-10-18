@@ -105,6 +105,7 @@ function ReaderPdf({
   onRemoveHighlight,
   selectionActions,
   annotationActions,
+  memoRailsVisible,
 }: {
   snapshot: ReaderSnapshot;
   layoutResizeActive: boolean;
@@ -116,6 +117,7 @@ function ReaderPdf({
   onRemoveHighlight: (id: string) => void;
   selectionActions?: ReactNode;
   annotationActions?: ReactNode;
+  memoRailsVisible: boolean;
 }) {
   const { t, locale } = useI18n();
   if (snapshot.pdf_state === "missing" || snapshot.paper.missing_pdf || !snapshot.paper.relative_pdf_path) {
@@ -141,6 +143,7 @@ function ReaderPdf({
     onRemoveHighlight={onRemoveHighlight}
     selectionActions={selectionActions}
     annotationActions={annotationActions}
+    memoRailsVisible={memoRailsVisible}
   />;
 }
 
@@ -300,6 +303,7 @@ function ReaderWorkspace({ snapshot }: { snapshot: ReaderSnapshot }) {
   const researchPanelWidthRef = useRef(DEFAULT_RESEARCH_PANEL_WIDTH);
   const keyboardResizeFrameRef = useRef<number | null>(null);
   const capturePdfLayoutAnchorRef = useRef<(() => void) | null>(null);
+  const memoRailsVisibleRef = useRef(false);
   const candidateRequestGateRef = useRef(createLatestPaperRequestGate());
   const candidateAbortControllerRef = useRef<AbortController | null>(null);
   const tagBookRequestRef = useRef(0);
@@ -314,6 +318,7 @@ function ReaderWorkspace({ snapshot }: { snapshot: ReaderSnapshot }) {
   const [pdfSelection, setPdfSelection] = useState<PdfPageSelection | null>(null);
   const [readerHighlights, setReaderHighlights] = useState<ReaderHighlight[]>([]);
   const [citedHighlights, setCitedHighlights] = useState<ReaderHighlight[]>([]);
+  const [memoRailsVisible, setMemoRailsVisible] = useState(false);
   const [aiRequest, setAiRequest] = useState<ReaderAiRequest | null>(null);
   const visibleHighlights = useMemo(() => mergeReaderHighlights(readerHighlights, citedHighlights), [readerHighlights, citedHighlights]);
   const [selectionMessage, setSelectionMessage] = useState("");
@@ -1194,6 +1199,14 @@ function ReaderWorkspace({ snapshot }: { snapshot: ReaderSnapshot }) {
   const capturePdfLayoutAnchor = useCallback((capture: (() => void) | null) => {
     capturePdfLayoutAnchorRef.current = capture;
   }, []);
+  const updateMemoRailsVisibility = useCallback((visible: boolean) => {
+    if (memoRailsVisibleRef.current === visible) return;
+    // Preserve the active reading position before reserving or releasing the
+    // note margins. The viewer then fits the actual remaining center width.
+    capturePdfLayoutAnchorRef.current?.();
+    memoRailsVisibleRef.current = visible;
+    setMemoRailsVisible(visible);
+  }, []);
   const applyResearchPanelWidth = useCallback((width: number) => {
     const nextWidth = clampResearchPanelWidth(width);
     researchPanelWidthRef.current = nextWidth;
@@ -1471,7 +1484,8 @@ function ReaderWorkspace({ snapshot }: { snapshot: ReaderSnapshot }) {
             pageJump={pageJump}
             highlights={visibleHighlights}
             onRemoveHighlight={removeHighlight}
-            annotationActions={<ReaderFloatingMemos key={snapshot.paper.paper_id} paperId={snapshot.paper.paper_id} selection={pdfSelection} refreshToken={blockRefreshToken} mutationBusy={mutationBusy} acquireMutation={beginMutation} releaseMutation={finishMutation} onSaved={() => setBlockRefreshToken((current) => current + 1)} onHighlights={setCitedHighlights} onJumpToPage={jumpToPage} />}
+            memoRailsVisible={memoRailsVisible}
+            annotationActions={<ReaderFloatingMemos key={snapshot.paper.paper_id} paperId={snapshot.paper.paper_id} onVisibilityChange={updateMemoRailsVisibility} selection={pdfSelection} refreshToken={blockRefreshToken} mutationBusy={mutationBusy} acquireMutation={beginMutation} releaseMutation={finishMutation} onSaved={() => setBlockRefreshToken((current) => current + 1)} onHighlights={setCitedHighlights} onJumpToPage={jumpToPage} />}
             selectionActions={<div className="reader-selection-capture" aria-live="polite">{pdfSelection ? <><strong>{t("Selected text · Page {page}", { page: pdfSelection.pageNumber })}</strong><blockquote>{pdfSelection.text}</blockquote><div className="reader-editor__actions"><button className="reader-control" type="button" disabled={mutationBusy || !extendedReaderCommands} title={!extendedReaderCommands ? t("Cited selection blocks require the browser or cloud workspace.") : undefined} onClick={() => void saveSelectionEvidence()}><Quote size={15} />{t("Save as cited evidence")}</button><button className="reader-control reader-control--secondary" type="button" disabled={mutationBusy} onClick={() => saveHighlight()}>{t("Highlight")}</button><button className="reader-control reader-control--secondary" type="button" onClick={() => setAiRequest({ token: Date.now(), action: "explain", selection: structuredClone(pdfSelection) })}>{t("Explain selected text with AI")}</button><button className="reader-control reader-control--secondary" type="button" onClick={() => setPdfSelection(null)}>{t("Clear selection")}</button></div></> : <span className="muted-text">{t("Select PDF text to save a cited evidence block or highlight.")}</span>}<button className="reader-control reader-control--secondary" type="button" onClick={() => setAiRequest({ token: Date.now(), action: "summary", selection: null })}>{t("Summarize paper with AI")}</button>{selectionMessage ? <p role="status">{t(selectionMessage)}</p> : null}</div>}
           />
         </section>
