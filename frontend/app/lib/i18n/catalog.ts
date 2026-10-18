@@ -52,6 +52,7 @@ const KO: Record<string, string> = {
   ...ADVANCED_KO,
   ...READER_KO,
   ...WORKSPACE_KO,
+  "Lab collaboration": "연구실 협업", "Shared calendar": "공유 캘린더", "Idea reviews": "아이디어 검토", "Assigned tasks": "담당 업무", "Collaboration inbox": "협업 알림",
   "Dashboard": "연구 홈", "Library": "논문 보관함", "Projects": "연구 프로젝트", "Tags": "태그", "Settings": "설정",
   "Reader": "논문 읽기", "Papers": "논문", "Paper": "논문", "Paper Detail": "논문 정보", "Project Detail": "프로젝트 정보",
   "Research workspace": "나의 연구 공간", "Research notes": "연구 노트", "Discover": "논문 찾기", "Research assistant": "연구 도우미", "Search research": "연구 자료 검색", "Maintenance": "자료 관리", "Diagnostics": "진단", "Breadcrumb": "현재 위치",

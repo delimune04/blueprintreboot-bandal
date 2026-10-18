@@ -1,0 +1,2 @@
+import type { CollaborationSnapshot } from "./types";
+export function createCollaborationMutationGate(options: { request: (path: string, options: {method: "POST" | "PATCH" | "DELETE"; body: object}) => Promise<CollaborationSnapshot>; id?: () => string }): { readonly locked: boolean; run(path: string, method: "POST" | "PATCH" | "DELETE", body: Record<string, unknown>, revision: string, idempotent?: boolean): Promise<CollaborationSnapshot | null> };

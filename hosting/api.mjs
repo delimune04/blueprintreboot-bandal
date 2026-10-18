@@ -6,7 +6,8 @@ import { routeResearch } from "./domain/research.mjs";
 import { stageUploads } from "./domain/papers.mjs";
 import { discover, related } from "./domain/providers.mjs";
 import { generateCitedAnswer } from "./ai.mjs";
-import { resolveWorkspaceAccess, routeWorkspaceMembership } from "./membership.mjs";
+import { resolveWorkspaceAccess, routeWorkspaceMembership, collaborationMembership } from "./membership.mjs";
+import { routeCollaboration } from "./domain/collaboration.mjs";
 import { routeTagMaintenance } from "./domain/tag-maintenance.mjs";
 import { routeProfile } from "./domain/profile.mjs";
 import { explore } from "./domain/exploration.mjs";
@@ -47,7 +48,8 @@ export async function handleLabviumApi(request,env){
   const body=await commandBody(request,path);
   if(path==="ai/answer"&&method==="POST"){if(!env.OPENAI_API_KEY)c.fail(503,"Connect a server API key to enable cited AI answers. Your saved research remains available.","ai_not_configured");c.strict(body,["question","locale","paper_ids","project_id","source_ids","sources_revision","task"]);const output=await generateCitedAnswer(env,await selectAiEvidence(state,body));return reply({...output,evidence_revision:body.sources_revision},200,loaded.revision);}
   let output;
-  if(path==="papers/upload"&&method==="POST")output=await stageUploads(state,body.getAll("files"),ctx);
+  if(parts[0]==="collaboration")output=routeCollaboration(parts,method,body,state,await collaborationMembership(request,env,access));
+  else if(path==="papers/upload"&&method==="POST")output=await stageUploads(state,body.getAll("files"),ctx);
   else if(parts[0]==="projects"&&parts.length===3&&parts[2]==="exploration"){
     if(method==="GET")output=getProjectExplorationState(state,parts[1]);
     else if(method==="PUT")output=saveProjectExplorationState(state,parts[1],body);

@@ -1,4 +1,6 @@
 /** Browser-owned PDFs and research state. No server filesystem access. */
+import { validateCollaboration } from "../collaboration/model.mjs";
+import { collaborationAfterRestore } from "../collaboration/restore.mjs";
 export const BROWSER_WORKSPACE_KEY = "bandal.blueprint.demo.workspace.v1";
 const DB_NAME = "labvium-browser-workspace";
 const DB_VERSION = 1;
@@ -194,6 +196,10 @@ export async function exportBrowserWorkspace() {
 async function validateBackup(archive) {
   if (!archive || archive.schema_version !== 1 || !Array.isArray(archive.pdfs) || archive.pdfs.length > 2000 || !workspaceContract) throw new Error("This is not a supported browser workspace backup.");
   const workspace = workspaceContract.validate(structuredClone(archive.workspace));
+  // Keep member references as historical attribution only. Browser restore
+  // never manufactures account memberships or turns retained people into a
+  // selectable team. Invalid collaboration bytes reject the whole restore.
+  if (workspace.collaboration !== undefined) validateCollaboration(workspace.collaboration);
   const keys = new Set();
   const files = [];
   let bytes = 0;
@@ -227,7 +233,10 @@ export async function restoreBrowserWorkspace(archive, options) {
   if (current.revision !== options.expected_revision) throw new Error("The workspace changed after the restore preview. Review a new preview before restoring.");
   const existing = await listBrowserPdfRecords();
   const recoveryId = `restore-${crypto.randomUUID()}`;
-  const next = JSON.stringify(validated.workspace);
+  const nextWorkspace = structuredClone(validated.workspace);
+  const collaboration = collaborationAfterRestore(current.workspace.collaboration, nextWorkspace.collaboration);
+  if (collaboration !== undefined) nextWorkspace.collaboration = collaboration;
+  const next = JSON.stringify(nextWorkspace);
   const result = await transact(["workspace", "pdfs"], "readwrite", (transaction, done) => {
     const workspaces = transaction.objectStore("workspace"), request = workspaces.get(BROWSER_WORKSPACE_KEY);
     request.onsuccess = () => {

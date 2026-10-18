@@ -7,6 +7,7 @@ import { getReviewDossier, reviewRevision } from "../review/model.mjs";
 import { getProjectReview, saveProjectReview, freezeProjectReview } from "../../../../hosting/domain/review.mjs";
 import { createResearchPagesStore, RESEARCH_PAGES_KEY } from "../workspace/pages.mjs";
 import { prepareAiSources } from "../ai/sources.mjs";
+import { validateCollaboration } from "../collaboration/model.mjs";
 
 export const DEMO_STORAGE_KEY = "bandal.blueprint.demo.workspace.v1";
 const VERSION = 1;
@@ -146,6 +147,7 @@ function validateState(state) {
     if (!object(state) || state.version !== VERSION || !Array.isArray(state.papers) || !Array.isArray(state.projects) || !Array.isArray(state.tags) || !counter(state.registryRev) || state.papers.length > 1000 || state.projects.length > 1000 || state.tags.length > 1000) throw new Error();
     const unique = (rows, key) => rows.every((row) => object(row) && typeof row[key] === "string" && /^[a-z0-9-]{1,100}$/.test(row[key])) && new Set(rows.map((row) => row[key])).size === rows.length;
     if (!unique(state.papers, "paper_id") || !unique(state.projects, "project_id") || !unique(state.tags, "canonical_key")) throw new Error();
+    if (state.collaboration !== undefined) validateCollaboration(state.collaboration);
     for (const paper of state.papers) {
       if (!validateBrowserPaper(paper) || typeof paper.archived !== "boolean" || typeof paper.noteExists !== "boolean" || ![paper.metadataRev, paper.tagsRev, paper.statusRev, paper.lifecycleRev, paper.blocksRev].every(counter) || !Array.isArray(paper.blocks) || paper.blocks.length > 1000 || !unique(paper.blocks, "id")) throw new Error();
       validateMetadata(paper.metadata, false);
@@ -331,7 +333,7 @@ export function createDemoAdapter(storageProvider = getBrowserWorkspaceStorage) 
       return reply(output);
     } catch (error) {
       if (error?.name === "AbortError") throw error;
-      if (error instanceof DemoFailure) return reply({ detail: error.message }, error.status);
+      if (error instanceof DemoFailure || Number.isInteger(error?.status)) return reply({ detail: error.message, ...(error.code ? { code: error.code } : {}) }, error.status);
       return reply({ detail: "The browser demo could not complete this operation. Your saved workspace has not been reset." }, 503);
     }
   }

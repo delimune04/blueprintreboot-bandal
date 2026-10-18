@@ -1,0 +1,15 @@
+export type CollaborationTab = "calendar" | "ideas" | "tasks" | "inbox";
+export type Member = { id: string; name: string; email: string; role: "owner" | "editor" | "viewer"; accepted: boolean };
+export type CalendarEvent = { id: string; title: string; description: string; start_date: string; end_date: string; all_day: boolean; start_time: string; end_time: string; participant_ids: string[]; project_id: string; created_by: string; created_by_name: string; created_at: string; updated_at: string };
+export type Source = { type: "paper" | "project" | "page" | "none"; id: string; title: string; excerpt: string; available?: boolean };
+export type Idea = { id: string; title: string; body: string; recipient_ids: string[]; source: Source; author_id: string; author_name: string; status: "open" | "resolved"; created_at: string; updated_at: string };
+export type TaskStatus = "todo" | "in_progress" | "submitted" | "done" | "cancelled";
+export type Task = { id: string; title: string; description: string; assignee_id: string; assignee_name: string; assigned_by: string; assigned_by_name: string; due_date: string; priority: "normal" | "high"; project_id: string; source_idea_id: string; status: TaskStatus; created_at: string; updated_at: string };
+export type Comment = { id: string; target_type: "idea" | "task"; target_id: string; body: string; author_id: string; author_name: string; created_at: string; updated_at: string };
+export type Notice = { id: string; title: string; target_type: "idea" | "task"; target_id: string; actor_id: string; actor_name: string; created_at: string; read_at: string };
+export type CollaborationSnapshot = { revision: string; actor: Member; members: Member[]; events: CalendarEvent[]; ideas: Idea[]; tasks: Task[]; comments: Comment[]; notifications: Notice[]; permissions: { can_edit: boolean; can_assign: boolean }; mode: "cloud" | "browser"; time_zone: string; result_id?: string };
+export type EventDraft = Pick<CalendarEvent, "title" | "description" | "start_date" | "end_date" | "all_day" | "start_time" | "end_time" | "participant_ids" | "project_id">;
+export type IdeaDraft = Pick<Idea, "title" | "body" | "recipient_ids" | "source">;
+export type TaskDraft = Pick<Task, "title" | "description" | "assignee_id" | "due_date" | "priority" | "project_id" | "source_idea_id">;
+export type ProjectOption = { project_id: string; name: string };
+export type Mutation = (path: string, method: "POST" | "PATCH" | "DELETE", body: Record<string, unknown>, idempotent?: boolean, expectedRevision?: string) => Promise<CollaborationSnapshot | null>;

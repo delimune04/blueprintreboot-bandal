@@ -2,6 +2,7 @@ import * as c from "./core.mjs";
 import { recoveryEntry } from "./commands.mjs";
 import { managedPath } from "./papers.mjs";
 import { validateResearchPages } from "./research.mjs";
+import { collaborationAfterRestore } from "../../frontend/app/lib/collaboration/restore.mjs";
 
 const SECTIONS={"One-line Summary":"summary","Summary":"summary","Key Claims":"claim","Methods":"method","Evidence / Results":"evidence","Questions":"question","Ideas":"idea","Limitations":"limitation","Raw Notes":null,"한 줄 요약":"summary","요약":"summary","핵심 주장":"claim","방법":"method","근거 / 결과":"evidence","질문":"question","아이디어":"idea","한계":"limitation","원본 노트":null};
 function publicBackup({key,sha256,...record}){return{...record,pdf_coverage:record.portable?"bytes":"references",download_url:`/ku-ai/api/backups/${record.backup_id}`};}
@@ -21,6 +22,9 @@ export async function portableArchive(state,ctx,kind="full"){
  const archive={schema_version:1,kind,created_at:c.now(),revision:c.rev(ctx.revision),workspace,pdfs,research_pages:{version:1,sequence:workspace.researchRev||1,pages:workspace.researchPages||[]}};if(new TextEncoder().encode(JSON.stringify(archive)).length>30*1024*1024)c.fail(413,"The portable archive exceeds the 30 MiB importable JSON limit. Create an account-bound cloud backup and download original PDFs separately.");return archive;
 }
 export async function validateArchive(archive,ctx){
+ // validateWorkspace also validates the optional collaboration extension.
+ // Preserve historical member references; this archive never contains or
+ // changes workspace grants, accepted membership, or the current actor.
  c.strict(archive,["schema_version","kind","created_at","revision","workspace","pdfs","research_pages","storage","portable","coverage","message"]);if(archive.schema_version!==1||!Array.isArray(archive.pdfs)||archive.pdfs.length>1000||!c.object(archive.workspace))c.fail(422,"Unsupported workspace backup.");
  if(archive.storage==="cloud-references"){
   if(!ctx)c.fail(422,"Account-bound cloud backups require an authenticated cloud workspace.");const workspace=structuredClone(archive.workspace);try{c.validateWorkspace(workspace);validateResearchPages(workspace);validateRecovery(workspace);}catch{c.fail(422,"The cloud backup's structured data failed validation.");}
@@ -73,7 +77,7 @@ export async function routeMaintenance(parts,method,body,state,ctx){
   if(parts.length===2&&method==="GET")return new Response(JSON.stringify(archive),{headers:{"Content-Type":"application/json","Content-Disposition":`attachment; filename="labvium-${record.backup_id}.json"`,"Cache-Control":"no-store"}});
   if(parts[2]==="restore-preview"&&method==="POST"){c.strict(body,[]);return{backup_id:record.backup_id,verified:true,kind:record.kind,paper_count:validated.workspace.papers.length,project_count:validated.workspace.projects.length,missing_pdf_count:validated.workspace.papers.filter(p=>p.pdfMissing).length,message:"Restore replaces the current workspace atomically and retains a verified backup of current work."};}
   if(parts[2]==="restore"&&method==="POST"){
-   c.strict(body,["expected_revision","confirm"]);c.guard(body.expected_revision,ctx.revision);c.confirm(body);const retained=await createBackup(state,ctx,"full"),next=validated.workspace;for(const file of validated.files){const stored=await ctx.putObject("pdfs",file.bytes,{contentType:"application/pdf"});if(file.kind==="recovery"){recoveryEntry(next,"pdf",{paper_id:file.paper_id,path:file.path,file:{...stored,filename:file.path}},"PDF recovery copy imported from a portable backup");continue;}if(next.files[file.path])c.fail(422,"Backup PDF paths collide.");next.files[file.path]={...stored,filename:file.path};const paper=c.paperById(next,file.paper_id);paper.pdfPath=file.path;paper.pdfMissing=false;paper.pdfSha256=stored.sha256;}
+   c.strict(body,["expected_revision","confirm"]);c.guard(body.expected_revision,ctx.revision);c.confirm(body);const next=structuredClone(validated.workspace),collaboration=collaborationAfterRestore(state.collaboration,next.collaboration);if(collaboration!==undefined)next.collaboration=collaboration;const retained=await createBackup(state,ctx,"full");for(const file of validated.files){const stored=await ctx.putObject("pdfs",file.bytes,{contentType:"application/pdf"});if(file.kind==="recovery"){recoveryEntry(next,"pdf",{paper_id:file.paper_id,path:file.path,file:{...stored,filename:file.path}},"PDF recovery copy imported from a portable backup");continue;}if(next.files[file.path])c.fail(422,"Backup PDF paths collide.");next.files[file.path]={...stored,filename:file.path};const paper=c.paperById(next,file.paper_id);paper.pdfPath=file.path;paper.pdfMissing=false;paper.pdfSha256=stored.sha256;}
    next.backups=state.backups;for(const key of Object.keys(state))delete state[key];Object.assign(state,next);return{status:"restored",backup_id:record.backup_id,recovery_backup_id:retained.backup_id};
   }
  }

@@ -2,6 +2,7 @@ import { DEMO_TAGS } from "../../frontend/app/lib/demo/seed.mjs";
 import { validateExploration, explorationRevision } from "../../frontend/app/lib/exploration/model.mjs";
 import { getReviewDossier, reviewRevision } from "../../frontend/app/lib/review/model.mjs";
 import { getContinuity, continuityRevision } from "../../frontend/app/lib/continuity/model.mjs";
+import { validateCollaboration } from "../../frontend/app/lib/collaboration/model.mjs";
 
 export const SCHEMA_VERSION = 1;
 export const MAX_STATE_BYTES = 16 * 1024 * 1024;
@@ -29,6 +30,9 @@ export function emptyWorkspace() {
 }
 export function validateWorkspace(state) {
   if (!object(state) || state.version !== SCHEMA_VERSION || ![state.papers, state.projects, state.tags, state.imports, state.recovery, state.backups, state.researchPages, state.decisions].every(Array.isArray) || !object(state.files) || !Number.isSafeInteger(state.registryRev) || state.registryRev < 1) fail(503, "The saved workspace is unreadable; its contents have been preserved.", "corrupt_state");
+  // Optional extensions preserve old snapshots byte-for-byte on reads. A
+  // malformed extension is corruption, never an invitation to reset it.
+  if (state.collaboration !== undefined) validateCollaboration(state.collaboration);
   for (const project of state.projects) {
     if (project?.researchTrail !== undefined) validateExploration(project.researchTrail);
     explorationRevision(project); getReviewDossier(project); reviewRevision(project); getContinuity(project); continuityRevision(project);

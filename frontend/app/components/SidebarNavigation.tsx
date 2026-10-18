@@ -1,6 +1,6 @@
 "use client";
 
-import { CircleHelp, Cloud, Home, Compass, FolderKanban, Gauge, LibraryBig, NotebookPen, PanelLeftClose, PanelLeftOpen, Pin, PinOff, Search, Settings, Sparkles, Tags, Users, Wrench, X } from "lucide-react";
+import { CalendarDays, CircleHelp, Cloud, Home, Compass, FolderKanban, Gauge, LibraryBig, NotebookPen, PanelLeftClose, PanelLeftOpen, Pin, PinOff, Search, Settings, Sparkles, Tags, Users, Wrench, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { RefObject } from "react";
@@ -11,6 +11,7 @@ import { getWorkspaceMode } from "../lib/api/client";
 const primaryNavigation = [
   { href: "/", label: "LabVium home", icon: Home },
   { href: "/dashboard", label: "Dashboard", icon: Gauge },
+  { href: "/collaboration", label: "Lab collaboration", icon: CalendarDays },
   { href: "/library", label: "Library", icon: LibraryBig },
   { href: "/workspace", label: "Research notes", icon: NotebookPen },
   { href: "/projects", label: "Projects", icon: FolderKanban },

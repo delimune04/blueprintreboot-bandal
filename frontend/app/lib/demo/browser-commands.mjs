@@ -1,6 +1,8 @@
 import { DEMO_PAPERS } from "./seed.mjs";
 import { getBrowserPdfRecord, listBrowserPdfRecords, listBrowserRecoveryWorkspaces, restoreBrowserRecoveryWorkspace, validatePdfFile, sha256Blob, workspaceRevision } from "./browser-storage.mjs";
 import { extractPdfPages, extractedPagesContent } from "./pdf-extraction.mjs";
+import { applyCollaborationCommand, getCollaborationSnapshot } from "../collaboration/model.mjs";
+import { createResearchPagesStore } from "../workspace/pages.mjs";
 
 const now = () => new Date().toISOString();
 const uuid = () => crypto.randomUUID();
@@ -83,6 +85,20 @@ function validatePages(body, fail) {
 }
 
 export async function handleBrowserCommand(parts, method, body, params, state, effects, contract) {
+  if (parts[0] === "collaboration") {
+    // This is one real browser-local actor, not a simulated professor/team.
+    // Account-based collaboration uses the hosted, accepted member roster.
+    const actor = { id: "browser-self", name: "나 (이 기기)", email: "", role: "owner", accepted: true };
+    const context = { actor, members: [actor], mode: "browser" };
+    const sourceState = { ...state, researchPages: typeof window === "undefined" ? [] : createResearchPagesStore().list().items };
+    if (parts.length === 2 && parts[1] === "summary" && method === "GET") {
+      const snapshot = getCollaborationSnapshot(sourceState, context);
+      return result({ unread_count: snapshot.notifications.filter(notification => !notification.read_at).length, revision: snapshot.revision });
+    }
+    const value = parts.length === 1 && method === "GET" ? getCollaborationSnapshot(sourceState, context) : applyCollaborationCommand(sourceState, parts, method, body, context);
+    if (sourceState.collaboration !== state.collaboration) state.collaboration = sourceState.collaboration;
+    return value === null ? { handled: false } : result(value);
+  }
   const { fail, guard, revision } = contract;
   const path = parts.join("/");
   if (parts[0] === "note-import" && method === "POST" && parts.length <= 2) {

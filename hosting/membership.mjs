@@ -51,6 +51,26 @@ export async function resolveWorkspaceAccess(request, env) {
 }
 function checkExpected(value, actual) { if (value !== rev(actual)) fail(409, "Workspace access changed. Reload before updating permissions.", "conflict"); }
 
+/** Read only the accepted roster of the already-authorized selected workspace.
+ * Pending email grants never become selectable identities. This does not open
+ * the owner's access-management endpoint to other members.
+ */
+export async function collaborationMembership(request, env, access) {
+  const rows = await env.LABVIUM_DB.prepare("SELECT a.owner_user_key, m.member_user_key, m.role, g.email_label FROM labvium_workspace_access a LEFT JOIN labvium_workspace_members m ON m.workspace_key = a.workspace_key AND m.member_user_key != a.owner_user_key LEFT JOIN labvium_workspace_email_grants g ON g.workspace_key = m.workspace_key AND g.email_key = m.email_key WHERE a.workspace_key = ?")
+    .bind(access.workspace_key).all();
+  if (!rows.results.length) fail(403, "This workspace is no longer available.");
+  const members = [{ id: rows.results[0].owner_user_key, name: "공간 관리자", email: "", role: "owner", accepted: true }];
+  for (const row of rows.results) if (row.member_user_key && ["viewer", "editor"].includes(row.role)) members.push({ id: row.member_user_key, name: row.email_label || "공간 구성원", email: row.email_label || "", role: row.role, accepted: true });
+  let name = request.headers.get("oai-authenticated-user-full-name") || "";
+  if (request.headers.get("oai-authenticated-user-full-name-encoding") === "percent-encoded-utf-8") { try { name = decodeURIComponent(name); } catch { name = ""; } }
+  name = name.replace(/[\u0000-\u001f]/g, "").slice(0, 300).trim();
+  const actor = { id: access.actor_key, name: name || access.email || (access.role === "owner" ? "공간 관리자" : "공간 구성원"), email: access.email || "", role: access.role, accepted: true };
+  const index = members.findIndex(member => member.id === actor.id);
+  if (index < 0 || members[index].role !== actor.role) fail(409, "Workspace access changed. Reload before continuing.", "conflict");
+  members[index] = actor;
+  return { actor, members, mode: "cloud" };
+}
+
 export async function routeWorkspaceMembership(request, env, parts, body) {
   if (parts[0] !== "workspaces") return null;
   const actor = await trustedActor(request);

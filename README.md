@@ -40,6 +40,30 @@ They are configuration proposals. ChatGPT remains the only activated hosted
 sign-in method until dedicated provider applications and authentication settings
 are supplied and verified. Existing account ownership is unchanged.
 
+## Lab collaboration
+
+`/ku-ai/collaboration/` brings a shared monthly calendar, idea review threads,
+assigned tasks and a personal notification inbox into the selected workspace.
+Owners and accepted editors can share and edit events, ask for feedback in either
+direction, and assign a task to an accepted editor. The task assignee reports
+progress and submits work; its original assigner or the workspace owner confirms
+completion. Calendar deadlines use Korean dates, with a visible six-day default
+that can be changed before creation.
+
+Saved papers, projects and research pages have an **이 아이디어 어때요?** action
+that opens a discussion with its source. The composer can address named workspace
+members. All discussion content remains visible to the workspace; recipients
+control in-app notifications, not private access. Invite collaborators through
+the existing team settings and grant editing permission before working together.
+Guest mode stores only this browser's own records and has no shared roster.
+
+Changes use revision checks, preserve drafts after conflicts and retain stable
+request IDs for safe retries. Refreshes load new snapshots; simultaneous text
+coauthoring, email delivery and external calendar synchronization are not enabled.
+The updated in-app guide covers collaboration. The downloadable October 17 core
+PDF remains separately labeled. See the
+[collaboration contract](docs/LABVIUM_COLLABORATION_CONTRACT.md).
+
 ## What is BluePrintReboot?
 
 BluePrintReboot is a local-first research workspace with an established Streamlit interface, a bounded FastAPI layer, and a desktop-first web Reader. It keeps PDFs, metadata, BluePrint Reading Notes, structured note blocks, project links, tags, and extracted text on the local machine.

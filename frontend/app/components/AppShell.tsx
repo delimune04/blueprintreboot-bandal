@@ -88,7 +88,7 @@ export function AppShell({ children }: { children: ReactNode }) {
   }, [readerRoute, readerSidebarOpen, narrowNavigation, closeNavigation]);
   useEffect(() => {
     const key = pathname.split("/").filter(Boolean)[0] || "dashboard";
-    const pages: Record<string, string> = { dashboard: "Dashboard", library: "Library", papers: readerRoute ? "Reader" : "Paper", projects: "Projects", tags: "Tags", settings: "Settings", workspace: "Research notes", discover: "Discover", assistant: "Research assistant", search: "Search research", maintenance: "Maintenance" };
+    const pages: Record<string, string> = { dashboard: "Dashboard", collaboration: "Lab collaboration", library: "Library", papers: readerRoute ? "Reader" : "Paper", projects: "Projects", tags: "Tags", settings: "Settings", workspace: "Research notes", discover: "Discover", assistant: "Research assistant", search: "Search research", maintenance: "Maintenance" };
     document.title = `${t(pages[key] || "Research workspace")} · ${PRODUCT_NAME}`;
     const description = document.querySelector('meta[name="description"]');
     description?.setAttribute("content", locale === "ko" ? "랩비움에서 논문을 읽고 근거 노트와 연구 프로젝트를 연결하세요." : "Read papers and connect evidence notes with research projects in 랩비움.");
