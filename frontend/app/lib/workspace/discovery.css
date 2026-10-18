@@ -1,0 +1,29 @@
+/* Search controls and scholarly identities stay readable at notebook density. */
+.discovery-search-form { display:grid; gap:var(--space-4); max-width:76rem; }
+.discovery-search-options { display:grid; grid-template-columns:repeat(2,minmax(9rem,12rem)) minmax(13rem,19rem); gap:var(--space-3); align-items:end; }
+.discovery-search-fields { display:grid; grid-template-columns:minmax(0,2fr) minmax(0,1fr) auto; gap:var(--space-3); align-items:end; }
+.discovery-search-form .reader-field { min-width:0; }
+.discovery-search-form input:not([type="checkbox"]), .discovery-search-form select { width:100%; min-width:0; }
+.discovery-exact-title { grid-column:1/-1; display:flex; gap:var(--space-2); align-items:center; width:fit-content; min-height:var(--control-height); font-size:var(--font-size-sm); cursor:pointer; }
+.discovery-exact-title input { width:1rem; height:1rem; flex:none; accent-color:var(--blue-600); }
+.discovery-author-search { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:var(--space-3); align-items:end; }
+.discovery-form-help, .discovery-original-tip { margin:0; max-width:80ch; color:var(--color-text-secondary); font-size:var(--font-size-sm); line-height:1.7; }
+.discovery-source-tools { display:flex; align-items:center; flex-wrap:wrap; gap:var(--space-3) var(--space-6); margin-block:var(--space-4) var(--space-3); }
+.discovery-source-tools .text-link { display:inline-flex; align-items:center; gap:var(--space-2); text-align:left; min-height:var(--control-height); }
+.discovery-pending { margin:0; border-left:2px solid var(--state-amber); padding:var(--space-2) var(--space-3); color:var(--color-text); font-size:var(--font-size-sm); line-height:1.65; }
+.discovery-results-summary { display:grid; gap:var(--space-2); margin-bottom:var(--space-4); }
+.discovery-results-summary p { margin:0; line-height:1.65; overflow-wrap:anywhere; }
+.discovery-applied-criteria { display:flex; gap:var(--space-2) var(--space-4); flex-wrap:wrap; font-size:var(--font-size-sm); }
+.discovery-page .lab-discovery-row { padding-block:var(--space-6); min-width:0; }
+.discovery-page .lab-discovery-row h3 { margin:0; max-width:80ch; font-size:var(--font-size-lg); line-height:1.5; overflow-wrap:anywhere; }
+.discovery-page .lab-discovery-row h3 a { display:inline; }
+.discovery-page .lab-discovery-row h3 svg { display:inline; vertical-align:middle; }
+.discovery-page .discovery-author-line { color:var(--color-text); max-width:100ch; overflow-wrap:anywhere; }
+.discovery-identity, .discovery-identifiers { display:flex; gap:var(--space-2) var(--space-4); flex-wrap:wrap; color:var(--color-text-secondary); font-size:var(--font-size-sm); line-height:1.65; }
+.discovery-identifiers { font-family:var(--font-mono); overflow-wrap:anywhere; }
+.discovery-affiliations { font-size:var(--font-size-sm); max-width:100ch; overflow-wrap:anywhere; }
+.discovery-abstract { max-width:80ch; margin-top:var(--space-3)!important; white-space:pre-line; }
+.discovery-page details summary { cursor:pointer; min-height:var(--control-height); display:list-item; align-content:center; font-size:var(--font-size-sm); }
+.discovery-page .lab-result-metadata { line-height:1.65; overflow-wrap:anywhere; }
+@media(max-width:64rem) { .discovery-search-options { grid-template-columns:repeat(3,minmax(0,1fr)); } .discovery-search-fields { grid-template-columns:minmax(0,1fr) minmax(0,1fr); } .discovery-search-fields > button { grid-column:2; grid-row:2; justify-self:end; } .discovery-exact-title { grid-column:1; grid-row:2; } }
+@media(max-width:48rem) { .discovery-search-options, .discovery-search-fields { grid-template-columns:minmax(0,1fr); } .discovery-search-fields > button, .discovery-exact-title { grid-column:1; grid-row:auto; } .discovery-search-fields > button { justify-self:stretch; justify-content:center; } .discovery-search-form input:not([type="checkbox"]), .discovery-search-form select { min-height:2.75rem; font-size:1rem; } .discovery-exact-title { min-height:2.75rem; } .discovery-source-tools { align-items:flex-start; flex-direction:column; gap:var(--space-2); } .discovery-page .lab-result-actions .reader-control { min-height:2.75rem; } .discovery-author-search { grid-template-columns:minmax(0,1fr); } }

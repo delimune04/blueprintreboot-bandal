@@ -64,6 +64,27 @@ The updated in-app guide covers collaboration. The downloadable October 17 core
 PDF remains separately labeled. See the
 [collaboration contract](docs/LABVIUM_COLLABORATION_CONTRACT.md).
 
+## Finding a specific paper
+
+The **논문 찾기** page combines Crossref, arXiv and OpenAlex by default, with
+individual sources still selectable. Search a title or topic together with an
+author, or use an author name alone. Exact-title matching is optional. Results
+show the applied criteria, authors, publication date, venue, available
+affiliations and DOI/arXiv identifiers so equal titles remain distinguishable.
+Only shared stable identifiers collapse duplicates; a title alone never merges
+two publications.
+
+Ordering supports relevance, citation count, newest, oldest and popularity.
+Relevance prioritizes exact titles; equal-title matches use earliest publication
+first so later reuploads do not bury a dated source solely for missing citations.
+Popularity explicitly means cumulative citations divided by
+`current year - publication year + 1`, within the bounded retrieved candidates;
+it is not a usage or paper-quality metric. Missing metrics remain unavailable.
+arXiv alone supports relevance and publication-date ordering, with no citation
+or popularity option. Source failures are disclosed while successful sources
+remain usable. The applied order and scope are displayed separately from draft
+filters, which take effect when **검색** is chosen.
+
 ## What is BluePrintReboot?
 
 BluePrintReboot is a local-first research workspace with an established Streamlit interface, a bounded FastAPI layer, and a desktop-first web Reader. It keeps PDFs, metadata, BluePrint Reading Notes, structured note blocks, project links, tags, and extracted text on the local machine.

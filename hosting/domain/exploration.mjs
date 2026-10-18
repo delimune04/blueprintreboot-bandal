@@ -41,7 +41,7 @@ export async function explore(params, env, fetchImpl = fetch) {
   }
   async function crossrefFallback(query, exact = false) {
     const url = exact ? new URL(`https://api.crossref.org/works/${encodeURIComponent(query)}`) : new URL("https://api.crossref.org/works");
-    if (!exact) { url.searchParams.set("query.bibliographic", query.slice(0, 300)); url.searchParams.set("query.title", query.slice(0, 300)); url.searchParams.set("rows", String(Math.min(40, limit * 2))); }
+    if (!exact) { url.searchParams.set("query.bibliographic", query.slice(0, 300)); url.searchParams.set("rows", String(Math.min(40, limit * 2))); }
     const data = await lookup(url, "Crossref fallback"); if (!data) return [];
     const list = exact ? (data.message ? [data.message] : []) : (Array.isArray(data.message?.items) ? data.message.items.slice(0, 40) : []), found = list.map(crossrefItem).filter(usable).filter(researchItem); if (found.length) providers.add("Crossref"); candidates.push(...found); return found;
   }

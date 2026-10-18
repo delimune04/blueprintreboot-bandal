@@ -1,4 +1,5 @@
 import { fail, text, choice, metadata, METADATA_LIMITS, now } from "./core.mjs";
+import { discoveryOptions, prepareWorks, publicationDate, queryPhrase, queryWords, queryTerms, canonicalArxivId } from "./discovery-search.mjs";
 
 const cache=new Map();let nextRequest=0,cacheCost=0;
 const CACHE_BUDGET=12*1024*1024;
@@ -24,15 +25,95 @@ export function canonicalDoi(value){return String(value||"").trim().replace(/^ht
 export function canonicalOpenAlexId(value,prefix="W"){const raw=String(value||"").replace(/^https:\/\/openalex\.org\//i,"");return new RegExp(`^${prefix}\\d+$`,"i").test(raw)?`https://openalex.org/${raw.toUpperCase()}`:"";}
 const list=value=>Array.isArray(value)?value:[];
 const count=value=>Number.isSafeInteger(value)&&value>=0?value:null;
-export function crossrefItem(row){const authors=list(row.author).slice(0,100).map(author=>[author.given,author.family].filter(Boolean).join(" ").slice(0,500)).filter(Boolean);const year=String((row.published?.["date-parts"]||row["published-print"]?.["date-parts"]||row["published-online"]?.["date-parts"]||[])[0]?.[0]||"");const doi=canonicalDoi(row.DOI),references=[...new Set(list(row.reference).map(ref=>canonicalDoi(ref.DOI)).filter(value=>/^10\.\d{4,9}\/\S+$/.test(value)).map(value=>`https://doi.org/${value}`))].slice(0,1500),abstract=entities(row.abstract||"").slice(0,30000);return{id:doi||safeUrl(row.URL),title:entities(row.title?.[0]||"Untitled").slice(0,2000),authors,year,doi,abstract,url:safeUrl(row.URL)|| (doi?`https://doi.org/${doi}`:""),pdf_url:safeUrl(list(row.link).find(link=>link["content-type"]==="application/pdf")?.URL),source:"Crossref",providers:["Crossref"],references,topic_ids:[],journal:entities(row["container-title"]?.[0]||"").slice(0,1000),keywords:list(row.subject).slice(0,30),citation_count:count(row["is-referenced-by-count"]),cited_by_count:count(row["is-referenced-by-count"]),updated_at:row.indexed?.["date-time"]||null,topics:list(row.subject).slice(0,30),evidence:{references:Array.isArray(row.reference)?(references.length===row.reference.length?"available":"partial"):"missing",topic_ids:"missing",citation_count:count(row["is-referenced-by-count"])===null?"missing":"available",abstract:abstract?"available":"missing",publication_year:year?"available":"missing"},retrieved_at:now()};}
-function arxivItems(source){return [...String(source).matchAll(/<entry(?:\s[^>]*)?>([\s\S]*?)<\/entry>/g)].map(match=>{const entry=match[1],url=xml(entry,"id"),authors=[...entry.matchAll(/<author>([\s\S]*?)<\/author>/g)].map(author=>xml(author[1],"name"));const identifier=url.split("/abs/")[1]||"";return{id:identifier,title:xml(entry,"title"),authors,year:xml(entry,"published").slice(0,4),doi:xml(entry,"doi"),abstract:xml(entry,"summary"),url,pdf_url:identifier?`https://arxiv.org/pdf/${identifier}`:"",source:"arXiv",journal:xml(entry,"journal_ref"),keywords:[],topics:[],cited_by_count:null,updated_at:xml(entry,"updated")||null,retrieved_at:now()};});}
-export function openalexItem(row){let abstract="";if(row.abstract_inverted_index&&typeof row.abstract_inverted_index==="object"){const words=[];for(const[word,positions]of Object.entries(row.abstract_inverted_index))for(const position of list(positions))if(Number.isInteger(position)&&position>=0&&position<20000)words[position]=word;abstract=words.filter(Boolean).join(" ").slice(0,30000);}const workId=canonicalOpenAlexId(row.id),references=[...new Set(list(row.referenced_works).map(value=>canonicalOpenAlexId(value)).filter(Boolean))].slice(0,1500),topic_ids=[...new Set(list(row.topics).map(topic=>canonicalOpenAlexId(topic.id,"T")).filter(Boolean))].slice(0,100),year=String(row.publication_year||"");return{id:workId,openalex_id:workId,title:entities(row.display_name||"Untitled").slice(0,2000),authors:list(row.authorships).slice(0,100).map(author=>author.author?.display_name?.slice(0,500)).filter(Boolean),year,doi:canonicalDoi(row.doi),abstract,url:safeUrl(row.primary_location?.landing_page_url)||workId,pdf_url:safeUrl(row.best_oa_location?.pdf_url||row.primary_location?.pdf_url),source:"OpenAlex",providers:["OpenAlex"],references,related_ids:[...new Set(list(row.related_works).map(value=>canonicalOpenAlexId(value)).filter(Boolean))].slice(0,100),topic_ids,is_retracted:row.is_retracted===true,is_paratext:row.is_paratext===true||row.type==="paratext",journal:entities(row.primary_location?.source?.display_name||"").slice(0,1000),keywords:list(row.keywords).map(value=>value.display_name).filter(Boolean).slice(0,30),citation_count:count(row.cited_by_count),updated_date:row.updated_date||null,cited_by_count:count(row.cited_by_count),updated_at:row.updated_date||null,topics:list(row.topics).map(topic=>topic.display_name).filter(Boolean).slice(0,20),evidence:{references:Array.isArray(row.referenced_works)?(row.referenced_works.length>1500?"partial":"available"):"missing",topic_ids:topic_ids.length?"available":"missing",citation_count:count(row.cited_by_count)===null?"missing":"available",abstract:abstract?"available":"missing",publication_year:year?"available":"missing"},retrieved_at:now()};}
-export async function discover(params,env,fetchImpl=fetch){
-  const q=text(params.get("q")||"",300,true).trim(),provider=choice(params.get("provider")||"crossref",["crossref","arxiv","openalex"]),mode=choice(params.get("mode")||"works",["works","authors"]),limit=Number(params.get("limit")||20);if(!Number.isInteger(limit)||limit<1||limit>50)fail(422,"Discovery limit must be between one and 50.");
-  if(mode==="authors"&&provider!=="openalex")fail(422,"Author metrics require the OpenAlex provider.");
-  if(provider==="crossref"){const url=new URL("https://api.crossref.org/works");url.searchParams.set("query.bibliographic",q);url.searchParams.set("query.title",q);url.searchParams.set("rows",String(Math.min(100,limit*2)));const data=await providerGet(url,env,fetchImpl);const items=(data.message?.items||[]).filter(row=>!/^(?:front[ -]?matter|back[ -]?matter|table of contents|contents|cover|editorial(?: board)?)\b/i.test(entities(row.title?.[0]||""))).map(crossrefItem).slice(0,limit);return{items,total:data.message?.["total-results"]||0,total_is_provider_count:true,q,provider,next_cursor:null,retrieved_at:now()};}
-  if(provider==="arxiv"){const url=new URL("https://export.arxiv.org/api/query");const terms=q.split(/\s+/).map(term=>term.replace(/["\\]/g,"")).filter(Boolean).slice(0,12);url.searchParams.set("search_query",terms.map(term=>`all:"${term}"`).join(" AND "));url.searchParams.set("sortBy","relevance");url.searchParams.set("sortOrder","descending");url.searchParams.set("max_results",String(limit));const data=await providerGet(url,env,fetchImpl);return{items:arxivItems(data),total:Number(xml(data,"totalResults"))||arxivItems(data).length,q,provider,next_cursor:null,retrieved_at:now()};}
-  const url=new URL(`https://api.openalex.org/${mode==="authors"?"authors":"works"}`);url.searchParams.set("search",q);url.searchParams.set("per-page",String(limit));const data=await providerGet(url,env,fetchImpl);return{items:mode==="authors"?(data.results||[]).map(row=>({id:row.id,name:row.display_name||"",works_count:row.works_count??null,cited_by_count:row.cited_by_count??null,h_index:Number.isFinite(row.summary_stats?.h_index)?row.summary_stats.h_index:null,source:"OpenAlex",url:row.id,updated_date:row.updated_date||null,updated_at:row.updated_date||null,retrieved_at:now(),topics:(row.topics||[]).map(topic=>topic.display_name).filter(Boolean)})): (data.results||[]).map(openalexItem),total:data.meta?.count||0,q,provider,next_cursor:data.meta?.next_cursor||null,retrieved_at:now()};
+const uniqueStrings = values => [...new Set(values.map(value => entities(value).slice(0, 1000)).filter(Boolean))].slice(0, 100);
+export function crossrefItem(row) {
+  const authors = list(row.author).slice(0, 100).map(author => [author.given, author.family].filter(Boolean).join(" ") || author.name || "").map(value => String(value).slice(0, 500)).filter(Boolean);
+  const publication_date = publicationDate((row.published?.["date-parts"] || row["published-print"]?.["date-parts"] || row["published-online"]?.["date-parts"] || row.issued?.["date-parts"] || [])[0]);
+  const year = publication_date?.slice(0, 4) || "";
+  const doi = canonicalDoi(row.DOI), references = [...new Set(list(row.reference).map(ref => canonicalDoi(ref.DOI)).filter(value => /^10\.\d{4,9}\/\S+$/.test(value)).map(value => `https://doi.org/${value}`))].slice(0, 1500), abstract = entities(row.abstract || "").slice(0, 30000);
+  return { id: doi || safeUrl(row.URL), title: entities(row.title?.[0] || "Untitled").slice(0, 2000), authors, year, publication_date, doi, abstract, url: safeUrl(row.URL) || (doi ? `https://doi.org/${doi}` : ""), pdf_url: safeUrl(list(row.link).find(link => link["content-type"] === "application/pdf")?.URL), source: "Crossref", providers: ["Crossref"], references, topic_ids: [], journal: entities(row["container-title"]?.[0] || "").slice(0, 1000), affiliations: uniqueStrings(list(row.author).flatMap(author => list(author.affiliation).map(value => value.name))), keywords: list(row.subject).slice(0, 30), citation_count: count(row["is-referenced-by-count"]), cited_by_count: count(row["is-referenced-by-count"]), updated_at: row.indexed?.["date-time"] || null, topics: list(row.subject).slice(0, 30), evidence: { references: Array.isArray(row.reference) ? (references.length === row.reference.length ? "available" : "partial") : "missing", topic_ids: "missing", citation_count: count(row["is-referenced-by-count"]) === null ? "missing" : "available", abstract: abstract ? "available" : "missing", publication_year: year ? "available" : "missing" }, retrieved_at: now() };
+}
+function arxivItems(source) {
+  return [...String(source).matchAll(/<entry(?:\s[^>]*)?>([\s\S]*?)<\/entry>/g)].map(match => {
+    const entry = match[1], url = xml(entry, "id"), authorBlocks = [...entry.matchAll(/<author(?:\s[^>]*)?>([\s\S]*?)<\/author>/g)], authors = authorBlocks.map(author => xml(author[1], "name")).filter(Boolean), identifier = url.split("/abs/")[1] || "";
+    const publication_date = publicationDate(xml(entry, "published").slice(0, 10));
+    return { id: identifier, arxiv_id: canonicalArxivId(identifier), title: xml(entry, "title"), authors, year: publication_date?.slice(0, 4) || "", publication_date, doi: canonicalDoi(xml(entry, "doi")), abstract: xml(entry, "summary"), url: safeUrl(url), pdf_url: identifier ? `https://arxiv.org/pdf/${identifier}` : "", source: "arXiv", providers: ["arXiv"], journal: xml(entry, "journal_ref"), affiliations: uniqueStrings(authorBlocks.flatMap(author => [...author[1].matchAll(/<(?:arxiv:)?affiliation(?:\s[^>]*)?>([\s\S]*?)<\/(?:arxiv:)?affiliation>/g)].map(value => value[1]))), keywords: [], topics: [], citation_count: null, cited_by_count: null, updated_at: xml(entry, "updated") || null, retrieved_at: now() };
+  }).filter(item => canonicalArxivId(item.id));
+}
+export function openalexItem(row) {
+  let abstract = "";
+  if (row.abstract_inverted_index && typeof row.abstract_inverted_index === "object") { const words = []; for (const [word, positions] of Object.entries(row.abstract_inverted_index)) for (const position of list(positions)) if (Number.isInteger(position) && position >= 0 && position < 20000) words[position] = word; abstract = words.filter(Boolean).join(" ").slice(0, 30000); }
+  const workId = canonicalOpenAlexId(row.id), references = [...new Set(list(row.referenced_works).map(value => canonicalOpenAlexId(value)).filter(Boolean))].slice(0, 1500), topic_ids = [...new Set(list(row.topics).map(topic => canonicalOpenAlexId(topic.id, "T")).filter(Boolean))].slice(0, 100), publication_date = publicationDate(row.publication_date) || publicationDate([row.publication_year]), year = publication_date?.slice(0, 4) || "";
+  const authorships = list(row.authorships).slice(0, 100);
+  return { id: workId, openalex_id: workId, title: entities(row.display_name || "Untitled").slice(0, 2000), authors: authorships.map(author => String(author.author?.display_name || author.raw_author_name || "").slice(0, 500)).filter(Boolean), year, publication_date, doi: canonicalDoi(row.doi), abstract, url: safeUrl(row.primary_location?.landing_page_url) || workId, pdf_url: safeUrl(row.best_oa_location?.pdf_url || row.primary_location?.pdf_url), source: "OpenAlex", providers: ["OpenAlex"], references, related_ids: [...new Set(list(row.related_works).map(value => canonicalOpenAlexId(value)).filter(Boolean))].slice(0, 100), topic_ids, is_retracted: row.is_retracted === true, is_paratext: row.is_paratext === true || row.type === "paratext", journal: entities(row.primary_location?.source?.display_name || "").slice(0, 1000), affiliations: uniqueStrings(authorships.flatMap(author => [...list(author.institutions).map(value => value.display_name), ...list(author.raw_affiliation_strings)])), keywords: list(row.keywords).map(value => value.display_name).filter(Boolean).slice(0, 30), citation_count: count(row.cited_by_count), updated_date: row.updated_date || null, cited_by_count: count(row.cited_by_count), updated_at: row.updated_date || null, topics: list(row.topics).map(topic => topic.display_name).filter(Boolean).slice(0, 20), evidence: { references: Array.isArray(row.referenced_works) ? (row.referenced_works.length > 1500 ? "partial" : "available") : "missing", topic_ids: topic_ids.length ? "available" : "missing", citation_count: count(row.cited_by_count) === null ? "missing" : "available", abstract: abstract ? "available" : "missing", publication_year: year ? "available" : "missing" }, retrieved_at: now() };
+}
+
+const isDoi = value => /^10\.\d{4,9}\/\S+$/.test(value);
+function queryIdentity(q) {
+  const doi = canonicalDoi(q), arxiv_id = canonicalArxivId(q) || canonicalArxivId(/^10\.48550\/arxiv\.(.+)$/i.exec(doi)?.[1]);
+  return { doi: isDoi(doi) ? doi : "", arxiv_id };
+}
+async function discoverSource(options, provider, env, fetchImpl) {
+  const { q, author, sort, mode, exact_title, limit } = options;
+  const candidate_limit = mode === "authors" ? limit : Math.min(100, Math.max(50, limit * 4));
+  const identity = queryIdentity(q);
+  if (provider === "crossref") {
+    const url = new URL(identity.doi ? `https://api.crossref.org/works/${encodeURIComponent(identity.doi)}` : "https://api.crossref.org/works");
+    if (!identity.doi) {
+      if (q) url.searchParams.set("query.bibliographic", q);
+      if (author) url.searchParams.set("query.author", author);
+      url.searchParams.set("rows", String(candidate_limit));
+      url.searchParams.set("select", "DOI,title,author,published,published-print,published-online,issued,URL,link,container-title,subject,is-referenced-by-count,indexed,abstract");
+      url.searchParams.set("sort", sort === "citations" ? "is-referenced-by-count" : ["newest", "oldest"].includes(sort) ? "published" : "score");
+      url.searchParams.set("order", sort === "oldest" ? "asc" : "desc");
+    }
+    const data = await providerGet(url, env, fetchImpl), rows = identity.doi ? [data.message].filter(Boolean) : list(data.message?.items);
+    const items = rows.filter(row => !/^(?:front[ -]?matter|back[ -]?matter|table of contents|contents|cover|editorial(?: board)?)\b/i.test(entities(row.title?.[0] || ""))).map(crossrefItem);
+    return { provider, items, total: identity.doi ? items.length : count(data.message?.["total-results"]) ?? items.length, candidate_limit: identity.doi ? 1 : candidate_limit };
+  }
+  if (provider === "arxiv") {
+    const url = new URL("https://export.arxiv.org/api/query"), clauses = [];
+    if (identity.arxiv_id) url.searchParams.set("id_list", identity.arxiv_id);
+    else if (q) clauses.push(exact_title ? `ti:${queryPhrase(q)}` : queryTerms(q, "ti"));
+    if (author) clauses.push(queryTerms(author, "au"));
+    if (clauses.length) url.searchParams.set("search_query", clauses.map(clause => `(${clause})`).join(" AND "));
+    url.searchParams.set("sortBy", ["newest", "oldest"].includes(sort) ? "submittedDate" : "relevance");
+    url.searchParams.set("sortOrder", sort === "oldest" ? "ascending" : "descending");
+    url.searchParams.set("max_results", String(candidate_limit));
+    const data = await providerGet(url, env, fetchImpl), items = arxivItems(data), totalText = xml(data, "totalResults");
+    return { provider, items, total: /^\d+$/.test(totalText) ? Number(totalText) : items.length, candidate_limit };
+  }
+  const url = new URL(identity.doi && mode === "works" ? `https://api.openalex.org/works/doi:${encodeURIComponent(identity.doi)}` : `https://api.openalex.org/${mode === "authors" ? "authors" : "works"}`), filters = [];
+  if (mode === "authors") url.searchParams.set("search", q);
+  else {
+    if (!identity.doi && q) url.searchParams.set("search.title", exact_title ? queryPhrase(q) : queryWords(q));
+    if (author && !identity.doi) filters.push(`raw_author_name.search:${queryPhrase(author)}~2`);
+    if (filters.length) url.searchParams.set("filter", filters.join(","));
+    if (!identity.doi && sort === "citations") url.searchParams.set("sort", "cited_by_count:desc");
+    else if (!identity.doi && ["newest", "oldest"].includes(sort)) url.searchParams.set("sort", `publication_date:${sort === "oldest" ? "asc" : "desc"}`);
+    // With a byline-only filter there is no text relevance score to sort by.
+  }
+  if (!identity.doi || mode === "authors") url.searchParams.set("per-page", String(candidate_limit));
+  if (mode === "works") url.searchParams.set("select", "id,doi,display_name,publication_year,publication_date,authorships,primary_location,best_oa_location,cited_by_count,abstract_inverted_index,topics,keywords,is_retracted,is_paratext,updated_date,type");
+  const data = await providerGet(url, env, fetchImpl);
+  const items = mode === "authors" ? list(data.results).map(row => ({ id: canonicalOpenAlexId(row.id, "A"), name: row.display_name || "", works_count: count(row.works_count), cited_by_count: count(row.cited_by_count), h_index: Number.isFinite(row.summary_stats?.h_index) ? row.summary_stats.h_index : null, source: "OpenAlex", url: safeUrl(row.id), updated_date: row.updated_date || null, updated_at: row.updated_date || null, retrieved_at: now(), topics: list(row.topics).map(topic => topic.display_name).filter(Boolean) })) : (identity.doi ? [data] : list(data.results)).map(openalexItem);
+  return { provider, items, total: count(data.meta?.count) ?? items.length, candidate_limit: identity.doi && mode === "works" ? 1 : candidate_limit };
+}
+
+export async function discover(params, env, fetchImpl = fetch) {
+  const options = discoveryOptions(params), { q, author, provider, mode, sort, exact_title, limit } = options;
+  const sources = provider === "all" ? ["openalex", "crossref", "arxiv"] : [provider];
+  const results = await Promise.allSettled(sources.map(source => discoverSource(options, source, env, fetchImpl)));
+  const successes = results.filter(result => result.status === "fulfilled").map(result => result.value);
+  if (!successes.length) { const rejected = results.find(result => result.status === "rejected"); if (provider !== "all") throw rejected.reason; fail(502, "All scholarly search sources are unavailable. Retry shortly.", "provider_unavailable"); }
+  const warnings = results.flatMap((result, index) => result.status === "rejected" ? [`${sources[index]}_unavailable`] : []);
+  const candidates = successes.flatMap(result => result.items), provider_totals = Object.fromEntries(successes.map(result => [result.provider, result.total]));
+  const prepared = mode === "authors" ? { items: candidates, duplicates_removed: 0, postfiltered_count: 0 } : prepareWorks(candidates, options);
+  const items = prepared.items.slice(0, limit), provider_total = provider === "all" ? null : successes[0].total;
+  if (prepared.postfiltered_count) warnings.push("bounded_candidates_filtered");
+  if (sort === "popularity") warnings.push("popularity_is_annual_citations_within_candidates");
+  if (provider === "all" && ["citations", "popularity"].includes(sort)) warnings.push("arxiv_citation_counts_unavailable");
+  return { items, total: provider_total ?? prepared.items.length, provider_total, provider_totals, total_is_provider_count: provider !== "all", displayed_count: items.length, candidate_count: candidates.length, candidate_limit: successes.reduce((sum, result) => sum + result.candidate_limit, 0), postfiltered_count: prepared.postfiltered_count, duplicates_removed: prepared.duplicates_removed, q, author, provider, mode, sort, exact_title, sort_scope: "provider_candidates", warnings, next_cursor: null, retrieved_at: now() };
 }
 export async function related(params,env,fetchImpl=fetch){const raw=text(params.get("openalex_id")||"",100,true).replace(/^https:\/\/openalex\.org\//,"");if(!/^W\d+$/.test(raw))fail(422,"A real OpenAlex work ID is required.");const relation=choice(params.get("relation")||"references",["references","cited_by"]);if(relation==="cited_by"){const url=new URL("https://api.openalex.org/works");url.searchParams.set("filter",`cites:${raw}`);url.searchParams.set("per-page","20");const data=await providerGet(url,env,fetchImpl);return{items:(data.results||[]).map(openalexItem),total:data.meta?.count||0,provider:"openalex",relation,source_work_id:raw,next_cursor:null,retrieved_at:now()};}const work=await providerGet(`https://api.openalex.org/works/${raw}`,env,fetchImpl);const refs=(work.referenced_works||[]).map(value=>String(value).split("/").at(-1)).filter(value=>/^W\d+$/.test(value)).slice(0,20);if(!refs.length)return{items:[],total:0,provider:"openalex",relation,source_work_id:raw,next_cursor:null,retrieved_at:now()};const url=new URL("https://api.openalex.org/works");url.searchParams.set("filter",`openalex:${refs.join("|")}`);url.searchParams.set("per-page","20");const data=await providerGet(url,env,fetchImpl);return{items:(data.results||[]).map(openalexItem),total:work.referenced_works.length,provider:"openalex",relation,source_work_id:raw,next_cursor:null,retrieved_at:now()};}
 export async function enrichment(paper,env,fetchImpl=fetch){
