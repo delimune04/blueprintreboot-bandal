@@ -121,7 +121,7 @@ export function AppShell({ children }: { children: ReactNode }) {
           aria-controls="primary-navigation"
           onClick={() => setMobileSidebarPath(mobileSidebarOpen ? null : pathname)}
         ><PanelLeftOpen aria-hidden="true" size={20} /></button>
-        <span className="workspace-appbar__brand"><span className="brand__mark" aria-hidden="true" /><strong>{PRODUCT_NAME}</strong></span>
+        <span className="workspace-appbar__brand"><span className="brand__mark" aria-hidden="true" /><strong className="labvium-wordmark">LabVium</strong></span>
         <span className="workspace-appbar__context">{t("Research workspace")}</span>
       </header> : null}
       {navigationModalOpen ? <button className="navigation-backdrop" type="button" tabIndex={-1} aria-label={t("Close navigation")} onClick={closeNavigation} /> : null}

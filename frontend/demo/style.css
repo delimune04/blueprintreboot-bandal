@@ -39,6 +39,8 @@
 }
 
 [data-bandal-demo="true"] .bandal-demo-banner__brand {
+  display: inline-flex;
+  align-items: center;
   flex: none;
   padding-right: var(--space-4);
   border-right: 1px solid #d3c5eb;
@@ -132,12 +134,7 @@
   font-weight: 550;
   letter-spacing: 0;
 }
-[data-bandal-demo="true"] .lv-home--connected .lv-kicker > span {
-  width: .5rem;
-  height: .5rem;
-  flex: none;
-  background: var(--lv-accent);
-}
+[data-bandal-demo="true"] .lv-home--connected .lv-hero-identity .lv-kicker { margin: 0; }
 [data-bandal-demo="true"] .lv-home--connected .lv-hero h1 {
   color: var(--lv-ink);
   font-size: clamp(2.25rem, 3.8vw, 4.25rem);

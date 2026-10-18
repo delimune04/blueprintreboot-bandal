@@ -87,7 +87,7 @@ export function SidebarNavigation({
       <div className="sidebar__header">
         <Link href="/dashboard" className="brand" aria-label={`${PRODUCT_NAME} · ${t("Dashboard")}`} onClick={onNavigate}>
           <span className="brand__mark" aria-hidden="true" />
-          <span className="brand__copy"><strong>{PRODUCT_NAME}</strong><small>{t("Research workspace")}</small></span>
+          <span className="brand__copy"><strong className="labvium-wordmark">LabVium</strong><small>{t("Research workspace")}</small></span>
         </Link>
         {readerMode || overlayMode ? (
           <div className="sidebar__reader-actions">

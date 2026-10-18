@@ -101,10 +101,10 @@ button, input, textarea, select { font: inherit; }
 .sidebar { position: sticky; top: 0; z-index: var(--z-sidebar); height: 100dvh; display: flex; flex-direction: column; gap: var(--space-6); padding: var(--space-4) var(--space-3); overflow-y: auto; background: var(--color-sidebar); border-right: var(--border); }
 .sidebar__header { display: flex; align-items: center; justify-content: space-between; gap: var(--space-2); }
 .brand { display: flex; align-items: center; gap: var(--space-3); padding: var(--space-2); border-radius: var(--radius-sm); }
-.brand__mark { width: 2.25rem; height: 2.25rem; display: block; flex: 0 0 2.25rem; background: url("/brand/labvium-mark.svg") center / contain no-repeat; }
+.brand__mark { width: 2rem; height: 2rem; display: block; flex: 0 0 2rem; background: url("/brand/labvium-symbol-v1.png") center / contain no-repeat; }
 .brand strong, .brand small { display: block; }
-.brand strong { font-size: var(--font-size-sm); letter-spacing: 0.01em; }
-.brand small { color: var(--color-text-muted); font-size: var(--font-size-xs); }
+.brand strong.labvium-wordmark { font-size: 1.375rem; letter-spacing: -.055em; }
+.brand small { color: var(--color-text-muted); font-size: .6875rem; }
 .sidebar-toggle { min-height: var(--control-height-compact); display: inline-flex; align-items: center; justify-content: center; gap: var(--space-1); flex: none; padding: var(--space-1) var(--space-2); border: var(--border); border-radius: var(--radius-sm); background: transparent; color: var(--color-text-secondary); font: inherit; font-size: var(--font-size-xs); font-weight: 650; cursor: pointer; }
 .sidebar-toggle:hover { border-color: var(--color-rule); background: var(--color-surface); color: var(--color-text); }
 .sidebar-toggle--icon { width: var(--control-height-compact); padding: 0; }

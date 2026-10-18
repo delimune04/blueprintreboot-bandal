@@ -1,0 +1,11 @@
+.labvium-brand { display: inline-flex; flex: none; align-items: center; gap: .5rem; vertical-align: middle; white-space: nowrap; }
+.labvium-brand__symbol { display: block; flex: none; width: 2rem; height: 2rem; object-fit: contain; }
+.labvium-wordmark { display: block; color: var(--color-text, #1d2935); font-family: var(--font-sans, system-ui, sans-serif); font-size: 1.375rem; font-weight: 750; letter-spacing: -.055em; line-height: 1.1; white-space: nowrap; }
+.labvium-brand--compact { gap: .375rem; }
+.labvium-brand--compact .labvium-brand__symbol { width: 1.5rem; height: 1.5rem; }
+.labvium-brand--compact .labvium-wordmark { font-size: 1.125rem; }
+.labvium-brand--hero { gap: .75rem; }
+.labvium-brand--hero .labvium-brand__symbol { width: 3rem; height: 3rem; }
+.labvium-brand--hero .labvium-wordmark { font-size: 2rem; }
+.lv-hero-identity { display: grid; justify-items: start; gap: .5rem; margin-bottom: 1.5rem; }
+.lv-hero-identity .lv-kicker { margin: 0; }

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { ArrowRight, ArrowUpRight, BookOpen, CalendarDays, Compass, FolderKanban, GitBranch, Layers, ListChecks, MessageCircle, NotebookPen, ShieldCheck, Users } from "lucide-react";
 import { LabviumMotion } from "../components/LabviumMotion";
+import { LabviumBrand } from "../components/LabviumBrand";
 import { getWorkspaceMode } from "../lib/api/client";
 import { useI18n } from "../lib/i18n/LocaleProvider";
 
@@ -41,7 +42,7 @@ export function HomeView() {
     <LabviumMotion refreshKey={locale} />
     <section className="lv-hero lv-hero--connected" aria-labelledby="lv-home-title">
       <div className="lv-hero-intro" data-lv-reveal>
-        <p className="lv-kicker"><span aria-hidden="true" />LabVium · {ko ? "연구가 이어지는 작업공간" : "Research, carried forward"}</p>
+        <div className="lv-hero-identity"><LabviumBrand variant="hero" /><p className="lv-kicker">{ko ? "연구가 이어지는 작업공간" : "Research, carried forward"}</p></div>
         <h1 id="lv-home-title">{ko ? <>읽은 논문에서,<br />함께하는 연구까지.</> : <>From reading papers.<br />To working together.</>}</h1>
         <p className="lv-hero-copy">{ko ? "좋은 논문을 찾고, 아이디어에 의견을 더하고, 다음 할 일을 정하세요. 공부와 협업의 기록이 하나의 연구 흐름으로 이어집니다." : "Find a useful paper, discuss the idea, and decide what to do next. Keep your reading and your team's work in one research flow."}</p>
         <div className="lv-actions">
