@@ -20,7 +20,7 @@ const readableError = (error: unknown) => error instanceof Error ? error.message
 type TagMergePreview = { affected_paper_count: number; affected_block_count: number; affected_project_count: number; expected_registry_revision: string; preview_token: string; workspace_revision: string; message: string };
 type SimilarTag = {source_key:string;target_key:string;source_label:string;target_label:string;similarity:number;reason:string};
 function downloadJson(value: unknown, name: string) { const url = URL.createObjectURL(new Blob([JSON.stringify(value, null, 2)], { type: "application/json" })); const anchor = document.createElement("a"); anchor.href = url; anchor.download = name; anchor.click(); setTimeout(() => URL.revokeObjectURL(url), 1000); }
-function recoveryDownload(url: string | undefined) { return url && /^\/ku-ai\/api\/recovery\/[a-zA-Z0-9_-]+\/download(?:\?|$)/.test(url) ? workspaceDownloadUrl(url) : ""; }
+function recoveryDownload(url: string | undefined) { return url && /^\/(?:LabVium|ku-ai)\/api\/recovery\/[a-zA-Z0-9_-]+\/download(?:\?|$)/.test(url) ? workspaceDownloadUrl(url) : ""; }
 
 export function MaintenanceView() {
   const { t } = useI18n();

@@ -25,7 +25,7 @@ export async function routeCommands(parts,method,body,params,state,ctx){
   if(path==="tags/governance")return{items:state.tags,registry_revision:c.rev(state.registryRev)};
   if(path==="tags/summary")return candidateSummary(state);
   if(path==="tags/review-queue")return c.page(state.papers.filter(paper=>paper.candidates?.length).map(paper=>({paper_id:paper.paper_id,title:paper.metadata.title,candidate_count:paper.candidates.length,unresolved_count:paper.candidates.filter(item=>item.state==="unresolved").length,resolved_count:paper.candidates.filter(item=>item.state==="resolved").length,approved_count:paper.candidates.filter(item=>item.state==="approved").length,candidate_labels:paper.candidates.slice(0,5).map(item=>item.tag_text)})),params);
-  if(path==="recovery")return{items:state.recovery.map(({value,...entry})=>({...entry,download_url:`/ku-ai/api/recovery/${entry.recovery_id}/download`}))};
+  if(path==="recovery")return{items:state.recovery.map(({value,...entry})=>({...entry,download_url:`${ctx.apiBase||"/LabVium/api"}/recovery/${entry.recovery_id}/download`}))};
   if(path==="search")return searchResults(state,params);
  }
  if(path==="papers/scan"&&method==="POST"){c.strict(body,[]);return{status:"ok",message:"Scanned private managed PDF objects.",candidates:scanFiles(state)};}

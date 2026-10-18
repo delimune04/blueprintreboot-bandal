@@ -59,7 +59,10 @@ configuration from this work.
 
 ## Runtime boundary
 
-- API mount: `/ku-ai/api` and `/ku-ai/api/*`.
+- Public app: `https://bandal.app/LabVium`, with clean history routes.
+- API mount: `/LabVium/api/*`; legacy `/ku-ai/api/*` remains compatible.
+- Physical static files stay in `assetdist/ku-ai`; the Worker maps `/LabVium`
+  requests internally. Old `/ku-ai` HTML links redirect to the new mount.
 - Domain entry: `handleLabviumApi(request, env)` from `hosting/api.mjs`.
 - Owner identity: the platform's `oai-authenticated-user-id` header. Workspace
   reads and writes are owner-scoped; browser JSON owner IDs are not trusted.
@@ -67,7 +70,7 @@ configuration from this work.
   persist account records. Worker ingress rejects anonymous writes before API
   dispatch and rejects cross-origin authenticated writes.
 - Sign in using a top-level anchor, not fetch or router prefetch:
-  `/signin-with-chatgpt?return_to=%2Fku-ai%2F`, with `target="_top"`.
+  `/signin-with-chatgpt?return_to=%2FLabVium`, with `target="_top"`.
 - D1: `env.LABVIUM_DB`; R2: `env.LABVIUM_PDFS`.
 - Existing static directory-index URLs are preserved. SPA fallback is restricted
   to extensionless Labvium HTML requests, leaving unrelated missing pages as 404.
@@ -77,6 +80,6 @@ configuration from this work.
 ## Verification limit
 
 Unit tests exercise the router and asset fetcher contract. Hosted verification
-must additionally confirm `/`, an unrelated existing article, `/ku-ai/`, API
+must additionally confirm `/`, an unrelated existing article, `/LabVium`, API
 anonymous-write rejection, signed-in save/reload, and a private PDF upload/read.
 The scaffold does not claim that these hosted requests have already run.

@@ -75,7 +75,7 @@ async function executeBrowserWorkspaceRequest(path, init = {}) {
       pagesStore().restore(recovery.state, current.pages_revision, true);
       return reply({ status: "restored", workspace_revision: current.workspace_revision });
     }
-    if (parts[0] === "discover") return fetch(`/ku-ai/api${url.pathname}${url.search}`, { ...init, credentials: "same-origin" });
+    if (parts[0] === "discover") return fetch(`/LabVium/api${url.pathname}${url.search}`, { ...init, credentials: "same-origin" });
     if (parts[0] === "search" && method === "GET") {
       await getMaintenanceSnapshot();
       const raw = await getBrowserWorkspaceStorage().getItem(BROWSER_WORKSPACE_KEY);

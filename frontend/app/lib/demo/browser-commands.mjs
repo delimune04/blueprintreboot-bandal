@@ -349,7 +349,7 @@ export async function handleBrowserCommand(parts, method, body, params, state, e
         if (!data) throw new Error("No metadata candidate was found.");
       } catch {
         try {
-          const prefix = (process.env.NEXT_PUBLIC_BANDAL_DEMO_BASE || "/ku-ai").replace(/\/$/, "");
+          const prefix = (process.env.NEXT_PUBLIC_BANDAL_DEMO_BASE || "/LabVium").replace(/\/$/, "");
           const response = await fetch(`${prefix}/api/discover?q=${encodeURIComponent(paper.metadata.doi || paper.metadata.title)}&provider=crossref&limit=5`, { signal: AbortSignal.timeout(10000) });
           if (!response.ok) throw new Error("The metadata fallback is unavailable.");
           const match = (await response.json()).items?.[0];

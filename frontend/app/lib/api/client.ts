@@ -6,7 +6,7 @@ import { configureReaderWorkspaceScope } from "../reader/browser-reader-state.mj
 import { demoPdfUrl, demoRequest, isDemoEnabled } from "../demo/adapter.mjs";
 
 const API_BASE_URL = (process.env.NEXT_PUBLIC_BLUEPRINT_API_BASE_URL || "/api/blueprint").replace(/\/$/, "");
-const HOSTED_API_BASE = `${(process.env.NEXT_PUBLIC_BANDAL_DEMO_BASE || "/ku-ai").replace(/\/$/, "")}/api`;
+const HOSTED_API_BASE = `${(process.env.NEXT_PUBLIC_BANDAL_DEMO_BASE || "/LabVium").replace(/\/$/, "")}/api`;
 
 export type WorkspaceMode = "cloud" | "browser" | "local";
 export type WorkspaceSession = {
@@ -33,6 +33,7 @@ export function getWorkspaceRole(): "owner" | "editor" | "viewer" { return works
 export function workspaceDownloadUrl(path: string): string {
   if (workspaceMode !== "cloud" || !workspaceScope) return path;
   const url = new URL(path, window.location.origin);
+  if (url.pathname.startsWith("/ku-ai/api/")) url.pathname = `${HOSTED_API_BASE}/${url.pathname.slice("/ku-ai/api/".length)}`;
   if (url.origin !== window.location.origin || !url.pathname.startsWith(`${HOSTED_API_BASE}/`)) throw new Error("Download must belong to this workspace API.");
   url.searchParams.set("workspace", workspaceScope);
   return `${url.pathname}${url.search}`;

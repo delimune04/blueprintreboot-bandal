@@ -122,8 +122,8 @@ export function pdfAccessQuery(params) {
   if (!Object.keys(input).length) fail(422, "Supply a DOI, arXiv, or OpenAlex identifier to resolve this PDF.");
   return input;
 }
-export async function paperPdfAccess(paper, state, env = {}, fetchImpl = fetch) {
-  if (hasPdf(paper, state)) return response("available", `/ku-ai/api/papers/${encodeURIComponent(paper.paper_id)}/pdf`, safeLink(paper.external_source?.url), "managed_pdf");
+export async function paperPdfAccess(paper, state, env = {}, fetchImpl = fetch, apiBase = "/LabVium/api") {
+  if (hasPdf(paper, state)) return response("available", `${apiBase}/papers/${encodeURIComponent(paper.paper_id)}/pdf`, safeLink(paper.external_source?.url), "managed_pdf");
   const source = paper.external_source || {};
   return resolvePdfAccess({ ...source, doi: paper.metadata?.doi || source.doi || "", arxiv_id: paper.arxiv_id || source.arxiv_id || "" }, env, fetchImpl);
 }

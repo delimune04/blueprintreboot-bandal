@@ -1,7 +1,10 @@
 import { handleLabviumApi } from "./api.mjs";
 
-const API_PREFIX = "/ku-ai/api";
+const APP_PREFIX = "/LabVium";
+const LEGACY_PREFIX = "/ku-ai";
+const API_PREFIXES = [`${APP_PREFIX}/api`, `${LEGACY_PREFIX}/api`];
 const SAFE_METHODS = new Set(["GET", "HEAD", "OPTIONS"]);
+const ASSET_DIRECTORIES = new Set(["assets", "brand", "help", "bandal-demo", "pdfjs", "ocr"]);
 
 function apiError(status, code, detail) {
   return Response.json({ detail, error: { code, message: detail } }, {
@@ -17,10 +20,33 @@ function sameOriginWrite(request, url) {
   return site !== "cross-site" && site !== "same-site";
 }
 
+function mountedAt(pathname, prefix) {
+  return pathname === prefix || pathname.startsWith(`${prefix}/`);
+}
+
 function assetRequest(request, pathname) {
   const url = new URL(request.url);
   url.pathname = pathname;
   return new Request(url, { method: request.method, headers: request.headers });
+}
+
+function redirectPath(url, pathname) {
+  // Assign pathname rather than resolve a caller-controlled relative URL: even
+  // a path with double slashes cannot change the destination origin.
+  const target = new URL(url.origin);
+  target.pathname = pathname;
+  target.search = url.search;
+  return Response.redirect(target, 308);
+}
+
+function spaPath(pathname, prefix) {
+  const relative = pathname.slice(prefix.length).replace(/^\//, "");
+  let parts;
+  try { parts = relative.split("/").map(decodeURIComponent); } catch { return false; }
+  if (parts.some(part => /[\\/\u0000-\u001f]/.test(part) || part === "." || part === "..")) return false;
+  // Missing public files and protected API routes must never become HTML.
+  if (parts[0] === "api" || ASSET_DIRECTORIES.has(parts[0])) return false;
+  return !parts.filter(Boolean).at(-1)?.includes(".");
 }
 
 async function serveAssets(request, env, url) {
@@ -28,9 +54,30 @@ async function serveAssets(request, env, url) {
   if (request.method !== "GET" && request.method !== "HEAD") {
     return new Response("Method not allowed", { status: 405, headers: { Allow: "GET, HEAD" } });
   }
-  if (url.pathname === "/ku-ai") return Response.redirect(new URL("/ku-ai/", url), 308);
   if (url.hostname === "labvium.bandal.app" && url.pathname === "/") {
-    return env.ASSETS.fetch(assetRequest(request, "/ku-ai/index.html"));
+    // Keep this already-supported origin so browser-local research remains
+    // reachable. Only the BANDAL path is being renamed in this release.
+    return env.ASSETS.fetch(assetRequest(request, `${LEGACY_PREFIX}/index.html`));
+  }
+  if (url.pathname === `${APP_PREFIX}/` || url.pathname === `${APP_PREFIX}/index.html`) {
+    return redirectPath(url, APP_PREFIX);
+  }
+  if (mountedAt(url.pathname, LEGACY_PREFIX) &&
+      (url.pathname === `${LEGACY_PREFIX}/index.html` || spaPath(url.pathname, LEGACY_PREFIX))) {
+    const suffix = url.pathname === `${LEGACY_PREFIX}/index.html` ? "" : url.pathname.slice(LEGACY_PREFIX.length).replace(/\/$/, "");
+    return redirectPath(url, `${APP_PREFIX}${suffix}`);
+  }
+  // The public URL changes, while the physical asset tree and all private
+  // bindings stay in place. Existing /ku-ai asset and PDF bookmarks still work.
+  if (mountedAt(url.pathname, APP_PREFIX)) {
+    if (url.pathname === APP_PREFIX) return env.ASSETS.fetch(assetRequest(request, `${LEGACY_PREFIX}/index.html`));
+    const physicalPath = `${LEGACY_PREFIX}${url.pathname.slice(APP_PREFIX.length)}`;
+    const response = await env.ASSETS.fetch(assetRequest(request, physicalPath));
+    if (response.status !== 404) return response;
+    if (spaPath(url.pathname, APP_PREFIX) && request.headers.get("accept")?.includes("text/html")) {
+      return env.ASSETS.fetch(assetRequest(request, `${LEGACY_PREFIX}/index.html`));
+    }
+    return response;
   }
   let response = await env.ASSETS.fetch(request);
   if (response.status !== 404) return response;
@@ -42,18 +89,13 @@ async function serveAssets(request, env, url) {
     response = await env.ASSETS.fetch(assetRequest(request, indexPath));
     if (response.status !== 404) return response;
   }
-  // Only the Labvium application owns SPA routes. Unrelated missing pages stay 404.
-  if (url.pathname.startsWith("/ku-ai/") && !finalSegment.includes(".") &&
-      request.headers.get("accept")?.includes("text/html")) {
-    return env.ASSETS.fetch(assetRequest(request, "/ku-ai/index.html"));
-  }
   return response;
 }
 
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
-    if (url.pathname === API_PREFIX || url.pathname.startsWith(`${API_PREFIX}/`)) {
+    if (API_PREFIXES.some(prefix => mountedAt(url.pathname, prefix))) {
       // Sites dispatch, rather than browser JSON or URL parameters, supplies
       // this trusted identity header. Public anonymous visitors remain read-only.
       if (!SAFE_METHODS.has(request.method)) {

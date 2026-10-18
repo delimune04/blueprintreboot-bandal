@@ -6,7 +6,7 @@ import { defineConfig } from "vite";
 // ordinary Next/vinext frontend continues to use its existing configuration.
 export default defineConfig({
   root: fileURLToPath(new URL("./demo", import.meta.url)),
-  base: "/ku-ai/",
+  base: "/LabVium/",
   publicDir: fileURLToPath(new URL("./public", import.meta.url)),
   plugins: [react()],
   resolve: {
@@ -17,7 +17,7 @@ export default defineConfig({
   },
   define: {
     "process.env.NEXT_PUBLIC_BANDAL_DEMO": JSON.stringify("1"),
-    "process.env.NEXT_PUBLIC_BANDAL_DEMO_BASE": JSON.stringify("/ku-ai"),
+    "process.env.NEXT_PUBLIC_BANDAL_DEMO_BASE": JSON.stringify("/LabVium"),
     "process.env.NEXT_PUBLIC_BLUEPRINT_API_BASE_URL": JSON.stringify("/api/blueprint"),
     "process.env.NEXT_PUBLIC_BLUEPRINT_READER_DIAGNOSTICS": JSON.stringify("0"),
     "process.env.NODE_ENV": JSON.stringify("production"),

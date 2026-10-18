@@ -6,7 +6,7 @@ import { getWorkspaceMode, initializeWorkspaceTransport, type WorkspaceSession }
 import { LanguageToggle, LocaleProvider, useI18n } from "../app/lib/i18n/LocaleProvider";
 import { PRODUCT_NAME } from "../app/lib/i18n/catalog";
 import Link from "./link";
-import { usePathname } from "./navigation";
+import { migrateLegacyRoute, usePathname } from "./navigation";
 import "../app/globals.css";
 import "./style.css";
 import "../app/lib/continuity/continuity.css";
@@ -65,7 +65,7 @@ function DemoBanner({ session }: { session: WorkspaceSession | null }) {
   }, []);
   return <header ref={banner} className="bandal-demo-banner lv-topbar" aria-label={ko ? "계정과 저장 상태" : "Account and storage status"}>
     <p><Link href="/" className="bandal-demo-banner__brand"><LabviumBrand variant="compact" /></Link><span>{!session ? (ko ? "연결 확인 중" : "Connecting") : session.connection_error ? (ko ? "연결 확인 필요" : "Connection unavailable") : cloud ? <CloudStatus key={session.workspace_id} /> : (ko ? "브라우저 공간 · 이 기기에 저장" : "Browser workspace · saved on this device")}</span>{session?.role === "viewer" ? <span>{ko ? "읽기 전용" : "Read only"}</span> : null}</p>
-    <nav aria-label={ko ? "계정 메뉴" : "Account menu"}><CollaborationInboxLink key={session?.workspace_id||"browser"}/><LanguageToggle/><Link href="/guide">{ko ? "사용 안내" : "Guide"}</Link><Link href="/account">{cloud && (session?.user?.name || session?.user?.email) ? session.user.name || session.user.email : ko ? "계정과 저장" : "Account and storage"}</Link>{session && !cloud ? <a href="/signin-with-chatgpt?return_to=%2Fku-ai%2F" target="_top">{ko ? "로그인" : "Sign in"}</a> : cloud ? <a href="/signout-with-chatgpt?return_to=%2Fku-ai%2F" target="_top">{ko ? "로그아웃" : "Sign out"}</a> : null}<details className="bandal-demo-about"><summary>{ko ? "서비스 정보" : "About"}</summary><div className="bandal-demo-about__content"><p>{ko ? "논문 탐색에서 결정과 인수인계까지 이어지는 연구 작업공간입니다." : "A research workspace connecting papers, decisions and handoff."}</p><p><a href="https://github.com/Lilshawn-LSY/BluePrintReboot" target="_blank" rel="noopener noreferrer">{ko ? "이서연(Lilshawn-LSY)·박상현 공동 프로젝트 BluePrintReboot 기반" : "Based on BluePrintReboot by Seoyeon Lee and Sanghyeon Park"}</a></p><p><a href="https://github.com/delimune04/blueprintreboot-bandal" target="_blank" rel="noopener noreferrer">{ko ? "LabVium 개발 소스" : "LabVium source"}</a> · <a href="https://bandal.app">BANDAL STUDIO</a></p><p><a href="mailto:support@bandal.app">support@bandal.app</a></p></div></details></nav>
+    <nav aria-label={ko ? "계정 메뉴" : "Account menu"}><CollaborationInboxLink key={session?.workspace_id||"browser"}/><LanguageToggle/><Link href="/guide">{ko ? "사용 안내" : "Guide"}</Link><Link href="/account">{cloud && (session?.user?.name || session?.user?.email) ? session.user.name || session.user.email : ko ? "계정과 저장" : "Account and storage"}</Link>{session && !cloud ? <a href="/signin-with-chatgpt?return_to=%2FLabVium" target="_top">{ko ? "로그인" : "Sign in"}</a> : cloud ? <a href="/signout-with-chatgpt?return_to=%2FLabVium" target="_top">{ko ? "로그아웃" : "Sign out"}</a> : null}<details className="bandal-demo-about"><summary>{ko ? "서비스 정보" : "About"}</summary><div className="bandal-demo-about__content"><p>{ko ? "논문 탐색에서 결정과 인수인계까지 이어지는 연구 작업공간입니다." : "A research workspace connecting papers, decisions and handoff."}</p><p><a href="https://github.com/Lilshawn-LSY/BluePrintReboot" target="_blank" rel="noopener noreferrer">{ko ? "이서연(Lilshawn-LSY)·박상현 공동 프로젝트 BluePrintReboot 기반" : "Based on BluePrintReboot by Seoyeon Lee and Sanghyeon Park"}</a></p><p><a href="https://github.com/delimune04/blueprintreboot-bandal" target="_blank" rel="noopener noreferrer">{ko ? "LabVium 개발 소스" : "LabVium source"}</a> · <a href="https://bandal.app">BANDAL STUDIO</a></p><p><a href="mailto:support@bandal.app">support@bandal.app</a></p></div></details></nav>
   </header>;
 }
 
@@ -158,6 +158,8 @@ function DemoApp() {
     </>
   );
 }
+
+migrateLegacyRoute();
 
 const root = document.getElementById("root");
 if (!root) throw new Error("The demo root element is missing.");

@@ -145,7 +145,7 @@ test("Crossref preview uses the fixed public fallback after CORS failure and nev
   try {
     const preview = await request(api, "/papers/demo-ccs/metadata/enrichment-preview", "POST", {});
     assert.equal(preview.status, 200); assert.equal(calls.length, 2);
-    assert.match(calls[1], /^\/ku-ai\/api\/discover\?q=.+&provider=crossref&limit=5$/);
+    assert.match(calls[1], /^\/LabVium\/api\/discover\?q=.+&provider=crossref&limit=5$/);
     assert.equal(preview.data.fields.find((field) => field.field === "title").candidate_value, "A different publication to review");
     assert.equal(preview.data.fields.find((field) => field.field === "abstract").candidate_value, "Safe candidate text");
     assert.equal((await request(api, "/papers/demo-ccs/reader")).data.metadata_revision, before.metadata_revision);

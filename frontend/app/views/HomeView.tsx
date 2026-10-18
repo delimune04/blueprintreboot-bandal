@@ -46,7 +46,7 @@ export function HomeView() {
         <h1 id="lv-home-title">{ko ? <>읽은 논문에서,<br />함께하는 연구까지.</> : <>From reading papers.<br />To working together.</>}</h1>
         <p className="lv-hero-copy">{ko ? "좋은 논문을 찾고, 아이디어에 의견을 더하고, 다음 할 일을 정하세요. 공부와 협업의 기록이 하나의 연구 흐름으로 이어집니다." : "Find a useful paper, discuss the idea, and decide what to do next. Keep your reading and your team's work in one research flow."}</p>
         <div className="lv-actions">
-          {cloud ? <Link className="reader-control" href="/projects">{ko ? "내 연구 이어가기" : "Open my research"}<ArrowRight size={16} /></Link> : <a className="reader-control" href="/signin-with-chatgpt?return_to=%2Fku-ai%2F" target="_top">{ko ? "계정으로 시작하기" : "Sign in to start"}<ArrowRight size={16} /></a>}
+          {cloud ? <Link className="reader-control" href="/projects">{ko ? "내 연구 이어가기" : "Open my research"}<ArrowRight size={16} /></Link> : <a className="reader-control" href="/signin-with-chatgpt?return_to=%2FLabVium" target="_top">{ko ? "계정으로 시작하기" : "Sign in to start"}<ArrowRight size={16} /></a>}
           <Link className="reader-control reader-control--secondary" href="/collaboration/calendar">{ko ? "연구실 일정 보기" : "View lab calendar"}<CalendarDays size={16} /></Link>
         </div>
         <p className="lv-hero-note">{ko ? cloud ? "개인 공부는 내 공간에, 함께하는 연구는 팀 공간에 보관하세요." : "브라우저 공간에서 먼저 둘러볼 수 있습니다. 팀과 함께 쓰려면 로그인하세요." : cloud ? "Keep personal study in your workspace, and shared research in a team workspace." : "Explore in a browser workspace first. Sign in to work with your team."}</p>

@@ -3,6 +3,7 @@ import { DatabaseSync } from "node:sqlite";
 import { readFileSync, readdirSync } from "node:fs";
 import assert from "node:assert/strict";
 import { handleLabviumApi } from "../api.mjs";
+import worker from "../worker.mjs";
 import { emptyWorkspace, rev, sha256, provenance } from "../domain/core.mjs";
 import { loadWorkspace, saveWorkspace } from "../domain/store.mjs";
 import { validateArchive } from "../domain/maintenance.mjs";
@@ -108,4 +109,55 @@ test("account reproduction records survive new requests, reject foreign accounts
 test("session displays only platform-supplied account labels and decodes the signed-in name",async()=>{
  const r=await request(env(),"/session",{headers:{"oai-authenticated-user-email":"fixture@lab.test","oai-authenticated-user-full-name":encodeURIComponent("연구 담당자"),"oai-authenticated-user-full-name-encoding":"percent-encoded-utf-8"}});
  assert.equal(r.data.user.email,"fixture@lab.test");assert.equal(r.data.user.name,"연구 담당자");assert.equal(r.response.headers.get("cache-control"),"private, no-store");
+});
+
+
+test("canonical and legacy API mounts share the same account, private PDFs and revision protection", async () => {
+ const e=env(),identity=await imported(e),before=await workspace(e),keys=[...e.LABVIUM_PDFS.files.keys()];
+ const call=async(mount,path,{method="GET",body,user="alice",headers={}}={})=>{
+  const response=await worker.fetch(new Request(`https://bandal.app${mount}${path}`,{method,headers:{...(user?{"oai-authenticated-user-id":user}:{}),...(body===undefined?{}:{"content-type":"application/json"}),...headers},...(body===undefined?{}:{body:JSON.stringify(body)})}),e);
+  return{response,status:response.status,data:(response.headers.get("content-type")||"").includes("application/json")?await response.json():await response.arrayBuffer()};
+ };
+ const session=await call("/LabVium/api","/session",{user:null});
+ assert.equal(session.status,200);assert.equal(session.data.authenticated,false);
+ assert.equal(session.data.sign_in_url,"/signin-with-chatgpt?return_to=%2FLabVium");
+ const canonical=await call("/LabVium/api","/workspace");
+ assert.equal(canonical.data.workspace_id,before.workspace_id);assert.equal(canonical.data.revision,before.revision);
+ const paper=await call("/LabVium/api",`/papers/${identity}/reader`);
+ const change=await call("/LabVium/api",`/papers/${identity}/metadata`,{method:"PATCH",body:{changes:{title:"Same saved paper after URL change"},expected_revision:paper.data.metadata_revision}});
+ assert.equal(change.status,200);assert.equal(change.response.headers.get("location"),null);
+ assert.equal((await request(e,`/papers/${identity}`)).data.title,"Same saved paper after URL change");
+ const stale=await call("/ku-ai/api",`/papers/${identity}/metadata`,{method:"PATCH",body:{changes:{title:"Stale overwrite"},expected_revision:paper.data.metadata_revision}});
+ assert.equal(stale.status,409);
+ for(const mount of ["/LabVium/api","/ku-ai/api"]){
+  const pdf=await call(mount,`/papers/${identity}/pdf`,{headers:{range:"bytes=0-4"}});
+  assert.equal(pdf.status,206);assert.equal(new TextDecoder().decode(pdf.data),"%PDF-");
+  assert.equal((await call(mount,`/papers/${identity}/pdf`,{user:"bob"})).status,404);
+  assert.equal((await call(mount,`/papers/${identity}`,{user:null})).status,401);
+  const root=await call(mount,"");assert.equal(root.status,404);assert.ok(root.response.headers.get("content-type").includes("application/json"));
+ }
+ const access=await call("/LabVium/api",`/papers/${identity}/pdf-access`);
+ assert.equal(access.data.pdf_url,`/LabVium/api/papers/${identity}/pdf`);
+ assert.deepEqual([...e.LABVIUM_PDFS.files.keys()],keys);
+ assert.equal(e.LABVIUM_DB.rows.get(await sha256("alice")).owner_key,before.workspace_id);
+});
+
+test("generated backup and recovery links use the canonical API while legacy downloads remain valid", async () => {
+ const e=env(),identity=await imported(e),current=await workspace(e);
+ const backup=await request(e,"/backups",{method:"POST",body:{kind:"full",expected_revision:current.workspace_revision}});
+ assert.equal(backup.status,200);assert.equal(backup.data.download_url,`/ku-ai/api/backups/${backup.data.backup_id}`);
+ assert.equal((await request(e,`/backups/${backup.data.backup_id}`)).status,200);
+ const canonicalBackup=await handleLabviumApi(new Request(`https://bandal.app/LabVium/api/backups/${backup.data.backup_id}`,{headers:{"oai-authenticated-user-id":"alice"}}),e);
+ assert.equal(canonicalBackup.status,200);
+ const paper=(await request(e,`/papers/${identity}`)).data;
+ await request(e,`/papers/${identity}/remove-pdf`,{method:"POST",body:{expected_pdf_revision:paper.pdf_revision,confirm:true}});
+ const entry=(await request(e,"/recovery")).data.items[0];
+ assert.equal(entry.download_url,`/ku-ai/api/recovery/${entry.recovery_id}/download`);
+ const canonicalRecovery=await handleLabviumApi(new Request("https://bandal.app/LabVium/api/recovery",{headers:{"oai-authenticated-user-id":"alice"}}),e);
+ assert.equal((await canonicalRecovery.json()).items[0].download_url,`/LabVium/api/recovery/${entry.recovery_id}/download`);
+ const canonicalBackups=await handleLabviumApi(new Request("https://bandal.app/LabVium/api/backups",{headers:{"oai-authenticated-user-id":"alice"}}),e);
+ assert.equal((await canonicalBackups.json()).items[0].download_url,`/LabVium/api/backups/${backup.data.backup_id}`);
+ const recovery=await handleLabviumApi(new Request(`https://bandal.app/LabVium/api/recovery/${entry.recovery_id}/download`,{headers:{"oai-authenticated-user-id":"alice"}}),e);
+ assert.equal(recovery.status,200);
+ assert.equal((await request(e,`/recovery/${entry.recovery_id}/download`)).status,200);
 });

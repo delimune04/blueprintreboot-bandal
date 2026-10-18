@@ -1,7 +1,7 @@
 # 랩비움 · BANDAL personal fork
 
 Research reading, evidence capture, related-paper discovery and lab handoff on
-[bandal.app/ku-ai](https://bandal.app/ku-ai/). This independent repository belongs
+[bandal.app/LabVium](https://bandal.app/LabVium). This independent repository belongs
 to `delimune04/blueprintreboot-bandal` and retains the work and attribution of
 Seoyeon Lee (Lilshawn-LSY) and Sanghyeon Park. The upstream repository is read-only.
 
@@ -42,7 +42,7 @@ are supplied and verified. Existing account ownership is unchanged.
 
 ## Lab collaboration
 
-`/ku-ai/collaboration/` brings a shared monthly calendar, idea review threads,
+`/LabVium/collaboration` brings a shared monthly calendar, idea review threads,
 assigned tasks and a personal notification inbox into the selected workspace.
 Owners and accepted editors can share and edit events, ask for feedback in either
 direction, and assign a task to an accepted editor. The task assignee reports

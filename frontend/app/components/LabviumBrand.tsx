@@ -1,7 +1,7 @@
 import "./labvium-brand.css";
 
 const assetBase = process.env.NEXT_PUBLIC_BANDAL_DEMO === "1"
-  ? (process.env.NEXT_PUBLIC_BANDAL_DEMO_BASE || "/ku-ai").replace(/\/$/, "")
+  ? (process.env.NEXT_PUBLIC_BANDAL_DEMO_BASE || "/LabVium").replace(/\/$/, "")
   : "";
 
 export function LabviumBrand({ variant = "default" }: { variant?: "default" | "compact" | "hero" }) {
