@@ -243,6 +243,7 @@ export function PdfJsReader({
   highlights = [],
   onRemoveHighlight,
   selectionActions,
+  annotationActions,
 }: {
   paperId: string;
   onSelectionChange?: (selection: PdfPageSelection | null) => void;
@@ -253,6 +254,7 @@ export function PdfJsReader({
   highlights?: ReaderHighlight[];
   onRemoveHighlight?: (id: string) => void;
   selectionActions?: ReactNode;
+  annotationActions?: ReactNode;
 }) {
   const { t } = useI18n();
   const pdfUrl = useMemo(() => paperPdfUrl(paperId), [paperId]);
@@ -513,13 +515,14 @@ export function PdfJsReader({
         </div>
       </div>
       {selectionActions}
+      {annotationActions}
       <div ref={setViewportElement} className="reader-canvas-viewport">
         {pdfDocument ? <div className="reader-pdf-page-stack">{Array.from({ length: state.totalPages }, (_, index) => index + 1).map((pageNumber) => <ContinuousPdfPage key={pageNumber} document={pdfDocument} pageNumber={pageNumber} zoom={state.zoom} viewportRoot={viewportRoot} active={state.pageNumber === pageNumber} defaultPageSize={pageSize.width ? pageSize : { width: 612, height: 792 }} highlights={highlights.filter((highlight) => highlight.pageNumber === pageNumber)} onRendered={onRendered} onRenderError={onRenderError} onSelectionChange={onSelectionChange} />)}</div> : null}
         {state.mode === "loading" ? <div className="reader-render-state" role="status"><LoaderCircle className="loading-icon" size={22} aria-hidden="true" /><div><h2>{t("Loading PDF.js Reader")}</h2><p>{t("Loading the managed PDF through the local same-origin endpoint.")}</p></div></div> : null}
         {state.mode === "ready" && state.rendering ? <div className="reader-render-progress" role="status">{t("Rendering page {page}…", { page: state.pageNumber })}</div> : null}
         {state.mode === "error" ? <div className="reader-render-state" role="alert"><AlertCircle size={22} aria-hidden="true" /><div><h2>{state.errorKind === "unavailable" ? "Local PDF service unavailable" : state.errorKind === "not-found" ? "Managed PDF missing" : "PDF.js Reader unavailable"}</h2><p>{state.message || "The managed PDF could not be displayed."}</p><div className="reader-error-actions"><button className="reader-control" type="button" onClick={() => setLoadAttempt((value) => value + 1)}>{t("Retry PDF.js")}</button><button className="reader-control reader-control--secondary" type="button" onClick={() => setFallbackActive(true)}>{t("Use native viewer fallback")}</button></div></div></div> : null}
       </div>
-      {highlights.length ? <details className="reader-highlight-list"><summary>{t("Highlights ({count})", { count: highlights.length })}</summary>{highlights.map((highlight) => <div key={highlight.id}><button className="text-link" type="button" onClick={() => setPage(highlight.pageNumber)}>{t("Page {page}", { page: highlight.pageNumber })}: {highlight.text.slice(0, 100)}</button>{onRemoveHighlight ? <button className="reader-control reader-control--secondary" type="button" onClick={() => onRemoveHighlight(highlight.id)}>{t("Remove highlight")}</button> : null}</div>)}</details> : null}
+      {highlights.length ? <details className="reader-highlight-list"><summary>{t("Highlights ({count})", { count: highlights.length })}</summary>{highlights.map((highlight) => <div key={highlight.id}><button className="text-link" type="button" onClick={() => setPage(highlight.pageNumber)}>{t("Page {page}", { page: highlight.pageNumber })}: {highlight.text.slice(0, 100)}</button>{highlight.id.startsWith("block:") ? <span className="muted-text">{t("Saved in this paper’s Blocks")}</span> : onRemoveHighlight ? <button className="reader-control reader-control--secondary" type="button" onClick={() => onRemoveHighlight(highlight.id)}>{t("Remove highlight")}</button> : null}</div>)}</details> : null}
       {preferenceMessage ? <p className="reader-editor__status" role="status">{t(preferenceMessage)}</p> : null}
       {diagnosticsEnabled ? <ReaderDiagnostics diagnostics={diagnostics} /> : null}
     </div>

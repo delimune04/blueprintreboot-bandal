@@ -54,10 +54,12 @@ async function executeBrowserWorkspaceRequest(path, init = {}) {
   const url = new URL(path, "https://labvium.invalid");
   const parts = url.pathname.split("/").filter(Boolean);
   const ownedRecovery = parts[0] === "recovery" && ((parts.length === 1 && (init.method || "GET") === "GET") || parts[1]?.startsWith("research-pages-"));
-  const owned = ownedRecovery || (parts[0] === "research" && parts[1] === "pages") || ["workspace", "backups", "exports", "discover", "search"].includes(parts[0]);
+  const discoveryPaper = parts[0] === "papers" && ((parts.length === 2 && ["from-discovery", "discovery-index"].includes(parts[1])) || (parts.length === 3 && parts[2] === "pdf-attachment"));
+  const owned = discoveryPaper || ownedRecovery || (parts[0] === "research" && parts[1] === "pages") || ["workspace", "backups", "exports", "discover", "search"].includes(parts[0]);
   if (!owned) return null;
   try {
     if (init.signal?.aborted) throw new DOMException("The operation was aborted.", "AbortError");
+    if (discoveryPaper) return await demoRequest(path, init);
     const method = (init.method || "GET").toUpperCase();
     const body = init.body == null ? {} : JSON.parse(init.body);
     if (ownedRecovery && parts.length === 1 && method === "GET") {

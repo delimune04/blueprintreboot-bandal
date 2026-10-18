@@ -8,6 +8,8 @@ import { EmptyState, ErrorState, LoadingState, UnavailableState } from "../compo
 import { Breadcrumbs } from "../components/Breadcrumbs";
 import { DetailPanel } from "../components/DetailPanel";
 import { FirstPageThumbnail } from "../components/FirstPageThumbnail";
+import { PaperDocumentAccess } from "../components/PaperDocumentAccess";
+import { PaperNextSteps } from "../components/PaperNextSteps";
 import { QuickIdeaButton } from "../components/QuickIdeaButton";
 import { PageHeader } from "../components/PageHeader";
 import { Section } from "../components/Section";
@@ -37,7 +39,8 @@ export function PaperDetailView({ paperId }: { paperId: string }) {
       {resource.status === "success" ? (
         <>
           <Breadcrumbs items={[{ label: "Library", href: "/library" }, { label: resource.data.title || "Paper" }]} />
-          <PageHeader title={resource.data.title || t("Untitled paper")} description={[formatAuthorSummary(resource.data.authors, resource.data.first_author, locale), resource.data.journal, resource.data.year].filter(Boolean).join(" · ")} actions={<div className="paper-detail-actions"><QuickIdeaButton source={{type:"paper",id:resource.data.paper_id,title:resource.data.title,excerpt:resource.data.abstract}}/><div className="badge-row"><StatusBadge>{resource.data.status}</StatusBadge>{resource.data.priority ? <StatusBadge>{resource.data.priority}</StatusBadge> : null}{resource.data.archived ? <StatusBadge>{t("Archived")}</StatusBadge> : null}{resource.data.missing_pdf ? <StatusBadge tone="rose">{t("Missing PDF")}</StatusBadge> : null}</div>{!resource.data.missing_pdf && resource.data.relative_pdf_path ? <Link className="reader-action" href={`/papers/${encodeURIComponent(resource.data.paper_id)}/reader`}><BookOpen size={16} />{t("Open Reader")}</Link> : <div className="paper-detail-recovery"><span className="reader-action reader-action--disabled" aria-disabled="true">{t("Reader unavailable")}</span><Link className="reader-action" href="/library"><LibraryBig size={16} />{t("Open Library Scan")}</Link><Link className="text-link" href="/settings/diagnostics">{t("Review diagnostics")}</Link></div>}</div>} />
+          <PageHeader title={resource.data.title || t("Untitled paper")} description={[formatAuthorSummary(resource.data.authors, resource.data.first_author, locale), resource.data.journal, resource.data.year].filter(Boolean).join(" · ")} actions={<div className="paper-detail-actions"><QuickIdeaButton source={{type:"paper",id:resource.data.paper_id,title:resource.data.title,excerpt:resource.data.abstract}}/><div className="badge-row"><StatusBadge>{resource.data.status}</StatusBadge>{resource.data.priority ? <StatusBadge>{resource.data.priority}</StatusBadge> : null}{resource.data.archived ? <StatusBadge>{t("Archived")}</StatusBadge> : null}{resource.data.missing_pdf ? <StatusBadge tone={resource.data.metadata_only ? "slate" : "rose"}>{resource.data.metadata_only ? (locale === "ko" ? "서지정보 저장" : "Metadata saved") : t("Missing PDF")}</StatusBadge> : null}</div>{!resource.data.missing_pdf && resource.data.relative_pdf_path ? <Link className="reader-action" href={`/papers/${encodeURIComponent(resource.data.paper_id)}/reader`}><BookOpen size={16} />{t("Open Reader")}</Link> : resource.data.metadata_only ? <button className="reader-action" type="button" onClick={() => document.getElementById("paper-document")?.scrollIntoView({behavior:"smooth",block:"start"})}><BookOpen size={16}/>{locale === "ko" ? "PDF 연결하고 읽기" : "Connect PDF and read"}</button> : <div className="paper-detail-recovery"><span className="reader-action reader-action--disabled" aria-disabled="true">{t("Reader unavailable")}</span><Link className="reader-action" href="/library"><LibraryBig size={16} />{t("Open Library Scan")}</Link><Link className="text-link" href="/settings/diagnostics">{t("Review diagnostics")}</Link></div>}</div>} />
+          <PaperDocumentAccess paper={resource.data} onAttached={resource.retry}/>
           <div className="paper-detail-content-grid">
             <div className="paper-detail-main">
               <Section title={t("Abstract")}>
@@ -59,6 +62,7 @@ export function PaperDetailView({ paperId }: { paperId: string }) {
               <DetailPanel title={t("Reading context")}><p>{resource.data.note_available ? t("A reading note is ready in Reader.") : t("Open Reader to begin a reading note.")}</p></DetailPanel>
             </aside>
           </div>
+          <PaperNextSteps paperId={paperId}/>
           {resource.data.keywords.length ? <Section title={t("Keywords")}><div className="tag-list">{resource.data.keywords.map((keyword) => <StatusBadge presentation="chip" taxonomy="alias" key={keyword}>{keyword}</StatusBadge>)}</div></Section> : null}
         </>
       ) : null}

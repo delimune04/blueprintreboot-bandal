@@ -48,6 +48,11 @@ const REVIEW_KO: Record<string, string> = {
 };
 
 const KO: Record<string, string> = {
+  "Explain selected text with AI": "선택 구간 AI 설명",
+  "Summarize paper with AI": "AI로 논문 요약",
+  "Saved in this paper’s Blocks": "이 논문의 메모 블록에 저장됨",
+  "Select a shorter excerpt before saving.": "저장하기 전에 더 짧은 구간을 선택해주세요.",
+  "Highlight saved ✔️ · Reopen it in this paper’s Blocks.": "하이라이트 저장 완료 ✔️ · 이 논문의 메모 블록에서 다시 볼 수 있습니다.",
   ...REVIEW_KO,
   ...ADVANCED_KO,
   ...READER_KO,

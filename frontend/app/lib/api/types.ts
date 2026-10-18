@@ -31,6 +31,7 @@ export interface PaperListItem {
   tags: string[];
   archived: boolean;
   missing_pdf: boolean;
+  metadata_only?: boolean;
   health: string[];
 }
 
@@ -42,6 +43,8 @@ export interface ProjectLink {
 }
 
 export interface PaperDetail extends PaperListItem {
+  external_source?: import("../workspace/types").ScholarlyWork;
+  discovery_identifiers?: string[];
   authors: string[];
   journal: string;
   abstract: string;

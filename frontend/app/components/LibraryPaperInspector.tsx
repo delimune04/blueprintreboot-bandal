@@ -11,6 +11,7 @@ import { StatusBadge } from "./StatusBadge";
 import { useApiResource } from "../hooks/useApiResource";
 import { apiClient } from "../lib/api/client";
 import { patchPaperReadingStatus } from "../lib/library/reading-status-collection.mjs";
+import { isMetadataOnlyPaper } from "../lib/library/paper-file-state.mjs";
 import { formatAuthorSummary } from "../lib/presentation";
 import { abstractDisplayParagraphs } from "../lib/abstract-display.mjs";
 
@@ -29,12 +30,14 @@ export function LibraryPaperInspector({ paperId, onDismiss, onEnrich, enrichment
   onReadingStatusSaved: (update: { paperId: string; previousStatus: string; readingStatus: "unread" | "reading" | "read" | "finished" }) => void;
 }) {
   const { t, locale } = useI18n();
+  const say = (ko: string, en: string) => locale === "ko" ? ko : en;
   const resource = useApiResource(`library-inspector:${paperId}`, () => apiClient.getPaper(paperId));
   const [abstractExpanded, setAbstractExpanded] = useState(false);
   const [statusBusy, setStatusBusy] = useState(false);
   const [statusMessage, setStatusMessage] = useState("");
   const [removalBusy, setRemovalBusy] = useState(false);
   const [removalMessage, setRemovalMessage] = useState("");
+  const metadataOnly = resource.status === "success" && isMetadataOnlyPaper(resource.data);
   const abstractParagraphs = useMemo(
     () => resource.status === "success" ? abstractDisplayParagraphs(resource.data.abstract) : [],
     [resource],
@@ -111,15 +114,16 @@ export function LibraryPaperInspector({ paperId, onDismiss, onEnrich, enrichment
               <div className="badge-row">
                 <StatusBadge>{resource.data.status}</StatusBadge>
                 {resource.data.priority ? <StatusBadge>{resource.data.priority}</StatusBadge> : null}
-                {resource.data.missing_pdf ? <StatusBadge tone="rose">{t("Missing PDF")}</StatusBadge> : null}
+                {metadataOnly ? <span className="library-paper-file-state">{say("서지정보 저장 · PDF 연결 필요", "Citation saved · Attach a PDF")}</span> : resource.data.missing_pdf ? <StatusBadge tone="rose">{t("Missing PDF")}</StatusBadge> : null}
               </div>
               <div className="library-paper-inspector__actions">
                 {!resource.data.missing_pdf && resource.data.relative_pdf_path ? <Link className="reader-action" href={`/papers/${encodeURIComponent(resource.data.paper_id)}/reader`}><BookOpen size={16} />{t("Open Reader")}</Link> : null}
-                <Link className="text-link" href={`/papers/${encodeURIComponent(resource.data.paper_id)}`}>{t("View Paper Detail")}</Link>
+                <Link className={metadataOnly ? "reader-action" : "text-link"} href={`/papers/${encodeURIComponent(resource.data.paper_id)}`}>{metadataOnly ? <><BookOpen size={16} />{say("논문 열기 · PDF 연결", "Open paper · Attach PDF")}</> : t("View Paper Detail")}</Link>
                 <button className="reader-control reader-control--secondary" type="button" disabled={enrichmentBusy} onClick={() => onEnrich(resource.data.paper_id)}>{enrichmentBusy ? t("Loading…") : t("Find metadata")}</button>
               </div>
             </div>
           </div>
+          {metadataOnly ? <p className="library-paper-inspector__context">{say("논문 보관함에 서지정보와 초록이 저장되어 있습니다. 논문을 열어 원문을 확인하고 PDF를 연결하면 하이라이트와 플로팅 메모를 사용할 수 있습니다.", "This paper’s citation details and abstract are saved in Library. Open the paper to visit its source and attach a PDF for highlights and floating notes.")}</p> : null}
           <section className="library-paper-inspector__section library-paper-inspector__metadata-summary" aria-labelledby="selected-paper-metadata">
             <h3 id="selected-paper-metadata">{t("Metadata")}</h3>
             <dl><div><dt>{t("Title")}</dt><dd>{resource.data.title ? t("present") : t("missing")}</dd></div><div><dt>{t("Authors")}</dt><dd>{resource.data.authors.length ? t("present") : t("missing")}</dd></div><div><dt>{t("DOI")}</dt><dd>{resource.data.doi ? t("present") : t("missing")}</dd></div></dl>
@@ -138,8 +142,7 @@ export function LibraryPaperInspector({ paperId, onDismiss, onEnrich, enrichment
           </section>
           <section className="library-paper-inspector__section library-paper-inspector__removal" aria-labelledby="selected-paper-removal">
             <h3 id="selected-paper-removal">{t("Remove safely")}</h3>
-            <p>{t("Remove PDF file creates a verified recovery copy first and leaves the Paper as Missing PDF.")}</p>
-            <button className="reader-control reader-control--secondary" type="button" disabled={removalBusy || resource.data.missing_pdf} onClick={() => void removePdf()}>{removalBusy ? t("Working…") : t("Remove PDF file")}</button>
+            {!metadataOnly ? <><p>{t("Remove PDF file creates a verified recovery copy first and leaves the Paper as Missing PDF.")}</p><button className="reader-control reader-control--secondary" type="button" disabled={removalBusy || resource.data.missing_pdf} onClick={() => void removePdf()}>{removalBusy ? t("Working…") : t("Remove PDF file")}</button></> : null}
             <p>{t("Remove Paper from Library archives it from active views. It does not delete the managed PDF or any Paper-owned research.")}</p>
             <button className="reader-control reader-control--secondary" type="button" disabled={removalBusy || resource.data.archived} onClick={() => void archivePaper()}>{resource.data.archived ? t("Archived") : t("Remove Paper from Library")}</button>
             <p className="library-paper-inspector__context">{t("Permanent deletion is intentionally unavailable in this release.")}</p>

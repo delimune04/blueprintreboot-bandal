@@ -18,6 +18,7 @@ function createSurface({ request = async () => { throw new Error("Rendering must
     function localRequire(name) {
       if (name.endsWith(".css")) return {};
       if (name === "react") return hooks;
+      if (name === "next/link") return {default: ({children, ...props}) => React.createElement("a", props, children)};
       if (name.endsWith("/api/client")) return { labviumRequest: request, getWorkspaceRole: () => "owner", apiClient: { getAllPapers: async () => [] } };
       if (name.endsWith("/i18n/LocaleProvider")) return { useI18n: () => ({ locale, t: value => value }) };
       if (!name.startsWith(".")) return require(name);
@@ -60,7 +61,7 @@ test("rendered search results distinguish identical titles by authors, publicati
   assert.match(html, /검토 후보 60편/); assert.match(html, /동일 식별자 중복 2건/);
   assert.match(html, /적용 정렬: 인용수 많은 순/); assert.match(html, /전체 학술 데이터베이스의 순위가 아닙니다/);
   assert.match(html, /OpenAlex · arXiv/); assert.match(html, /Citations \(OpenAlex\): 1,000/); assert.match(html, /Citations \(OpenAlex\): Unavailable/);
-  assert.match(html, /Save as research page/); assert.match(html, /References/); assert.match(html, /Citing works/); assert.match(html, /Source PDF/);
+  assert.match(html, /논문 보관함에 저장/); assert.match(html, /References/); assert.match(html, /Citing works/); assert.match(html, /Source PDF/);
 });
 
 test("popularity uses supplied annual citation score and never invents unavailable metrics", () => {
@@ -73,14 +74,14 @@ test("popularity uses supplied annual citation score and never invents unavailab
   assert.ok(!authorHtml.includes("적용 정렬")); assert.ok(!authorHtml.includes("제목 정확히 일치"));
 });
 
-function hookController(request) {
+function hookController(request, index = { items: [] }) {
   const values = []; const cleanups = []; let cursor = 0;
   const hooks = { ...React,
     useState(initial) { const index = cursor++; if (!(index in values)) values[index] = typeof initial === "function" ? initial() : initial; return [values[index], next => { values[index] = typeof next === "function" ? next(values[index]) : next; }]; },
     useRef(initial) { const index = cursor++; if (!(index in values)) values[index] = { current: initial }; return values[index]; },
     useEffect(effect) { const index = cursor++; if (!(index in values)) { values[index] = true; cleanups.push(effect()); } },
   };
-  const ui = createSurface({ request, hooks });
+  const ui = createSurface({ request: (path, options) => path === "/papers/discovery-index" ? Promise.resolve(index) : request(path, options), hooks });
   return { render() { cursor = 0; return ui.DiscoverView(); }, unmount() { cleanups.forEach(cleanup => cleanup?.()); } };
 }
 function nodes(tree, predicate) {
@@ -172,4 +173,41 @@ test("provider warning codes become readable bilingual partial-result guidance",
   const englishHtml = renderToStaticMarkup(React.createElement(english.DiscoveryResults, { results: { ...response, warnings: [...warnings, "The source omitted some fields."] }, criteria, ...callbacks }));
   assert.match(englishHtml, /OpenAlex could not be reached/); assert.match(englishHtml, /Only retrieved candidates matching/); assert.match(englishHtml, /The source omitted some fields/);
   for (const warning of warnings) assert.ok(!englishHtml.includes(warning), warning);
+});
+
+test("saving creates an actual library paper, shows a stable saved check and direct destination, and blocks double clicks", async () => {
+  const requests = [];
+  const controller = hookController((path, options) => {
+    if (path.startsWith("/discover?")) return Promise.resolve(response);
+    return new Promise((resolve, reject) => requests.push({path, options, resolve, reject}));
+  });
+  let tree = controller.render(); paperInput(tree).props.onChange({target: {value: work.title}}); tree = controller.render(); form(tree).props.onSubmit({preventDefault(){}}); await settle(); tree = controller.render();
+  let results = nodes(tree, node => node.type?.name === "DiscoveryResults")[0];
+  results.props.onSave(work); results.props.onSave(work);
+  assert.equal(requests.length, 1); assert.equal(requests[0].path, "/papers/from-discovery"); assert.deepEqual(requests[0].options.body, {work});
+  requests[0].resolve({paper_id: "paper-original", keys: ["doi:10.5555/original"]}); await settle(); tree = controller.render();
+  results = nodes(tree, node => node.type?.name === "DiscoveryResults")[0];
+  const html = renderToStaticMarkup(React.createElement(surface.DiscoveryResults, results.props));
+  assert.match(html, /저장 완료 ✔️/); assert.match(html, /저장 위치: 논문 보관함/); assert.match(html, /href="\/papers\/paper-original"/); assert.ok(!html.includes("Save as research page"));
+  results.props.onSave({...work, id: "other-provider", doi: "https://doi.org/10.5555/ORIGINAL"}); assert.equal(requests.length, 1);
+  controller.unmount();
+});
+
+test("saved identity index restores checks after reopening search; failed writes keep save available", async () => {
+  const keys = ["doi:10.5555/original"];
+  const controller = hookController(async (path) => path.startsWith("/discover?") ? response : Promise.reject(new Error("Save failed in test")), {items: [{paper_id:"saved-before-reload",keys}]});
+  let tree = controller.render(); await settle(); paperInput(tree).props.onChange({target:{value:work.title}}); tree = controller.render(); form(tree).props.onSubmit({preventDefault(){}}); await settle(); tree=controller.render();
+  const results=nodes(tree,node=>node.type?.name==="DiscoveryResults")[0];
+  assert.equal(surface.savedDiscoveryPaper(work,results.props.savedPapers),"saved-before-reload");
+  const other = {...work,id:"arxiv:2401.00001",doi:"",arxiv_id:"2401.00001",url:"https://arxiv.org/abs/2401.00001"};
+  results.props.onSave(other); await settle(); tree=controller.render();
+  assert.match(renderToStaticMarkup(tree),/Save failed in test/);
+  const current=nodes(tree,node=>node.type?.name==="DiscoveryResults")[0]; assert.equal(surface.savedDiscoveryPaper(other,current.props.savedPapers),"");
+  controller.unmount();
+});
+
+test("ambiguous saved identifiers never point at an arbitrary library paper", () => {
+  const map = surface.discoverySavedMap([{paper_id:"one",keys:["doi:10.5555/original"]},{paper_id:"two",keys:["doi:10.5555/original"]}]);
+  assert.equal(surface.savedDiscoveryPaper(work,map),"");
+  assert.equal(surface.savedDiscoveryPaper(work,{"doi:10.5555/original":"one","arxiv:1706.03762":"two"}),"");
 });

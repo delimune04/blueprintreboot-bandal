@@ -8,6 +8,9 @@ import { Breadcrumbs } from "../components/Breadcrumbs";
 import { PdfJsReader } from "../components/PdfJsReader";
 import { FullTextWorkspace } from "../components/FullTextWorkspace";
 import { NoteBlocksWorkspace } from "../components/NoteBlocksWorkspace";
+import { PaperNextSteps } from "../components/PaperNextSteps";
+import { ReaderFloatingMemos } from "../components/ReaderFloatingMemos";
+import { ReaderSelectionAssistant, type ReaderAiRequest } from "../components/ReaderSelectionAssistant";
 import { SaveStatus } from "../components/SaveStatus";
 import { StatusBadge } from "../components/StatusBadge";
 import { useApiResource } from "../hooks/useApiResource";
@@ -16,6 +19,7 @@ import { ApiClientError, apiClient, getWorkspaceMode } from "../lib/api/client";
 import { useI18n } from "../lib/i18n/LocaleProvider";
 import type { PdfPageSelection } from "../lib/pdf/selection-coordinates.mjs";
 import { appendReaderHighlight, readReaderPreferences, selectionEvidenceDraft, updateReaderPreferences, type ReaderHighlight } from "../lib/reader/browser-reader-state.mjs";
+import { citedBlockHighlights, mergeReaderHighlights } from "../lib/reader/floating-memo.mjs";
 
 import type { CanonicalTag, EditablePaperMetadata, MetadataEnrichmentPreview, PaperTagCommandResponse, ReaderSnapshot, TagCandidateCollection } from "../lib/api/types";
 import {
@@ -99,6 +103,7 @@ function ReaderPdf({
   highlights,
   onRemoveHighlight,
   selectionActions,
+  annotationActions,
 }: {
   snapshot: ReaderSnapshot;
   layoutResizeActive: boolean;
@@ -109,6 +114,7 @@ function ReaderPdf({
   highlights: ReaderHighlight[];
   onRemoveHighlight: (id: string) => void;
   selectionActions?: ReactNode;
+  annotationActions?: ReactNode;
 }) {
   const { t } = useI18n();
   if (snapshot.pdf_state === "missing" || snapshot.paper.missing_pdf || !snapshot.paper.relative_pdf_path) {
@@ -129,6 +135,7 @@ function ReaderPdf({
     highlights={highlights}
     onRemoveHighlight={onRemoveHighlight}
     selectionActions={selectionActions}
+    annotationActions={annotationActions}
   />;
 }
 
@@ -301,6 +308,9 @@ function ReaderWorkspace({ snapshot }: { snapshot: ReaderSnapshot }) {
   const [narrowReader, setNarrowReader] = useState(false);
   const [pdfSelection, setPdfSelection] = useState<PdfPageSelection | null>(null);
   const [readerHighlights, setReaderHighlights] = useState<ReaderHighlight[]>([]);
+  const [citedHighlights, setCitedHighlights] = useState<ReaderHighlight[]>([]);
+  const [aiRequest, setAiRequest] = useState<ReaderAiRequest | null>(null);
+  const visibleHighlights = useMemo(() => mergeReaderHighlights(readerHighlights, citedHighlights), [readerHighlights, citedHighlights]);
   const [selectionMessage, setSelectionMessage] = useState("");
   const [pageJump, setPageJump] = useState<{ page: number; token: number } | null>(null);
   const [blockRefreshToken, setBlockRefreshToken] = useState(0);
@@ -533,6 +543,7 @@ function ReaderWorkspace({ snapshot }: { snapshot: ReaderSnapshot }) {
   };
   const saveHighlight = (selection: PdfPageSelection = pdfSelection!) => {
     if (!selection) return;
+    if (extendedReaderCommands) { void saveSelectionEvidence("highlight"); return; }
     const saved = updateReaderPreferences(browserStorage(), snapshot.paper.paper_id, (current) => appendReaderHighlight(current, selection, crypto.randomUUID()));
     if (saved.ok) { setReaderHighlights(saved.value.highlights); setSelectionMessage("Highlight saved in this browser."); }
     else setSelectionMessage(saved.message);
@@ -542,19 +553,21 @@ function ReaderWorkspace({ snapshot }: { snapshot: ReaderSnapshot }) {
     if (saved.ok) { setReaderHighlights(saved.value.highlights); setSelectionMessage("Highlight removed."); }
     else setSelectionMessage(saved.message);
   };
-  const saveSelectionEvidence = async () => {
+  const saveSelectionEvidence = async (mode: "evidence" | "highlight" = "evidence") => {
     if (!pdfSelection || mutationBusy || !extendedReaderCommands) return;
     const selection = pdfSelection;
+    if (selection.rectangles.length > 200) { setSelectionMessage("Select a shorter excerpt before saving."); return; }
     const token = beginMutation();
     if (token === null) return;
     setSelectionMessage("Saving cited evidence…");
     try {
       const collection = await apiClient.getNoteBlocks(snapshot.paper.paper_id);
-      const created = await apiClient.createNoteBlock(snapshot.paper.paper_id, selectionEvidenceDraft(selection), collection.note_blocks_revision);
+      const existing = collection.items.find((block) => {
+        const source = block.provenance;
+        return source?.source === "pdf_selection" && source.page === selection.pageNumber && source.quote === selection.text && JSON.stringify(source.rectangles) === JSON.stringify(selection.rectangles);
+      });
+      const created = existing ? { block: existing } : await apiClient.createNoteBlock(snapshot.paper.paper_id, selectionEvidenceDraft(selection), collection.note_blocks_revision);
       setBlockRefreshToken((current) => current + 1);
-      setBlocksVisited(true);
-      setActiveResearchTab("blocks");
-      if (!narrowReader) setResearchPanelCollapsed(false);
       const provenance = created.block.provenance;
       const confirmed = created.block.paper_id === snapshot.paper.paper_id && provenance?.source === "pdf_selection"
         && provenance.page === selection.pageNumber && provenance.coordinate_space === selection.coordinateSpace
@@ -564,10 +577,15 @@ function ReaderWorkspace({ snapshot }: { snapshot: ReaderSnapshot }) {
         setSelectionMessage("A block was saved, but its PDF provenance could not be confirmed. Review the block before retrying.");
         return;
       }
+      setCitedHighlights(citedBlockHighlights(existing ? collection.items : [created.block, ...collection.items], snapshot.paper.paper_id));
+      if (mode === "evidence") {
+        setBlocksVisited(true); setActiveResearchTab("blocks");
+        if (!narrowReader) setResearchPanelCollapsed(false);
+      }
       setPdfSelection((current) => current && JSON.stringify(current) === JSON.stringify(selection) ? null : current);
       const highlighted = updateReaderPreferences(browserStorage(), snapshot.paper.paper_id, (current) => appendReaderHighlight(current, selection, crypto.randomUUID()));
       if (highlighted.ok) setReaderHighlights(highlighted.value.highlights);
-      setSelectionMessage(highlighted.ok ? "Evidence block saved with its Paper, page and selection coordinates." : "Evidence block saved. The browser highlight could not be saved.");
+      setSelectionMessage(mode === "highlight" ? "Highlight saved ✔️ · Reopen it in this paper’s Blocks." : "Evidence block saved with its Paper, page and selection coordinates.");
     } catch (error) {
       setSelectionMessage(error instanceof ApiClientError && error.kind === "conflict" ? "The block collection changed. Your PDF selection is preserved; retry explicitly." : "Evidence was not saved. Your PDF selection is preserved.");
     } finally { finishMutation(token); }
@@ -1412,8 +1430,9 @@ function ReaderWorkspace({ snapshot }: { snapshot: ReaderSnapshot }) {
             </div>
           </section>
           <section id="reader-panel-blocks" role="tabpanel" aria-labelledby="reader-tab-blocks" hidden={activeResearchTab !== "blocks"}>
-            {blocksVisited ? <NoteBlocksWorkspace key={snapshot.paper.paper_id} paperId={snapshot.paper.paper_id} focusBlockId={noteBlockId} refreshToken={blockRefreshToken} onJumpToPage={jumpToPage} mutationBusy={mutationBusy} acquireMutation={beginMutation} releaseMutation={finishMutation} /> : null}
+            {blocksVisited ? <NoteBlocksWorkspace key={snapshot.paper.paper_id} paperId={snapshot.paper.paper_id} focusBlockId={noteBlockId} refreshToken={blockRefreshToken} onChanged={() => setBlockRefreshToken((current) => current + 1)} onJumpToPage={jumpToPage} mutationBusy={mutationBusy} acquireMutation={beginMutation} releaseMutation={finishMutation} /> : null}
           </section>
+          <PaperNextSteps key={`${snapshot.paper.paper_id}:${readingStatus}`} paperId={snapshot.paper.paper_id} />
               </div>
             </>
           )}
@@ -1445,9 +1464,10 @@ function ReaderWorkspace({ snapshot }: { snapshot: ReaderSnapshot }) {
             onCaptureLayoutAnchor={capturePdfLayoutAnchor}
             onSelectionChange={setPdfSelection}
             pageJump={pageJump}
-            highlights={readerHighlights}
+            highlights={visibleHighlights}
             onRemoveHighlight={removeHighlight}
-            selectionActions={<div className="reader-selection-capture" aria-live="polite">{pdfSelection ? <><strong>{t("Selected text · Page {page}", { page: pdfSelection.pageNumber })}</strong><blockquote>{pdfSelection.text}</blockquote><div className="reader-editor__actions"><button className="reader-control" type="button" disabled={mutationBusy || !extendedReaderCommands} title={!extendedReaderCommands ? t("Cited selection blocks require the browser or cloud workspace.") : undefined} onClick={() => void saveSelectionEvidence()}><Quote size={15} />{t("Save as cited evidence")}</button><button className="reader-control reader-control--secondary" type="button" onClick={() => saveHighlight()}>{t("Highlight")}</button><button className="reader-control reader-control--secondary" type="button" onClick={() => setPdfSelection(null)}>{t("Clear selection")}</button></div></> : <span className="muted-text">{t("Select PDF text to save a cited evidence block or highlight.")}</span>}{selectionMessage ? <p role="status">{t(selectionMessage)}</p> : null}</div>}
+            annotationActions={<ReaderFloatingMemos key={snapshot.paper.paper_id} paperId={snapshot.paper.paper_id} selection={pdfSelection} refreshToken={blockRefreshToken} mutationBusy={mutationBusy} acquireMutation={beginMutation} releaseMutation={finishMutation} onSaved={() => setBlockRefreshToken((current) => current + 1)} onHighlights={setCitedHighlights} onJumpToPage={jumpToPage} />}
+            selectionActions={<div className="reader-selection-capture" aria-live="polite">{pdfSelection ? <><strong>{t("Selected text · Page {page}", { page: pdfSelection.pageNumber })}</strong><blockquote>{pdfSelection.text}</blockquote><div className="reader-editor__actions"><button className="reader-control" type="button" disabled={mutationBusy || !extendedReaderCommands} title={!extendedReaderCommands ? t("Cited selection blocks require the browser or cloud workspace.") : undefined} onClick={() => void saveSelectionEvidence()}><Quote size={15} />{t("Save as cited evidence")}</button><button className="reader-control reader-control--secondary" type="button" disabled={mutationBusy} onClick={() => saveHighlight()}>{t("Highlight")}</button><button className="reader-control reader-control--secondary" type="button" onClick={() => setAiRequest({ token: Date.now(), action: "explain", selection: structuredClone(pdfSelection) })}>{t("Explain selected text with AI")}</button><button className="reader-control reader-control--secondary" type="button" onClick={() => setPdfSelection(null)}>{t("Clear selection")}</button></div></> : <span className="muted-text">{t("Select PDF text to save a cited evidence block or highlight.")}</span>}<button className="reader-control reader-control--secondary" type="button" onClick={() => setAiRequest({ token: Date.now(), action: "summary", selection: null })}>{t("Summarize paper with AI")}</button>{selectionMessage ? <p role="status">{t(selectionMessage)}</p> : null}</div>}
           />
         </section>
         {activeUtility ? (
@@ -1515,6 +1535,14 @@ function ReaderWorkspace({ snapshot }: { snapshot: ReaderSnapshot }) {
           </aside>
         ) : null}
       </div>
+      <ReaderSelectionAssistant key={`${snapshot.paper.paper_id}:${aiRequest?.token ?? "closed"}`} paperId={snapshot.paper.paper_id} request={aiRequest} onClose={() => setAiRequest(null)} onUseDraft={(text) => {
+        if (noteUnavailable) { setSelectionMessage("The Paper Note is unavailable. Copy the AI draft before leaving."); return; }
+        updateNote((current) => {
+          const draft = `${current.draft.trimEnd()}\n\n${text}\n`;
+          return { ...editRevisionDraft(current, draft), status: "dirty", message: "AI draft appended. Verify it against the source and choose Save explicitly." };
+        });
+        setActiveResearchTab("note"); setResearchPanelCollapsed(false);
+      }} />
       {linkPopoverOpen ? (
         <div className="metadata-review-backdrop" role="presentation">
           <form ref={linkDialogRef} className="reader-link-dialog" role="dialog" aria-modal="true" aria-labelledby="paper-note-link-title" onSubmit={(event) => { event.preventDefault(); if (!linkUrl.trim()) return; formatPaperNote("link", linkUrl.trim()); closeLinkPopover(); }}>

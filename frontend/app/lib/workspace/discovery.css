@@ -1,4 +1,11 @@
 /* Search controls and scholarly identities stay readable at notebook density. */
+.discovery-library-guide { display:flex; align-items:flex-start; gap:var(--space-3); padding:var(--space-4); border-left:3px solid var(--state-violet); background:var(--color-surface); }
+.discovery-library-guide > svg { flex:none; margin-top:.2rem; color:var(--state-violet); }
+.discovery-library-guide > div { flex:1; min-width:0; }
+.discovery-library-guide p { margin:var(--space-2) 0 0; max-width:85ch; line-height:1.7; font-size:var(--font-size-sm); color:var(--color-text-secondary); }
+.discovery-save--complete:disabled { color:var(--state-green); opacity:1; border-color:var(--state-green); }
+.discovery-save-location { color:var(--state-green); font-size:var(--font-size-sm); margin:var(--space-2) 0 0; }
+@media(max-width:48rem) { .discovery-library-guide { flex-wrap:wrap; } .discovery-library-guide > .reader-control { margin-left:2rem; } }
 .discovery-search-form { display:grid; gap:var(--space-4); max-width:76rem; }
 .discovery-search-options { display:grid; grid-template-columns:repeat(2,minmax(9rem,12rem)) minmax(13rem,19rem); gap:var(--space-3); align-items:end; }
 .discovery-search-fields { display:grid; grid-template-columns:minmax(0,2fr) minmax(0,1fr) auto; gap:var(--space-3); align-items:end; }

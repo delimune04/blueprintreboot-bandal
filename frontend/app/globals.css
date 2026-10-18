@@ -208,6 +208,7 @@ button, input, textarea, select { font: inherit; }
 .library-paper-row__select:hover { color: var(--color-accent); }
 .library-paper-row__select:focus-visible { outline: 3px solid color-mix(in srgb, var(--color-accent-strong) 35%, transparent); outline-offset: 2px; }
 .library-paper-row__detail-link { width: fit-content; font-size: var(--font-size-xs); }
+.library-paper-file-state { display: block; width: fit-content; max-width: 100%; color: var(--color-text-secondary); font-size: var(--font-size-xs); white-space: normal; overflow-wrap: anywhere; }
 .library-paper-row__tags { min-width: 0; max-width: none; overflow: visible; }
 .library-paper-inspector { min-width: 0; display: grid; container-type: inline-size; gap: var(--space-3); padding: var(--space-4); border: 0; border-left: 3px solid var(--color-accent-strong); border-radius: 0; background: var(--color-surface); }
 .library-paper-inspector__heading { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); }

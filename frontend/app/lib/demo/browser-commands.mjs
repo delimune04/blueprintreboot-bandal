@@ -1,3 +1,5 @@
+import { validateDiscoverySource } from "../../../../hosting/domain/discovery-library.mjs";
+import { validateDiscoveryIdentifiers } from "../workspace/discovery-identity.mjs";
 import { DEMO_PAPERS } from "./seed.mjs";
 import { getBrowserPdfRecord, listBrowserPdfRecords, listBrowserRecoveryWorkspaces, restoreBrowserRecoveryWorkspace, validatePdfFile, sha256Blob, workspaceRevision } from "./browser-storage.mjs";
 import { extractPdfPages, extractedPagesContent } from "./pdf-extraction.mjs";
@@ -21,6 +23,8 @@ export function validatePdfProvenance(value) {
 }
 export function validateBrowserPaper(paper) {
   if (!object(paper) || (!sample(paper) && !/^paper-[a-f0-9-]{36}$/.test(paper.paper_id))) return false;
+  if (paper.external_source !== undefined) { try { validateDiscoverySource(paper.external_source); } catch { return false; } }
+  if (paper.discovery_identifiers !== undefined) { try { validateDiscoveryIdentifiers(paper.discovery_identifiers); } catch { return false; } }
   if (paper.pdfId !== undefined && (typeof paper.pdfId !== "string" || !/^[a-z0-9-]{1,180}$/.test(paper.pdfId))) return false;
   if (paper.pdfSha256 !== undefined && !/^[0-9a-f]{64}$/.test(paper.pdfSha256)) return false;
   if (paper.pdfMissing !== undefined && typeof paper.pdfMissing !== "boolean") return false;

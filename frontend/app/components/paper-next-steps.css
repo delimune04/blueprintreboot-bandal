@@ -1,0 +1,30 @@
+.paper-next-steps { min-width: 0; display: grid; gap: var(--space-6); }
+.paper-next-steps .section-heading > div { min-width: 0; }
+.paper-next-steps .section-heading p { max-width: 75ch; }
+.paper-next-steps__entry { display: flex; align-items: flex-start; gap: var(--space-2); margin-bottom: var(--space-3); }
+.paper-next-steps__entry svg { flex: none; margin-top: 3px; color: var(--state-blue); }
+.paper-next-steps__controls { display: flex; align-items: center; flex-wrap: wrap; gap: var(--space-3); }
+.paper-next-steps__notice { border-left: 2px solid var(--state-green); padding-left: var(--space-3); }
+.paper-next-steps__saved { color: var(--state-green); }
+.paper-next-steps__exploration { min-width: 0; margin-top: var(--space-6); border-top: var(--rule); padding-top: var(--space-4); }
+.paper-next-steps__trail { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2); margin-bottom: var(--space-3); }
+.paper-next-steps__trail > span { min-width: 0; display: inline-flex; align-items: center; gap: var(--space-2); max-width: 100%; }
+.paper-next-steps__trail svg { flex: none; }
+.paper-next-steps__trail button { display: block; min-width: 0; max-width: 32ch; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; text-align: left; }
+.paper-next-steps__trail [aria-current="step"] { color: var(--color-text); font-weight: 600; }
+.paper-next-steps__exploration h3 { font-size: var(--font-size-md); margin: var(--space-4) 0 var(--space-2); }
+.paper-next-steps__results { list-style: none; padding: 0; margin: var(--space-4) 0 0; }
+.paper-next-steps__result { padding: var(--space-4) 0; border-top: var(--rule-faint); overflow-wrap: anywhere; }
+.paper-next-steps__result h4 { margin: 0 0 var(--space-2); font-size: var(--font-size-base); line-height: 1.5; }
+.paper-next-steps__result h4 svg { display: inline; vertical-align: baseline; }
+.paper-next-steps__result p { font-size: var(--font-size-sm); color: var(--color-text-secondary); margin: 0 0 var(--space-3); }
+.paper-next-steps__project-form { display: flex; flex-wrap: wrap; align-items: flex-end; gap: var(--space-3); }
+.paper-next-steps__project-form .reader-field { min-width: 0; flex: 1 1 220px; }
+.paper-next-steps__project-form select { max-width: 100%; width: 100%; }
+@media (max-width: 640px) {
+  .paper-next-steps__controls { align-items: stretch; gap: var(--space-2); }
+  .paper-next-steps__controls > .reader-control { white-space: normal; height: auto; min-height: var(--control-height); text-align: left; }
+  .paper-next-steps__project-form { align-items: stretch; }
+  .paper-next-steps__project-form .reader-field { flex-basis: 100%; }
+  .paper-next-steps__trail button { max-width: 24ch; }
+}

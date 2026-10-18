@@ -8,6 +8,7 @@ import { getProjectReview, saveProjectReview, freezeProjectReview } from "../../
 import { createResearchPagesStore, RESEARCH_PAGES_KEY } from "../workspace/pages.mjs";
 import { prepareAiSources } from "../ai/sources.mjs";
 import { validateCollaboration } from "../collaboration/model.mjs";
+import { handleBrowserDiscovery } from "../workspace/browser-discovery.mjs";
 
 export const DEMO_STORAGE_KEY = "bandal.blueprint.demo.workspace.v1";
 const VERSION = 1;
@@ -55,7 +56,7 @@ function reply(data, status = 200) {
   return new Response(JSON.stringify(data), { status, headers: { "Content-Type": "application/json", "Cache-Control": "no-store", "X-Bandal-Demo": "browser-local" } });
 }
 function header(paper) {
-  return { template_version: "1.0", paper_id: paper.paper_id, title: paper.metadata.title, doi: paper.metadata.doi, arxiv_id: "", year: paper.metadata.year, first_author: authors(paper)[0] || "", tags: paper.tags.join(", ") };
+  return { template_version: "1.0", paper_id: paper.paper_id, title: paper.metadata.title, doi: paper.metadata.doi, arxiv_id: paper.arxiv_id || "", year: paper.metadata.year, first_author: authors(paper)[0] || "", tags: paper.tags.join(", ") };
 }
 function headerText(paper) {
   const values = header(paper);
@@ -79,7 +80,7 @@ function canonicalNote(content, paper) {
   const body = content.slice(offset);
   return textField(`${headerText(paper)}\n${body}`, 2000000);
 }
-function authors(paper) { return paper.metadata.authors.split(/[;,]/).map((part) => part.trim()).filter(Boolean); }
+function authors(paper) { return paper.metadata.authors.split(";").map((part) => part.trim()).filter(Boolean); }
 
 export function createDemoSeed() {
   const papers = DEMO_PAPERS.map((sample) => {
@@ -181,11 +182,12 @@ function validateState(state) {
     fail(503, "The saved browser demo workspace is unreadable. It has been preserved; no reset was performed.");
   }
 }
+function metadataOnly(paper) { return Boolean(paper.external_source && !paper.pdfId && !paper.pdfSha256); }
 function listItem(paper) {
-  return { paper_id: paper.paper_id, title: paper.metadata.title, first_author: authors(paper)[0] || "", year: paper.metadata.year, status: paper.status, priority: paper.priority, tags: [...paper.tags], archived: paper.archived, missing_pdf: Boolean(paper.pdfMissing), health: paper.pdfMissing ? ["missing_pdf"] : [] };
+  return { paper_id: paper.paper_id, title: paper.metadata.title, first_author: authors(paper)[0] || "", year: paper.metadata.year, status: paper.status, priority: paper.priority, tags: [...paper.tags], archived: paper.archived, metadata_only: metadataOnly(paper), missing_pdf: Boolean(paper.pdfMissing), health: paper.pdfMissing && !metadataOnly(paper) ? ["missing_pdf"] : [] };
 }
 function paperDetail(paper, state) {
-  return { ...listItem(paper), authors: authors(paper), journal: paper.metadata.journal, abstract: paper.metadata.abstract, keywords: paper.metadata.keywords.split(/[;,]/).map((part) => part.trim()).filter(Boolean), arxiv_id: "", filename: paper.filename || `${paper.paper_id}.pdf`, relative_pdf_path: paper.pdfMissing ? "" : paper.pdfId || `bandal-demo/${paper.paper_id}.pdf`, doi: paper.metadata.doi, project_links: state.projects.flatMap((project) => project.links.filter((link) => link.paper_id === paper.paper_id && link.target_type === "paper").map((link) => ({ project_id: project.project_id, link_type: link.link_type, target_type: link.target_type }))), note_available: paper.noteExists, extracted_text_available: Boolean(paper.fullText || paper.fullTextCache?.content), profile_available: false, lifecycle_state: paper.archived ? "archived" : "active", recoverable_warnings: paper.pdfMissing ? ["missing_pdf"] : [], reading_status_revision: revision(paper.statusRev), pdf_revision: revision(paper.pdfVersion || 1), priority_revision: revision(paper.priorityRev || 1), lifecycle_revision: revision(paper.lifecycleRev) };
+  return { ...listItem(paper), authors: authors(paper), journal: paper.metadata.journal, abstract: paper.metadata.abstract, keywords: paper.metadata.keywords.split(/[;,]/).map((part) => part.trim()).filter(Boolean), arxiv_id: paper.arxiv_id || "", ...(paper.external_source ? { external_source: structuredClone(paper.external_source) } : {}), ...(paper.discovery_identifiers ? { discovery_identifiers: [...paper.discovery_identifiers] } : {}), filename: paper.filename || (metadataOnly(paper) ? "" : `${paper.paper_id}.pdf`), relative_pdf_path: paper.pdfMissing ? "" : paper.pdfId || `bandal-demo/${paper.paper_id}.pdf`, doi: paper.metadata.doi, project_links: state.projects.flatMap((project) => project.links.filter((link) => link.paper_id === paper.paper_id && link.target_type === "paper").map((link) => ({ project_id: project.project_id, link_type: link.link_type, target_type: link.target_type }))), note_available: paper.noteExists, extracted_text_available: Boolean(paper.fullText || paper.fullTextCache?.content), profile_available: false, lifecycle_state: paper.archived ? "archived" : "active", recoverable_warnings: paper.pdfMissing && !metadataOnly(paper) ? ["missing_pdf"] : [], reading_status_revision: revision(paper.statusRev), pdf_revision: revision(paper.pdfVersion || 1), priority_revision: revision(paper.priorityRev || 1), lifecycle_revision: revision(paper.lifecycleRev) };
 }
 async function persistedNote(paper) {
   return { exists: paper.noteExists, content: paper.note, sha256: await hash(paper.note), size_bytes: encoder.encode(paper.note).byteLength };
@@ -224,13 +226,13 @@ function fullText(paper, includeContent) {
   if (!paper.fullText) return { paper_id: paper.paper_id, state: "not_extracted", extraction_state: "not_extracted", source: "", provider: "", provider_version: "", content_format: "plain_text", classification: "unknown", page_count: 0, char_count: 0, ocr_needed_pages: [], extracted_at: "", has_content: false, is_stale: false, can_extract: !paper.pdfMissing, previous_cache_preserved: false, message: "Extract selectable text from this PDF, then optionally run on-device English and Korean OCR for scanned pages.", ...(includeContent ? { content: "" } : {}) };
   return { paper_id: paper.paper_id, state: "cached", extraction_state: "success", source: "authored_demo", provider: "BANDAL sample text", provider_version: "1", content_format: "plain_text", classification: "text", page_count: 2, char_count: paper.fullText.length, ocr_needed_pages: [], extracted_at: STAMP, has_content: true, is_stale: false, can_extract: !paper.pdfMissing, previous_cache_preserved: false, message: "Authored sample text supplied with this example PDF. Use Extract to read selectable text from the actual PDF; no OCR or AI is performed.", ...(includeContent ? { content: paper.fullText } : {}) };
 }
-function health(state) { const missing = state.papers.filter((paper) => paper.pdfMissing).length; return { overall_state: missing ? "degraded" : "healthy", blocking_issues: 0, warning_count: missing, corrupt_critical_state_count: 0, quarantine_count: 0, missing_pdf_count: missing, duplicate_review_count: 0 }; }
-function library(state) { const missing = state.papers.filter((paper) => paper.pdfMissing).length; return { active_count: state.papers.filter((paper) => !paper.archived).length, archived_count: state.papers.filter((paper) => paper.archived).length, missing_count: missing, duplicate_count: 0, corrupt_count: 0, quarantine_count: 0, degraded: Boolean(missing), workspace_warnings: missing ? ["Some PDF attachments are missing. Notes are retained; use recovery/reconnect."] : [] }; }
+function health(state) { const missing = state.papers.filter((paper) => paper.pdfMissing && !metadataOnly(paper)).length; return { overall_state: missing ? "degraded" : "healthy", blocking_issues: 0, warning_count: missing, corrupt_critical_state_count: 0, quarantine_count: 0, missing_pdf_count: missing, duplicate_review_count: 0 }; }
+function library(state) { const missing = state.papers.filter((paper) => paper.pdfMissing && !metadataOnly(paper)).length; return { active_count: state.papers.filter((paper) => !paper.archived).length, archived_count: state.papers.filter((paper) => paper.archived).length, missing_count: missing, duplicate_count: 0, corrupt_count: 0, quarantine_count: 0, degraded: Boolean(missing), workspace_warnings: missing ? ["Some PDF attachments are missing. Notes are retained; use recovery/reconnect."] : [] }; }
 function settings(state) {
   const resources = [
     ["papers", "PDF Library", state.papers.length], ["notes", "Saved Paper Notes", state.papers.filter((paper) => paper.noteExists).length], ["projects", "Projects", state.projects.length], ["tags", "Canonical tags", state.tags.length], ["note_blocks", "Note Blocks", state.papers.reduce((total, paper) => total + paper.blocks.length, 0)], ["project_links", "Project links", state.projects.reduce((total, project) => total + project.links.length, 0)], ["tag_candidate_reviews", "Candidate reviews", state.papers.reduce((total, paper) => total + (paper.candidates?.length || 0), 0)],
   ].map(([code, label, count]) => ({ code, label, count, state: count ? "healthy" : "empty", summary: "This browser's private research workspace." }));
-  const missing = state.papers.filter((paper) => paper.pdfMissing).length;
+  const missing = state.papers.filter((paper) => paper.pdfMissing && !metadataOnly(paper)).length;
   return { application: { state: "healthy", product_version: "1.6.5 · 랩비움", api_state: "available", api_contract_version: "browser-workspace-v1", summary: "Browser workspace with IndexedDB storage. GitHub holds application code, not your research data." }, workspace: { state: "healthy", resources, summary: "Explicit saves and PDFs persist on this device. Sign-in cloud workspaces remain separate; browser data is not automatically synchronized." }, data_integrity: { state: missing ? "warning" : "healthy", issues: missing ? [{ code: "missing_pdfs", state: "warning", count: missing, severity: "warning", explanation: "Some Paper attachments have been removed; research notes are retained.", next_action: "Use Maintenance to reconnect a verified recovery copy or select the same PDF again." }] : [], summary: "Saved research metadata passed schema validation. PDF checksums are verified during upload, reconnect and backup export." }, backup_readiness: { state: "warning", snapshot_available: false, last_updated_at: null, summary: "Use Maintenance to export a complete backup, including PDF bytes. Clearing site data removes this device's workspace. Browser storage is not an external backup." } };
 }
 
@@ -257,7 +259,7 @@ export function createDemoAdapter(storageProvider = getBrowserWorkspaceStorage) 
     return next;
   };
 
-  async function execute(path, init, reviewPagesLocked = false) {
+  async function execute(path, init, reviewPagesLocked = false, retryDiscovery = true) {
     try {
       if (init.signal?.aborted) throw new DOMException("The operation was aborted.", "AbortError");
       let storage;
@@ -281,7 +283,7 @@ export function createDemoAdapter(storageProvider = getBrowserWorkspaceStorage) 
       const parts = url.pathname.split("/").filter(Boolean).map((part) => decodeURIComponent(part));
       const method = (init.method || "GET").toUpperCase();
       let body = {};
-      if (typeof FormData !== "undefined" && init.body instanceof FormData && parts[0] === "papers" && parts[1] === "upload") body = init.body;
+      if (typeof FormData !== "undefined" && init.body instanceof FormData && parts[0] === "papers" && (parts[1] === "upload" || (parts.length === 3 && parts[2] === "pdf-attachment"))) body = init.body;
       else if (init.body !== undefined && init.body !== null) {
         const commandLimit = parts[0] === "projects" && parts.length === 3 && parts[2] === "exploration" && method === "PUT" ? 8 * 1024 * 1024 : 2500000;
         if (typeof init.body !== "string" || encoder.encode(init.body).byteLength > commandLimit) {
@@ -311,7 +313,10 @@ export function createDemoAdapter(storageProvider = getBrowserWorkspaceStorage) 
           // transaction. Never describe that fallback as an atomic freeze.
           if (reviewWrite && window.localStorage.getItem(RESEARCH_PAGES_KEY) !== pagesRaw) fail(409, "Research pages changed while reviewing. Reload the sources before saving or freezing.");
           if (storage.compareAndSet) {
-            if (!await storage.compareAndSet(DEMO_STORAGE_KEY, original, serialized, effects)) fail(409, "The browser workspace changed in another tab. Reload before saving.");
+            if (!await storage.compareAndSet(DEMO_STORAGE_KEY, original, serialized, effects)) {
+              if (retryDiscovery && parts.join("/") === "papers/from-discovery" && method === "POST") return execute(path, init, reviewPagesLocked, false);
+              fail(409, "The browser workspace changed in another tab. Reload before saving.");
+            }
           } else {
             if (await storage.getItem(DEMO_STORAGE_KEY) !== original) fail(409, "The browser workspace changed in another tab. Reload before saving.");
             if (effects.putFiles.length || effects.deleteFiles.length) fail(503, "PDF writes require IndexedDB transaction support.");
@@ -364,6 +369,8 @@ async function route(parts, method, body, params, state, effects) {
       fail(405, "Unsupported project research command.");
     } catch (error) { fail(Number.isInteger(error.status) ? error.status : 503, error.message || "The project research operation failed. Saved data was preserved."); }
   }
+  const discovery = await handleBrowserDiscovery(parts, method, body, state, effects, { fail, guard, revision, paperDetail });
+  if (discovery.handled) return discovery.value;
   const handled = await handleBrowserCommand(parts, method, body, params, state, effects, { fail, guard, revision, canonicalNote, persistedNote, header, headerText, fullText, paperDetail, projectState, noteBlocks });
   if (handled.handled) return handled.value;
   const path = parts.join("/");

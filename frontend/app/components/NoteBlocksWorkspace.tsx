@@ -25,6 +25,7 @@ import { RelationshipLabel } from "./RelationshipLabel";
 import { SaveStatus } from "./SaveStatus";
 import { useI18n } from "../lib/i18n/LocaleProvider";
 import { createExclusiveMutationGate } from "../lib/reader/mutation-coordinator.mjs";
+import { decodeFloatingMemo, encodeFloatingMemo } from "../lib/reader/floating-memo.mjs";
 import {
   applyLatestRevisionDraft,
   beginRevisionSave,
@@ -110,9 +111,10 @@ function browserStorage(): Storage | null {
 }
 
 
-export function NoteBlocksWorkspace({ paperId, focusBlockId = "", refreshToken = 0, onJumpToPage, mutationBusy = false, acquireMutation, releaseMutation }: {
+export function NoteBlocksWorkspace({ paperId, focusBlockId = "", refreshToken = 0, onJumpToPage, onChanged, mutationBusy = false, acquireMutation, releaseMutation }: {
   paperId: string; focusBlockId?: string; refreshToken?: number; onJumpToPage?: (page: number) => void;
   mutationBusy?: boolean; acquireMutation?: () => number | null; releaseMutation?: (token: number) => void;
+  onChanged?: () => void;
 }) {
   const { t } = useI18n();
   const localGate = useRef(createExclusiveMutationGate());
@@ -299,7 +301,9 @@ export function NoteBlocksWorkspace({ paperId, focusBlockId = "", refreshToken =
 
   function updateDraft(field: keyof EditableNoteBlockContent, value: string | string[]) {
     updateEditor((current) => {
-      const draft = { ...current.draft, [field]: value } as EditableNoteBlockContent;
+      const memo = decodeFloatingMemo(current.draft.text);
+      const nextValue = field === "text" && typeof value === "string" && memo ? encodeFloatingMemo(value, memo.position) : value;
+      const draft = { ...current.draft, [field]: nextValue } as EditableNoteBlockContent;
       const updated = editRevisionDraft(current, draft);
       return {
         ...updated,
@@ -362,6 +366,7 @@ export function NoteBlocksWorkspace({ paperId, focusBlockId = "", refreshToken =
         setExpandedBlockId(response.block.id);
         window.requestAnimationFrame(() => editorTitleRef.current?.focus());
       }
+      onChanged?.();
     } catch (error) {
       let remote: { block: NoteBlock; revision: string } | null = null;
       if (error instanceof ApiClientError && error.kind === "conflict") {
@@ -500,6 +505,7 @@ export function NoteBlocksWorkspace({ paperId, focusBlockId = "", refreshToken =
       setExpandedBlockId("");
       setLinkStatus("idle");
       setLinkMessage("Note Block deleted. The Paper and Paper Note remain.");
+      onChanged?.();
     } catch (error) {
       setLinkStatus(error instanceof ApiClientError && error.kind === "conflict" ? "conflict" : "error");
       setLinkMessage(error instanceof ApiClientError ? error.message : "The Note Block was not deleted. Reload the collection before retrying.");
@@ -552,7 +558,7 @@ export function NoteBlocksWorkspace({ paperId, focusBlockId = "", refreshToken =
                   <div><strong>{block.title || t(block.block_type)}</strong></div>
                   <StatusBadge>{t(block.block_type)}</StatusBadge>
                 </div>
-                {block.text ? <p>{block.text}</p> : <p className="muted-text">{t("No block text.")}</p>}
+                {block.text ? <p>{decodeFloatingMemo(block.text)?.text ?? block.text}</p> : <p className="muted-text">{t("No block text.")}</p>}
                 <p className="muted-text">{[block.page && t("Page {page}", { page: block.page }), block.figure && t("Figure {figure}", { figure: block.figure }), block.tags.join(", ")].filter(Boolean).join(" · ")}</p>
                 {block.quote ? <blockquote>{block.quote}</blockquote> : null}
                 {onJumpToPage && /^\d+$/.test(block.page) && Number(block.page) > 0 ? <button className="text-link" type="button" onClick={() => onJumpToPage(Number(block.page))}>{t("Go to PDF page {page}", { page: Number(block.page) })}</button> : null}
@@ -605,7 +611,7 @@ export function NoteBlocksWorkspace({ paperId, focusBlockId = "", refreshToken =
           </div>
           <label className={`reader-field ${changedFields.includes("block_type") ? "reader-field--changed" : ""}`}><span>{t("Block type")}{changedFields.includes("block_type") ? t(" (changed)") : ""}</span><select disabled={Boolean(deletingBlockId) && deletingBlockId === editor.blockId} value={editor.draft.block_type} onChange={(event) => updateDraft("block_type", event.target.value as NoteBlockType)}>{BLOCK_TYPES.map((type) => <option key={type} value={type}>{t(type)}</option>)}</select></label>
           <label className={`reader-field ${changedFields.includes("title") ? "reader-field--changed" : ""}`}><span>{t("Title")}{changedFields.includes("title") ? t(" (changed)") : ""}</span><input disabled={Boolean(deletingBlockId) && deletingBlockId === editor.blockId} ref={editorTitleRef} maxLength={1000} value={editor.draft.title} onChange={(event) => updateDraft("title", event.target.value)} /></label>
-          <label className={`reader-field ${changedFields.includes("text") ? "reader-field--changed" : ""}`}><span>{t("Text")}{changedFields.includes("text") ? t(" (changed)") : ""}</span><textarea disabled={Boolean(deletingBlockId) && deletingBlockId === editor.blockId} rows={8} maxLength={100000} value={editor.draft.text} onChange={(event) => updateDraft("text", event.target.value)} /></label>
+          <label className={`reader-field ${changedFields.includes("text") ? "reader-field--changed" : ""}`}><span>{t("Text")}{changedFields.includes("text") ? t(" (changed)") : ""}</span><textarea disabled={Boolean(deletingBlockId) && deletingBlockId === editor.blockId} rows={8} maxLength={100000} value={decodeFloatingMemo(editor.draft.text)?.text ?? editor.draft.text} onChange={(event) => updateDraft("text", event.target.value)} /></label>
           <div className="project-form-grid">
             <label className={`reader-field ${changedFields.includes("page") ? "reader-field--changed" : ""}`}><span>{t("Page")}</span><input disabled={Boolean(deletingBlockId) && deletingBlockId === editor.blockId} maxLength={100} value={editor.draft.page} onChange={(event) => updateDraft("page", event.target.value)} /></label>
             <label className={`reader-field ${changedFields.includes("figure") ? "reader-field--changed" : ""}`}><span>{t("Figure")}</span><input disabled={Boolean(deletingBlockId) && deletingBlockId === editor.blockId} maxLength={500} value={editor.draft.figure} onChange={(event) => updateDraft("figure", event.target.value)} /></label>

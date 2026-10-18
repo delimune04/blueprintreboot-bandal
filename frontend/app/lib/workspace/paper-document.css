@@ -1,0 +1,6 @@
+.paper-document-access { scroll-margin-top:8rem; border-left:3px solid var(--state-violet); padding:var(--space-4); background:var(--color-surface); }
+.paper-document-access p { max-width:85ch; line-height:1.7; }
+.paper-document-location { color:var(--state-violet); font-size:var(--font-size-sm); }
+.paper-document-actions { display:flex; flex-wrap:wrap; align-items:center; gap:var(--space-3); margin-block:var(--space-4); }
+.paper-document-actions .text-link { display:inline-flex; gap:.4rem; align-items:center; }
+@media(max-width:48rem) { .paper-document-actions { align-items:stretch; flex-direction:column; } .paper-document-actions .reader-control { justify-content:center; min-height:2.75rem; } }
