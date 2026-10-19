@@ -13,10 +13,12 @@ import { StatusBadge } from "../components/StatusBadge";
 import { Toolbar } from "../components/Toolbar";
 import { useApiResource } from "../hooks/useApiResource";
 import { useModalFocus } from "../hooks/useModalFocus";
-import { ApiClientError, apiClient, getWorkspaceMode } from "../lib/api/client";
+import { ApiClientError, apiClient, getWorkspaceMode, getWorkspaceStorageScope } from "../lib/api/client";
 import { patchReadingStatusCollection, readingStatusChangeRequiresCollectionRefresh } from "../lib/library/reading-status-collection.mjs";
 import { isMetadataOnlyPaper } from "../lib/library/paper-file-state.mjs";
 import type { EditablePaperMetadata, ManagedPdfImportResponse, ManagedPdfScanResponse, MetadataEnrichmentPreview } from "../lib/api/types";
+
+import { readLibraryHistory, mergeLibraryHistory } from "../lib/library/library-history.mjs";
 
 const PAGE_SIZE = 20;
 const READING_STATUSES = ["unread", "reading", "read", "finished"];
@@ -61,14 +63,17 @@ export function LibraryView() {
     const [health, status] = await Promise.all([apiClient.getHealth(), apiClient.getLibraryStatus()]);
     return { health, status };
   });
-  const [searchInput, setSearchInput] = useState("");
-  const [q, setQ] = useState("");
-  const [tag, setTag] = useState("");
-  const [tagInput, setTagInput] = useState("");
-  const [year, setYear] = useState("");
-  const [readingStatus, setReadingStatus] = useState("");
-  const [archiveStatus, setArchiveStatus] = useState<"active" | "archived" | "all">("active");
-  const [offset, setOffset] = useState(0);
+  const historyScope = `${getWorkspaceMode()}:${getWorkspaceStorageScope()}`;
+  const [initialFilters] = useState(() => readLibraryHistory(null, historyScope));
+  const [restoredScope, setRestoredScope] = useState("");
+  const [searchInput, setSearchInput] = useState(initialFilters.searchInput);
+  const [q, setQ] = useState(initialFilters.q);
+  const [tag, setTag] = useState(initialFilters.tag);
+  const [tagInput, setTagInput] = useState(initialFilters.tagInput);
+  const [year, setYear] = useState(initialFilters.year);
+  const [readingStatus, setReadingStatus] = useState(initialFilters.readingStatus);
+  const [archiveStatus, setArchiveStatus] = useState<"active" | "archived" | "all">(initialFilters.archiveStatus);
+  const [offset, setOffset] = useState(initialFilters.offset);
   const [selectedPaperId, setSelectedPaperId] = useState("");
   const [showImport, setShowImport] = useState(false);
   const [dragActive, setDragActive] = useState(false);
@@ -186,12 +191,40 @@ export function LibraryView() {
   const attention = resource.status === "success" && libraryNeedsAttention(resource.data);
 
   useEffect(() => {
+    const restore = () => {
+      if (!/\/(?:library|papers)\/?$/.test(window.location.pathname)) return;
+      const filters = readLibraryHistory(window.history.state, historyScope);
+      setSearchInput(filters.searchInput); setQ(filters.q); setTag(filters.tag); setTagInput(filters.tagInput);
+      setYear(filters.year); setReadingStatus(filters.readingStatus); setArchiveStatus(filters.archiveStatus); setOffset(filters.offset);
+      setSelectedPaperId(""); setEnrichmentPaperId(""); setEnrichment(null); setSelectedFields([]);
+      setRestoredScope(historyScope);
+    };
+    restore();
+    window.addEventListener("popstate", restore);
+    window.addEventListener("bandal-demo:navigation", restore);
+    return () => {
+      window.removeEventListener("popstate", restore);
+      window.removeEventListener("bandal-demo:navigation", restore);
+    };
+  }, [historyScope]);
+
+  // Keep context on this browser history entry, not in the URL or shared records.
+  useEffect(() => {
+    if (restoredScope !== historyScope) return;
+    try {
+      window.history.replaceState(mergeLibraryHistory(window.history.state, historyScope,
+        { searchInput, q, tag, tagInput, year, readingStatus, archiveStatus, offset }), "");
+    } catch { /* Browsing still works when history storage is unavailable. */ }
+  }, [restoredScope, historyScope, searchInput, q, tag, tagInput, year, readingStatus, archiveStatus, offset]);
+
+  useEffect(() => {
+    if (restoredScope !== historyScope || searchInput === q) return;
     const timer = window.setTimeout(() => {
       setQ(searchInput);
       resetCollection();
     }, 260);
     return () => window.clearTimeout(timer);
-  }, [searchInput]);
+  }, [searchInput, q, restoredScope, historyScope]);
 
   useEffect(() => {
     folderInputRef.current?.setAttribute("webkitdirectory", "");
