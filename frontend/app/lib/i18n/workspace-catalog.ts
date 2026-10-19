@@ -1,4 +1,10 @@
 export const WORKSPACE_KO: Record<string, string> = {
+  "Active filters": "적용한 필터", "Remove filter: {label}": "필터 해제: {label}",
+  "No active papers": "활성 논문이 없습니다", "No papers yet": "아직 저장한 논문이 없습니다",
+  "Pending search": "검색 적용 대기", "Clearing search": "검색 해제 중",
+  "Save a paper from Discover or import a PDF you already have.": "논문 찾기에서 논문을 저장하거나 가지고 있는 PDF를 가져오세요.",
+  "Saved papers may be hidden by these filters. Remove a filter above or reset filters to broaden your search.": "필터 때문에 저장한 논문이 보이지 않을 수 있습니다. 위의 조건을 하나씩 해제하거나 필터를 초기화해 검색 범위를 넓혀보세요.",
+  "Save a paper from Discover or import a PDF you already have. To find archived papers, change Library state.": "논문 찾기에서 논문을 저장하거나 가지고 있는 PDF를 가져오세요. 보관한 논문을 찾으려면 보관 상태를 바꿔보세요.",
   "Add PDFs": "PDF 추가", "Scan / import": "PDF 확인·가져오기", "Scanning PDFs…": "PDF 확인 중…", "Choose folder": "폴더 선택", "Check workspace files": "저장된 파일 확인", "Choose your PDFs or a folder. Existing workspace files can be checked separately.": "PDF나 폴더를 선택하세요. 이미 저장된 파일은 별도로 확인할 수 있습니다.", "No PDF files were found in this folder.": "이 폴더에서 PDF를 찾지 못했습니다.",
   "First page preview": "첫 페이지 미리보기", "Loading first page preview": "첫 페이지를 불러오는 중", "First page preview unavailable": "첫 페이지를 미리볼 수 없습니다", "A first page PDF preview is displayed here when available.": "논문의 첫 페이지를 표시합니다.", "No unsaved changes.": "변경 내용이 없습니다.", "{type} Note Block": "{type} 근거 노트",
   "{count} linked papers · Updated {date}": "{count}개 논문 연결 · 최근 변경 {date}", "{count} locally preserved drafts": "저장된 초안 {count}개", "{count} matching papers": "논문 {count}개", "{count} updates found · Choose fields before applying.": "정보 {count}개를 찾았습니다 · 적용할 항목을 선택해주세요.", "{unresolved} unresolved · {resolved} ready · {approved} approved": "미해결 {unresolved}개 · 준비됨 {resolved}개 · 승인됨 {approved}개",

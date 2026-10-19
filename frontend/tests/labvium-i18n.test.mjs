@@ -43,3 +43,11 @@ test("reader labels and plural interpolation are available in the common catalog
   assert.equal(translate("Highlights ({count})", "ko", { count: 4 }), "하이라이트 (4)");
   assert.equal(translate("Page {page}", "en", { page: 9 }), "Page 9");
 });
+
+
+test("colon-containing research values retain their existing action-label translations", () => {
+  assert.equal(translate("Inspect A paper: subtitle", "ko"), "A paper: subtitle 미리보기");
+  assert.equal(translate("Select folder: paper.pdf", "ko"), "folder: paper.pdf 선택");
+  assert.equal(translate("Manage field: subfield", "ko"), "field: subfield 수정");
+  assert.equal(translate("Remove filter: {label}", "ko", { label: "검색: field: subfield" }), "필터 해제: 검색: field: subfield");
+});
