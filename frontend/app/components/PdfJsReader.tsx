@@ -279,11 +279,19 @@ export function PdfJsReader({
   const [loadAttempt, setLoadAttempt] = useState(0);
   const [fallbackActive, setFallbackActive] = useState(false);
   const pendingLayoutAnchorRef = useRef<PdfViewportAnchor | null>(null);
+  const pageNavigationFrameRef = useRef<number | null>(null);
   const initialPageRef = useRef<number | null>(null);
+  const loadedPaperIdRef = useRef<string | null>(null);
   const [preferenceMessage, setPreferenceMessage] = useState("");
   const diagnosticsEnabled = process.env.NODE_ENV !== "production" && process.env.NEXT_PUBLIC_BLUEPRINT_READER_DIAGNOSTICS === "1";
 
   useEffect(() => {
+    pendingLayoutAnchorRef.current = null;
+    loadedPaperIdRef.current = null;
+    if (pageNavigationFrameRef.current !== null) {
+      window.cancelAnimationFrame(pageNavigationFrameRef.current);
+      pageNavigationFrameRef.current = null;
+    }
     if (fallbackActive) return;
     let current = true;
     let loadingTask: Awaited<ReturnType<typeof createPdfLoadingTask>> | null = null;
@@ -306,6 +314,7 @@ export function PdfJsReader({
         const firstViewport = firstPage.getViewport({ scale: 1 });
         if (!current) return;
         setPageSize({ width: firstViewport.width, height: firstViewport.height });
+        loadedPaperIdRef.current = paperId;
         setPdfDocument(document);
         setState({ mode: "ready", pageNumber: restoredPage, totalPages: Math.max(1, Number(document.numPages) || 1), zoom: viewPreferenceRef.current.mode === "manual" ? viewPreferenceRef.current.zoom : DEFAULT_ZOOM, rendering: true, errorKind: null, message: "" });
         setDiagnostics((value) => ({ ...value, documentLoadDurationMs: Math.max(0, performance.now() - startedAt), requestCount: network.requestCount, rangeRequestCount: network.rangeRequestCount, fullRequestCount: network.fullRequestCount, requestMode: network.requestMode }));
@@ -317,6 +326,12 @@ export function PdfJsReader({
     void load();
     return () => {
       current = false;
+      loadedPaperIdRef.current = null;
+      pendingLayoutAnchorRef.current = null;
+      if (pageNavigationFrameRef.current !== null) {
+        window.cancelAnimationFrame(pageNavigationFrameRef.current);
+        pageNavigationFrameRef.current = null;
+      }
       void loadingTask?.destroy();
       void document?.destroy();
     };
@@ -330,7 +345,8 @@ export function PdfJsReader({
   }, []);
 
   const captureLayoutAnchor = useCallback(() => {
-    if (pendingLayoutAnchorRef.current) return;
+    // A deliberate page jump takes precedence over preserving the old position.
+    if (pendingLayoutAnchorRef.current || pageNavigationFrameRef.current !== null) return;
     const viewport = viewportRootRef.current;
     if (!viewport) return;
     const viewportRect = viewport.getBoundingClientRect();
@@ -426,14 +442,15 @@ export function PdfJsReader({
     return () => { active = false; };
   }, [pdfDocument, state.mode, state.pageNumber]);
 
-  const applyFitMode = useCallback((mode: Exclude<PdfViewMode, "manual">) => {
+  const applyFitMode = useCallback((mode: Exclude<PdfViewMode, "manual">, preservePosition = false) => {
     const viewport = viewportRootRef.current;
     if (!viewport || !pageSize.width || !pageSize.height) return;
     const zoom = mode === "fit-width"
       ? fitWidthZoom({ availableWidth: viewport.clientWidth, pageWidth: pageSize.width, horizontalPadding: PDF_VIEWPORT_PADDING })
       : fitPageZoom({ availableWidth: viewport.clientWidth, availableHeight: viewport.clientHeight, pageWidth: pageSize.width, pageHeight: pageSize.height, horizontalPadding: PDF_VIEWPORT_PADDING, verticalPadding: PDF_VIEWPORT_PADDING });
+    if (preservePosition && state.zoom !== zoom) captureLayoutAnchor();
     setState((current) => current.zoom === zoom ? current : { ...current, zoom, rendering: true });
-  }, [pageSize]);
+  }, [captureLayoutAnchor, pageSize, state.zoom]);
 
   useEffect(() => {
     if (!viewportRoot || !pageSize.width || viewMode === "manual" || layoutResizeActive) return;
@@ -449,23 +466,18 @@ export function PdfJsReader({
     if (layoutResizeActive || fallbackActive || !pendingLayoutAnchorRef.current) return;
     let restoreFrame: number | null = null;
     const frame = window.requestAnimationFrame(() => {
+      // Memo/panel layout may have changed before ResizeObserver runs. Fit the
+      // latest viewport first, then restore after its page geometry commits.
       if (viewMode !== "manual") applyFitMode(viewMode);
-      // PDF page surfaces take their geometry directly from zoom. Restore
-      // after that geometry commits; no PDF load is started for note layout.
       restoreFrame = window.requestAnimationFrame(() => restoreLayoutAnchor());
     });
-    return () => { window.cancelAnimationFrame(frame); if (restoreFrame !== null) window.cancelAnimationFrame(restoreFrame); };
-  }, [applyFitMode, fallbackActive, layoutResizeActive, memoLayout, memoRailsVisible, restoreLayoutAnchor, viewMode]);
-
-  useEffect(() => {
-    if (layoutResizeActive || !pendingLayoutAnchorRef.current) return;
-    // A manual zoom does not rerender page geometry. For fit modes this is a
-    // fallback behind onRendered, which restores as soon as the anchor page's
-    // new canvas/text layer dimensions are available.
-    if (viewMode !== "manual") return;
-    const frame = window.requestAnimationFrame(() => { restoreLayoutAnchor(); });
-    return () => window.cancelAnimationFrame(frame);
-  }, [layoutResizeActive, layoutResizeVersion, restoreLayoutAnchor, viewMode]);
+    return () => {
+      window.cancelAnimationFrame(frame);
+      if (restoreFrame !== null) window.cancelAnimationFrame(restoreFrame);
+    };
+    // Manual zoom must also reschedule, retaining the first anchor across rapid
+    // changes until the latest geometry commits (not a stale canvas render).
+  }, [applyFitMode, fallbackActive, layoutResizeActive, layoutResizeVersion, memoLayout, memoRailsVisible, restoreLayoutAnchor, state.zoom, viewMode]);
 
   useEffect(() => {
     try {
@@ -476,8 +488,11 @@ export function PdfJsReader({
   const setPage = useCallback((requestedPage: number) => {
     if (state.mode !== "ready") return;
     const pageNumber = Math.min(state.totalPages, Math.max(1, Math.trunc(requestedPage)));
+    pendingLayoutAnchorRef.current = null;
+    if (pageNavigationFrameRef.current !== null) window.cancelAnimationFrame(pageNavigationFrameRef.current);
     setState((current) => ({ ...current, pageNumber, rendering: true }));
-    window.requestAnimationFrame(() => {
+    pageNavigationFrameRef.current = window.requestAnimationFrame(() => {
+      pageNavigationFrameRef.current = null;
       const viewport = viewportRootRef.current;
       const target = viewport?.querySelector<HTMLElement>(`#pdf-page-${pageNumber}`);
       if (!target || !viewport) return;
@@ -492,7 +507,7 @@ export function PdfJsReader({
   }, [setPage, state.mode, viewportRoot]);
   useEffect(() => { if (pageJump && state.mode === "ready") setPage(pageJump.page); }, [pageJump, setPage, state.mode]);
   useEffect(() => {
-    if (state.mode !== "ready") return;
+    if (state.mode !== "ready" || loadedPaperIdRef.current !== paperId) return;
     const saved = updateReaderPreferences(readerStorage(), paperId, (current) => ({ ...current, page: state.pageNumber }));
     if (!saved.ok) setPreferenceMessage(saved.message);
   }, [paperId, state.mode, state.pageNumber]);
@@ -503,22 +518,22 @@ export function PdfJsReader({
   };
   const setManualZoom = (requestedZoom: number) => {
     const zoom = Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, requestedZoom));
+    if (zoom !== state.zoom) captureLayoutAnchor();
     setViewMode("manual");
-    setState((current) => ({ ...current, zoom, rendering: true }));
+    setState((current) => current.zoom === zoom ? current : { ...current, zoom, rendering: true });
   };
   const chooseFitMode = (mode: Exclude<PdfViewMode, "manual">) => {
     setViewMode(mode);
-    applyFitMode(mode);
+    applyFitMode(mode, true);
   };
   const onVisible = useCallback((pageNumber: number) => {
-    if (initialPageRef.current !== null) return;
+    if (initialPageRef.current !== null || pendingLayoutAnchorRef.current !== null) return;
     setState((current) => current.mode === "ready" && current.pageNumber !== pageNumber ? { ...current, pageNumber } : current);
   }, []);
   const onRendered = useCallback((pageNumber: number, durationMs: number) => {
-    if (!layoutResizeActive && pendingLayoutAnchorRef.current?.pageNumber === pageNumber) restoreLayoutAnchor();
     setState((current) => current.pageNumber === pageNumber ? { ...current, rendering: false } : current);
     setDiagnostics((current) => ({ ...current, renderCount: current.renderCount + 1, firstPageRenderDurationMs: current.firstPageRenderDurationMs ?? durationMs }));
-  }, [layoutResizeActive, restoreLayoutAnchor]);
+  }, []);
   const onRenderError = useCallback((error: unknown) => setState((current) => ({ ...current, mode: "error", rendering: false, ...classifyPdfError(error, "render") })), []);
   useEffect(() => {
     if (!viewportRoot || state.mode !== "ready") return;
