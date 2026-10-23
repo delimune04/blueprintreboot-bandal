@@ -41,9 +41,10 @@ export function HomeView() {
   return <div className="lv-home lv-home--connected">
     <LabviumMotion refreshKey={locale} />
     <section className="lv-hero lv-hero--connected" aria-labelledby="lv-home-title">
-      <div className="lv-hero-intro" data-lv-reveal>
-        <div className="lv-hero-identity"><LabviumBrand variant="hero" /><p className="lv-kicker">{ko ? "연구가 이어지는 작업공간" : "Research, carried forward"}</p></div>
-        <h1 id="lv-home-title">{ko ? <>읽은 논문에서,<br />함께하는 연구까지.</> : <>From reading papers.<br />To working together.</>}</h1>
+      <div className="lv-hero-aura" aria-hidden="true"><span /><span /><span /></div>
+      <div className="lv-hero-intro">
+        <div className="lv-hero-identity"><LabviumBrand variant="hero" /><p className="lv-kicker"><span className="lv-kicker-dot" aria-hidden="true" />{ko ? "연구가 이어지는 작업공간" : "Research, carried forward"}</p></div>
+        <h1 id="lv-home-title">{ko ? <>읽은 논문에서,<br /><span className="lv-gradient-text">함께하는 연구까지.</span></> : <>From reading papers.<br /><span className="lv-gradient-text">To working together.</span></>}</h1>
         <p className="lv-hero-copy">{ko ? "좋은 논문을 찾고, 아이디어에 의견을 더하고, 다음 할 일을 정하세요. 공부와 협업의 기록이 하나의 연구 흐름으로 이어집니다." : "Find a useful paper, discuss the idea, and decide what to do next. Keep your reading and your team's work in one research flow."}</p>
         <div className="lv-actions">
           {cloud ? <Link className="reader-control" href="/projects">{ko ? "내 연구 이어가기" : "Open my research"}<ArrowRight size={16} /></Link> : <a className="reader-control" href="/signin-with-chatgpt?return_to=%2FLabVium" target="_top">{ko ? "계정으로 시작하기" : "Sign in to start"}<ArrowRight size={16} /></a>}
@@ -54,7 +55,7 @@ export function HomeView() {
       <nav className="lv-workflow" aria-label={ko ? "발견에서 기한까지 연구의 다음 단계" : "Your next research step"} data-lv-reveal data-lv-order="1">
         <div className="lv-workflow-heading"><span>{ko ? "연구의 다음 단계" : "The next step"}</span><GitBranch size={17} aria-hidden="true" /></div>
         <ol>{workflow.map(({ n, ko: label, en, title, english, href, icon: Icon }) => <li key={n}>
-          <Link href={href}><span className="lv-workflow-number">{n}</span><Icon size={20} aria-hidden="true" /><span className="lv-workflow-text"><strong>{ko ? label : en}</strong><span>{ko ? title : english}</span></span><ArrowUpRight size={16} aria-hidden="true" /></Link>
+          <Link href={href}><span className="lv-workflow-number">{n}</span><span className="lv-workflow-icon" aria-hidden="true"><Icon size={19} /></span><span className="lv-workflow-text"><strong>{ko ? label : en}</strong><span>{ko ? title : english}</span></span><ArrowUpRight size={16} aria-hidden="true" /></Link>
         </li>)}</ol>
         <p>{ko ? "발견 → 의견 → 담당 → 기한" : "Discover → Discuss → Assign → Schedule"}</p>
       </nav>
@@ -62,14 +63,14 @@ export function HomeView() {
 
     <section className="lv-collaboration-intro" aria-labelledby="lv-collaboration-title">
       <div className="lv-section-heading" data-lv-reveal><div><p className="lv-section-label">{ko ? "연구실 협업" : "Work together"}</p><h2 id="lv-collaboration-title">{ko ? "좋은 생각이 다음 행동으로 이어지도록." : "Turn a good idea into the next action."}</h2></div><Link href="/team" className="text-link">{ko ? "팀 공간 선택" : "Choose a team"}<ArrowRight size={14} /></Link></div>
-      <div className="lv-collaboration-links">{collaboration.map(({ n, ko: title, en, detail, english, action, englishAction, href, icon: Icon }, index) => <Link className="lv-collaboration-link" key={n} href={href} data-lv-reveal data-lv-order={index}>
+      <div className="lv-collaboration-links">{collaboration.map(({ n, ko: title, en, detail, english, action, englishAction, href, icon: Icon }, index) => <Link className="lv-collaboration-link" key={n} href={href} data-lv-reveal data-lv-order={index} data-lv-spotlight>
         <div className="lv-collaboration-link-top"><Icon size={23} aria-hidden="true" /><span>{n}</span></div><h3>{ko ? title : en}</h3><p>{ko ? detail : english}</p><span className="lv-collaboration-action">{ko ? action : englishAction}<ArrowRight size={16} aria-hidden="true" /></span>
       </Link>)}</div>
     </section>
 
     <section className="lv-feature-section" aria-labelledby="lv-research-tools-title">
       <div className="lv-section-heading" data-lv-reveal><div><p className="lv-section-label">{ko ? "탐색부터 인수인계까지" : "From discovery to handoff"}</p><h2 id="lv-research-tools-title">{ko ? "쌓아 둔 공부가 연구의 근거가 됩니다." : "Make your reading part of the evidence."}</h2></div><Link href="/guide" className="text-link">{ko ? "사용 안내" : "User guide"}<ArrowRight size={14} /></Link></div>
-      <div className="lv-feature-list">{features.map(({ n, ko: title, en, detail, english, href, icon: Icon }, index) => <Link href={href} key={n} className="lv-feature" data-lv-reveal data-lv-order={index % 2}><span className="lv-feature-no">{n}</span><Icon size={20} aria-hidden="true" /><div><h3>{ko ? title : en}</h3><p>{ko ? detail : english}</p></div><ArrowRight size={16} aria-hidden="true" /></Link>)}</div>
+      <div className="lv-feature-list">{features.map(({ n, ko: title, en, detail, english, href, icon: Icon }, index) => <Link href={href} key={n} className="lv-feature" data-lv-reveal data-lv-order={index % 3} data-lv-spotlight><span className="lv-feature-no">{n}</span><Icon size={20} aria-hidden="true" /><div><h3>{ko ? title : en}</h3><p>{ko ? detail : english}</p></div><ArrowRight size={16} aria-hidden="true" /></Link>)}</div>
     </section>
 
     <section className="lv-home-end" aria-labelledby="lv-continuity-title" data-lv-reveal>

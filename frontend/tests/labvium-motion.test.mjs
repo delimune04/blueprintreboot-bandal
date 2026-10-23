@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { mountLabviumMotion } from "../app/components/labvium-motion.mjs";
+import { mountLabviumMotion, mountLabviumSpotlight } from "../app/components/labvium-motion.mjs";
 
 function fixture({ reduced = false } = {}) {
   const focusListeners = new Map(), mediaListeners = new Map();
@@ -96,4 +96,51 @@ test("changing motion preference cancels animations; cleanup ignores queued obse
   state.preference.matches = false;
   state.observer.enter(state.elements[1]);
   assert.equal(state.elements[1].calls.length, 0);
+});
+
+function spotlightFixture({ reduced = false, fine = true } = {}) {
+  const listeners = new Map(), frames = new Map(), properties = new Map();
+  let nextFrame = 1;
+  const card = {
+    getBoundingClientRect: () => ({ left: 100, top: 40 }),
+    style: { setProperty: (name, value) => properties.set(name, value) },
+  };
+  const root = {
+    contains: (element) => element === card,
+    addEventListener: (name, handler) => listeners.set(name, handler),
+    removeEventListener: (name, handler) => { if (listeners.get(name) === handler) listeners.delete(name); },
+  };
+  const environment = {
+    preference: { matches: reduced },
+    finePointer: { matches: fine },
+    requestFrame: (callback) => { const handle = nextFrame++; frames.set(handle, callback); return handle; },
+    cancelFrame: (handle) => frames.delete(handle),
+  };
+  const move = (clientX, clientY, target = card) => listeners.get("pointermove")({ clientX, clientY, target: { closest: () => target } });
+  const flush = () => { const pending = [...frames.values()]; frames.clear(); pending.forEach((callback) => callback()); };
+  return { root, environment, card, listeners, frames, properties, move, flush };
+}
+
+test("card spotlight is skipped for reduced motion and touch-first pointers", () => {
+  for (const options of [{ reduced: true }, { fine: false }]) {
+    const state = spotlightFixture(options);
+    mountLabviumSpotlight(state.root, state.environment)();
+    assert.equal(state.listeners.size, 0);
+  }
+});
+
+test("card spotlight batches pointer moves into one frame and cleans up", () => {
+  const state = spotlightFixture();
+  const dispose = mountLabviumSpotlight(state.root, state.environment);
+  state.move(130, 70);
+  state.move(150.4, 90.6);
+  state.move(10, 10, { outside: true });
+  assert.equal(state.frames.size, 1);
+  state.flush();
+  assert.equal(state.properties.get("--lv-x"), "50px");
+  assert.equal(state.properties.get("--lv-y"), "51px");
+  state.move(160, 60);
+  dispose();
+  assert.equal(state.frames.size, 0);
+  assert.equal(state.listeners.size, 0);
 });
