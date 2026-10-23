@@ -14,6 +14,7 @@ import { useI18n } from "../lib/i18n/LocaleProvider";
 import { REVIEW_KINDS, REVIEW_MAX_SNAPSHOTS, compareReviewSnapshots, exportReviewMarkdown, newReviewRow, reviewCoverage, reviewInput, reviewSourceKey } from "../lib/review/model.mjs";
 import type { ProjectReviewResponse, ReviewKind, ReviewRow } from "../lib/review/model.mjs";
 import "../lib/review/review.css";
+import { reviewReadiness } from "../lib/review/readiness.mjs";
 import { ReviewWorkflow, ReviewContextEditor, FrozenWorkflowContext } from "../components/ReviewWorkflow";
 
 const LABELS: Record<ReviewKind, string> = { hypothesis: "Current hypothesis", decision: "Key decisions", failed_attempt: "Failed attempts", question: "Open questions", next_action: "Next actions" };
@@ -33,6 +34,20 @@ function ReviewEditor({ initial }: { initial: ProjectReviewResponse }) {
   const readonly = viewer || archived || busy;
   const dirty = !same(draft, reviewInput(saved.dossier));
   const coverage = reviewCoverage(draft, saved.sources);
+  const readiness = reviewReadiness({ draft, coverage, viewer, archived, busy, dirty, evidenceChanges: saved.evidence_change_count, staleSources: saved.draft_sources_stale, reviewedBy, snapshotCount: saved.dossier.snapshots.length });
+  const readinessText: Record<string, string> = locale === "ko" ? {
+    viewer: "편집 권한이 있는 작업 공간에서 진행하세요.", archived: "프로젝트 보관을 해제하세요.", busy: "현재 저장·새로고침이 끝날 때까지 기다리세요.",
+    empty: "검토 기록을 하나 이상 추가하세요.", blank: "내용이 빈 기록을 작성하거나 제거한 뒤 저장하세요.",
+    unsourced: "검토 완료 주장에 프로젝트 근거를 연결하거나 미검토로 되돌리세요.", missing: "없어진 출처의 연결을 복구하거나 해당 참조를 제거하세요.",
+    changed: "근거 변경 화면에서 영향을 받은 기록을 재검토하고 결론을 저장하세요.", stale: "변경된 원문을 확인한 뒤 검토를 다시 저장하세요.",
+    save: "작성 중인 변경을 ‘검토 저장’으로 저장하세요.", reviewer: "검토 담당자 이름을 입력하세요.", limit: "스냅샷 20개 한도에 도달했습니다. 기존 버전은 보존됩니다.",
+  } : {
+    viewer: "Use a workspace where you have editing permission.", archived: "Restore the archived project.", busy: "Wait for the current save or refresh to finish.",
+    empty: "Add at least one review record.", blank: "Complete or remove empty records, then save.",
+    unsourced: "Link project evidence to reviewed claims, or mark them open.", missing: "Restore missing source relationships or remove their references.",
+    changed: "Review affected records in Evidence changes and save your conclusions.", stale: "Inspect changed sources, then save the review again.",
+    save: "Save your changes with Save review.", reviewer: "Enter the human reviewer name.", limit: "The 20-snapshot limit has been reached. Existing versions are preserved.",
+  };
   const snapshotIndex = saved.dossier.snapshots.findIndex((entry) => entry.snapshot_id === selectedSnapshot);
   const snapshot = saved.dossier.snapshots[snapshotIndex];
   const previous = snapshotIndex > 0 ? saved.dossier.snapshots[snapshotIndex - 1] : null;
@@ -105,7 +120,11 @@ function ReviewEditor({ initial }: { initial: ProjectReviewResponse }) {
     <Section title={t("Human review checklist")} description={t("Confirm that each section was considered, including sections where nothing has been recorded. This records your judgment, not external certification.")}>
       <fieldset className="review-fieldset review-checklist" disabled={readonly}>{REVIEW_KINDS.map((kind) => <label key={kind}><input type="checkbox" checked={draft.checklist[kind]} onChange={(event) => setDraft({ ...draft, checklist: { ...draft.checklist, [kind]: event.target.checked } })} />{t(LABELS[kind])}</label>)}</fieldset>
       <p className="muted-text">{t("Compared with the latest snapshot: {added} added, {changed} changed, {removed} removed.", { added: currentComparison.added.length, changed: currentComparison.changed.length, removed: currentComparison.removed.length })}</p>
-      <div className="review-actions"><label className="reader-field"><span>{t("Human reviewer name")}</span><input value={reviewedBy} maxLength={200} disabled={readonly} onChange={(event) => setReviewedBy(event.target.value)} /></label><button className="reader-control" disabled={readonly || dirty || Boolean(saved.evidence_change_count) || saved.draft_sources_stale || !coverage.can_freeze || !reviewedBy.trim() || saved.dossier.snapshots.length >= REVIEW_MAX_SNAPSHOTS} onClick={() => void freeze()}><CheckCircle2 size={15} />{t("Freeze reviewed snapshot")}</button></div>
+      <div className="review-actions"><label className="reader-field"><span>{t("Human reviewer name")}</span><input value={reviewedBy} maxLength={200} disabled={readonly} onChange={(event) => setReviewedBy(event.target.value)} /></label><button className="reader-control" aria-describedby="review-freeze-readiness" disabled={readonly || dirty || Boolean(saved.evidence_change_count) || saved.draft_sources_stale || !coverage.can_freeze || !reviewedBy.trim() || saved.dossier.snapshots.length >= REVIEW_MAX_SNAPSHOTS} onClick={() => void freeze()}><CheckCircle2 size={15} />{t("Freeze reviewed snapshot")}</button></div>
+      <div id="review-freeze-readiness" role="status" aria-live="polite" className="review-freeze-readiness">
+        <strong>{locale === "ko" ? (readiness.length ? "스냅샷 확정 전 확인할 일" : "스냅샷을 확정할 수 있습니다") : (readiness.length ? "Before freezing this snapshot" : "Ready to freeze this snapshot")}</strong>
+        {readiness.length ? <ul>{readiness.map(reason => <li key={reason.code}>{reason.code === "checklist" ? `${locale === "ko" ? "검토 목록을 확인하세요" : "Complete the review checklist"}: ${reason.kinds!.map(kind => t(LABELS[kind])).join(", ")}` : readinessText[reason.code]}{reason.count ? ` (${reason.count})` : ""}</li>)}</ul> : <p>{locale === "ko" ? "확정 버튼을 누른 뒤 내용을 확인하세요. 미검토 기록은 미검토 상태로 보존됩니다." : "Use Freeze reviewed snapshot and confirm. Open records will remain unreviewed."}</p>}
+      </div>
       <p className="muted-text">{t("Save first. Each snapshot preserves the exact review input, selected source text and fingerprints, reviewer name and date. Open records remain marked unreviewed.")}</p>
       {saved.dossier.snapshots.length >= REVIEW_MAX_SNAPSHOTS ? <p className="review-warning">{t("The 20-snapshot retention limit has been reached. Existing snapshots are preserved.")}</p> : null}
     </Section>
