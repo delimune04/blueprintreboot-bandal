@@ -528,3 +528,33 @@ collections may scroll horizontally and normal navigation may compact, but
 content, controls, and all navigation destinations must remain accessible.
 Respect reduced-motion preferences and do not make hover the sole way to reach
 an action.
+
+## LabVium web skin (hosted build only)
+
+The hosted LabVium build (`frontend/demo`, mounted at `/LabVium`) layers a
+modern presentation over this foundation without changing shared tokens,
+component contracts, or the local application's appearance. Its stylesheets
+load after the shared ones and every rule is scoped to
+`[data-bandal-demo="true"]`:
+
+- `demo/skin.css` sets the LabVium palette (logo violet `#7c3aed` / deep
+  `#5b21b6`, with an indigo gradient for primary emphasis), softer rules,
+  8–16px radii, light elevation for working surfaces, round status markers,
+  a translucent account strip and app bar, and the bundled Pretendard
+  Variable typeface (`demo/fonts/pretendard`, OFL 1.1, unicode-range
+  subsets served from the same origin).
+- `demo/home.css` owns the landing page: an aria-hidden hero aura, the
+  glass workflow card, collaboration and feature cards, and the closing panel.
+- At 64rem and below the account strip scrolls away on ordinary pages and the
+  compact app bar stays sticky; the Reader keeps the strip because its shell
+  never scrolls.
+
+Motion in this skin is decorative and opt-in. Every animation sits inside
+`@media (prefers-reduced-motion: no-preference)`. Content entrances (route
+fade, staggered page sections, dialogs, drawers, menus) use `backwards` fill
+only, so no transform remains after they finish and fixed overlays keep the
+viewport as their containing block. The Reader workspace is excluded from
+content entrances, and nothing in the skin changes PDF stage geometry.
+Landing-page section reveals and the pointer-following card highlight come
+from `labvium-motion.mjs`, which never hides content before it runs and skips
+touch-first pointers and reduced motion.

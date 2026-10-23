@@ -7,9 +7,12 @@ import { LanguageToggle, LocaleProvider, useI18n } from "../app/lib/i18n/LocaleP
 import { PRODUCT_NAME } from "../app/lib/i18n/catalog";
 import Link from "./link";
 import { migrateLegacyRoute, usePathname } from "./navigation";
+import "./fonts/pretendard/pretendardvariable-dynamic-subset.css";
 import "../app/globals.css";
 import "./style.css";
 import "../app/lib/continuity/continuity.css";
+import "./skin.css";
+import "./home.css";
 import { CloudStatus } from "../app/components/CloudStatus";
 import { CollaborationInboxLink } from "../app/components/CollaborationInboxLink";
 import { LabviumBrand } from "../app/components/LabviumBrand";

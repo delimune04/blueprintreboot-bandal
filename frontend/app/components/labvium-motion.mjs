@@ -26,11 +26,11 @@ export function mountLabviumMotion(root, { preference, Observer }) {
       seen.add(element);
       observer.unobserve(element);
       if (element.contains(root.ownerDocument.activeElement) || typeof element.animate !== "function") continue;
-      const order = Math.min(4, Math.max(0, Number(element.getAttribute("data-lv-order")) || 0));
+      const order = Math.min(5, Math.max(0, Number(element.getAttribute("data-lv-order")) || 0));
       const animation = element.animate([
-        { opacity: 0, transform: "translate3d(0, 14px, 0)" },
-        { opacity: 1, transform: "translate3d(0, 0, 0)" },
-      ], { duration: 640, delay: order * 55, easing: "cubic-bezier(.22, 1, .36, 1)", fill: "none" });
+        { opacity: 0, transform: "translate3d(0, 22px, 0) scale(.985)" },
+        { opacity: 1, transform: "translate3d(0, 0, 0) scale(1)" },
+      ], { duration: 760, delay: order * 55, easing: "cubic-bezier(.22, 1, .36, 1)", fill: "none" });
       running.set(element, animation);
       animation.finished.then(() => running.delete(element), () => running.delete(element));
     }
@@ -55,5 +55,41 @@ export function mountLabviumMotion(root, { preference, Observer }) {
     running.clear();
     root.removeEventListener("focusin", onFocus);
     preference.removeEventListener?.("change", onPreference);
+  };
+}
+
+/**
+ * A pointer-following highlight for cards marked with data-lv-spotlight. It
+ * writes two custom properties on the hovered card at most once per frame and
+ * is skipped for reduced motion or devices without a fine hover pointer.
+ *
+ * @param {HTMLElement} root
+ * @param {{ preference: MediaQueryList, finePointer: MediaQueryList, requestFrame?: (callback: () => void) => number, cancelFrame?: (handle: number) => void }} environment
+ */
+export function mountLabviumSpotlight(root, { preference, finePointer, requestFrame = globalThis.requestAnimationFrame, cancelFrame = globalThis.cancelAnimationFrame }) {
+  if (preference.matches || !finePointer.matches || typeof requestFrame !== "function") return () => {};
+  let frame = 0;
+  let pending = null;
+  const flush = () => {
+    frame = 0;
+    if (!pending) return;
+    const { element, x, y } = pending;
+    pending = null;
+    element.style.setProperty("--lv-x", `${x}px`);
+    element.style.setProperty("--lv-y", `${y}px`);
+  };
+  const onMove = (event) => {
+    const element = event.target?.closest?.("[data-lv-spotlight]");
+    if (!element || !root.contains(element)) return;
+    const box = element.getBoundingClientRect();
+    pending = { element, x: Math.round(event.clientX - box.left), y: Math.round(event.clientY - box.top) };
+    if (!frame) frame = requestFrame(flush);
+  };
+  root.addEventListener("pointermove", onMove, { passive: true });
+  return () => {
+    root.removeEventListener("pointermove", onMove);
+    if (frame) cancelFrame?.(frame);
+    frame = 0;
+    pending = null;
   };
 }
