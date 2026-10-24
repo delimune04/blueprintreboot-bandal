@@ -113,6 +113,7 @@ test('price history exposes correct range and timestamps without replacing unava
  const month=renderPricePanel(data,{range:'1M'}),year=renderPricePanel(data,{range:'1Y'});
  assert.match(month,/data-price-range="1M" aria-pressed="true"/);assert.match(month,/2026-10-23 20:00:00 UTC/);assert.match(month,/장마감/);assert.match(month,/15분 지연/);assert.match(month,/2거래일/);assert.match(year,/3거래일/);assert(!month.includes('2026-10-24 · $0'));assert.match(month,/Public Finance/);
  const missing=renderPricePanel(company('X',{quote:{price:null},priceHistory:{points:[],reason:'SOURCE_FAILED'}}));assert.match(missing,/SOURCE_FAILED/);assert.match(missing,/미제공/);assert(!/NaN|Infinity/.test(missing));
+ {const html=renderPricePanel({company:{ticker:"IREN"},quote:{price:100},priceHistory:{currency:"USD",points:[{date:"2025-01-01",close:1},{date:"2026-01-01",close:100}]}},{range:"5Y"});const axes=[...html.matchAll(/class="price-axis">([^<]+)/g)].slice(0,3).map(m=>Number(m[1].replaceAll(",","")));assert(axes.every(value=>Number.isFinite(value)&&value>=0));}
 });
 test('individual analyst rows separate named people and firms from anonymous consensus',()=>{
  const html=renderAnalystResearch(company('AAPL',{analystResearch:{consensus:{recommendation:'strong_buy',analystCount:10,targetMean:250,source},estimates:[{fiscalQuarter:'Q4 2026',epsAverage:2,revenueAverage:120000000000,source}],ratings:[{analyst:'Jane Analyst',firm:'Research Firm',rating:'Buy',previousRating:'Hold',date:'2026-10-23',targetPrice:260,source},{firm:'Other Firm',rating:'Sell',date:'2026-10-22',source}]}}));
@@ -170,3 +171,4 @@ test('quarter chart basis uses explicit type and does not confuse comparison men
  const explicit=renderMetricHistory([{...point,periodType:'ttm',source:{basis:'분기 말 시점의 최근 4개 분기 이익 합계'}}],'PER','배');assert.match(explicit,/최근 4분기 · TTM/);
  const explicitQuarter=renderMetricHistory([{...point,periodType:'quarter',source:{basis:'분기 단위이며 TTM 비교와는 별도'}}],'EPS','USD/주');assert.match(explicitQuarter,/최근 4분기 · 분기</);
 });
+
