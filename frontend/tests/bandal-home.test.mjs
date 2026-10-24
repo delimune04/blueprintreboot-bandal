@@ -75,3 +75,73 @@ test("BANDAL homepage animation is opt-in and has static fallbacks", async () =>
   assert.match(script, /prefers-reduced-motion: reduce/);
   assert.match(script, /try \{\s*if \(userPaused\) localStorage/, "the motion preference is stored best-effort");
 });
+
+const PROJECTS = [
+  { id: "labvium", href: "/LabVium", label: "LABVIUM" },
+  { id: "harupyeon", href: "/harupyeon/", label: "HARUPYEON" },
+  { id: "travel", href: "/travel/", label: "TRAVEL PLANNER" },
+  { id: "capella", href: "/capella/", label: "CAPELLA CAMERA" },
+  { id: "moaflow", href: "/moaflow/", label: "MOAFLOW" },
+  { id: "finance", href: "/finance/", label: "BANDAL FINANCE" },
+];
+
+// Match complete section elements so ordering checks use rendered source order,
+// rather than independent string-presence checks that let stale numbering pass.
+const projectSections = html => [...html.matchAll(/<section\b([^>]*)>([\s\S]*?)<\/section>/g)]
+  .filter(([, attrs]) => /class="project(?: |")/.test(attrs))
+  .map(([, attrs, content]) => ({
+    id: /\bid="([^"]+)"/.exec(attrs)?.[1],
+    chapter: /\bdata-chapter="([^"]+)"/.exec(attrs)?.[1],
+    heading: /aria-labelledby="([^"]+)"/.exec(attrs)?.[1],
+    content,
+  }));
+const navContent = (html, attributes) => new RegExp(`<nav ${attributes}>([\\s\\S]*?)<\\/nav>`).exec(html)?.[1] || "";
+
+test("homepage source order, chapter numbers and jump links follow the requested project order", async () => {
+  const html = await read("index.html");
+  const sections = projectSections(html);
+  assert.deepEqual(sections.map(section => section.id), PROJECTS.map(project => project.id));
+  assert.deepEqual(sections.map(section => section.chapter), PROJECTS.map(project => project.id));
+  for (const [index, section] of sections.entries()) {
+    const number = String(index + 1).padStart(2, "0");
+    assert.match(section.content, new RegExp(`<span class="project-numeral" aria-hidden="true">${number}</span>`));
+    assert.ok(section.content.includes(`<p class="eyebrow reveal">${number} / ${PROJECTS[index].label}</p>`));
+    assert.ok(section.content.includes(`<h2 id="${section.heading}"`), `${section.id} has its labelled heading`);
+    assert.ok(attributes(section.content, "href").includes(PROJECTS[index].href));
+  }
+  const rail = navContent(html, 'class="chapter-rail" aria-label="섹션 바로가기"');
+  assert.deepEqual(attributes(rail, "data-chapter-link"), [...PROJECTS.map(project => project.id), "about", "directory"]);
+  assert.deepEqual(attributes(rail, "href"), [...PROJECTS.map(project => `#${project.id}`), "#about", "#app-projects"]);
+  assert.match(html, /class="scroll-cue" href="#projects" aria-label="다음 섹션, LabVium"/);
+  assert.ok(html.includes(`${String(PROJECTS.length).padStart(2, "0")} PROJECTS`));
+  assert.ok(html.includes(`${String(PROJECTS.length + 1).padStart(2, "0")} / ABOUT BANDAL`));
+});
+
+test("desktop, compact menu, footer and directory keep the same project order", async () => {
+  const html = await read("index.html");
+  const nav = navContent(html, 'id="navigation" class="primary-nav" aria-label="주 메뉴"');
+  assert.deepEqual(attributes(nav, "href"), [...PROJECTS.map(project => project.href), "#about"]);
+  assert.deepEqual([...nav.matchAll(/<small aria-hidden="true">(\d{2})<\/small>/g)].map(match => match[1]), ["01", "02", "03", "04", "05", "06", "07"]);
+  assert.deepEqual([...nav.matchAll(/style="--i:(\d+)"/g)].map(match => Number(match[1])), [0, 1, 2, 3, 4, 5, 6]);
+  const cards = [...html.matchAll(/<a class="directory-card[^>]+href="([^"]+)"[^>]*>([\s\S]*?)<\/a>/g)];
+  assert.deepEqual(cards.map(match => match[1]), PROJECTS.map(project => project.href));
+  for (const [index, card] of cards.entries()) {
+    assert.ok(card[2].includes(`<span class="directory-label">${String(index + 1).padStart(2, "0")} /`));
+  }
+  const footer = navContent(html, 'aria-label="하단 메뉴"');
+  const footerProjects = attributes(footer, "href").filter(href => PROJECTS.some(project => project.href === href));
+  assert.deepEqual(footerProjects, PROJECTS.map(project => project.href));
+  // Numbered mobile links must remain usable after the seventh menu item is added.
+  const css = await read("bandal-home.css"), script = await read("bandal-home.js");
+  assert.match(css, /@media \(max-width:1020px\)/);
+  assert.match(css, /overflow-y:auto/);
+  assert.match(script, /matchMedia\('\(max-width: 1020px\)'\)/);
+});
+
+test("MoaFlow remains independent and the Finance hub links to all three modules", async () => {
+  const html = await read("index.html");
+  const sections = projectSections(html);
+  assert.ok(sections.find(section => section.id === "moaflow").content.includes('href="/moaflow/"'));
+  const finance = sections.find(section => section.id === "finance");
+  for (const tab of ["ledger", "analysis", "quant"]) assert.ok(finance.content.includes(`href="/finance/#${tab}"`));
+});

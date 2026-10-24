@@ -15,6 +15,27 @@
       "when": 1791972650334,
       "tag": "0001_slimy_the_order",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1792682037654,
+      "tag": "0002_powerful_richard_fisk",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1792683026937,
+      "tag": "0003_spotty_tarantula",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "6",
+      "when": 1792813989663,
+      "tag": "0004_bandal_finance",
+      "breakpoints": true
     }
   ]
 }

@@ -848,3 +848,11 @@ If Crossref reports an SSL/certificate problem, update the networking dependenci
 ```powershell
 python -m pip install --upgrade requests urllib3 certifi
 ```
+# BANDAL homepage and Finance
+
+The personal BANDAL homepage source is in `bandal-home/`. Its project order is
+LabVium, Harupyeon, Travel, CAPELLA, MoaFlow, Bandal Finance. The Finance hub
+adds the existing ledger, source-backed US company research and private Quant
+simulations. See [implementation and operational limits](docs/BANDAL_FINANCE.md)
+and [existing Quant runner connection](docs/finance-quant-runner.md).
+GitHub changes and BANDAL Site deployments are separate operations.
