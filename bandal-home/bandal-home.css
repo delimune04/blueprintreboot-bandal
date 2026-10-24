@@ -39,6 +39,7 @@
 :root[data-chapter=travel]{--ambient-a:#4d58b82b;--ambient-b:#38368f22}
 :root[data-chapter=capella]{--ambient-a:#9a4b9a2b;--ambient-b:#5b2f7a1f}
 :root[data-chapter=finance]{--ambient-a:#586fb82e;--ambient-b:#52428f22}
+:root[data-chapter=tools]{--ambient-a:#3f8f8a26;--ambient-b:#4b3f8f1f}
 :root[data-chapter=about],:root[data-chapter=directory]{--ambient-a:#6a3fa526;--ambient-b:#3f2b8a1a}
 
 *,*:before,*:after{box-sizing:border-box}
@@ -171,6 +172,7 @@ a:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var
 .projects{position:relative}
 .project,.studio{position:relative;overflow:hidden;overflow:clip;padding:clamp(130px,13vw,184px) 0 clamp(96px,9vw,130px)}
 .project{--accent:#c9b5ef;--accent-hi:#e4d4fb;--accent-glow:#8e65d926;--accent-line:#c9b5ef8c;--accent-line-2:#c9b5ef59;--accent-spot:#c9b5ef29;--accent-soft:#c9b5ef17}
+#tools{--accent:#9fdccf;--accent-hi:#ddf7ef;--accent-glow:#3f9c8b2b;--accent-line:#9fdccf8c;--accent-line-2:#9fdccf59;--accent-spot:#9fdccf29;--accent-soft:#9fdccf17}
 #finance{--accent:#a8b7ff;--accent-hi:#e0e6ff;--accent-glow:#6076d32b;--accent-line:#a8b7ff8c;--accent-line-2:#a8b7ff59;--accent-spot:#a8b7ff29;--accent-soft:#a8b7ff17}
 #labvium{--accent:#ab92f7;--accent-hi:#ddd2ff;--accent-glow:#6e55d32b;--accent-line:#ab92f78c;--accent-line-2:#ab92f759;--accent-spot:#ab92f729;--accent-soft:#ab92f717}
 #harupyeon{--accent:#d3a3ec;--accent-hi:#f3dcff;--accent-glow:#9a52c02b;--accent-line:#d3a3ec8c;--accent-line-2:#d3a3ec59;--accent-spot:#d3a3ec29;--accent-soft:#d3a3ec17}
@@ -304,6 +306,7 @@ details[open] summary>span{transform:rotate(45deg)}
 .directory-card:hover,.directory-card:focus-visible{background:linear-gradient(160deg,#241933,#171021) padding-box,linear-gradient(140deg,#d8c5f78c,#c9b5ef1f 45%,#c9b5ef55) border-box;box-shadow:0 30px 70px -20px #050208d9}
 .directory-card:hover:before,.directory-card:focus-visible:before{opacity:1}
 .directory-card--wide{grid-column:span 2}
+.directory-card--full{grid-column:1/-1}
 .directory-symbol{display:flex;align-items:center;justify-content:center;width:56px;height:56px;margin-bottom:34px;border-radius:15px;box-shadow:0 12px 30px #09041259;transition:transform .6s var(--spring)}
 .directory-card:hover .directory-symbol{transform:translateY(-4px) rotate(-5deg) scale(1.04)}
 .symbol-labvium{object-fit:contain;padding:4px;background:#f8f4ff;border:1px solid #c8b8e655}
@@ -600,11 +603,18 @@ details[open] summary>span{transform:rotate(45deg)}
 }
 
 /* Finance hub entry */
-.finance-services{display:grid;gap:10px;margin-top:28px}
-.finance-services a{display:grid;gap:8px;padding:18px 20px;border:1px solid var(--accent-line-2);border-radius:14px;background:var(--accent-soft)}
-.finance-services a:hover{border-color:var(--accent);background:var(--accent-spot)}
-.finance-services span{font-size:10px;letter-spacing:.12em;color:var(--accent)}
-.finance-services strong{font-size:19px;font-weight:650}
-.finance-services small{font-size:12px;color:var(--ink-2)}
+.finance-services,.tools-services{display:grid;gap:10px;margin-top:28px}
+.tools-services{grid-template-columns:1fr 1fr}
+.tools-services a:first-child{grid-column:1/-1}
+.tools-services a,.finance-services a{display:grid;gap:8px;padding:18px 20px;border:1px solid var(--accent-line-2);border-radius:14px;background:var(--accent-soft)}
+.tools-services a:hover,.finance-services a:hover{border-color:var(--accent);background:var(--accent-spot)}
+.tools-services span,.finance-services span{font-size:10px;letter-spacing:.12em;color:var(--accent)}
+.tools-services strong,.finance-services strong{font-size:19px;font-weight:650}
+.tools-services small,.finance-services small{font-size:12px;color:var(--ink-2)}
 .symbol-finance{display:flex;align-items:center;justify-content:center;gap:2px;font-weight:700;color:#dce1ff;background:#a8b7ff12;border:1px solid #a8b7ff44}
 .symbol-finance span{font-size:18px}
+.symbol-tools{display:flex;align-items:center;justify-content:center;gap:2px;font-weight:700;color:#dcf7ef;background:#9fdccf12;border:1px solid #9fdccf44}
+.symbol-tools span{font-size:16px}
+@media (max-width:560px){.tools-services{grid-template-columns:1fr}}
+.directory-pills{display:none}
+@media (min-width:941px){.directory-card--full{position:relative}.directory-pills{position:absolute;top:50%;right:clamp(28px,4vw,56px);display:flex;flex-wrap:wrap;justify-content:flex-end;gap:10px;max-width:46%;transform:translateY(-50%)}.directory-pills span{padding:10px 16px;border:1px solid #9fdccf3d;border-radius:999px;background:#9fdccf0f;color:#dcf7ef;font-size:14px;font-weight:600}}

@@ -19,6 +19,8 @@ jobs:
           node-version: "24"
       - name: Verify Finance ownership, valuation, paper trading and existing ledger
         run: node --test tests/finance/*.test.mjs tests/moaflow/*.test.mjs hosting/tests/worker.test.mjs
+      - name: Verify BANDAL site pages, shared UI and 반달 도구함 calculators
+        run: node --test tests/site/*.test.mjs
 
   python:
     runs-on: ubuntu-latest

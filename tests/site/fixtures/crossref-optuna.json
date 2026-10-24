@@ -1,0 +1,48 @@
+{
+ "message": {
+  "type": "proceedings-article",
+  "title": [
+   "Optuna"
+  ],
+  "subtitle": [
+   "A Next-generation Hyperparameter Optimization Framework"
+  ],
+  "author": [
+   {
+    "given": "Takuya",
+    "family": "Akiba"
+   },
+   {
+    "given": "Shotaro",
+    "family": "Sano"
+   },
+   {
+    "given": "Toshihiko",
+    "family": "Yanase"
+   },
+   {
+    "given": "Takeru",
+    "family": "Ohta"
+   },
+   {
+    "given": "Masanori",
+    "family": "Koyama"
+   }
+  ],
+  "container-title": [
+   "Proceedings of the 25th ACM SIGKDD International Conference on Knowledge Discovery &amp; Data Mining"
+  ],
+  "issued": {
+   "date-parts": [
+    [
+     2019,
+     7,
+     25
+    ]
+   ]
+  },
+  "page": "2623-2631",
+  "publisher": "ACM",
+  "DOI": "10.1145/3292500.3330701"
+ }
+}

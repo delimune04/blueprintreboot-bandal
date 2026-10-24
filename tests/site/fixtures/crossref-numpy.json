@@ -1,0 +1,132 @@
+{
+ "message": {
+  "type": "journal-article",
+  "title": [
+   "Array programming with NumPy"
+  ],
+  "subtitle": [],
+  "author": [
+   {
+    "given": "Charles R.",
+    "family": "Harris"
+   },
+   {
+    "given": "K. Jarrod",
+    "family": "Millman"
+   },
+   {
+    "given": "Stéfan J.",
+    "family": "van der Walt"
+   },
+   {
+    "given": "Ralf",
+    "family": "Gommers"
+   },
+   {
+    "given": "Pauli",
+    "family": "Virtanen"
+   },
+   {
+    "given": "David",
+    "family": "Cournapeau"
+   },
+   {
+    "given": "Eric",
+    "family": "Wieser"
+   },
+   {
+    "given": "Julian",
+    "family": "Taylor"
+   },
+   {
+    "given": "Sebastian",
+    "family": "Berg"
+   },
+   {
+    "given": "Nathaniel J.",
+    "family": "Smith"
+   },
+   {
+    "given": "Robert",
+    "family": "Kern"
+   },
+   {
+    "given": "Matti",
+    "family": "Picus"
+   },
+   {
+    "given": "Stephan",
+    "family": "Hoyer"
+   },
+   {
+    "given": "Marten H.",
+    "family": "van Kerkwijk"
+   },
+   {
+    "given": "Matthew",
+    "family": "Brett"
+   },
+   {
+    "given": "Allan",
+    "family": "Haldane"
+   },
+   {
+    "given": "Jaime Fernández",
+    "family": "del Río"
+   },
+   {
+    "given": "Mark",
+    "family": "Wiebe"
+   },
+   {
+    "given": "Pearu",
+    "family": "Peterson"
+   },
+   {
+    "given": "Pierre",
+    "family": "Gérard-Marchant"
+   },
+   {
+    "given": "Kevin",
+    "family": "Sheppard"
+   },
+   {
+    "given": "Tyler",
+    "family": "Reddy"
+   },
+   {
+    "given": "Warren",
+    "family": "Weckesser"
+   },
+   {
+    "given": "Hameer",
+    "family": "Abbasi"
+   },
+   {
+    "given": "Christoph",
+    "family": "Gohlke"
+   },
+   {
+    "given": "Travis E.",
+    "family": "Oliphant"
+   }
+  ],
+  "container-title": [
+   "Nature"
+  ],
+  "issued": {
+   "date-parts": [
+    [
+     2020,
+     9,
+     16
+    ]
+   ]
+  },
+  "volume": "585",
+  "issue": "7825",
+  "page": "357-362",
+  "publisher": "Springer Science and Business Media LLC",
+  "DOI": "10.1038/s41586-020-2649-2"
+ }
+}
