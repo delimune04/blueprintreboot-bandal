@@ -1,0 +1,3241 @@
+{
+  "checkedAt": "2026-10-08",
+  "meta": {
+    "schemaVersion": 1,
+    "cities": [
+      "tokyo",
+      "paris",
+      "london"
+    ],
+    "currencies": [
+      "JPY",
+      "EUR",
+      "GBP"
+    ],
+    "liveData": false,
+    "notice": "도쿄·파리·런던 공식 공개자료를 2026-10-08 확인한 정적 확장자료입니다. 여행일 실시간 가격·운행·재고·최단경로를 보장하지 않습니다."
+  },
+  "pois": [
+    {
+      "id": "tokyo-sensoji",
+      "name": "센소지·나카미세",
+      "city": "tokyo",
+      "currency": "JPY",
+      "priceCurrency": "JPY",
+      "lat": 35.714634,
+      "lng": 139.79673,
+      "district": "아사쿠사",
+      "category": "culture",
+      "duration": 90,
+      "durationIsEstimate": true,
+      "price": 0,
+      "priceScope": "일반 경내 참배·산책. 특별행사·먹거리·기념품 별도.",
+      "priceNote": "일반 경내 참배·산책. 특별행사·먹거리·기념품 별도.",
+      "description": "가미나리몬에서 나카미세를 지나 본당까지 이어지는 전통 거리 코스.",
+      "officialUrl": "https://www.senso-ji.jp/english/",
+      "coordinateSource": "https://www.senso-ji.jp/english/",
+      "coordinatePrecision": "official_page_explicit_place_marker",
+      "coordinateNote": "사찰 공식 페이지 지도 marker의 명시 좌표. 별도로 표시된 가미나리몬 좌표나 지도 중심을 쓰지 않음.",
+      "hours": "본당 06:00–17:00(10~3월 06:30 개방), 상점별 영업시간 상이.",
+      "reservation": "일반 참배 예약 없음. 행사 시 통행·입장 안내 확인.",
+      "checkedAt": "2026-10-08",
+      "hoursSource": "https://www.gotokyo.org/book/wp-content/uploads/2025/11/AO_2511_discover-tokyo_low_EN.pdf"
+    },
+    {
+      "id": "tokyo-meiji-jingu",
+      "name": "메이지 신궁",
+      "city": "tokyo",
+      "currency": "JPY",
+      "priceCurrency": "JPY",
+      "lat": 35.6763976,
+      "lng": 139.6993259,
+      "district": "하라주쿠·요요기",
+      "category": "culture",
+      "duration": 75,
+      "durationIsEstimate": true,
+      "price": 0,
+      "priceScope": "신사 일반 참배. 유료 정원·박물관 별도.",
+      "priceNote": "신사 일반 참배. 유료 정원·박물관 별도.",
+      "description": "숲길을 걸어 도심의 신사로 향합니다. 입구에서 본전까지 최소 10분을 더 잡으세요.",
+      "officialUrl": "https://www.meijijingu.or.jp/en/visit/",
+      "coordinateSource": "https://www.meijijingu.or.jp/en/access/",
+      "coordinatePrecision": "officially_linked_place_pin",
+      "coordinateNote": "도쿄 관광청이 연결한 지도 장소 ID에 대응하는 장소명·주소·핀 좌표를 확인. 지도 화면 중심이나 실제 출입구 좌표와 다름.",
+      "hours": "연중 개방. 월별 일출·일몰 기준 개폐: 10월 05:40–16:40, 11월 06:10–16:10, 12월 06:40–16:00.",
+      "reservation": "일반 참배 예약 없음.",
+      "checkedAt": "2026-10-08",
+      "monthlyHours": {
+        "1": [
+          "06:40",
+          "16:20"
+        ],
+        "2": [
+          "06:20",
+          "16:50"
+        ],
+        "3": [
+          "05:40",
+          "17:20"
+        ],
+        "4": [
+          "05:10",
+          "17:50"
+        ],
+        "5": [
+          "05:00",
+          "18:10"
+        ],
+        "6": [
+          "05:00",
+          "18:30"
+        ],
+        "7": [
+          "05:00",
+          "18:20"
+        ],
+        "8": [
+          "05:00",
+          "18:00"
+        ],
+        "9": [
+          "05:20",
+          "17:20"
+        ],
+        "10": [
+          "05:40",
+          "16:40"
+        ],
+        "11": [
+          "06:10",
+          "16:10"
+        ],
+        "12": [
+          "06:40",
+          "16:00"
+        ]
+      }
+    },
+    {
+      "id": "tokyo-skytree",
+      "name": "도쿄 스카이트리",
+      "city": "tokyo",
+      "currency": "JPY",
+      "priceCurrency": "JPY",
+      "lat": 35.7100627,
+      "lng": 139.8107004,
+      "district": "오시아게·스카이트리",
+      "category": "view",
+      "duration": 90,
+      "durationIsEstimate": true,
+      "price": null,
+      "priceScope": "15세 이상 1인 350m 덴보 데크 웹권 ¥1,800부터. 450m 덴보 갤러리아 결합 ¥3,000부터. 날짜별 변동.",
+      "priceNote": "15세 이상 1인 350m 덴보 데크 웹권 ¥1,800부터. 450m 덴보 갤러리아 결합 ¥3,000부터. 날짜별 변동.",
+      "description": "도쿄 전망을 즐기는 전망대. 350m와 450m 포함 범위를 먼저 고르세요.",
+      "officialUrl": "https://www.tokyo-skytree.jp/ticket/",
+      "coordinateSource": "https://www.gotokyo.org/en/spot/6/index.html",
+      "coordinatePrecision": "officially_linked_place_pin",
+      "coordinateNote": "도쿄 관광청이 연결한 지도 장소 ID에 대응하는 장소명·주소·핀 좌표를 확인. 지도 화면 중심이나 실제 출입구 좌표와 다름.",
+      "hours": "관광청 기본 안내 평일10:00–22:00, 토·일·공휴일09:00–22:00, 마감60분 전 최종입장. 날짜별 운영표 우선.",
+      "reservation": "시간 지정 웹권 권장. 전망대 현장발권은 1장당 ¥500 추가. 재고 미조회.",
+      "checkedAt": "2026-10-08",
+      "priceRange": {
+        "min": 1800,
+        "max": 3600,
+        "currency": "JPY",
+        "basis": "공식 운영사 안내의 덴보 데크 성인 변동가격 범위. 여행일 실제가격은 미확정."
+      },
+      "priceFrom": 1800,
+      "priceDynamic": true,
+      "priceEffectiveFrom": "2026-04-01",
+      "priceRangeSource": "https://restaurant.tokyo-skytree.jp/maintenance/share/images/ABOUT_en.pdf?260401=",
+      "hoursSource": "https://www.tokyo-skytree.jp/open-hours/"
+    },
+    {
+      "id": "tokyo-shinjuku-gyoen",
+      "name": "신주쿠 교엔",
+      "city": "tokyo",
+      "currency": "JPY",
+      "priceCurrency": "JPY",
+      "lat": 35.6851763,
+      "lng": 139.7100517,
+      "district": "신주쿠",
+      "category": "nature",
+      "duration": 100,
+      "durationIsEstimate": true,
+      "price": 500,
+      "priceScope": "성인 일반 정원 입장 1인. 65세 이상·학생 별도 할인.",
+      "priceNote": "성인 일반 정원 입장 1인. 65세 이상·학생 별도 할인.",
+      "description": "정원과 온실을 둘러보며 쉬기 좋은 코스.",
+      "officialUrl": "https://policies.env.go.jp/national-garden/shinjukugyoen/english/guide/information/",
+      "coordinateSource": "https://www.gotokyo.org/en/spot/75/index.html",
+      "coordinatePrecision": "officially_linked_place_pin",
+      "coordinateNote": "도쿄 관광청이 연결한 지도 장소 ID에 대응하는 장소명·주소·핀 좌표를 확인. 지도 화면 중심이나 실제 출입구 좌표와 다름.",
+      "hours": "10/1–3/14 09:00–16:30; 3/15–9/30 09:00–18:00; 6/11–7/31 19:00까지. 최종입장 마감30분 전.",
+      "reservation": "벚꽃철 지정일·시간 예약제 가능. 공식 날짜 공지 확인.",
+      "checkedAt": "2026-10-08",
+      "conditionalClosureRule": {
+        "weekday": 1,
+        "exceptJapanesePublicHoliday": true,
+        "closeFollowingWeekday": true,
+        "openSeasonRanges": [
+          [
+            "03-25",
+            "04-24"
+          ],
+          [
+            "11-01",
+            "11-15"
+          ]
+        ]
+      },
+      "closureNote": "월요일 휴원(공휴일이면 다음 평일). 3/25–4/24·11/1–11/15는 월요일도 개방. 휴일캘린더 검증 전 일괄 월요일 자동제외 금지.",
+      "closedDates": [
+        "2026-12-29",
+        "2026-12-30",
+        "2026-12-31",
+        "2027-01-01",
+        "2027-01-02",
+        "2027-01-03"
+      ]
+    },
+    {
+      "id": "tokyo-national-museum",
+      "name": "도쿄 국립박물관",
+      "city": "tokyo",
+      "currency": "JPY",
+      "priceCurrency": "JPY",
+      "lat": 35.7188351,
+      "lng": 139.7765215,
+      "district": "우에노",
+      "category": "culture",
+      "duration": 150,
+      "durationIsEstimate": true,
+      "price": 1000,
+      "priceScope": "성인 동박 컬렉션전(상설전) 1인. 특별전 별도.",
+      "priceNote": "성인 동박 컬렉션전(상설전) 1인. 특별전 별도.",
+      "description": "일본 미술과 문화재를 차분히 살펴보는 우에노 박물관 코스.",
+      "officialUrl": "https://www.tnm.jp/modules/r_free_page/index.php?id=113&lang=en",
+      "coordinateSource": "https://www.gotokyo.org/en/spot/123/index.html",
+      "coordinatePrecision": "officially_linked_place_pin",
+      "coordinateNote": "도쿄 관광청이 연결한 지도 장소 ID에 대응하는 장소명·주소·핀 좌표를 확인. 지도 화면 중심이나 실제 출입구 좌표와 다름.",
+      "hours": "09:30–17:00, 금·토 및 다음 월요일이 공휴일인 일요일20:00까지. 최종입장30분 전.",
+      "reservation": "온라인 구입 권장. 상설전 전자권은 구입일부터2개월. 보안검색·대기 여유 필요.",
+      "checkedAt": "2026-10-08",
+      "conditionalClosureRule": {
+        "weekday": 1,
+        "exceptJapanesePublicHoliday": true,
+        "closeFollowingDay": true
+      },
+      "closureNote": "월요일 휴관, 공휴일 예외. 2026-12-22~25는 법륭사보물관·구로다기념관만 개방. 일부 전시실 장기휴관 별도.",
+      "openDates": [
+        "2026-04-27",
+        "2026-08-10",
+        "2026-09-21",
+        "2027-03-29"
+      ],
+      "closedDates": [
+        "2026-04-07",
+        "2026-12-15",
+        "2026-12-26",
+        "2026-12-27",
+        "2026-12-28",
+        "2026-12-29",
+        "2026-12-30",
+        "2026-12-31"
+      ],
+      "freeAdmissionDates": [
+        "2026-05-19",
+        "2026-09-21",
+        "2026-11-03"
+      ],
+      "partialClosurePeriods": [
+        {
+          "from": "2026-12-22",
+          "to": "2026-12-25",
+          "note": "법륭사보물관·구로다기념관만 개방"
+        }
+      ]
+    },
+    {
+      "id": "tokyo-shibuya-crossing",
+      "name": "시부야 스크램블 교차로",
+      "city": "tokyo",
+      "currency": "JPY",
+      "priceCurrency": "JPY",
+      "lat": 35.659482,
+      "lng": 139.7005596,
+      "district": "시부야",
+      "category": "view",
+      "duration": 35,
+      "durationIsEstimate": true,
+      "price": 0,
+      "priceScope": "공공 교차로·거리 산책. 전망시설·카페·쇼핑 별도.",
+      "priceNote": "공공 교차로·거리 산책. 전망시설·카페·쇼핑 별도.",
+      "description": "시부야 역 앞 교차로와 주변 거리를 함께 둘러봅니다.",
+      "officialUrl": "https://www.gotokyo.org/en/spot/78/index.html",
+      "coordinateSource": "https://www.gotokyo.org/en/spot/78/index.html",
+      "coordinatePrecision": "officially_linked_place_pin",
+      "coordinateNote": "도쿄 관광청이 연결한 지도 장소 ID에 대응하는 장소명·주소·핀 좌표를 확인. 지도 화면 중심이나 실제 출입구 좌표와 다름.",
+      "hours": "공공거리. 보행신호·행사 통제 준수.",
+      "reservation": "거리 산책 예약 없음.",
+      "checkedAt": "2026-10-08"
+    },
+    {
+      "id": "paris-eiffel-tower",
+      "name": "에펠탑 정상",
+      "city": "paris",
+      "currency": "EUR",
+      "priceCurrency": "EUR",
+      "district": "에펠탑·샹드마르스",
+      "category": "view",
+      "lat": 48.858261,
+      "lng": 2.294495,
+      "duration": 150,
+      "durationIsEstimate": true,
+      "price": 36.7,
+      "priceScope": "만 25세 이상 성인 1인, 엘리베이터 2회로 정상까지. 2026-01-12 적용. 12–24세 €18.40.",
+      "priceNote": "만 25세 이상 성인 1인, 엘리베이터 2회로 정상까지. 2026-01-12 적용. 12–24세 €18.40.",
+      "description": "정상 전망대까지 올라가는 선택. 계단/2층권과 정상 엘리베이터권을 혼동하지 마세요.",
+      "officialUrl": "https://www.toureiffel.paris/en/rates-opening-times",
+      "priceSource": "https://www.toureiffel.paris/fr/tarifs-janv-2026-en",
+      "coordinateSource": "https://www.transilien.com/fr/page-tourisme/la-tour-eiffel",
+      "coordinatePrecision": "official_place_or_route_destination_point",
+      "coordinateNote": "공식 장소 지도핀 또는 공식 교통운영자의 명소 목적지 좌표. 정확한 출입구·보행경로 아님.",
+      "hours": "날짜별 공식 캘린더 확인. 조회 화면은 09:30–23:00으로 표시하나 여행일의 운영시간은 별도 확인. 정상은 기상·혼잡으로 제한 가능.",
+      "reservation": "공식 온라인 날짜·시간 예약 권장. 현장 당일권도 판매하나 대기·매진 가능.",
+      "checkedAt": "2026-10-08",
+      "priceEffectiveFrom": "2026-01-12",
+      "priceValidityNote": "공식 2026 요금표; 예고 없이 변경 가능.",
+      "hoursRequireDateCheck": true,
+      "priceVariants": [
+        {
+          "label": "성인25세 이상 정상 엘리베이터",
+          "price": 36.7
+        },
+        {
+          "label": "성인25세 이상 2층 엘리베이터, 정상 제외",
+          "price": 23.5
+        },
+        {
+          "label": "성인25세 이상 2층 계단, 정상 제외",
+          "price": 14.8
+        },
+        {
+          "label": "성인25세 이상 2층까지 계단+정상 엘리베이터",
+          "price": 28
+        }
+      ],
+      "ticketUrl": "https://ticket.toureiffel.paris/en"
+    },
+    {
+      "id": "paris-louvre",
+      "name": "루브르 박물관",
+      "city": "paris",
+      "currency": "EUR",
+      "priceCurrency": "EUR",
+      "district": "루브르·팔레루아얄",
+      "category": "culture",
+      "lat": 48.8606111,
+      "lng": 2.337644,
+      "duration": 180,
+      "durationIsEstimate": true,
+      "price": 32,
+      "priceScope": "만 18세 이상 EEA 시민도 거주자도 아닌 방문객 1인. EEA 시민/거주자는 일반 €22; 18세 미만·EEA 26세 미만 무료 자격 별도.",
+      "priceNote": "만 18세 이상 EEA 시민도 거주자도 아닌 방문객 1인. EEA 시민/거주자는 일반 €22; 18세 미만·EEA 26세 미만 무료 자격 별도.",
+      "description": "상설·기획전 일반 입장. 같은 날 또는 다음 날 들라크루아 박물관 포함.",
+      "officialUrl": "https://www.louvre.fr/en/visit/hours-admission",
+      "priceSource": "https://www.louvre.fr/en/visit/hours-admission",
+      "coordinateSource": "https://www.louvre.fr/en/visit/map-entrances-directions",
+      "coordinatePrecision": "official_place_or_route_destination_point",
+      "coordinateNote": "공식 장소 지도핀 또는 공식 교통운영자의 명소 목적지 좌표. 정확한 출입구·보행경로 아님.",
+      "hours": "월·목·토·일 09:00–18:00, 수·금 09:00–21:00. 최종입장 마감1시간 전. 화요일 휴관.",
+      "reservation": "무료 대상도 시간예약 권장. 공식 티켓은 ticket.louvre.fr.",
+      "checkedAt": "2026-10-08",
+      "closedWeekdays": [
+        2
+      ],
+      "closedDates": [
+        "2026-01-01",
+        "2026-05-01",
+        "2026-12-25",
+        "2027-01-01",
+        "2027-05-01",
+        "2027-12-25"
+      ],
+      "priceEffectiveFrom": "2026-01-14",
+      "priceVariants": [
+        {
+          "label": "성인 비EEA 시민·비거주자",
+          "price": 32
+        },
+        {
+          "label": "EEA 시민 또는 거주자 일반",
+          "price": 22
+        },
+        {
+          "label": "18세 미만 및 EEA 26세 미만 등 무료 자격 충족",
+          "price": 0
+        }
+      ],
+      "freeEntryNote": "첫 금요일 18시 이후(7·8월 제외) 및 7월14일 무료 안내. 해당일 개관·시간예약은 별도 확인.",
+      "coordinateVerification": {
+        "method": "공식 페이지에서 연결한 Google Maps 장소 핀",
+        "pinEvidence": "!8m2!3d48.8606111!4d2.337644"
+      },
+      "ticketUrl": "https://ticket.louvre.fr/en"
+    },
+    {
+      "id": "paris-orsay",
+      "name": "오르세 미술관",
+      "city": "paris",
+      "currency": "EUR",
+      "priceCurrency": "EUR",
+      "district": "오르세·생제르맹",
+      "category": "culture",
+      "lat": 48.859929,
+      "lng": 2.326537,
+      "duration": 150,
+      "durationIsEstimate": true,
+      "price": 16,
+      "priceScope": "성인 일반 온라인 입장 1인 €16. 현장 €14. 무료·야간·동반아동 할인 자격은 별도.",
+      "priceNote": "성인 일반 온라인 입장 1인 €16. 현장 €14. 무료·야간·동반아동 할인 자격은 별도.",
+      "description": "상설 전시와 가용한 기획전 포함. 별도 VR·행사 상품 제외.",
+      "officialUrl": "https://www.musee-orsay.fr/en/visit",
+      "priceSource": "https://www.musee-orsay.fr/en/visit",
+      "coordinateSource": "https://www.transilien.com/fr/page-tourisme/musee-dorsay",
+      "coordinatePrecision": "official_place_or_route_destination_point",
+      "coordinateNote": "공식 장소 지도핀 또는 공식 교통운영자의 명소 목적지 좌표. 정확한 출입구·보행경로 아님.",
+      "hours": "화–일 09:30–18:00, 목요일 21:45까지. 일반 최종입장17:00, 목요일21:00. 월요일·5월1일·12월25일 휴관.",
+      "reservation": "온라인 시간예약 권장. Paris Museum Pass 이용자도 시간예약 필수 안내. 입구 공사에 따른 동선 재확인.",
+      "checkedAt": "2026-10-08",
+      "closedWeekdays": [
+        1
+      ],
+      "closedDates": [
+        "2026-05-01",
+        "2026-12-25",
+        "2027-05-01",
+        "2027-12-25"
+      ],
+      "priceValidityNote": "2026-10-08 현재 게시 요금; 별도 발효일 미표기.",
+      "priceVariants": [
+        {
+          "label": "성인 일반 온라인",
+          "price": 16
+        },
+        {
+          "label": "성인 일반 현장, 대기·매진 가능",
+          "price": 14
+        }
+      ],
+      "ticketUrl": "https://billetterie.musee-orsay.fr/index-css5-museeorsay-pg1.html"
+    },
+    {
+      "id": "paris-sainte-chapelle",
+      "name": "생트샤펠",
+      "city": "paris",
+      "currency": "EUR",
+      "priceCurrency": "EUR",
+      "district": "시테섬",
+      "category": "culture",
+      "lat": 48.855375,
+      "lng": 2.3449609,
+      "duration": 60,
+      "durationIsEstimate": true,
+      "price": 22,
+      "priceScope": "만18세 이상 EEA 시민도 거주자도 아닌 방문객 1인 단독권. EEA 시민/4개월 초과 정규거주자는 €16. 콩시에르주리 결합권 별도.",
+      "priceNote": "만18세 이상 EEA 시민도 거주자도 아닌 방문객 1인 단독권. EEA 시민/4개월 초과 정규거주자는 €16. 콩시에르주리 결합권 별도.",
+      "description": "스테인드글라스 예배당. 콩시에르주리 입장과 중복 합산하지 않도록 상품 범위 확인.",
+      "officialUrl": "https://www.sainte-chapelle.fr/en/visite/informations-pratiques",
+      "priceSource": "https://www.sainte-chapelle.fr/en/visite/informations-pratiques",
+      "coordinateSource": "https://www.sainte-chapelle.fr/en/visite/informations-pratiques",
+      "coordinatePrecision": "official_place_or_route_destination_point",
+      "coordinateNote": "공식 장소 지도핀 또는 공식 교통운영자의 명소 목적지 좌표. 정확한 출입구·보행경로 아님.",
+      "hours": "4–9월09:00–19:00, 10–3월09:00–17:00. 최종입장30분 전. 1월1일·5월1일·12월25일 휴관.",
+      "reservation": "기존 티켓 소지자도 시간대를 예약. 예약 시각에 도착, 법원 보안검사 적용.",
+      "checkedAt": "2026-10-08",
+      "closedDates": [
+        "2026-01-01",
+        "2026-05-01",
+        "2026-12-25",
+        "2027-01-01",
+        "2027-05-01",
+        "2027-12-25"
+      ],
+      "priceEffectiveFrom": "2026-01-12",
+      "priceVariants": [
+        {
+          "label": "비EEA 시민·비거주자 단독권",
+          "price": 22
+        },
+        {
+          "label": "EEA 시민/정규거주자 단독권",
+          "price": 16
+        },
+        {
+          "label": "비EEA 시민·비거주자 콩시에르주리 결합권",
+          "price": 30
+        },
+        {
+          "label": "EEA 시민/정규거주자 결합권",
+          "price": 23
+        }
+      ],
+      "freeEntryNote": "18세미만 등 무료자격 및 1·2·3·11·12월 첫 일요일 무료. 자격증명·예약조건 확인.",
+      "coordinateVerification": {
+        "method": "공식 페이지 연결 Google Maps 경로 목적지 핀",
+        "pinEvidence": "!2m2!1d2.3449609!2d48.855375"
+      },
+      "ticketUrl": "https://tickets.monuments-nationaux.fr/en-GB/families?site=2035141861660400306"
+    },
+    {
+      "id": "paris-arc-de-triomphe",
+      "name": "개선문 전망대",
+      "city": "paris",
+      "currency": "EUR",
+      "priceCurrency": "EUR",
+      "district": "샹젤리제·에투알",
+      "category": "view",
+      "lat": 48.873848,
+      "lng": 2.2950682,
+      "duration": 75,
+      "durationIsEstimate": true,
+      "price": null,
+      "priceScope": "성인 일반1인. 10–3월 €16. 4–9월 €22, 해당기간 수요일 €16. 방문일로 요금을 선택해야 함.",
+      "priceNote": "성인 일반1인. 10–3월 €16. 4–9월 €22, 해당기간 수요일 €16. 방문일로 요금을 선택해야 함.",
+      "description": "실내와 옥상 전망대 포함. 광장 횡단 대신 Passage du Souvenir 지하통로 이용.",
+      "officialUrl": "https://www.paris-arc-de-triomphe.fr/visiter/informations-pratiques",
+      "priceSource": "https://www.paris-arc-de-triomphe.fr/visiter/informations-pratiques",
+      "coordinateSource": "https://www.paris-arc-de-triomphe.fr/visiter/informations-pratiques",
+      "coordinatePrecision": "official_place_or_route_destination_point",
+      "coordinateNote": "공식 장소 지도핀 또는 공식 교통운영자의 명소 목적지 좌표. 정확한 출입구·보행경로 아님.",
+      "hours": "4–9월 수–월10:00–23:00·화11:00–23:00. 10–3월 수–월10:00–22:30·화11:00–22:30. 최종입장45분 전.",
+      "reservation": "공식 온라인권 권장. 기념행사·기상에 따른 부분/전체폐쇄 확인.",
+      "checkedAt": "2026-10-08",
+      "priceDateDependent": true,
+      "autoPriceRequiresDate": true,
+      "priceVariants": [
+        {
+          "label": "10–3월 성인 일반",
+          "price": 16
+        },
+        {
+          "label": "4–9월 수요일 성인 일반",
+          "price": 16
+        },
+        {
+          "label": "4–9월 수요일 외 성인 일반",
+          "price": 22
+        }
+      ],
+      "pricingRules": [
+        {
+          "months": [
+            10,
+            11,
+            12,
+            1,
+            2,
+            3
+          ],
+          "price": 16
+        },
+        {
+          "months": [
+            4,
+            5,
+            6,
+            7,
+            8,
+            9
+          ],
+          "weekdays": [
+            3
+          ],
+          "price": 16
+        },
+        {
+          "months": [
+            4,
+            5,
+            6,
+            7,
+            8,
+            9
+          ],
+          "weekdays": [
+            0,
+            1,
+            2,
+            4,
+            5,
+            6
+          ],
+          "price": 22
+        }
+      ],
+      "closedDates": [
+        "2026-05-01",
+        "2027-05-01"
+      ],
+      "closureNote": "5월1일 휴관. 5월8일·7월14일·11월11일 오전폐쇄. 2026-12-24·12-31 16시 조기종료. 행사로 추가폐쇄 가능.",
+      "specialClosingTimes": [
+        {
+          "date": "2026-12-24",
+          "close": "16:00"
+        },
+        {
+          "date": "2026-12-31",
+          "close": "16:00"
+        }
+      ],
+      "coordinateVerification": {
+        "method": "공식 페이지 연결 Google Maps 경로 목적지 핀",
+        "pinEvidence": "!2m2!1d2.2950682!2d48.873848; 지도 카메라 중심 @48.8656501,2.2855123 미사용"
+      },
+      "ticketUrl": "https://tickets.monuments-nationaux.fr/fr-FR/familles?site=2032863779450400197",
+      "priceRange": {
+        "min": 16,
+        "max": 22,
+        "currency": "EUR",
+        "basis": "성인 일반 방문월·요일별 요금. pricingRules로 방문일 선택 필요."
+      },
+      "priceCurrentSeason": 16,
+      "priceCurrentSeasonAsOf": "2026-10-08"
+    },
+    {
+      "id": "paris-notre-dame",
+      "name": "노트르담 대성당 본당",
+      "city": "paris",
+      "currency": "EUR",
+      "priceCurrency": "EUR",
+      "district": "시테섬",
+      "category": "culture",
+      "lat": 48.852974,
+      "lng": 2.349908,
+      "duration": 60,
+      "durationIsEstimate": true,
+      "price": 0,
+      "priceScope": "본당 일반입장은 누구나 무료. 탑·보물실·지하 유적 및 외부 유료투어는 별도 상품.",
+      "priceNote": "본당 일반입장은 누구나 무료. 탑·보물실·지하 유적 및 외부 유료투어는 별도 상품.",
+      "description": "재개관한 본당을 관람하는 무료 방문. 유료 탑 관람과 구분.",
+      "officialUrl": "https://www.notredamedeparis.fr/en/qa/?_filtres_faq_boutons_en=visit",
+      "priceSource": "https://www.notredamedeparis.fr/en/qa/?_filtres_faq_boutons_en=visit",
+      "coordinateSource": "https://www.transilien.com/fr/page-tourisme/cathedrale-notre-dame-de-paris",
+      "coordinatePrecision": "official_place_or_route_destination_point",
+      "coordinateNote": "공식 장소 지도핀 또는 공식 교통운영자의 명소 목적지 좌표. 정확한 출입구·보행경로 아님.",
+      "hours": "월·화·수·금07:50–19:00, 목07:50–22:00, 토·일08:15–19:30. 최종입장30분 전. 종교행사 시 변동.",
+      "reservation": "예약 없이도 입장 가능하나 대기 발생. 공식 사이트 무료 시간예약 권장; 무료 입장권 재판매 경계.",
+      "checkedAt": "2026-10-08",
+      "hoursSource": "https://www.visitparisregion.com/fr/cathedrale-notre-dame-de-paris",
+      "priceValidityNote": "2026-10-08 공식 안내상 연중 무료 본당 입장.",
+      "closureNote": "고정 주간휴무 없음. 종교행사·특별 일정의 방문 제한은 공식 사이트 확인.",
+      "ticketUrl": "https://www.notredamedeparis.fr/en/visit/practical-information/"
+    },
+    {
+      "id": "london-british-museum",
+      "name": "대영박물관",
+      "city": "london",
+      "currency": "GBP",
+      "priceCurrency": "GBP",
+      "district": "블룸즈버리",
+      "category": "culture",
+      "lat": 51.519413319978,
+      "lng": -0.12695659999997,
+      "duration": 180,
+      "durationIsEstimate": true,
+      "price": 0,
+      "priceScope": "성인 1인 상설전 일반입장 무료. 유료 기획전·투어·오디오 별도.",
+      "priceNote": "성인 1인 상설전 일반입장 무료. 유료 기획전·투어·오디오 별도.",
+      "description": "상설 소장품 중심의 박물관 코스.",
+      "officialUrl": "https://www.britishmuseum.org/visit",
+      "priceSource": "https://www.britishmuseum.org/visit",
+      "coordinateSource": "https://www.britishmuseum.org/visit",
+      "hours": "매일 10:00–17:00, 금요일 20:30까지. 12월 24–26일 휴관. 일부 전시실 별도 운영.",
+      "reservation": "무료 시간예약 권장. 예약 없이 방문 시 입장 보장 없음.",
+      "checkedAt": "2026-10-08",
+      "priceDateApplicability": "확인일 공식 게시요금. 별도 유효기간이 명시되지 않아 과거·미래 날짜에 자동 소급/확정하지 않음.",
+      "coordinatePrecision": "official_published_place_coordinate",
+      "coordinateNote": "공식 Visit 페이지 Getting here에 게시된 대표좌표. Great Russell Street 방문객 입구와 다를 수 있음.",
+      "coordinateVerification": {
+        "method": "공식 페이지 검색본문에서 Getting here 제목 다음 숫자 좌표 직접 확인",
+        "pinEvidence": "51.519413319978, -0.12695659999997",
+        "status": "official_search_index_crosscheck_direct_page_403"
+      },
+      "closedDates": [
+        "2026-12-24",
+        "2026-12-25",
+        "2026-12-26"
+      ],
+      "closureNote": "연간 12월 24–26일 휴관. 특별휴관·전시실 폐쇄는 방문 전 확인.",
+      "priceVerification": "공식 Visit 페이지 검색본문 확인. 직접 페이지는 403; 공식 관광청 무료입장 안내 교차검증.",
+      "walkingSource": "https://www.britishmuseum.org/visit",
+      "accessNote": "Tottenham Court Road역에서 공식 도보 5분; Holborn/Russell Square 7분."
+    },
+    {
+      "id": "london-national-gallery",
+      "name": "내셔널 갤러리",
+      "city": "london",
+      "currency": "GBP",
+      "priceCurrency": "GBP",
+      "district": "트래펄가 광장",
+      "category": "culture",
+      "lat": 51.508929,
+      "lng": -0.128299,
+      "duration": 150,
+      "durationIsEstimate": true,
+      "price": 0,
+      "priceScope": "성인 1인 일반 소장품 무료. 일부 특별전·투어 유료.",
+      "priceNote": "성인 1인 일반 소장품 무료. 일부 특별전·투어 유료.",
+      "description": "Sainsbury Wing 입구를 통해 회화 소장품을 관람합니다.",
+      "officialUrl": "https://www.nationalgallery.org.uk/visiting/plan-your-visit",
+      "priceSource": "https://www.nationalgallery.org.uk/visiting/plan-your-visit",
+      "coordinateSource": "https://www.nationalgallery.org.uk/visiting/plan-your-visit",
+      "hours": "매일 10:00–18:00, 금요일 21:00까지. 12월 24–26일·1월 1일 휴관.",
+      "reservation": "무료 시간예약 시 우선입장; 현장 방문도 가능.",
+      "checkedAt": "2026-10-08",
+      "priceDateApplicability": "확인일 공식 게시요금. 별도 유효기간이 명시되지 않아 과거·미래 날짜에 자동 소급/확정하지 않음.",
+      "coordinatePrecision": "official_linked_directions_destination",
+      "coordinateNote": "공식 Getting here의 도보/대중교통 길찾기 도착점. 지도 카메라 중심 좌표를 사용하지 않음.",
+      "coordinateVerification": {
+        "method": "공식 Public transport/Walking 링크의 목적지 장소ID와 destination 경도·위도 확인",
+        "pinEvidence": "National Gallery 0x487604ce176ac979:0x42af85654e23a0b4; !2m2!1d-0.128299!2d51.508929"
+      },
+      "closedDates": [
+        "2026-12-24",
+        "2026-12-25",
+        "2026-12-26",
+        "2027-01-01"
+      ],
+      "closureNote": "일부 전시실 폐쇄·작품 이동 별도 확인."
+    },
+    {
+      "id": "london-tower-of-london",
+      "name": "런던탑",
+      "city": "london",
+      "currency": "GBP",
+      "priceCurrency": "GBP",
+      "district": "타워 힐",
+      "category": "culture",
+      "lat": 51.50805555555556,
+      "lng": -0.07611111111111112,
+      "duration": 180,
+      "durationIsEstimate": true,
+      "price": 38,
+      "priceScope": "성인 18–64세 1인 일반입장 £38, 선택 기부금 제외. 왕관 보석·공개 구역 포함. 오디오·특별 체험·크루즈 별도.",
+      "priceNote": "성인 18–64세 1인 일반입장 £38, 선택 기부금 제외. 왕관 보석·공개 구역 포함. 오디오·특별 체험·크루즈 별도.",
+      "description": "왕관 보석과 요새를 함께 방문하는 코스. 타워 브리지 입장권은 별도입니다.",
+      "officialUrl": "https://www.hrp.org.uk/tower-of-london/visit/tickets-and-prices/",
+      "priceSource": "https://www.hrp.org.uk/tower-of-london/visit/tickets-and-prices/",
+      "coordinateSource": "https://historicengland.org.uk/listing/the-list/list-entry/1000092?section=official-list-entry",
+      "hours": "2026-10-05~11 주간: 월·일 10:00–17:30, 화–토 09:00–17:30; 최종입장 16:30. 다른 날짜는 공식 캘린더 확인.",
+      "reservation": "온라인 사전구매 권장. 당일권 가능 여부·지정시간은 구매화면 확인.",
+      "checkedAt": "2026-10-08",
+      "priceDateApplicability": "확인일 공식 게시요금. 별도 유효기간이 명시되지 않아 과거·미래 날짜에 자동 소급/확정하지 않음.",
+      "coordinatePrecision": "official_heritage_representative_point",
+      "coordinateNote": "Historic England 공식 세계유산 위치 N51 30 29 W0 4 34를 십진도로 변환. 성곽 대표점이며 입구 아님.",
+      "coordinateVerification": {
+        "method": "공식 국가유산 기록의 DMS 좌표를 정확히 십진도 변환",
+        "pinEvidence": "N51 30 29 W0 4 34"
+      },
+      "hoursSource": "https://www.hrp.org.uk/tower-of-london/visit/opening-and-closing-times/",
+      "closureNote": "2026-10-08 Mint Street는 15:30 조기폐쇄. 보존공사로 일부 공간·경로 제한. 계절·행사일 공식 캘린더 확인.",
+      "priceVerification": "직접 연 공식 가격표 £38 채택. 검색색인에 남은 이전 £37은 사용하지 않음."
+    },
+    {
+      "id": "london-westminster-abbey",
+      "name": "웨스트민스터 사원",
+      "city": "london",
+      "currency": "GBP",
+      "priceCurrency": "GBP",
+      "district": "웨스트민스터",
+      "category": "culture",
+      "lat": 51.4993946337589,
+      "lng": -0.127341753744049,
+      "duration": 120,
+      "durationIsEstimate": true,
+      "price": 32,
+      "priceScope": "성인 1인 일반 관광입장 £32. 멀티미디어 가이드 포함. 별도 Galleries·특별투어는 구매옵션 확인.",
+      "priceNote": "성인 1인 일반 관광입장 £32. 멀티미디어 가이드 포함. 별도 Galleries·특별투어는 구매옵션 확인.",
+      "description": "대관식 교회와 역사적 기념물을 둘러봅니다. 무료 예배 참석과 유료 관광입장은 구분합니다.",
+      "officialUrl": "https://www.westminster-abbey.org/visit-us/opening-times-and-prices",
+      "priceSource": "https://www.westminster-abbey.org/visit-us/opening-times-and-prices",
+      "coordinateSource": "https://services-eu1.arcgis.com/ZOdPfBS3aqqDYPUQ/arcgis/rest/services/National_Heritage_List_for_England_NHLE_v02_VIEW/FeatureServer/0/query?where=ListEntry%3D1291494&outFields=ListEntry%2CName%2CNGR&outSR=4326&returnGeometry=true&f=json",
+      "hours": "날짜별 입장 캘린더 운영. 공식 2026-10-05 예시 09:30–15:30. 일요일은 관광관람 없이 예배만.",
+      "reservation": "공식 온라인 시간예약 권장. 종교행사로 예고 없이 변경·폐쇄 가능.",
+      "checkedAt": "2026-10-08",
+      "priceDateApplicability": "확인일 공식 게시요금. 별도 유효기간이 명시되지 않아 과거·미래 날짜에 자동 소급/확정하지 않음.",
+      "closedWeekdays": [
+        0
+      ],
+      "closureNote": "일요일 일반 관광관람 휴관. 예배는 별도이며 관광 대체 일정으로 계산하지 않음.",
+      "closureSource": "https://www.visitlondon.com/things-to-do/place/610825-westminster-abbey",
+      "coordinatePrecision": "official_heritage_feature_point",
+      "coordinateNote": "공식 Historic England 지도 데이터의 건축물 대표점. 방문객 입구·보행 경로 아님.",
+      "coordinateVerification": {
+        "method": "영국 정부 API 목록으로 공식 제공자를 확인한 뒤 장소명·등록번호와 geometry.points를 조회",
+        "pinEvidence": "Westminster Abbey (The Collegiate Church of St Peter); ListEntry=1291494; geometry.points=[[-0.127341753744049, 51.4993946337589]]",
+        "license": "© Crown Copyright 2026. Contains Ordnance Survey data © Crown copyright and database right 2026. Released under OGL.",
+        "provenanceUrl": "https://www.api.gov.uk/he/national-heritage-list-for-england-nhle/"
+      }
+    },
+    {
+      "id": "london-tower-bridge",
+      "name": "타워 브리지 내부 관람",
+      "city": "london",
+      "currency": "GBP",
+      "priceCurrency": "GBP",
+      "district": "타워 브리지",
+      "category": "view",
+      "lat": 51.5061678961578,
+      "lng": -0.0749653501240088,
+      "duration": 90,
+      "durationIsEstimate": true,
+      "price": 18,
+      "priceScope": "성인 18세 이상 1인 내부 일반입장 £18. 타워·상층 유리 바닥 통로·기관실 포함. 런던탑 제외.",
+      "priceNote": "성인 18세 이상 1인 내부 일반입장 £18. 타워·상층 유리 바닥 통로·기관실 포함. 런던탑 제외.",
+      "description": "다리 위 전망 통로와 기관실을 방문합니다. 도로층 공공 보행과 내부 유료 관람은 다릅니다.",
+      "officialUrl": "https://www.towerbridge.org.uk/whats-on/entry-to-tower-bridge",
+      "priceSource": "https://www.towerbridge.org.uk/whats-on/entry-to-tower-bridge",
+      "coordinateSource": "https://services-eu1.arcgis.com/ZOdPfBS3aqqDYPUQ/arcgis/rest/services/National_Heritage_List_for_England_NHLE_v02_VIEW/FeatureServer/0/query?where=ListEntry%3D1357515&outFields=ListEntry%2CName%2CNGR&outSR=4326&returnGeometry=true&f=json",
+      "hours": "매일 09:30–18:00, 최종입장 17:00. 12월 24–26일 휴관; 1월 1일 10:00 개장.",
+      "reservation": "원하는 시간 사전예약 권장, 최대 8주 전 예약. 사전권도 입장 줄 면제 아님.",
+      "checkedAt": "2026-10-08",
+      "priceDateApplicability": "확인일 공식 게시요금. 별도 유효기간이 명시되지 않아 과거·미래 날짜에 자동 소급/확정하지 않음.",
+      "closedDates": [
+        "2026-12-24",
+        "2026-12-25",
+        "2026-12-26"
+      ],
+      "hoursSource": "https://www.towerbridge.org.uk/plan-your-visit",
+      "closureNote": "매월 둘째 토요일 09:30–11:30은 별도 Relaxed Opening 세션. 해당 시간 예약규정 확인.",
+      "accessNote": "매표소·일반입구는 북쪽 타워의 서쪽. London Bridge역부터 기관실까지 공식 1km이며 일반입구까지 추가 보행 필요.",
+      "coordinatePrecision": "official_heritage_feature_point",
+      "coordinateNote": "공식 Historic England 지도 데이터의 건축물 대표점. 방문객 입구·보행 경로 아님.",
+      "coordinateVerification": {
+        "method": "영국 정부 API 목록으로 공식 제공자를 확인한 뒤 장소명·등록번호와 geometry.points를 조회",
+        "pinEvidence": "TOWER BRIDGE (THAT PART IN LONDON BOROUGH OF TOWER HAMLETS); ListEntry=1357515; geometry.points=[[-0.0749653501240088, 51.5061678961578]]",
+        "license": "© Crown Copyright 2026. Contains Ordnance Survey data © Crown copyright and database right 2026. Released under OGL.",
+        "provenanceUrl": "https://www.api.gov.uk/he/national-heritage-list-for-england-nhle/"
+      }
+    },
+    {
+      "id": "london-eye",
+      "name": "런던 아이",
+      "city": "london",
+      "currency": "GBP",
+      "priceCurrency": "GBP",
+      "district": "사우스 뱅크",
+      "category": "view",
+      "lat": 51.5031864,
+      "lng": -0.1195192,
+      "duration": 75,
+      "durationIsEstimate": true,
+      "price": null,
+      "priceScope": "성인 1인 Standard 온라인 최저 £29부터; 날짜·수요별 변동. 현재 홍보 현장가 £39. 실제 선택일 가격 미확정으로 합계에는 자동 확정하지 않음.",
+      "priceNote": "성인 1인 Standard 온라인 최저 £29부터; 날짜·수요별 변동. 현재 홍보 현장가 £39. 실제 선택일 가격 미확정으로 합계에는 자동 확정하지 않음.",
+      "description": "한 바퀴 탑승은 공식 약 30분. 전체 75분은 대기·보안검색 포함 계획용 예상입니다.",
+      "officialUrl": "https://www.londoneye.com/tickets-and-prices/",
+      "priceSource": "https://www.londoneye.com/tickets-and-prices/",
+      "coordinateSource": "https://www.londoneye.com/plan-your-visit/before-you-visit/directions/",
+      "hours": "날짜별 캘린더 운영. 확인일 2026-10-08 공식 페이지 11:00–18:00. 12월 25일 및 연간 정비기간 휴장.",
+      "reservation": "날짜·시간 선택 필요. 티켓시간은 대기줄 입장시간이며 탑승시간이 아님.",
+      "checkedAt": "2026-10-08",
+      "priceDateApplicability": "확인일 공식 게시요금. 별도 유효기간이 명시되지 않아 과거·미래 날짜에 자동 소급/확정하지 않음.",
+      "coordinatePrecision": "official_linked_google_place_pin",
+      "coordinateNote": "공식 지도 링크의 London Eye 장소 핀. @카메라 중심은 제외.",
+      "coordinateVerification": {
+        "method": "공식 Open in Google Maps 단축링크 리디렉션에서 장소명·ID·!3d/!4d 확인",
+        "officialMapUrl": "https://maps.app.goo.gl/5LktCN6cQYxJQeW19",
+        "pinEvidence": "lastminute.com London Eye; 0x487604b900d26973:0x4291f3172409ea92; !8m2!3d51.5031864!4d-0.1195192"
+      },
+      "priceFrom": 29,
+      "priceIsDynamic": true,
+      "priceVariants": [
+        {
+          "label": "온라인 Standard 최저 홍보가, 선택일 확정가 아님",
+          "price": 29,
+          "isFromPrice": true,
+          "currency": "GBP",
+          "priceCurrency": "GBP"
+        },
+        {
+          "label": "공식 현재 안내 현장 일반권 참고가",
+          "price": 39,
+          "currency": "GBP",
+          "priceCurrency": "GBP"
+        }
+      ],
+      "hoursSource": "https://www.londoneye.com/plan-your-visit/before-you-visit/opening-hours/",
+      "closedDates": [
+        "2026-12-25"
+      ],
+      "closureNote": "연간 정비의 정확한 날짜는 해당 연도 캘린더 확인. 1월 전체를 일괄 휴장으로 자동처리하지 않음.",
+      "accessNote": "Waterloo역에서 공식 도보 약 5분. 역내 보행은 추가."
+    }
+  ],
+  "restaurants": [
+    {
+      "id": "tokyo-asakusa-imahan",
+      "name": "아사쿠사 이마한 국제거리 본점",
+      "city": "tokyo",
+      "lat": 35.713986,
+      "lng": 139.792136,
+      "district": "아사쿠사",
+      "cuisine": "스키야키·샤부샤부·규동",
+      "priceRange": {
+        "min": null,
+        "max": null,
+        "currency": "JPY",
+        "basis": "선택 메뉴에 따라 달라 전체 식비는 사용자 설정"
+      },
+      "currency": "JPY",
+      "priceCurrency": "JPY",
+      "duration": 75,
+      "durationIsEstimate": true,
+      "officialUrl": "https://www.asakusaimahan.co.jp/kokusai",
+      "coordinateSource": "https://www.asakusaimahan.co.jp/imahan/wp-content/themes/imahan/js/kokusai_shop.js",
+      "coordinatePrecision": "official_named_restaurant_marker",
+      "reservationUrl": "https://www.asakusaimahan.co.jp/kokusai",
+      "source": "https://www.asakusaimahan.co.jp/kokusai",
+      "hours": "점심11:30–14:30. 일반안내11:30–21:30(라스트오더20:30), 14:30–16:00 입장 일시중지·19:00까지 입장 안내.",
+      "notes": "런치메뉴 예약불가. 한정 백년규동¥2,200·메이지스키야키덮밥¥3,300(세금포함). 1인 식음료¥5,500 이상은 서비스료10% 추가. 코스·자리별 예약조건 확인.",
+      "checkedAt": "2026-10-08"
+    },
+    {
+      "id": "tokyo-afuri-shibuya",
+      "name": "아후리 시부야 도겐자카",
+      "city": "tokyo",
+      "lat": 35.6570682,
+      "lng": 139.6960173,
+      "district": "시부야",
+      "cuisine": "유자 라멘",
+      "priceRange": {
+        "min": null,
+        "max": null,
+        "currency": "JPY",
+        "basis": "현행 지점별 메뉴·식사총액 미확정, 사용자 설정"
+      },
+      "currency": "JPY",
+      "priceCurrency": "JPY",
+      "duration": 50,
+      "durationIsEstimate": true,
+      "officialUrl": "https://afuri.com/findus/#shibuya",
+      "coordinateSource": "https://afuri.com/findus/",
+      "coordinatePrecision": "officially_linked_place_pin",
+      "coordinateMapUrl": "https://maps.app.goo.gl/LB3vtbvfBhmMm7xo9",
+      "coordinateNote": "공식 점포목록의 지도 링크 리디렉션에서 AFURI渋谷道玄坂의 !3d/!4d 실제핀 좌표 확인.",
+      "reservationUrl": null,
+      "source": "https://afuri.com/findus/",
+      "hours": "일–목11:00–23:00, 금·토11:00–다음날05:00. 육수 소진 시 조기마감.",
+      "notes": "완전 캐시리스 점포. 1-19-12 Dogenzaka 지점. 혼잡·대기·현행메뉴는 방문 전 확인.",
+      "checkedAt": "2026-10-08"
+    },
+    {
+      "id": "paris-chartier-grands-boulevards",
+      "name": "부이용 샤르티에 그랑불바르",
+      "district": "그랑불바르",
+      "cuisine": "프랑스 전통식·부이용",
+      "lat": null,
+      "lng": null,
+      "officialUrl": "https://www.bouillon-chartier.com/bouillon-chartier-grands-boulevards/",
+      "coordinateSource": null,
+      "reservationUrl": null,
+      "hours": "매일11:30–24:00 연속영업. 예약 없이 방문.",
+      "notes": "7 rue du Faubourg Montmartre, 75009 Paris. 공식 참고메뉴 주요리 €7–13.80; 매일 메뉴가 달라 실제 식사 총액은 사용자 설정. 좌표 미검증으로 자동 거리계산 제외.",
+      "menuSource": "https://www.bouillon-chartier.com/chartier_medias/2025/10/Francais.pdf",
+      "menuPriceExamples": [
+        {
+          "label": "주요리 범위, 참고메뉴·전체 식사아님",
+          "min": 7,
+          "max": 13.8
+        }
+      ],
+      "duration": 75,
+      "city": "paris",
+      "currency": "EUR",
+      "priceCurrency": "EUR",
+      "priceRange": {
+        "min": null,
+        "max": null,
+        "currency": "EUR",
+        "basis": "식사 전체 예산은 사용자 설정 필요"
+      },
+      "durationIsEstimate": true,
+      "checkedAt": "2026-10-08",
+      "source": "https://www.bouillon-chartier.com/bouillon-chartier-grands-boulevards/"
+    },
+    {
+      "id": "paris-angelina-rivoli",
+      "name": "안젤리나 리볼리",
+      "district": "튈르리·루브르",
+      "cuisine": "핫초콜릿·페이스트리·브런치",
+      "lat": 48.8650898,
+      "lng": 2.3284434,
+      "officialUrl": "https://salon-de-the.angelina-paris.fr/en/pastry-shop/rue-de-rivoli-paris-1/",
+      "coordinateSource": "https://salon-de-the.angelina-paris.fr/en/pastry-shop/rue-de-rivoli-paris-1/",
+      "coordinatePrecision": "official_structured_place_point",
+      "coordinateVerification": {
+        "method": "공식 지점 페이지 JSON-LD GeoCoordinates",
+        "pinEvidence": "latitude:48.8650898, longitude:2.3284434; hasMap https://www.google.com/maps/place/48.8650898,2.3284434"
+      },
+      "reservationUrl": null,
+      "hours": "월–목08:00–19:30, 금–일08:00–20:00.",
+      "notes": "226 Rue de Rivoli, 75001 Paris. 몽블랑·핫초콜릿·아침/브런치 제공. 공식 구조화 데이터는 예약 미수락으로 표시. 좌석·대기 및 메뉴가격은 방문 전 확인.",
+      "duration": 60,
+      "city": "paris",
+      "currency": "EUR",
+      "priceCurrency": "EUR",
+      "priceRange": {
+        "min": null,
+        "max": null,
+        "currency": "EUR",
+        "basis": "식사 전체 예산은 사용자 설정 필요"
+      },
+      "durationIsEstimate": true,
+      "checkedAt": "2026-10-08",
+      "source": "https://salon-de-the.angelina-paris.fr/en/pastry-shop/rue-de-rivoli-paris-1/"
+    },
+    {
+      "id": "london-dishoom-covent-garden",
+      "name": "디슘 코벤트 가든",
+      "city": "london",
+      "currency": "GBP",
+      "priceCurrency": "GBP",
+      "lat": 51.5125176,
+      "lng": -0.1268291,
+      "district": "코벤트 가든",
+      "cuisine": "봄베이식 인도 요리",
+      "priceRange": {
+        "min": null,
+        "max": null,
+        "currency": "GBP",
+        "priceCurrency": "GBP",
+        "basis": "성인 1인 전체 식사 예산은 사용자 설정 필요; 단품 예시와 구분"
+      },
+      "duration": 90,
+      "durationIsEstimate": true,
+      "officialUrl": "https://www.dishoom.com/covent-garden/",
+      "coordinateSource": "https://www.dishoom.com/covent-garden/",
+      "reservationUrl": "https://www.dishoom.com/covent-garden/",
+      "source": "https://www.dishoom.com/covent-garden/",
+      "hours": "월–목 08:00–23:00, 금 08:00–24:00, 토 09:00–24:00, 일 09:00–23:00.",
+      "notes": "12 Upper St. Martin’s Lane, WC2H 9FB. 18시 전 인원 제한 없이 예약 가능, 18시 이후는 6명 이상 예약. 대부분 좌석은 현장 방문용. 대기 별도.",
+      "checkedAt": "2026-10-08",
+      "coordinatePrecision": "official_structured_geo_coordinates",
+      "coordinateVerification": {
+        "method": "공식 지점 HTML의 Restaurant JSON-LD GeoCoordinates 확인",
+        "pinEvidence": "Dishoom Covent Garden; latitude:51.5125176, longitude:-0.1268291"
+      }
+    },
+    {
+      "id": "london-poppies-soho",
+      "name": "파피스 소호",
+      "city": "london",
+      "currency": "GBP",
+      "priceCurrency": "GBP",
+      "lat": 51.5126532516041,
+      "lng": -0.13265924920098723,
+      "district": "소호",
+      "cuisine": "피시 앤 칩스",
+      "priceRange": {
+        "min": null,
+        "max": null,
+        "currency": "GBP",
+        "priceCurrency": "GBP",
+        "basis": "성인 1인 전체 식사 예산은 사용자 설정 필요; 단품 예시와 구분"
+      },
+      "duration": 60,
+      "durationIsEstimate": true,
+      "officialUrl": "https://poppiesfishandchips.co.uk/poppies-soho/",
+      "coordinateSource": "https://poppiesfishandchips.co.uk/poppies-soho/",
+      "reservationUrl": "https://poppiesfishandchips.co.uk/poppies-soho/",
+      "source": "https://poppiesfishandchips.co.uk/poppies-soho/",
+      "hours": "월–수·일 11:00–22:00, 목–토 11:00–23:00.",
+      "notes": "55–59 Old Compton St, W1D 6HW. 공식 지점 페이지 예약 버튼 제공. 전체 식비·현재 메뉴 가격 미확정.",
+      "checkedAt": "2026-10-08",
+      "coordinatePrecision": "official_embedded_map_marker",
+      "coordinateVerification": {
+        "method": "공식 지점 HTML의 Google Maps Marker position 확인",
+        "pinEvidence": "myLatLng={lat:51.5126532516041,lng:-0.13265924920098723}; new google.maps.Marker({position:myLatLng,...})"
+      }
+    },
+    {
+      "id": "london-padella-borough",
+      "name": "파델라 버러 마켓",
+      "city": "london",
+      "currency": "GBP",
+      "priceCurrency": "GBP",
+      "lat": null,
+      "lng": null,
+      "district": "런던 브리지·버러",
+      "cuisine": "생면 파스타",
+      "priceRange": {
+        "min": null,
+        "max": null,
+        "currency": "GBP",
+        "priceCurrency": "GBP",
+        "basis": "성인 1인 전체 식사 예산은 사용자 설정 필요; 단품 예시와 구분"
+      },
+      "duration": 75,
+      "durationIsEstimate": true,
+      "officialUrl": "https://www.padella.co/borough-market/",
+      "coordinateSource": null,
+      "reservationUrl": null,
+      "source": "https://www.padella.co/borough-market/",
+      "hours": "매일 점심 11:30–15:45; 월–토 저녁 17:00–22:30, 일 저녁 17:00–21:00.",
+      "notes": "6 Southwark St, SE1 1TQ. 사전예약 없이 가상 대기줄 운영, 최대 6명. 공식 메뉴 예: Pici cacio & pepe £13.50, 쇠고기 라구 파파르델레 £16.50. 단품 예시이며 식사 전체 예산 아님.",
+      "checkedAt": "2026-10-08",
+      "coordinateNote": "공식 지도 링크는 있으나 실제 장소 핀 좌표를 검증하지 못함. 임의 좌표·화면 중심 사용 금지.",
+      "menuPriceExamples": [
+        {
+          "label": "Pici cacio & pepe",
+          "price": 13.5,
+          "currency": "GBP",
+          "priceCurrency": "GBP"
+        },
+        {
+          "label": "Pappardelle with beef shin ragu",
+          "price": 16.5,
+          "currency": "GBP",
+          "priceCurrency": "GBP"
+        }
+      ]
+    }
+  ],
+  "bases": [
+    {
+      "id": "tokyo-tokyo-station",
+      "name": "도쿄 메트로 도쿄역 기준점",
+      "city": "tokyo",
+      "lat": 35.681935,
+      "lng": 139.7648,
+      "officialUrl": "https://www.tokyometro.jp/lang_en/station/tokyo/index.html",
+      "coordinateSource": "https://www.tokyometro.jp/lang_en/station/tokyo/index.html",
+      "coordinatePrecision": "official_station_open_data_point",
+      "coordinateNote": "운영사 공식 역페이지가 사용하는 공개 지도데이터에서 역명·위경도 필드를 확인. 복수 노선의 대표점이며 실제 개찰구·승강장 또는 호텔입구가 아님.",
+      "checkedAt": "2026-10-08"
+    },
+    {
+      "id": "tokyo-ueno-station",
+      "name": "도쿄 메트로 우에노역 기준점",
+      "city": "tokyo",
+      "lat": 35.7118359292102,
+      "lng": 139.775624742036,
+      "officialUrl": "https://www.tokyometro.jp/lang_en/station/ueno/index.html",
+      "coordinateSource": "https://www.tokyometro.jp/lang_en/station/ueno/index.html",
+      "coordinatePrecision": "official_station_open_data_point",
+      "coordinateNote": "운영사 공식 역페이지가 사용하는 공개 지도데이터에서 역명·위경도 필드를 확인. 복수 노선의 대표점이며 실제 개찰구·승강장 또는 호텔입구가 아님.",
+      "checkedAt": "2026-10-08"
+    },
+    {
+      "id": "tokyo-shibuya-station",
+      "name": "시부야역 메트로 기준점",
+      "city": "tokyo",
+      "lat": 35.65945,
+      "lng": 139.701035,
+      "officialUrl": "https://www.tokyometro.jp/lang_en/station/shibuya/index.html",
+      "coordinateSource": "https://www.tokyometro.jp/lang_en/station/shibuya/index.html",
+      "coordinatePrecision": "official_station_open_data_point",
+      "coordinateNote": "운영사 공식 역페이지가 사용하는 공개 지도데이터에서 역명·위경도 필드를 확인. 복수 노선의 대표점이며 실제 개찰구·승강장 또는 호텔입구가 아님.",
+      "checkedAt": "2026-10-08"
+    },
+    {
+      "id": "paris-gare-de-lyon",
+      "name": "파리 리옹역 기준점",
+      "city": "paris",
+      "lat": 48.844888,
+      "lng": 2.37352,
+      "officialUrl": "https://www.garesetconnexions.sncf/fr/gares-services/paris-gare-lyon",
+      "coordinateSource": "https://ressources.data.sncf.com/api/explore/v2.1/catalog/datasets/gares-de-voyageurs/records?where=search%28nom%2C%22Paris%22%29&limit=50",
+      "coordinatePrecision": "official_station_representative_point",
+      "notes": "SNCF 역 대표점. 숙소부터 기준역까지 이동·지하철 승강장 접근은 추가 확인.",
+      "checkedAt": "2026-10-08",
+      "uicCodes": "87686030;87686006"
+    },
+    {
+      "id": "paris-gare-du-nord",
+      "name": "파리 북역 기준점",
+      "city": "paris",
+      "lat": 48.880185,
+      "lng": 2.355151,
+      "officialUrl": "https://www.garesetconnexions.sncf/fr/gares-services/paris-gare-du-nord",
+      "coordinateSource": "https://ressources.data.sncf.com/api/explore/v2.1/catalog/datasets/gares-de-voyageurs/records?where=search%28nom%2C%22Paris%22%29&limit=50",
+      "coordinatePrecision": "official_station_representative_point",
+      "notes": "SNCF 역 대표점. 숙소부터 기준역까지 이동·지하철 승강장 접근은 추가 확인.",
+      "checkedAt": "2026-10-08",
+      "uicCodes": "87271031;87271007;87271023"
+    },
+    {
+      "id": "london-waterloo",
+      "name": "워털루역 기준점",
+      "city": "london",
+      "currency": "GBP",
+      "priceCurrency": "GBP",
+      "lat": 51.503507,
+      "lng": -0.113897,
+      "officialUrl": "https://www.nationalrail.co.uk/stations/london-waterloo/",
+      "coordinateSource": "https://www.nationalrail.co.uk/stations/london-waterloo/",
+      "coordinatePrecision": "official_linked_map_query_point",
+      "coordinateVerification": {
+        "method": "National Rail 공식 Open in Google Maps 링크의 query 좌표 확인",
+        "pinEvidence": "https://www.google.com/maps/search/?api=1&query=51.503507,-0.113897"
+      },
+      "notes": "National Rail역 대표점. Underground의 Bakerloo·Jubilee·Northern 승강장까지 역내 보행 추가. Waterloo East와 구분. 숙소 위치를 뜻하지 않으며 호텔→기준점 이동은 별도.",
+      "checkedAt": "2026-10-08"
+    },
+    {
+      "id": "london-paddington",
+      "name": "패딩턴역 기준점",
+      "city": "london",
+      "currency": "GBP",
+      "priceCurrency": "GBP",
+      "lat": 51.51645141,
+      "lng": -0.176844743,
+      "officialUrl": "https://www.nationalrail.co.uk/stations/london-paddington/",
+      "coordinateSource": "https://www.nationalrail.co.uk/stations/london-paddington/",
+      "coordinatePrecision": "official_linked_map_query_point",
+      "coordinateVerification": {
+        "method": "National Rail 공식 Open in Google Maps 링크의 query 좌표 확인",
+        "pinEvidence": "https://www.google.com/maps/search/?api=1&query=51.51645141,-0.176844743"
+      },
+      "notes": "National Rail역 대표점. Bakerloo·Circle/District·Elizabeth line 승강장이 분리되어 역내 보행 추가. Heathrow Express 운임은 시내 패스와 별도. 숙소 위치를 뜻하지 않으며 호텔→기준점 이동은 별도.",
+      "checkedAt": "2026-10-08"
+    }
+  ],
+  "transitLegs": [
+    {
+      "id": "tokyo-ueno-to-sensoji",
+      "fromId": "tokyo-ueno-station",
+      "toId": "tokyo-sensoji",
+      "durationMinutes": 20,
+      "durationIsEstimate": true,
+      "fare": 180,
+      "fareIC": 178,
+      "currency": "JPY",
+      "priceCurrency": "JPY",
+      "fareScope": "성인1인 편도 일반종이권/카드터치 요금. IC카드금액 별도. 호텔이동·추가탑승 별도.",
+      "mode": "metro",
+      "operator": "tokyo_metro",
+      "line": "도쿄 메트로 긴자선 아사쿠사 방면",
+      "fromStation": "Ueno G16",
+      "toStation": "Asakusa G19",
+      "steps": [
+        "우에노역 긴자선 아사쿠사 방면 탑승",
+        "이나리초·다와라마치 다음 아사쿠사 하차",
+        "센소지 경내까지 도보 약5분"
+      ],
+      "passIds": [
+        "tokyo-metro-24h",
+        "tokyo-subway-24h"
+      ],
+      "officialUrl": "https://www.tokyometro.jp/info/files/20260414_jp.pdf",
+      "routeUrl": "https://www.gotokyo.org/en/spot/15/index.html",
+      "checkedAt": "2026-10-08",
+      "notes": "공식 차내5분·180엔(IC178엔) 확인. 전체20분은 역내이동·대기·도보 포함 예상.",
+      "sourceUrls": [
+        "https://www.tokyometro.jp/info/files/20260414_jp.pdf",
+        "https://www.tokyometro.jp/en/ticket/regular/index.html",
+        "https://www.gotokyo.org/en/spot/15/index.html"
+      ],
+      "verificationKind": "composed_from_official_fare_and_access_sources",
+      "publishedRideMinutes": 5,
+      "publishedRideTimeNote": "공식2026-04-01 기준 대표시간. 출발시각·열차에 따라 달라짐."
+    },
+    {
+      "id": "tokyo-shibuya-to-sensoji",
+      "fromId": "tokyo-shibuya-crossing",
+      "toId": "tokyo-sensoji",
+      "durationMinutes": 55,
+      "durationIsEstimate": true,
+      "fare": 260,
+      "fareIC": 252,
+      "currency": "JPY",
+      "priceCurrency": "JPY",
+      "fareScope": "성인1인 편도 일반종이권/카드터치 요금. IC카드금액 별도. 호텔이동·추가탑승 별도.",
+      "mode": "metro",
+      "operator": "tokyo_metro",
+      "line": "도쿄 메트로 긴자선 아사쿠사 방면",
+      "fromStation": "Shibuya G01",
+      "toStation": "Asakusa G19",
+      "steps": [
+        "시부야 교차로에서 긴자선 시부야역으로 이동",
+        "아사쿠사 방면 긴자선 탑승",
+        "아사쿠사 하차 후 센소지까지 도보"
+      ],
+      "passIds": [
+        "tokyo-metro-24h",
+        "tokyo-subway-24h"
+      ],
+      "officialUrl": "https://www.tokyometro.jp/info/files/20260414_jp.pdf",
+      "routeUrl": "https://www.gotokyo.org/en/spot/15/index.html",
+      "checkedAt": "2026-10-08",
+      "notes": "차내33분은 공식대표시간. 전체55분은 승강장·도보·대기 포함 예상.",
+      "sourceUrls": [
+        "https://www.tokyometro.jp/info/files/20260414_jp.pdf",
+        "https://www.tokyometro.jp/en/ticket/regular/index.html",
+        "https://www.gotokyo.org/en/spot/15/index.html",
+        "https://www.gotokyo.org/en/spot/78/index.html"
+      ],
+      "verificationKind": "composed_from_official_fare_and_access_sources",
+      "publishedRideMinutes": 33,
+      "publishedRideTimeNote": "공식2026-04-01 기준 대표시간. 출발시각·열차에 따라 달라짐."
+    },
+    {
+      "id": "tokyo-sensoji-to-museum",
+      "fromId": "tokyo-sensoji",
+      "toId": "tokyo-national-museum",
+      "durationMinutes": 35,
+      "durationIsEstimate": true,
+      "fare": 180,
+      "fareIC": 178,
+      "currency": "JPY",
+      "priceCurrency": "JPY",
+      "fareScope": "성인1인 편도 일반종이권/카드터치 요금. IC카드금액 별도. 호텔이동·추가탑승 별도.",
+      "mode": "metro",
+      "operator": "tokyo_metro",
+      "line": "도쿄 메트로 긴자선 시부야 방면",
+      "fromStation": "Asakusa G19",
+      "toStation": "Ueno G16",
+      "steps": [
+        "센소지에서 메트로 아사쿠사역으로 도보",
+        "긴자선 시부야 방면으로 우에노까지 탑승",
+        "우에노역에서 박물관 정문까지 공식 도보 약15분"
+      ],
+      "passIds": [
+        "tokyo-metro-24h",
+        "tokyo-subway-24h"
+      ],
+      "officialUrl": "https://www.tokyometro.jp/info/files/20260414_jp.pdf",
+      "routeUrl": "https://www.tnm.jp/modules/r_free_page/index.php?id=113&lang=en",
+      "checkedAt": "2026-10-08",
+      "notes": "상설전 입장료는 별도. 차내5분·양끝 도보·대기를 합친35분 예상.",
+      "sourceUrls": [
+        "https://www.tokyometro.jp/info/files/20260414_jp.pdf",
+        "https://www.tokyometro.jp/en/ticket/regular/index.html",
+        "https://www.tnm.jp/modules/r_free_page/index.php?id=113&lang=en",
+        "https://www.gotokyo.org/en/spot/15/index.html"
+      ],
+      "verificationKind": "composed_from_official_fare_and_access_sources",
+      "publishedRideMinutes": 5,
+      "publishedRideTimeNote": "공식2026-04-01 기준 대표시간. 출발시각·열차에 따라 달라짐."
+    },
+    {
+      "id": "tokyo-ueno-to-museum",
+      "fromId": "tokyo-ueno-station",
+      "toId": "tokyo-national-museum",
+      "durationMinutes": 20,
+      "durationIsEstimate": true,
+      "fare": 0,
+      "fareIC": 0,
+      "currency": "JPY",
+      "priceCurrency": "JPY",
+      "fareScope": "도보 무료. 명소 입장·식사 별도.",
+      "mode": "walk",
+      "operator": null,
+      "line": "도보",
+      "fromStation": "Ueno Metro",
+      "toStation": "Tokyo National Museum",
+      "steps": [
+        "메트로 우에노역에서 우에노공원을 거쳐 박물관 정문으로 도보"
+      ],
+      "passIds": [],
+      "officialUrl": "https://www.tnm.jp/modules/r_free_page/index.php?id=113&lang=en",
+      "routeUrl": "https://www.tnm.jp/modules/r_free_page/index.php?id=113&lang=en",
+      "checkedAt": "2026-10-08",
+      "notes": "박물관 공식 안내는 메트로 우에노역에서 도보15분. 여유 포함20분 예상.",
+      "sourceUrls": [
+        "https://www.tnm.jp/modules/r_free_page/index.php?id=113&lang=en"
+      ],
+      "verificationKind": "composed_from_official_fare_and_access_sources"
+    },
+    {
+      "id": "tokyo-shibuya-to-gyoen",
+      "fromId": "tokyo-shibuya-station",
+      "toId": "tokyo-shinjuku-gyoen",
+      "durationMinutes": 30,
+      "durationIsEstimate": true,
+      "fare": 180,
+      "fareIC": 178,
+      "currency": "JPY",
+      "priceCurrency": "JPY",
+      "fareScope": "성인1인 편도 일반종이권/카드터치 요금. IC카드금액 별도. 호텔이동·추가탑승 별도.",
+      "mode": "metro",
+      "operator": "tokyo_metro",
+      "line": "도쿄 메트로 후쿠토신선 신주쿠산초메·이케부쿠로 방면",
+      "fromStation": "Shibuya F16",
+      "toStation": "Shinjuku-sanchome F13",
+      "steps": [
+        "후쿠토신선 신주쿠산초메·이케부쿠로 방면 탑승",
+        "신주쿠산초메 하차",
+        "E5 출구에서 신주쿠 교엔 신주쿠문까지 도보 약5분"
+      ],
+      "passIds": [
+        "tokyo-metro-24h",
+        "tokyo-subway-24h"
+      ],
+      "officialUrl": "https://www.tokyometro.jp/info/files/20260414_jp.pdf",
+      "routeUrl": "https://policies.env.go.jp/national-garden/shinjukugyoen/english/guide/access/",
+      "checkedAt": "2026-10-08",
+      "notes": "공식 급행 대표시간6분. 보통열차·대기·출구까지 이동에 따라 증가; 전체30분은 예상.",
+      "sourceUrls": [
+        "https://www.tokyometro.jp/info/files/20260414_jp.pdf",
+        "https://www.tokyometro.jp/en/ticket/regular/index.html",
+        "https://policies.env.go.jp/national-garden/shinjukugyoen/english/guide/access/"
+      ],
+      "verificationKind": "composed_from_official_fare_and_access_sources",
+      "publishedRideMinutes": 6,
+      "publishedRideTimeNote": "공식2026-04-01 기준 대표시간. 출발시각·열차에 따라 달라짐."
+    },
+    {
+      "id": "tokyo-tokyo-to-shibuya",
+      "fromId": "tokyo-tokyo-station",
+      "toId": "tokyo-shibuya-crossing",
+      "durationMinutes": 40,
+      "durationIsEstimate": true,
+      "fare": 210,
+      "fareIC": 209,
+      "currency": "JPY",
+      "priceCurrency": "JPY",
+      "fareScope": "성인1인 편도 일반종이권/카드터치 요금. IC카드금액 별도. 호텔이동·추가탑승 별도.",
+      "mode": "metro",
+      "operator": "tokyo_metro",
+      "line": "도쿄 메트로 한조몬선 시부야 방면",
+      "fromStation": "Otemachi Z08",
+      "toStation": "Shibuya Z01",
+      "steps": [
+        "도쿄역 기준점에서 지하통로로 오테마치 한조몬선역까지 도보",
+        "시부야 방면 한조몬선 탑승",
+        "시부야 하차 후 교차로로 도보"
+      ],
+      "passIds": [
+        "tokyo-metro-24h",
+        "tokyo-subway-24h"
+      ],
+      "officialUrl": "https://www.tokyometro.jp/info/files/20260414_jp.pdf",
+      "routeUrl": "https://www.tokyometro.jp/info/files/20260414_jp.pdf",
+      "checkedAt": "2026-10-08",
+      "notes": "도쿄역과 오테마치는 도보 연결이나 서로 다른 승강장입니다. 공식 오테마치→시부야16분·210엔(IC209엔). 전체40분 예상.",
+      "sourceUrls": [
+        "https://www.tokyometro.jp/info/files/20260414_jp.pdf",
+        "https://www.tokyometro.jp/en/ticket/regular/index.html",
+        "https://www.gotokyo.org/en/spot/78/index.html"
+      ],
+      "verificationKind": "composed_from_official_fare_and_access_sources",
+      "publishedRideMinutes": 16,
+      "publishedRideTimeNote": "공식2026-04-01 기준 대표시간. 출발시각·열차에 따라 달라짐."
+    },
+    {
+      "id": "tokyo-sensoji-to-skytree-walk",
+      "fromId": "tokyo-sensoji",
+      "toId": "tokyo-skytree",
+      "durationMinutes": 40,
+      "durationIsEstimate": true,
+      "fare": 0,
+      "fareIC": 0,
+      "currency": "JPY",
+      "priceCurrency": "JPY",
+      "fareScope": "도보 무료. 명소 입장·식사 별도.",
+      "mode": "walk",
+      "operator": null,
+      "line": "스미다 리버워크·도쿄 미즈마치 도보",
+      "fromStation": "Senso-ji",
+      "toStation": "TOKYO SKYTREE",
+      "steps": [
+        "센소지에서 스미다강 방면으로 이동",
+        "스미다 리버워크로 강을 건넌 뒤 도쿄 미즈마치를 따라 이동",
+        "도쿄 스카이트리타운 및4층 전망대 입구로 이동"
+      ],
+      "passIds": [],
+      "officialUrl": "https://www.gotokyo.org/en/spot/1795/index.html",
+      "routeUrl": "https://www.gotokyo.org/en/spot/1795/index.html",
+      "checkedAt": "2026-10-08",
+      "notes": "공식 관광청이 안내하는 두 지역 연결 산책로를 합성. 리버워크07:00–22:00에만 이용. 전체40분은 계획용, 실시간길찾기 아님.",
+      "sourceUrls": [
+        "https://www.gotokyo.org/en/spot/1795/index.html"
+      ],
+      "verificationKind": "composed_from_official_fare_and_access_sources"
+    },
+    {
+      "id": "tokyo-sensoji-to-shibuya",
+      "fromId": "tokyo-sensoji",
+      "toId": "tokyo-shibuya-crossing",
+      "durationMinutes": 55,
+      "durationIsEstimate": true,
+      "fare": 260,
+      "fareIC": 252,
+      "currency": "JPY",
+      "priceCurrency": "JPY",
+      "fareScope": "성인1인 편도 일반종이권/카드터치 요금. IC카드금액 별도. 호텔이동·추가탑승 별도.",
+      "mode": "metro",
+      "operator": "tokyo_metro",
+      "line": "도쿄 메트로 긴자선 시부야 방면",
+      "fromStation": "Asakusa G19",
+      "toStation": "Shibuya G01",
+      "steps": [
+        "센소지에서 메트로 아사쿠사역으로 도보",
+        "긴자선 시부야 방면 탑승",
+        "시부야 G01 하차 후 교차로로 도보"
+      ],
+      "passIds": [
+        "tokyo-metro-24h",
+        "tokyo-subway-24h"
+      ],
+      "officialUrl": "https://www.tokyometro.jp/info/files/20260414_jp.pdf",
+      "routeUrl": "https://www.gotokyo.org/en/spot/15/index.html",
+      "checkedAt": "2026-10-08",
+      "notes": "차내33분은 공식대표시간. 전체55분은 승강장·도보·대기 포함 예상.",
+      "sourceUrls": [
+        "https://www.tokyometro.jp/info/files/20260414_jp.pdf",
+        "https://www.tokyometro.jp/en/ticket/regular/index.html",
+        "https://www.gotokyo.org/en/spot/15/index.html",
+        "https://www.gotokyo.org/en/spot/78/index.html"
+      ],
+      "verificationKind": "composed_from_official_fare_and_access_sources",
+      "publishedRideMinutes": 33,
+      "publishedRideTimeNote": "공식2026-04-01 기준 대표시간. 출발시각·열차에 따라 달라짐."
+    },
+    {
+      "id": "tokyo-museum-to-sensoji",
+      "fromId": "tokyo-national-museum",
+      "toId": "tokyo-sensoji",
+      "durationMinutes": 35,
+      "durationIsEstimate": true,
+      "fare": 180,
+      "fareIC": 178,
+      "currency": "JPY",
+      "priceCurrency": "JPY",
+      "fareScope": "성인1인 편도 일반종이권/카드터치 요금. IC카드금액 별도. 호텔이동·추가탑승 별도.",
+      "mode": "metro",
+      "operator": "tokyo_metro",
+      "line": "도쿄 메트로 긴자선 아사쿠사 방면",
+      "fromStation": "Ueno G16",
+      "toStation": "Asakusa G19",
+      "steps": [
+        "박물관에서 메트로 우에노역까지 도보",
+        "긴자선 아사쿠사 방면 탑승",
+        "아사쿠사 G19 하차 후 센소지까지 도보"
+      ],
+      "passIds": [
+        "tokyo-metro-24h",
+        "tokyo-subway-24h"
+      ],
+      "officialUrl": "https://www.tokyometro.jp/info/files/20260414_jp.pdf",
+      "routeUrl": "https://www.tnm.jp/modules/r_free_page/index.php?id=113&lang=en",
+      "checkedAt": "2026-10-08",
+      "notes": "상설전 입장료는 별도. 차내5분·양끝 도보·대기를 합친35분 예상.",
+      "sourceUrls": [
+        "https://www.tokyometro.jp/info/files/20260414_jp.pdf",
+        "https://www.tokyometro.jp/en/ticket/regular/index.html",
+        "https://www.tnm.jp/modules/r_free_page/index.php?id=113&lang=en",
+        "https://www.gotokyo.org/en/spot/15/index.html"
+      ],
+      "verificationKind": "composed_from_official_fare_and_access_sources",
+      "publishedRideMinutes": 5,
+      "publishedRideTimeNote": "공식2026-04-01 기준 대표시간. 출발시각·열차에 따라 달라짐."
+    },
+    {
+      "id": "paris-lyon-to-louvre",
+      "city": "paris",
+      "fromId": "paris-gare-de-lyon",
+      "toId": "paris-louvre",
+      "durationMinutes": 30,
+      "durationIsEstimate": true,
+      "fare": 2.55,
+      "currency": "EUR",
+      "priceCurrency": "EUR",
+      "fareScope": "성인1인 새 Metro–Train–RER 편도1여정. 2026요금; 카드구입비·공항연결 제외.",
+      "mode": "metro",
+      "line": "메트로1호선",
+      "fromStation": "Gare de Lyon",
+      "toStation": "Palais Royal–Musée du Louvre",
+      "steps": [
+        "리옹역에서 메트로1호선 La Défense 방면 승강장으로 이동",
+        "Palais Royal–Musée du Louvre역에서 하차",
+        "선택한 루브르 입구로 도보 이동"
+      ],
+      "passIds": [
+        "paris-navigo-day",
+        "paris-visite-1day"
+      ],
+      "officialUrl": "https://www.iledefrance-mobilites.fr/en/titres-et-tarifs/detail/ticket-metro-train-rer",
+      "routeUrl": "https://www.ratp.fr/sites/default/files/lines-assets/plan-de-ligne/metro/plan-de-ligne_metro_ligne-1.pdf",
+      "checkedAt": "2026-10-08",
+      "notes": "전체30분은 역내이동·대기·보행을 포함한 예상. 미술관 보안검색·입장대기는 별도.",
+      "operator": "ratp",
+      "fareEffectiveFrom": "2026-01-01",
+      "serviceRequiresDateCheck": true,
+      "walkingSource": "https://www.louvre.fr/en/visit/map-entrances-directions"
+    },
+    {
+      "id": "paris-lyon-to-arc",
+      "city": "paris",
+      "fromId": "paris-gare-de-lyon",
+      "toId": "paris-arc-de-triomphe",
+      "durationMinutes": 40,
+      "durationIsEstimate": true,
+      "fare": 2.55,
+      "currency": "EUR",
+      "priceCurrency": "EUR",
+      "fareScope": "성인1인 새 Metro–Train–RER 편도1여정. 2026요금; 카드구입비·공항연결 제외.",
+      "mode": "metro",
+      "line": "메트로1호선",
+      "fromStation": "Gare de Lyon",
+      "toStation": "Charles de Gaulle–Étoile",
+      "steps": [
+        "메트로1호선 La Défense 방면 탑승",
+        "Charles de Gaulle–Étoile 하차",
+        "Passage du Souvenir 지하통로로 개선문 접근"
+      ],
+      "passIds": [
+        "paris-navigo-day",
+        "paris-visite-1day"
+      ],
+      "officialUrl": "https://www.iledefrance-mobilites.fr/en/titres-et-tarifs/detail/ticket-metro-train-rer",
+      "routeUrl": "https://www.ratp.fr/sites/default/files/lines-assets/plan-de-ligne/metro/plan-de-ligne_metro_ligne-1.pdf",
+      "checkedAt": "2026-10-08",
+      "notes": "전체40분은 계획용 예상. 광장 차도로 횡단하지 않음.",
+      "operator": "ratp",
+      "fareEffectiveFrom": "2026-01-01",
+      "serviceRequiresDateCheck": true,
+      "walkingSource": "https://www.paris-arc-de-triomphe.fr/visiter/informations-pratiques"
+    },
+    {
+      "id": "paris-nord-to-notre-dame",
+      "city": "paris",
+      "fromId": "paris-gare-du-nord",
+      "toId": "paris-notre-dame",
+      "durationMinutes": 35,
+      "durationIsEstimate": true,
+      "fare": 2.55,
+      "currency": "EUR",
+      "priceCurrency": "EUR",
+      "fareScope": "성인1인 새 Metro–Train–RER 편도1여정. 2026요금; 카드구입비·공항연결 제외.",
+      "mode": "metro",
+      "line": "메트로4호선",
+      "fromStation": "Gare du Nord",
+      "toStation": "Cité",
+      "steps": [
+        "메트로4호선 Bagneux–Lucie Aubrac 방면 탑승",
+        "Cité역 하차",
+        "노트르담 광장/본당 입구까지 도보"
+      ],
+      "passIds": [
+        "paris-navigo-day",
+        "paris-visite-1day"
+      ],
+      "officialUrl": "https://www.iledefrance-mobilites.fr/en/titres-et-tarifs/detail/ticket-metro-train-rer",
+      "routeUrl": "https://www.ratp.fr/sites/default/files/lines-assets/plan-de-ligne/metro/plan-de-ligne_metro_ligne-4.pdf",
+      "checkedAt": "2026-10-08",
+      "notes": "전체35분 예상. Saint-Michel역은2026-09-14~12-19폐쇄이므로 Cité 하차 예시. 입장대기 별도.",
+      "operator": "ratp",
+      "fareEffectiveFrom": "2026-01-01",
+      "serviceRequiresDateCheck": true,
+      "serviceNoticeSource": "https://www.ratp.fr/decouvrir/coulisses/modernisation-du-reseau/metro-ligne-4-travaux",
+      "walkingSource": "https://www.visitparisregion.com/fr/cathedrale-notre-dame-de-paris"
+    },
+    {
+      "id": "paris-arc-to-eiffel",
+      "city": "paris",
+      "fromId": "paris-arc-de-triomphe",
+      "toId": "paris-eiffel-tower",
+      "durationMinutes": 35,
+      "durationIsEstimate": true,
+      "fare": 2.55,
+      "currency": "EUR",
+      "priceCurrency": "EUR",
+      "fareScope": "성인1인 새 Metro–Train–RER 편도1여정. 2026요금; 카드구입비·공항연결 제외.",
+      "mode": "metro",
+      "line": "메트로6호선",
+      "fromStation": "Charles de Gaulle–Étoile",
+      "toStation": "Bir-Hakeim",
+      "steps": [
+        "개선문 지하통로를 통해 Charles de Gaulle–Étoile역 이동",
+        "메트로6호선 Nation 방면 탑승 후 Bir-Hakeim 하차",
+        "에펠탑 입구까지 도보 약10–11분"
+      ],
+      "passIds": [
+        "paris-navigo-day",
+        "paris-visite-1day"
+      ],
+      "officialUrl": "https://www.iledefrance-mobilites.fr/en/titres-et-tarifs/detail/ticket-metro-train-rer",
+      "routeUrl": "https://www.ratp.fr/sites/default/files/lines-assets/plan-de-ligne/metro/plan-de-ligne_metro_ligne-6.pdf",
+      "checkedAt": "2026-10-08",
+      "notes": "전체35분 예상. 명소입장대기 별도. 아래 전구간 운휴일에는 이 경로를 사용하지 말고 공식 대체경로 확인.",
+      "operator": "ratp",
+      "fareEffectiveFrom": "2026-01-01",
+      "serviceRequiresDateCheck": true,
+      "walkingSource": "https://www.toureiffel.paris/en/access-map",
+      "closedDates": [
+        "2026-10-11",
+        "2026-10-18",
+        "2026-11-08",
+        "2026-11-22"
+      ],
+      "closureSource": "https://www.ratp.fr/decouvrir/coulisses/modernisation-du-reseau/metro-ligne-6-travaux"
+    },
+    {
+      "id": "paris-eiffel-to-orsay",
+      "city": "paris",
+      "fromId": "paris-eiffel-tower",
+      "toId": "paris-orsay",
+      "durationMinutes": 30,
+      "durationIsEstimate": true,
+      "fare": 2.55,
+      "currency": "EUR",
+      "priceCurrency": "EUR",
+      "fareScope": "성인1인 새 Metro–Train–RER 편도1여정. 2026요금; 카드구입비·공항연결 제외.",
+      "mode": "rail",
+      "line": "RER C",
+      "fromStation": "Champ de Mars–Tour Eiffel",
+      "toStation": "Musée d’Orsay",
+      "steps": [
+        "에펠탑에서 Champ de Mars–Tour Eiffel역까지 도보",
+        "RER C 파리중심/Paris Austerlitz 방면 중 Musée d’Orsay 정차편 탑승",
+        "Musée d’Orsay 하차 후 미술관 입구 이동"
+      ],
+      "passIds": [
+        "paris-navigo-day",
+        "paris-visite-1day"
+      ],
+      "officialUrl": "https://www.iledefrance-mobilites.fr/en/titres-et-tarifs/detail/ticket-metro-train-rer",
+      "routeUrl": "https://www.transilien.com/fr/page-lignes/ligne-c",
+      "checkedAt": "2026-10-08",
+      "notes": "전체30분 예상. 운행분기·공사로 통과/종착역이 달라질 수 있어 목적지 정차 여부를 현장표시로 확인.",
+      "operator": "sncf_transilien",
+      "fareEffectiveFrom": "2026-01-01",
+      "serviceRequiresDateCheck": true,
+      "walkingSource": "https://www.musee-orsay.fr/en/visit"
+    },
+    {
+      "id": "london-waterloo-to-british-museum",
+      "fromId": "london-waterloo",
+      "toId": "london-british-museum",
+      "city": "london",
+      "durationMinutes": 30,
+      "durationIsEstimate": true,
+      "fare": null,
+      "currency": "GBP",
+      "priceCurrency": "GBP",
+      "fareScope": "성인 1인 Zone 1 내 편도 Oyster/contactless PAYG. 출발시각 미지정이므로 실제 적용 운임은 미확정.",
+      "fareVariants": [
+        {
+          "label": "피크 PAYG",
+          "fare": 3.1,
+          "price": 3.1,
+          "currency": "GBP",
+          "priceCurrency": "GBP"
+        },
+        {
+          "label": "오프피크 PAYG",
+          "fare": 3,
+          "price": 3,
+          "currency": "GBP",
+          "priceCurrency": "GBP"
+        }
+      ],
+      "fareEffectiveFrom": "2026-03-01",
+      "fareRule": "일반적으로 월–금 공휴일 제외 06:30–09:29, 16:00–18:59 피크. 개찰 시각·경로·할인에 따라 확인. 현금 종이표 £7과 구분.",
+      "mode": "metro",
+      "line": "Northern line",
+      "fromStation": "Waterloo",
+      "toStation": "Tottenham Court Road",
+      "steps": [
+        "워털루역 Northern line 북행 탑승",
+        "Tottenham Court Road역 하차",
+        "박물관 Great Russell Street 입구로 도보(공식 역→박물관 약 5분)"
+      ],
+      "passIds": [
+        "london-travelcard-1day-z14",
+        "london-travelcard-7day-z12"
+      ],
+      "officialUrl": "https://tfl.gov.uk/campaign/fares-from-2-march-2025",
+      "routeUrl": "https://content.tfl.gov.uk/standard-tube-map.pdf",
+      "walkingSource": "https://www.britishmuseum.org/visit",
+      "checkedAt": "2026-10-08",
+      "notes": "대표 경로이며 실시간 최단경로가 아닙니다. 전체 시간은 역내 이동·보행·대기 포함 추정, 보안검색·명소 입장대기는 별도. 당일 TfL 운행·공사 확인.",
+      "operator": "tfl_underground",
+      "fareZoneScope": [
+        1
+      ]
+    },
+    {
+      "id": "london-paddington-to-national-gallery",
+      "fromId": "london-paddington",
+      "toId": "london-national-gallery",
+      "city": "london",
+      "durationMinutes": 35,
+      "durationIsEstimate": true,
+      "fare": null,
+      "currency": "GBP",
+      "priceCurrency": "GBP",
+      "fareScope": "성인 1인 Zone 1 내 편도 Oyster/contactless PAYG. 출발시각 미지정이므로 실제 적용 운임은 미확정.",
+      "fareVariants": [
+        {
+          "label": "피크 PAYG",
+          "fare": 3.1,
+          "price": 3.1,
+          "currency": "GBP",
+          "priceCurrency": "GBP"
+        },
+        {
+          "label": "오프피크 PAYG",
+          "fare": 3,
+          "price": 3,
+          "currency": "GBP",
+          "priceCurrency": "GBP"
+        }
+      ],
+      "fareEffectiveFrom": "2026-03-01",
+      "fareRule": "일반적으로 월–금 공휴일 제외 06:30–09:29, 16:00–18:59 피크. 개찰 시각·경로·할인에 따라 확인. 현금 종이표 £7과 구분.",
+      "mode": "metro",
+      "line": "Bakerloo line",
+      "fromStation": "Paddington",
+      "toStation": "Charing Cross",
+      "steps": [
+        "패딩턴역에서 Bakerloo line 남행 승강장으로 이동",
+        "Elephant & Castle 방면을 타고 Charing Cross 하차",
+        "트래펄가 광장을 지나 Sainsbury Wing 입구로 도보"
+      ],
+      "passIds": [
+        "london-travelcard-1day-z14",
+        "london-travelcard-7day-z12"
+      ],
+      "officialUrl": "https://tfl.gov.uk/campaign/fares-from-2-march-2025",
+      "routeUrl": "https://content.tfl.gov.uk/standard-tube-map.pdf",
+      "walkingSource": "https://www.visitlondon.com/things-to-do/place/427197-national-gallery",
+      "checkedAt": "2026-10-08",
+      "notes": "대표 경로이며 실시간 최단경로가 아닙니다. 전체 시간은 역내 이동·보행·대기 포함 추정, 보안검색·명소 입장대기는 별도. 당일 TfL 운행·공사 확인.",
+      "operator": "tfl_underground",
+      "fareZoneScope": [
+        1
+      ],
+      "timetableSource": "https://tfl.gov.uk/tube/timetable/bakerloo?FromId=940GZZLUPAC&ToId=940GZZLUCHX&departureHour=07&departureMins=21&fromText=Paddington+Underground+Station&selectedDate=sunday&toText=Charing+Cross+Underground+Station"
+    },
+    {
+      "id": "london-waterloo-to-westminster-abbey",
+      "fromId": "london-waterloo",
+      "toId": "london-westminster-abbey",
+      "city": "london",
+      "durationMinutes": 25,
+      "durationIsEstimate": true,
+      "fare": null,
+      "currency": "GBP",
+      "priceCurrency": "GBP",
+      "fareScope": "성인 1인 Zone 1 내 편도 Oyster/contactless PAYG. 출발시각 미지정이므로 실제 적용 운임은 미확정.",
+      "fareVariants": [
+        {
+          "label": "피크 PAYG",
+          "fare": 3.1,
+          "price": 3.1,
+          "currency": "GBP",
+          "priceCurrency": "GBP"
+        },
+        {
+          "label": "오프피크 PAYG",
+          "fare": 3,
+          "price": 3,
+          "currency": "GBP",
+          "priceCurrency": "GBP"
+        }
+      ],
+      "fareEffectiveFrom": "2026-03-01",
+      "fareRule": "일반적으로 월–금 공휴일 제외 06:30–09:29, 16:00–18:59 피크. 개찰 시각·경로·할인에 따라 확인. 현금 종이표 £7과 구분.",
+      "mode": "metro",
+      "line": "Jubilee line",
+      "fromStation": "Waterloo",
+      "toStation": "Westminster",
+      "steps": [
+        "워털루역 Jubilee line Stanmore 방면 탑승",
+        "Westminster에서 하차",
+        "Parliament Square를 지나 사원 방문객 입구로 이동"
+      ],
+      "passIds": [
+        "london-travelcard-1day-z14",
+        "london-travelcard-7day-z12"
+      ],
+      "officialUrl": "https://tfl.gov.uk/campaign/fares-from-2-march-2025",
+      "routeUrl": "https://content.tfl.gov.uk/standard-tube-map.pdf",
+      "walkingSource": "https://www.visitlondon.com/things-to-do/place/610825-westminster-abbey",
+      "checkedAt": "2026-10-08",
+      "notes": "대표 경로이며 실시간 최단경로가 아닙니다. 전체 시간은 역내 이동·보행·대기 포함 추정, 보안검색·명소 입장대기는 별도. 당일 TfL 운행·공사 확인.",
+      "operator": "tfl_underground",
+      "fareZoneScope": [
+        1
+      ],
+      "timetableSource": "https://tfl.gov.uk/tube/timetable/jubilee?FromId=940GZZLUWLO&ToId=940GZZLUWSM&departureHour=05&departureMins=34&fromText=Waterloo+Underground+Station&selectedDate=mondaythursday&toText=Westminster+Underground+Station"
+    },
+    {
+      "id": "london-abbey-to-tower-of-london",
+      "fromId": "london-westminster-abbey",
+      "toId": "london-tower-of-london",
+      "city": "london",
+      "durationMinutes": 35,
+      "durationIsEstimate": true,
+      "fare": null,
+      "currency": "GBP",
+      "priceCurrency": "GBP",
+      "fareScope": "성인 1인 Zone 1 내 편도 Oyster/contactless PAYG. 출발시각 미지정이므로 실제 적용 운임은 미확정.",
+      "fareVariants": [
+        {
+          "label": "피크 PAYG",
+          "fare": 3.1,
+          "price": 3.1,
+          "currency": "GBP",
+          "priceCurrency": "GBP"
+        },
+        {
+          "label": "오프피크 PAYG",
+          "fare": 3,
+          "price": 3,
+          "currency": "GBP",
+          "priceCurrency": "GBP"
+        }
+      ],
+      "fareEffectiveFrom": "2026-03-01",
+      "fareRule": "일반적으로 월–금 공휴일 제외 06:30–09:29, 16:00–18:59 피크. 개찰 시각·경로·할인에 따라 확인. 현금 종이표 £7과 구분.",
+      "mode": "metro",
+      "line": "District line",
+      "fromStation": "Westminster",
+      "toStation": "Tower Hill",
+      "steps": [
+        "사원에서 Westminster역까지 도보",
+        "District line 동행 탑승(Tower Hill 이후로 가는 열차 포함)",
+        "Tower Hill 하차 후 런던탑 방문객 입구로 공식 도보 약 5분"
+      ],
+      "passIds": [
+        "london-travelcard-1day-z14",
+        "london-travelcard-7day-z12"
+      ],
+      "officialUrl": "https://tfl.gov.uk/campaign/fares-from-2-march-2025",
+      "routeUrl": "https://content.tfl.gov.uk/standard-tube-map.pdf",
+      "walkingSource": "https://www.hrp.org.uk/tower-of-london/visit/getting-here/",
+      "checkedAt": "2026-10-08",
+      "notes": "대표 경로이며 실시간 최단경로가 아닙니다. 전체 시간은 역내 이동·보행·대기 포함 추정, 보안검색·명소 입장대기는 별도. 당일 TfL 운행·공사 확인.",
+      "operator": "tfl_underground",
+      "fareZoneScope": [
+        1
+      ]
+    },
+    {
+      "id": "london-waterloo-to-tower-bridge",
+      "fromId": "london-waterloo",
+      "toId": "london-tower-bridge",
+      "city": "london",
+      "durationMinutes": 35,
+      "durationIsEstimate": true,
+      "fare": null,
+      "currency": "GBP",
+      "priceCurrency": "GBP",
+      "fareScope": "성인 1인 Zone 1 내 편도 Oyster/contactless PAYG. 출발시각 미지정이므로 실제 적용 운임은 미확정.",
+      "fareVariants": [
+        {
+          "label": "피크 PAYG",
+          "fare": 3.1,
+          "price": 3.1,
+          "currency": "GBP",
+          "priceCurrency": "GBP"
+        },
+        {
+          "label": "오프피크 PAYG",
+          "fare": 3,
+          "price": 3,
+          "currency": "GBP",
+          "priceCurrency": "GBP"
+        }
+      ],
+      "fareEffectiveFrom": "2026-03-01",
+      "fareRule": "일반적으로 월–금 공휴일 제외 06:30–09:29, 16:00–18:59 피크. 개찰 시각·경로·할인에 따라 확인. 현금 종이표 £7과 구분.",
+      "mode": "metro",
+      "line": "Jubilee line",
+      "fromStation": "Waterloo",
+      "toStation": "London Bridge",
+      "steps": [
+        "워털루역 Jubilee line Stratford 방면 탑승",
+        "London Bridge 하차",
+        "강변을 따라 타워 브리지로 도보 후 북쪽 타워 서편 일반입구로 이동"
+      ],
+      "passIds": [
+        "london-travelcard-1day-z14",
+        "london-travelcard-7day-z12"
+      ],
+      "officialUrl": "https://tfl.gov.uk/campaign/fares-from-2-march-2025",
+      "routeUrl": "https://content.tfl.gov.uk/standard-tube-map.pdf",
+      "walkingSource": "https://www.towerbridge.org.uk/plan-your-visit",
+      "checkedAt": "2026-10-08",
+      "notes": "대표 경로이며 실시간 최단경로가 아닙니다. 전체 시간은 역내 이동·보행·대기 포함 추정, 보안검색·명소 입장대기는 별도. 당일 TfL 운행·공사 확인.",
+      "operator": "tfl_underground",
+      "fareZoneScope": [
+        1
+      ],
+      "timetableSource": "https://tfl.gov.uk/tube/timetable/jubilee?FromId=940GZZLUWLO&ToId=940GZZLUNGW&departureHour=05&departureMins=59&fromText=Waterloo+Underground+Station&selectedDate=mondaythursday&toText=North+Greenwich+Underground+Station"
+    }
+  ],
+  "passes": [
+    {
+      "id": "tokyo-metro-24h",
+      "name": "도쿄 메트로 24시간권(종이권)",
+      "city": "tokyo",
+      "currency": "JPY",
+      "priceCurrency": "JPY",
+      "price": 700,
+      "priceVariants": [
+        {
+          "label": "성인",
+          "price": 700
+        },
+        {
+          "label": "소아",
+          "price": 350
+        }
+      ],
+      "validHours": 24,
+      "validity": "종이권 첫사용부터24시간. 당일권은 구입당일에 사용개시. 선구입권은 구입후6개월내 개시.",
+      "coverage": "도쿄 메트로9개 노선",
+      "exclusions": "도에이 지하철·JR·도부·도큐·게이세이·게이큐·공항철도 등 타사구간 제외. 직통운전 타사구간 별도.",
+      "includedPoiIds": [],
+      "officialUrl": "https://www.tokyometro.jp/en/ticket/1day/index.html",
+      "checkedAt": "2026-10-08",
+      "cancellation": "미사용·유효기간 내 환불 시220엔 수수료. 판매형태별조건 확인.",
+      "eligibility": "국적제한 없음. IC상품은 구매시점부터24시간이라 종이권과 구별.",
+      "eligiblePredicate": "실제 Tokyo Metro 대상 구간과 24시간 사용 범위를 확인합니다. 다른 패스와 중복 차감하지 않습니다."
+    },
+    {
+      "id": "tokyo-subway-24h",
+      "name": "Tokyo Subway Ticket 24시간",
+      "city": "tokyo",
+      "currency": "JPY",
+      "priceCurrency": "JPY",
+      "price": 1000,
+      "priceVariants": [
+        {
+          "label": "24시간 성인",
+          "price": 1000
+        },
+        {
+          "label": "48시간 성인(별도상품)",
+          "price": 1500
+        },
+        {
+          "label": "72시간 성인(별도상품)",
+          "price": 2000
+        }
+      ],
+      "validHours": 24,
+      "validity": "첫이용부터24시간.48/72시간은별도상품. 표기된 유효기간내 이용.",
+      "coverage": "도쿄 메트로·도에이 지하철 전노선",
+      "exclusions": "JR·도부·게이세이·게이큐·도큐·버스·공항접근의 타사구간 제외. 시설입장 기본미포함.",
+      "includedPoiIds": [],
+      "officialUrl": "https://www.tokyometro.jp/en/ticket/travel/index.html",
+      "purchaseUrl": "https://tokyometrods.triplabo.com/en/product/prod_agpqggha454y7imf4xqzdrfrc4",
+      "checkedAt": "2026-10-08",
+      "cancellation": "판매형태·판매처별 취소/환불조건 구매전확인.",
+      "eligibility": "해외방문객 또는 도쿄·가나가와·사이타마·지바·이바라키·도치기·군마·야마나시 밖에 거주하는 일본내 여행자용. 자격증빙 판매처확인.",
+      "eligiblePredicate": "구매 자격 및 대상 노선과 24시간 사용 범위를 확인합니다. 48/72시간 가격을 24시간 상품에 혼용하지 않습니다."
+    },
+    {
+      "id": "paris-navigo-day",
+      "name": "나비고 1일권",
+      "city": "paris",
+      "currency": "EUR",
+      "priceCurrency": "EUR",
+      "price": 12.3,
+      "priceScope": "성인1인 2026년1월1일 적용 모든존1–5. 카드구입비 별도 가능.",
+      "validity": "선택한 하루의 첫 운행부터 야간운행 종료까지(Noctilien 포함). 활성화 후24시간권 아님.",
+      "validHours": null,
+      "validityKind": "service_day",
+      "coverage": "존1–5의 대상 메트로·RER·철도·버스·트램 등",
+      "exclusions": "오를리공항역 M14·CDG공항역 RER B·Orlyval 및 관광버스 등 제외. 명소입장 제외.",
+      "includedPoiIds": [],
+      "officialUrl": "https://www.iledefrance-mobilites.fr/en/titres-et-tarifs/detail/forfait-navigo-jour",
+      "checkedAt": "2026-10-08",
+      "cancellation": "조건에 따른 환불/취소 신청 가능; 구입채널 규정 확인.",
+      "eligiblePredicate": "선택 사용일의 대상교통만 포함; 공항 전용구간 제외.",
+      "autoCompare": false,
+      "benefitNote": "하루/야간 운행 기준을 적용하지 않으면 자동 절감액 산출 금지. 명소입장 절감액 없음."
+    },
+    {
+      "id": "paris-visite-1day",
+      "name": "파리 비지트 1일권",
+      "city": "paris",
+      "currency": "EUR",
+      "priceCurrency": "EUR",
+      "price": 30.6,
+      "priceScope": "성인1인 1일 모든존1–5. 2026년1월1일 적용. 카드구입비 별도 가능.",
+      "validity": "선택 첫날00:00–24:00. 연속24시간권 아님.",
+      "validHours": null,
+      "validityKind": "calendar_day",
+      "coverage": "존1–5 대중교통과 CDG RER B·오를리 M14·Orlyval 공항접근 포함.",
+      "exclusions": "Filéo 제외. 박물관·전망대·디즈니 입장료 미포함; 외부 관광셔틀 대상여부 별도.",
+      "includedPoiIds": [],
+      "officialUrl": "https://www.iledefrance-mobilites.fr/en/titres-et-tarifs/detail/forfait-paris-visite",
+      "checkedAt": "2026-10-08",
+      "cancellation": "교환·환불 불가.",
+      "eligiblePredicate": "기명 사용자1인·선택일·대상 운송수단 내 사용.",
+      "autoCompare": false,
+      "benefitNote": "공항접근 포함 여부가 나비고1일권과 다름. 명소 무료입장권으로 취급하지 않음."
+    },
+    {
+      "id": "london-travelcard-1day-z14",
+      "name": "런던 Day Travelcard Zones 1–4 Anytime",
+      "city": "london",
+      "currency": "GBP",
+      "priceCurrency": "GBP",
+      "price": 16.6,
+      "priceScope": "성인 1인 해당 구역 교통권. Oyster 신규 발급비·온라인 배송비 등 구매부대비용 별도.",
+      "productType": "travelcard",
+      "validity": "선택한 달력 날짜 전체 및 다음날 04:30 이전 시작 여정. 최초 사용부터 24시간이 아님.",
+      "validDays": 1,
+      "validityType": "calendar_days",
+      "zones": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "coverage": "지정 구역의 Tube·DLR·Elizabeth line·Overground 및 대부분 National Rail. TfL 시내버스는 구역과 관계없이 적용. 트램은 Zones 3·4·5·6 중 하나를 포함한 Travelcard만 적용.",
+      "exclusions": "관광명소 입장·식사·강 유람선·케이블카 제외. Heathrow Express·Gatwick Express·Stansted Express·Southeastern High Speed 제외. 선택 구역 밖 철도·공항 여정은 추가 요금.",
+      "includedPoiIds": [],
+      "officialUrl": "https://content.tfl.gov.uk/adult-fares.pdf",
+      "ruleSource": "https://visitorshop.tfl.gov.uk/pages/ticket-comparison",
+      "checkedAt": "2026-10-08",
+      "cancellation": "사용·미사용 여부, 판매처, 상품별 환불 조건 구매 전 확인.",
+      "eligiblePredicate": "유효한 날짜 범위 및 실제 통과 구역이 모두 포함된 대상 운영자 여정에만 적용.",
+      "benefitNote": "PAYG 일일/주간 cap과 비교할 때 이미 cap이 적용된 실제 대조 비용을 사용. 개별 운임 단순합 대비 절감액을 보장하지 않음.",
+      "priceDateApplicability": "TfL Adult rate prices 2026. 2027 이후 미검증.",
+      "validHours": null,
+      "purchaseUrl": "https://visitorshop.tfl.gov.uk/products/london-day-travelcard",
+      "purchaseNote": "TfL Visitor Shop의 공식 위탁 판매 상품. Zones 1–4 Anytime 옵션과 배송/수령·부대요금을 구매 전 확인.",
+      "autoCompare": false
+    },
+    {
+      "id": "london-travelcard-7day-z12",
+      "name": "런던 7 Day Travelcard Zones 1–2",
+      "city": "london",
+      "currency": "GBP",
+      "priceCurrency": "GBP",
+      "price": 44.7,
+      "priceScope": "성인 1인 해당 구역 교통권. Oyster 신규 발급비·온라인 배송비 등 구매부대비용 별도.",
+      "productType": "travelcard",
+      "validity": "선택 시작일부터 연속 7일. 어느 요일이나 시작 가능. 마지막 유효일 다음날 04:30 이전 시작 여정까지.",
+      "validDays": 7,
+      "validityType": "calendar_days",
+      "zones": [
+        1,
+        2
+      ],
+      "coverage": "지정 구역의 Tube·DLR·Elizabeth line·Overground 및 대부분 National Rail. TfL 시내버스는 구역과 관계없이 적용. 트램은 Zones 3·4·5·6 중 하나를 포함한 Travelcard만 적용.",
+      "exclusions": "관광명소 입장·식사·강 유람선·케이블카 제외. Heathrow Express·Gatwick Express·Stansted Express·Southeastern High Speed 제외. 선택 구역 밖 철도·공항 여정은 추가 요금.",
+      "includedPoiIds": [],
+      "officialUrl": "https://content.tfl.gov.uk/adult-fares.pdf",
+      "ruleSource": "https://www.southeasternrailway.co.uk/ways-to-save/ways-to-pay/contactless-payment",
+      "checkedAt": "2026-10-08",
+      "cancellation": "사용·미사용 여부, 판매처, 상품별 환불 조건 구매 전 확인.",
+      "eligiblePredicate": "유효한 날짜 범위 및 실제 통과 구역이 모두 포함된 대상 운영자 여정에만 적용.",
+      "benefitNote": "PAYG 일일/주간 cap과 비교할 때 이미 cap이 적용된 실제 대조 비용을 사용. 개별 운임 단순합 대비 절감액을 보장하지 않음.",
+      "priceDateApplicability": "TfL Adult rate prices 2026. 2027 이후 미검증.",
+      "validHours": null,
+      "purchaseNote": "공식 요금표를 제공. 실제 7일권 구매는 TfL의 Oyster/Travelcard 판매처와 필요 카드 발급비 확인.",
+      "autoCompare": false
+    }
+  ],
+  "catalogTickets": [
+    {
+      "id": "tokyo-national-museum-ticket",
+      "poiId": "tokyo-national-museum",
+      "officialUrl": "https://www.asoview.com/channel/ticket/WuX1M0a3sG/ticket0000027926/",
+      "klookUrl": null,
+      "officialPrice": 1000,
+      "officialPriceFrom": null,
+      "klookPrice": null,
+      "currency": "JPY",
+      "priceCurrency": "JPY",
+      "checkedAt": "2026-10-08",
+      "priceScope": "성인 동박 컬렉션전(상설전) 1인. 특별전 별도.",
+      "priceSource": "https://www.tnm.jp/modules/r_free_page/index.php?id=113&lang=en",
+      "cancellation": "공식 판매화면의 선택티켓 환불조건 확인.",
+      "cancellationSource": "https://www.tnm.jp/modules/r_free_page/index.php?id=113&lang=en"
+    },
+    {
+      "id": "tokyo-shinjuku-gyoen-ticket",
+      "poiId": "tokyo-shinjuku-gyoen",
+      "officialUrl": "https://www.asoview.com/channel/tickets/W9YQOvOh2y/",
+      "klookUrl": null,
+      "officialPrice": 500,
+      "officialPriceFrom": null,
+      "klookPrice": null,
+      "currency": "JPY",
+      "priceCurrency": "JPY",
+      "checkedAt": "2026-10-08",
+      "priceScope": "성인 일반 정원 입장 1인. 65세 이상·학생 별도 할인.",
+      "priceSource": "https://policies.env.go.jp/national-garden/shinjukugyoen/english/guide/information/",
+      "cancellation": "공식 판매화면의 선택티켓 환불조건 확인.",
+      "cancellationSource": "https://policies.env.go.jp/national-garden/shinjukugyoen/english/guide/information/"
+    },
+    {
+      "id": "tokyo-skytree-ticket",
+      "poiId": "tokyo-skytree",
+      "officialUrl": "https://official-ticket.tokyo-skytree.jp/ja/skytree/product/prod_agohj36oxb2vvei5jvjfwaowhu?planId=SKYTREE-EG9BH-1",
+      "klookUrl": null,
+      "officialPrice": null,
+      "officialPriceFrom": 1800,
+      "klookPrice": null,
+      "currency": "JPY",
+      "priceCurrency": "JPY",
+      "checkedAt": "2026-10-08",
+      "priceScope": "15세 이상 1인 350m 덴보 데크 웹권 ¥1,800부터. 450m 덴보 갤러리아 결합 ¥3,000부터. 날짜별 변동.",
+      "priceSource": "https://www.tokyo-skytree.jp/ticket/",
+      "cancellation": "스카이트리 일반 LINKTIVITY: 입장31일전까지0%,30일전부터입장시각20%,입장시각후100%;구매후59분내예외·결합권별도규칙.",
+      "cancellationSource": "https://www.tokyo-skytree.jp/ticket/cancel/"
+    },
+    {
+      "poiId": "paris-eiffel-tower",
+      "officialUrl": "https://ticket.toureiffel.paris/en",
+      "klookUrl": null,
+      "officialPrice": 36.7,
+      "klookPrice": null,
+      "currency": "EUR",
+      "priceCurrency": "EUR",
+      "checkedAt": "2026-10-08",
+      "priceScope": "만 25세 이상 성인 1인, 엘리베이터 2회로 정상까지. 2026-01-12 적용. 12–24세 €18.40.",
+      "priceSource": "https://www.toureiffel.paris/fr/tarifs-janv-2026-en",
+      "cancellation": "구매 화면의 선택 상품 변경·환불규정 확인.",
+      "officialLinkType": "opened_official_ticket_office",
+      "priceDateDependent": false
+    },
+    {
+      "poiId": "paris-louvre",
+      "officialUrl": "https://ticket.louvre.fr/en",
+      "klookUrl": null,
+      "officialPrice": 32,
+      "klookPrice": null,
+      "currency": "EUR",
+      "priceCurrency": "EUR",
+      "checkedAt": "2026-10-08",
+      "priceScope": "만 18세 이상 EEA 시민도 거주자도 아닌 방문객 1인. EEA 시민/거주자는 일반 €22; 18세 미만·EEA 26세 미만 무료 자격 별도.",
+      "priceSource": "https://www.louvre.fr/en/visit/hours-admission",
+      "cancellation": "구매 화면의 선택 상품 변경·환불규정 확인.",
+      "officialLinkType": "verified_official_link_target",
+      "priceDateDependent": false
+    },
+    {
+      "poiId": "paris-orsay",
+      "officialUrl": "https://billetterie.musee-orsay.fr/index-css5-museeorsay-pg1.html",
+      "klookUrl": null,
+      "officialPrice": 16,
+      "klookPrice": null,
+      "currency": "EUR",
+      "priceCurrency": "EUR",
+      "checkedAt": "2026-10-08",
+      "priceScope": "성인 일반 온라인 입장 1인 €16. 현장 €14. 무료·야간·동반아동 할인 자격은 별도.",
+      "priceSource": "https://www.musee-orsay.fr/en/visit",
+      "cancellation": "구매 화면의 선택 상품 변경·환불규정 확인.",
+      "officialLinkType": "opened_official_ticket_office",
+      "priceDateDependent": false
+    },
+    {
+      "poiId": "paris-sainte-chapelle",
+      "officialUrl": "https://tickets.monuments-nationaux.fr/en-GB/families?site=2035141861660400306",
+      "klookUrl": null,
+      "officialPrice": 22,
+      "klookPrice": null,
+      "currency": "EUR",
+      "priceCurrency": "EUR",
+      "checkedAt": "2026-10-08",
+      "priceScope": "만18세 이상 EEA 시민도 거주자도 아닌 방문객 1인 단독권. EEA 시민/4개월 초과 정규거주자는 €16. 콩시에르주리 결합권 별도.",
+      "priceSource": "https://www.sainte-chapelle.fr/en/visite/informations-pratiques",
+      "cancellation": "구매 화면의 선택 상품 변경·환불규정 확인.",
+      "officialLinkType": "verified_official_link_target",
+      "priceDateDependent": false
+    },
+    {
+      "poiId": "paris-arc-de-triomphe",
+      "officialUrl": "https://tickets.monuments-nationaux.fr/fr-FR/familles?site=2032863779450400197",
+      "klookUrl": null,
+      "officialPrice": null,
+      "klookPrice": null,
+      "currency": "EUR",
+      "priceCurrency": "EUR",
+      "checkedAt": "2026-10-08",
+      "priceScope": "성인 일반1인. 10–3월 €16. 4–9월 €22, 해당기간 수요일 €16. 방문일로 요금을 선택해야 함.",
+      "priceSource": "https://www.paris-arc-de-triomphe.fr/visiter/informations-pratiques",
+      "cancellation": "구매 화면의 선택 상품 변경·환불규정 확인.",
+      "officialLinkType": "verified_official_link_target",
+      "priceDateDependent": true,
+      "priceRange": {
+        "min": 16,
+        "max": 22,
+        "currency": "EUR",
+        "basis": "방문일별 요금 적용 필요."
+      },
+      "priceCurrentSeason": 16,
+      "priceCurrentSeasonAsOf": "2026-10-08"
+    },
+    {
+      "poiId": "paris-notre-dame",
+      "officialUrl": "https://www.notredamedeparis.fr/en/visit/practical-information/",
+      "klookUrl": null,
+      "officialPrice": 0,
+      "klookPrice": null,
+      "currency": "EUR",
+      "priceCurrency": "EUR",
+      "checkedAt": "2026-10-08",
+      "priceScope": "본당 일반입장은 누구나 무료. 탑·보물실·지하 유적 및 외부 유료투어는 별도 상품.",
+      "priceSource": "https://www.notredamedeparis.fr/en/qa/?_filtres_faq_boutons_en=visit",
+      "cancellation": "구매 화면의 선택 상품 변경·환불규정 확인. 본당 무료 방문은 유료권 구입 불필요.",
+      "officialLinkType": "official_information_and_reservation_entrypoint",
+      "priceDateDependent": false
+    },
+    {
+      "id": "london-british-museum-ticket",
+      "poiId": "london-british-museum",
+      "officialUrl": "https://www.britishmuseum.org/visit",
+      "klookUrl": null,
+      "officialPrice": 0,
+      "klookPrice": null,
+      "currency": "GBP",
+      "priceCurrency": "GBP",
+      "checkedAt": "2026-10-08",
+      "priceScope": "성인 1인 상설전 일반입장 무료. 유료 기획전·투어·오디오 별도.",
+      "priceSource": "https://www.britishmuseum.org/visit",
+      "cancellation": "공식 구매화면의 선택일·옵션 환불/변경 조건 확인.",
+      "officialLinkType": "운영자 공식 예약/요금 페이지; 재고 미조회"
+    },
+    {
+      "id": "london-national-gallery-ticket",
+      "poiId": "london-national-gallery",
+      "officialUrl": "https://my.nationalgallery.org.uk/events?k=galleryentry1",
+      "klookUrl": null,
+      "officialPrice": 0,
+      "klookPrice": null,
+      "currency": "GBP",
+      "priceCurrency": "GBP",
+      "checkedAt": "2026-10-08",
+      "priceScope": "성인 1인 일반 소장품 무료. 일부 특별전·투어 유료.",
+      "priceSource": "https://www.nationalgallery.org.uk/visiting/plan-your-visit",
+      "cancellation": "공식 구매화면의 선택일·옵션 환불/변경 조건 확인.",
+      "officialLinkType": "운영자 공식 예약/요금 페이지; 재고 미조회"
+    },
+    {
+      "id": "london-tower-of-london-ticket",
+      "poiId": "london-tower-of-london",
+      "officialUrl": "https://www.hrp.org.uk/tower-of-london/visit/tickets-and-prices/",
+      "klookUrl": null,
+      "officialPrice": 38,
+      "klookPrice": null,
+      "currency": "GBP",
+      "priceCurrency": "GBP",
+      "checkedAt": "2026-10-08",
+      "priceScope": "성인 18–64세 1인 일반입장 £38, 선택 기부금 제외. 왕관 보석·공개 구역 포함. 오디오·특별 체험·크루즈 별도.",
+      "priceSource": "https://www.hrp.org.uk/tower-of-london/visit/tickets-and-prices/",
+      "cancellation": "공식 구매화면의 선택일·옵션 환불/변경 조건 확인.",
+      "officialLinkType": "운영자 공식 예약/요금 페이지; 재고 미조회"
+    },
+    {
+      "id": "london-westminster-abbey-ticket",
+      "poiId": "london-westminster-abbey",
+      "officialUrl": "https://tickets.westminster-abbey.org/home/index",
+      "klookUrl": null,
+      "officialPrice": 32,
+      "klookPrice": null,
+      "currency": "GBP",
+      "priceCurrency": "GBP",
+      "checkedAt": "2026-10-08",
+      "priceScope": "성인 1인 일반 관광입장 £32. 멀티미디어 가이드 포함. 별도 Galleries·특별투어는 구매옵션 확인.",
+      "priceSource": "https://www.westminster-abbey.org/visit-us/opening-times-and-prices",
+      "cancellation": "일반 입장권 환불 불가. 교통 파업·질병으로 계획이 영향을 받으면 원래 예약일부터 6개월 내 날짜 변경 가능하다는 공식 안내; 구체 조건 구매 전 확인.",
+      "officialLinkType": "운영자 공식 예약/요금 페이지; 재고 미조회"
+    },
+    {
+      "id": "london-tower-bridge-ticket",
+      "poiId": "london-tower-bridge",
+      "officialUrl": "https://www.towerbridge.org.uk/book-tickets?product_id=7a2849ff-7252-44e0-84ac-dd22a7ecbe35",
+      "klookUrl": null,
+      "officialPrice": 18,
+      "klookPrice": null,
+      "currency": "GBP",
+      "priceCurrency": "GBP",
+      "checkedAt": "2026-10-08",
+      "priceScope": "성인 18세 이상 1인 내부 일반입장 £18. 타워·상층 유리 바닥 통로·기관실 포함. 런던탑 제외.",
+      "priceSource": "https://www.towerbridge.org.uk/whats-on/entry-to-tower-bridge",
+      "cancellation": "공식 구매화면의 선택일·옵션 환불/변경 조건 확인.",
+      "officialLinkType": "운영자 공식 예약/요금 페이지; 재고 미조회"
+    },
+    {
+      "id": "london-eye-ticket",
+      "poiId": "london-eye",
+      "officialUrl": "https://ticketing.londoneye.com/en/tickets/standard-london-eye-fast-track-tickets",
+      "klookUrl": null,
+      "officialPrice": null,
+      "klookPrice": null,
+      "currency": "GBP",
+      "priceCurrency": "GBP",
+      "checkedAt": "2026-10-08",
+      "priceScope": "성인 1인 Standard 온라인 최저 £29부터; 날짜·수요별 변동. 현재 홍보 현장가 £39. 실제 선택일 가격 미확정으로 합계에는 자동 확정하지 않음.",
+      "priceSource": "https://www.londoneye.com/tickets-and-prices/",
+      "cancellation": "공식 구매화면의 선택일·옵션 환불/변경 조건 확인.",
+      "officialLinkType": "운영자 공식 예약/요금 페이지; 재고 미조회"
+    }
+  ],
+  "catalogPasses": [
+    {
+      "passId": "paris-navigo-day",
+      "officialUrl": "https://www.iledefrance-mobilites.fr/en/titres-et-tarifs/detail/forfait-navigo-jour",
+      "klookUrl": null,
+      "officialPrice": 12.3,
+      "klookPrice": null,
+      "currency": "EUR",
+      "priceCurrency": "EUR",
+      "checkedAt": "2026-10-08",
+      "priceScope": "성인1인 2026년1월1일 적용 모든존1–5. 카드구입비 별도 가능.",
+      "notes": "선택한 하루의 첫 운행부터 야간운행 종료까지(Noctilien 포함). 활성화 후24시간권 아님. 오를리공항역 M14·CDG공항역 RER B·Orlyval 및 관광버스 등 제외. 명소입장 제외."
+    },
+    {
+      "passId": "paris-visite-1day",
+      "officialUrl": "https://www.iledefrance-mobilites.fr/en/titres-et-tarifs/detail/forfait-paris-visite",
+      "klookUrl": null,
+      "officialPrice": 30.6,
+      "klookPrice": null,
+      "currency": "EUR",
+      "priceCurrency": "EUR",
+      "checkedAt": "2026-10-08",
+      "priceScope": "성인1인 1일 모든존1–5. 2026년1월1일 적용. 카드구입비 별도 가능.",
+      "notes": "선택 첫날00:00–24:00. 연속24시간권 아님. Filéo 제외. 박물관·전망대·디즈니 입장료 미포함; 외부 관광셔틀 대상여부 별도."
+    },
+    {
+      "id": "london-travelcard-1day-z14-catalog",
+      "passId": "london-travelcard-1day-z14",
+      "officialUrl": "https://content.tfl.gov.uk/adult-fares.pdf",
+      "klookUrl": null,
+      "officialPrice": 16.6,
+      "klookPrice": null,
+      "currency": "GBP",
+      "priceCurrency": "GBP",
+      "checkedAt": "2026-10-08",
+      "priceScope": "성인 1인 해당 구역 교통권. Oyster 신규 발급비·온라인 배송비 등 구매부대비용 별도.",
+      "notes": "선택한 달력 날짜 전체 및 다음날 04:30 이전 시작 여정. 최초 사용부터 24시간이 아님.",
+      "officialLinkType": "TfL 공식 요금표",
+      "purchaseUrl": "https://visitorshop.tfl.gov.uk/products/london-day-travelcard"
+    },
+    {
+      "id": "london-travelcard-7day-z12-catalog",
+      "passId": "london-travelcard-7day-z12",
+      "officialUrl": "https://content.tfl.gov.uk/adult-fares.pdf",
+      "klookUrl": null,
+      "officialPrice": 44.7,
+      "klookPrice": null,
+      "currency": "GBP",
+      "priceCurrency": "GBP",
+      "checkedAt": "2026-10-08",
+      "priceScope": "성인 1인 해당 구역 교통권. Oyster 신규 발급비·온라인 배송비 등 구매부대비용 별도.",
+      "notes": "선택 시작일부터 연속 7일. 어느 요일이나 시작 가능. 마지막 유효일 다음날 04:30 이전 시작 여정까지.",
+      "officialLinkType": "TfL 공식 요금표"
+    }
+  ],
+  "sources": [
+    {
+      "url": "https://afuri.com/findus/",
+      "checkedAt": "2026-10-08",
+      "status": "verified_official_public_source"
+    },
+    {
+      "url": "https://afuri.com/findus/#shibuya",
+      "checkedAt": "2026-10-08",
+      "status": "verified_official_public_source"
+    },
+    {
+      "url": "https://official-ticket.tokyo-skytree.jp/ja/skytree/product/prod_agohj36oxb2vvei5jvjfwaowhu?planId=SKYTREE-EG9BH-1",
+      "checkedAt": "2026-10-08",
+      "status": "verified_official_public_source"
+    },
+    {
+      "url": "https://policies.env.go.jp/national-garden/shinjukugyoen/english/guide/access/",
+      "checkedAt": "2026-10-08",
+      "status": "verified_official_public_source"
+    },
+    {
+      "url": "https://policies.env.go.jp/national-garden/shinjukugyoen/english/guide/information/",
+      "checkedAt": "2026-10-08",
+      "status": "verified_official_public_source"
+    },
+    {
+      "url": "https://restaurant.tokyo-skytree.jp/maintenance/share/images/ABOUT_en.pdf?260401=",
+      "checkedAt": "2026-10-08",
+      "status": "verified_official_public_source"
+    },
+    {
+      "url": "https://www.asakusaimahan.co.jp/imahan/wp-content/themes/imahan/js/kokusai_shop.js",
+      "checkedAt": "2026-10-08",
+      "status": "verified_official_public_source"
+    },
+    {
+      "url": "https://www.asakusaimahan.co.jp/kokusai",
+      "checkedAt": "2026-10-08",
+      "status": "verified_official_public_source"
+    },
+    {
+      "url": "https://www.asoview.com/channel/ticket/WuX1M0a3sG/ticket0000027926/",
+      "checkedAt": "2026-10-08",
+      "status": "verified_official_public_source"
+    },
+    {
+      "url": "https://www.asoview.com/channel/tickets/W9YQOvOh2y/",
+      "checkedAt": "2026-10-08",
+      "status": "verified_official_public_source"
+    },
+    {
+      "url": "https://www.gotokyo.org/book/wp-content/uploads/2025/11/2511_mapoftokyo_EN_2_low.pdf",
+      "checkedAt": "2026-10-08",
+      "status": "verified_official_public_source"
+    },
+    {
+      "url": "https://www.gotokyo.org/book/wp-content/uploads/2025/11/AO_2511_discover-tokyo_low_EN.pdf",
+      "checkedAt": "2026-10-08",
+      "status": "verified_official_public_source"
+    },
+    {
+      "url": "https://www.gotokyo.org/en/plan/airport-access/haneda-airport/",
+      "checkedAt": "2026-10-08",
+      "status": "verified_official_public_source"
+    },
+    {
+      "url": "https://www.gotokyo.org/en/plan/airport-access/narita-airport/index.html",
+      "checkedAt": "2026-10-08",
+      "status": "verified_official_public_source"
+    },
+    {
+      "url": "https://www.gotokyo.org/en/spot/123/index.html",
+      "checkedAt": "2026-10-08",
+      "status": "verified_official_public_source"
+    },
+    {
+      "url": "https://www.gotokyo.org/en/spot/15/index.html",
+      "checkedAt": "2026-10-08",
+      "status": "verified_official_public_source"
+    },
+    {
+      "url": "https://www.gotokyo.org/en/spot/1795/index.html",
+      "checkedAt": "2026-10-08",
+      "status": "verified_official_public_source"
+    },
+    {
+      "url": "https://www.gotokyo.org/en/spot/6/index.html",
+      "checkedAt": "2026-10-08",
+      "status": "verified_official_public_source"
+    },
+    {
+      "url": "https://www.gotokyo.org/en/spot/75/index.html",
+      "checkedAt": "2026-10-08",
+      "status": "verified_official_public_source"
+    },
+    {
+      "url": "https://www.gotokyo.org/en/spot/78/index.html",
+      "checkedAt": "2026-10-08",
+      "status": "verified_official_public_source"
+    },
+    {
+      "url": "https://www.meijijingu.or.jp/en/access/",
+      "checkedAt": "2026-10-08",
+      "status": "verified_official_public_source"
+    },
+    {
+      "url": "https://www.meijijingu.or.jp/en/visit/",
+      "checkedAt": "2026-10-08",
+      "status": "verified_official_public_source"
+    },
+    {
+      "url": "https://www.senso-ji.jp/english/",
+      "checkedAt": "2026-10-08",
+      "status": "verified_official_public_source"
+    },
+    {
+      "url": "https://www.tnm.jp/modules/r_free_page/index.php?id=113&lang=en",
+      "checkedAt": "2026-10-08",
+      "status": "verified_official_public_source"
+    },
+    {
+      "url": "https://www.tokyo-skytree.jp/open-hours/",
+      "checkedAt": "2026-10-08",
+      "status": "verified_official_public_source"
+    },
+    {
+      "url": "https://www.tokyo-skytree.jp/ticket/",
+      "checkedAt": "2026-10-08",
+      "status": "verified_official_public_source"
+    },
+    {
+      "url": "https://www.tokyo-skytree.jp/ticket/cancel/",
+      "checkedAt": "2026-10-08",
+      "status": "verified_official_public_source"
+    },
+    {
+      "url": "https://www.tokyometro.jp/en/ticket/1day/index.html",
+      "checkedAt": "2026-10-08",
+      "status": "verified_official_public_source"
+    },
+    {
+      "url": "https://www.tokyometro.jp/en/ticket/regular/index.html",
+      "checkedAt": "2026-10-08",
+      "status": "verified_official_public_source"
+    },
+    {
+      "url": "https://www.tokyometro.jp/en/ticket/travel/index.html",
+      "checkedAt": "2026-10-08",
+      "status": "verified_official_public_source"
+    },
+    {
+      "url": "https://www.tokyometro.jp/info/files/20260414_jp.pdf",
+      "checkedAt": "2026-10-08",
+      "status": "verified_official_public_source"
+    },
+    {
+      "url": "https://www.tokyometro.jp/lang_en/station/shibuya/index.html",
+      "checkedAt": "2026-10-08",
+      "status": "verified_official_public_source"
+    },
+    {
+      "url": "https://www.tokyometro.jp/lang_en/station/tokyo/index.html",
+      "checkedAt": "2026-10-08",
+      "status": "verified_official_public_source"
+    },
+    {
+      "url": "https://www.tokyometro.jp/lang_en/station/ueno/index.html",
+      "checkedAt": "2026-10-08",
+      "status": "verified_official_public_source"
+    },
+    {
+      "url": "https://www.louvre.fr/en/visit/hours-admission",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "note": ""
+    },
+    {
+      "url": "https://www.toureiffel.paris/en/rates-opening-times",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "note": ""
+    },
+    {
+      "url": "https://www.toureiffel.paris/fr/tarifs-janv-2026-en",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "note": ""
+    },
+    {
+      "url": "https://www.musee-orsay.fr/en/visit",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "note": ""
+    },
+    {
+      "url": "https://www.sainte-chapelle.fr/en/visite/informations-pratiques",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "note": ""
+    },
+    {
+      "url": "https://www.paris-arc-de-triomphe.fr/visiter/informations-pratiques",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "note": ""
+    },
+    {
+      "url": "https://www.notredamedeparis.fr/en/qa/?_filtres_faq_boutons_en=visit",
+      "checkedAt": "2026-10-08",
+      "status": "official_search_index_crosscheck",
+      "note": "공식 검색색인 본문을 지역관광청 현재 페이지와 교차확인. 직접 페이지는 403."
+    },
+    {
+      "url": "https://www.visitparisregion.com/fr/cathedrale-notre-dame-de-paris",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "note": ""
+    },
+    {
+      "url": "https://www.louvre.fr/en/visit/map-entrances-directions",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "note": "공식 HTML의 Google Maps 링크 !8m2!3d48.8606111!4d2.337644 확인. @ 카메라 중심 좌표 미사용."
+    },
+    {
+      "url": "https://www.transilien.com/fr/page-tourisme/la-tour-eiffel",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "note": "공식 Y aller 링크 목적지 arrivalLatitude=48.858261&arrivalLongitude=2.294495. 노후 관광 설명·높이·방문객 수는 사용하지 않음."
+    },
+    {
+      "url": "https://www.transilien.com/fr/page-tourisme/musee-dorsay",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "note": "공식 Y aller 링크 목적지 arrivalLatitude=48.859929&arrivalLongitude=2.326537."
+    },
+    {
+      "url": "https://www.transilien.com/fr/page-tourisme/cathedrale-notre-dame-de-paris",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "note": "공식 Y aller 링크 목적지 arrivalLatitude=48.852974&arrivalLongitude=2.349908만 사용. 오래된 폐쇄 안내는 현재 운영자·지역관광청 안내로 대체."
+    },
+    {
+      "url": "https://www.toureiffel.paris/en/access-map",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "note": ""
+    },
+    {
+      "url": "https://www.bouillon-chartier.com/bouillon-chartier-grands-boulevards/",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "note": ""
+    },
+    {
+      "url": "https://www.bouillon-chartier.com/chartier_medias/2025/10/Francais.pdf",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "note": "공식 페이지가 현재 연결한 참고 메뉴. 매일 달라지며 실제 주문가격 보장 아님."
+    },
+    {
+      "url": "https://salon-de-the.angelina-paris.fr/en/pastry-shop/rue-de-rivoli-paris-1/",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "note": "공식 JSON-LD GeoCoordinates latitude48.8650898 longitude2.3284434; acceptsReservations:false."
+    },
+    {
+      "url": "https://ressources.data.sncf.com/explore/dataset/gares-de-voyageurs/",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "note": "공식 공개 API의 position_geographique 필드 확인. 역의 대표점이며 지하철 출입구 아님."
+    },
+    {
+      "url": "https://ressources.data.sncf.com/api/explore/v2.1/catalog/datasets/gares-de-voyageurs/records?where=search%28nom%2C%22Paris%22%29&limit=50",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "note": "공개 API 응답으로 Paris Gare de Lyon PLY 및 Paris Gare du Nord PNO 좌표 확인."
+    },
+    {
+      "url": "https://www.garesetconnexions.sncf/fr/gares-services/paris-gare-lyon",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "note": ""
+    },
+    {
+      "url": "https://www.garesetconnexions.sncf/fr/gares-services/paris-gare-du-nord",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "note": ""
+    },
+    {
+      "url": "https://www.iledefrance-mobilites.fr/en/titres-et-tarifs/detail/ticket-metro-train-rer",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "note": ""
+    },
+    {
+      "url": "https://www.iledefrance-mobilites.fr/en/tarifs-titre-de-transport-en-commun-2026",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "note": ""
+    },
+    {
+      "url": "https://www.iledefrance-mobilites.fr/en/titres-et-tarifs/detail/forfait-navigo-jour",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "note": ""
+    },
+    {
+      "url": "https://www.iledefrance-mobilites.fr/en/titres-et-tarifs/detail/forfait-paris-visite",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "note": ""
+    },
+    {
+      "url": "https://www.ratp.fr/sites/default/files/lines-assets/plan-de-ligne/metro/plan-de-ligne_metro_ligne-1.pdf",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "note": ""
+    },
+    {
+      "url": "https://www.ratp.fr/sites/default/files/lines-assets/plan-de-ligne/metro/plan-de-ligne_metro_ligne-4.pdf",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "note": ""
+    },
+    {
+      "url": "https://www.ratp.fr/sites/default/files/lines-assets/plan-de-ligne/metro/plan-de-ligne_metro_ligne-6.pdf",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "note": ""
+    },
+    {
+      "url": "https://www.transilien.com/fr/page-lignes/ligne-c",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "note": "노선 문자전사에서 Champ de Mars → Pont de l’Alma → Invalides → Musée d’Orsay 확인."
+    },
+    {
+      "url": "https://www.ratp.fr/decouvrir/coulisses/modernisation-du-reseau/metro-ligne-6-travaux",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "note": "2026-10-05 갱신 공지. 지정4일 전구간 운휴."
+    },
+    {
+      "url": "https://www.ratp.fr/decouvrir/coulisses/modernisation-du-reseau/metro-ligne-4-travaux",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "note": "2026-09-14~12-19 Saint-Michel역 미정차. Cité 이용 예시."
+    },
+    {
+      "url": "https://ticket.toureiffel.paris/en",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_ticket_office",
+      "note": "공식 안내페이지의 구매/예약 연결대상. 재고·선택일·결제 미확인."
+    },
+    {
+      "url": "https://ticket.louvre.fr/en",
+      "checkedAt": "2026-10-08",
+      "status": "verified_official_link_target",
+      "note": "공식 안내페이지의 구매/예약 연결대상. 재고·선택일·결제 미확인."
+    },
+    {
+      "url": "https://billetterie.musee-orsay.fr/index-css5-museeorsay-pg1.html",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_ticket_office",
+      "note": "공식 안내페이지의 구매/예약 연결대상. 재고·선택일·결제 미확인."
+    },
+    {
+      "url": "https://tickets.monuments-nationaux.fr/en-GB/families?site=2035141861660400306",
+      "checkedAt": "2026-10-08",
+      "status": "verified_official_link_target",
+      "note": "공식 안내페이지의 구매/예약 연결대상. 재고·선택일·결제 미확인."
+    },
+    {
+      "url": "https://tickets.monuments-nationaux.fr/fr-FR/familles?site=2032863779450400197",
+      "checkedAt": "2026-10-08",
+      "status": "verified_official_link_target",
+      "note": "공식 안내페이지의 구매/예약 연결대상. 재고·선택일·결제 미확인."
+    },
+    {
+      "url": "https://www.notredamedeparis.fr/en/visit/practical-information/",
+      "checkedAt": "2026-10-08",
+      "status": "official_information_and_reservation_entrypoint",
+      "note": "공식 안내페이지의 구매/예약 연결대상. 재고·선택일·결제 미확인."
+    },
+    {
+      "url": "https://www.cohor.org/en/airports/paris-orly-airport-ory-lfpo/",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "note": "프랑스 공항 슬롯조정기관 페이지에서 CDG/LFPG 및 ORY/LFPO 명칭 확인."
+    },
+    {
+      "url": "https://content.tfl.gov.uk/adult-fares.pdf",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "note": "공식 공개정보를 확인했으며 예약 재고·실시간 운행 조회는 하지 않음."
+    },
+    {
+      "url": "https://content.tfl.gov.uk/standard-tube-map.pdf",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "note": "공식 공개정보를 확인했으며 예약 재고·실시간 운행 조회는 하지 않음."
+    },
+    {
+      "url": "https://historicengland.org.uk/listing/the-list/data-downloads/",
+      "checkedAt": "2026-10-08",
+      "status": "official_search_index_verified",
+      "note": "공식 사이트의 검색본문에서 관련 사실 확인. 별도 실제 날짜 재고·실시간 운행 조회 없음."
+    },
+    {
+      "url": "https://historicengland.org.uk/listing/the-list/list-entry/1000092?section=official-list-entry",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "note": "공식 페이지 직접 열어 관련 좌표·유효기간·상한 규칙 확인. 개인 여정 조회 없음."
+    },
+    {
+      "url": "https://maps.app.goo.gl/5LktCN6cQYxJQeW19",
+      "checkedAt": "2026-10-08",
+      "status": "official_linked_place_pin_redirect",
+      "note": "공식 링크의 리디렉션 URL에서 장소ID·!3d/!4d 장소핀 확인. Google 화면 중심 제외."
+    },
+    {
+      "url": "https://poppiesfishandchips.co.uk/poppies-soho/",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "note": "공식 공개정보를 확인했으며 예약 재고·실시간 운행 조회는 하지 않음."
+    },
+    {
+      "url": "https://services-eu1.arcgis.com/ZOdPfBS3aqqDYPUQ/arcgis/rest/services/National_Heritage_List_for_England_NHLE_v02_VIEW/FeatureServer/0/query?where=ListEntry%3D1291494&outFields=ListEntry%2CName%2CNGR&outSR=4326&returnGeometry=true&f=json",
+      "checkedAt": "2026-10-08",
+      "status": "queried_official_open_data",
+      "note": "영국 정부 API 목록이 연결한 Historic England 공식 NHLE feature geometry, outSR=4326. 개별 등록번호를 포함한 묶음조회로 좌표 검증. OGL."
+    },
+    {
+      "url": "https://services-eu1.arcgis.com/ZOdPfBS3aqqDYPUQ/arcgis/rest/services/National_Heritage_List_for_England_NHLE_v02_VIEW/FeatureServer/0/query?where=ListEntry%3D1357515&outFields=ListEntry%2CName%2CNGR&outSR=4326&returnGeometry=true&f=json",
+      "checkedAt": "2026-10-08",
+      "status": "queried_official_open_data",
+      "note": "영국 정부 API 목록이 연결한 Historic England 공식 NHLE feature geometry, outSR=4326. 개별 등록번호를 포함한 묶음조회로 좌표 검증. OGL."
+    },
+    {
+      "url": "https://tfl.gov.uk/campaign/fares-from-2-march-2025",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "note": "공식 공개정보를 확인했으며 예약 재고·실시간 운행 조회는 하지 않음."
+    },
+    {
+      "url": "https://tfl.gov.uk/fares/find-fares/single-fare-finder",
+      "checkedAt": "2026-10-08",
+      "status": "official_reference_link",
+      "note": "여행일 실제 시각·경로별 재확인 링크. 이 페이지에서 개인 여정 운임을 조회하지 않음."
+    },
+    {
+      "url": "https://tfl.gov.uk/tube/timetable/bakerloo?FromId=940GZZLUPAC&ToId=940GZZLUCHX&departureHour=07&departureMins=21&fromText=Paddington+Underground+Station&selectedDate=sunday&toText=Charing+Cross+Underground+Station",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "note": "공식 공개정보를 확인했으며 예약 재고·실시간 운행 조회는 하지 않음."
+    },
+    {
+      "url": "https://tfl.gov.uk/tube/timetable/jubilee?FromId=940GZZLUWLO&ToId=940GZZLUNGW&departureHour=05&departureMins=59&fromText=Waterloo+Underground+Station&selectedDate=mondaythursday&toText=North+Greenwich+Underground+Station",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "note": "공식 공개정보를 확인했으며 예약 재고·실시간 운행 조회는 하지 않음."
+    },
+    {
+      "url": "https://tfl.gov.uk/tube/timetable/jubilee?FromId=940GZZLUWLO&ToId=940GZZLUWSM&departureHour=05&departureMins=34&fromText=Waterloo+Underground+Station&selectedDate=mondaythursday&toText=Westminster+Underground+Station",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "note": "공식 공개정보를 확인했으며 예약 재고·실시간 운행 조회는 하지 않음."
+    },
+    {
+      "url": "https://ticketing.londoneye.com/en/tickets/standard-london-eye-fast-track-tickets",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "note": "공식 공개정보를 확인했으며 예약 재고·실시간 운행 조회는 하지 않음."
+    },
+    {
+      "url": "https://tickets.westminster-abbey.org/home/index",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "note": "공식 공개정보를 확인했으며 예약 재고·실시간 운행 조회는 하지 않음."
+    },
+    {
+      "url": "https://vinci-airports.com/en/our-airports/united-kingdom/london-gatwick-airport/",
+      "checkedAt": "2026-10-08",
+      "status": "official_search_index_verified",
+      "note": "공식 사이트의 검색본문에서 관련 사실 확인. 별도 실제 날짜 재고·실시간 운행 조회 없음."
+    },
+    {
+      "url": "https://visitorshop.tfl.gov.uk/pages/ticket-comparison",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "note": "공식 공개정보를 확인했으며 예약 재고·실시간 운행 조회는 하지 않음."
+    },
+    {
+      "url": "https://www.api.gov.uk/he/national-heritage-list-for-england-nhle/",
+      "checkedAt": "2026-10-08",
+      "status": "official_search_index_verified",
+      "note": "공식 사이트의 검색본문에서 관련 사실 확인. 별도 실제 날짜 재고·실시간 운행 조회 없음."
+    },
+    {
+      "url": "https://www.britishmuseum.org/visit",
+      "checkedAt": "2026-10-08",
+      "status": "official_search_index_crosscheck",
+      "note": "공식 Visit 페이지 검색본문에서 무료입장·운영시간·Getting here 대표좌표 확인. 직접 페이지 403. 관광청 입장안내 교차검증."
+    },
+    {
+      "url": "https://www.dishoom.com/covent-garden/",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "note": "공식 공개정보를 확인했으며 예약 재고·실시간 운행 조회는 하지 않음."
+    },
+    {
+      "url": "https://www.gatwickairport.com/",
+      "checkedAt": "2026-10-08",
+      "status": "verified_official_homepage",
+      "note": "운영자·관광청 공식 페이지에서 확인한 공식 홈페이지. 가격 근거는 연결된 별도 출처 참고."
+    },
+    {
+      "url": "https://www.heathrow.com/",
+      "checkedAt": "2026-10-08",
+      "status": "verified_official_homepage",
+      "note": "운영자·관광청 공식 페이지에서 확인한 공식 홈페이지. 가격 근거는 연결된 별도 출처 참고."
+    },
+    {
+      "url": "https://www.heathrow.com/transport-and-directions/by-rail-or-train",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "note": "공식 공개정보를 확인했으며 예약 재고·실시간 운행 조회는 하지 않음."
+    },
+    {
+      "url": "https://www.hrp.org.uk/tower-of-london/visit/getting-here/",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "note": "공식 공개정보를 확인했으며 예약 재고·실시간 운행 조회는 하지 않음."
+    },
+    {
+      "url": "https://www.hrp.org.uk/tower-of-london/visit/opening-and-closing-times/",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "note": "공식 공개정보를 확인했으며 예약 재고·실시간 운행 조회는 하지 않음."
+    },
+    {
+      "url": "https://www.hrp.org.uk/tower-of-london/visit/tickets-and-prices/",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "note": "공식 공개정보를 확인했으며 예약 재고·실시간 운행 조회는 하지 않음."
+    },
+    {
+      "url": "https://www.londoneye.com/plan-your-visit/before-you-visit/directions/",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "note": "공식 공개정보를 확인했으며 예약 재고·실시간 운행 조회는 하지 않음."
+    },
+    {
+      "url": "https://www.londoneye.com/plan-your-visit/before-you-visit/opening-hours/",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "note": "공식 공개정보를 확인했으며 예약 재고·실시간 운행 조회는 하지 않음."
+    },
+    {
+      "url": "https://www.londoneye.com/tickets-and-prices/",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "note": "공식 공개정보를 확인했으며 예약 재고·실시간 운행 조회는 하지 않음."
+    },
+    {
+      "url": "https://www.nationalgallery.org.uk/visiting/plan-your-visit",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "note": "공식 공개정보를 확인했으며 예약 재고·실시간 운행 조회는 하지 않음."
+    },
+    {
+      "url": "https://www.nationalrail.co.uk/stations/london-paddington/",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "note": "공식 공개정보를 확인했으며 예약 재고·실시간 운행 조회는 하지 않음."
+    },
+    {
+      "url": "https://www.nationalrail.co.uk/stations/london-waterloo/",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "note": "공식 공개정보를 확인했으며 예약 재고·실시간 운행 조회는 하지 않음."
+    },
+    {
+      "url": "https://www.nationalrail.co.uk/tickets-railcards-and-offers/buying-a-ticket/pay-as-you-go-with-contactless/",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "note": "공식 페이지 직접 열어 관련 좌표·유효기간·상한 규칙 확인. 개인 여정 조회 없음."
+    },
+    {
+      "url": "https://www.padella.co/borough-market/",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "note": "공식 공개정보를 확인했으며 예약 재고·실시간 운행 조회는 하지 않음."
+    },
+    {
+      "url": "https://www.southeasternrailway.co.uk/ways-to-save/ways-to-pay/contactless-payment",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "note": "공식 페이지 직접 열어 관련 좌표·유효기간·상한 규칙 확인. 개인 여정 조회 없음."
+    },
+    {
+      "url": "https://www.towerbridge.org.uk/book-tickets?product_id=7a2849ff-7252-44e0-84ac-dd22a7ecbe35",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "note": "공식 공개정보를 확인했으며 예약 재고·실시간 운행 조회는 하지 않음."
+    },
+    {
+      "url": "https://www.towerbridge.org.uk/plan-your-visit",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "note": "공식 공개정보를 확인했으며 예약 재고·실시간 운행 조회는 하지 않음."
+    },
+    {
+      "url": "https://www.towerbridge.org.uk/whats-on/entry-to-tower-bridge",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "note": "공식 공개정보를 확인했으며 예약 재고·실시간 운행 조회는 하지 않음."
+    },
+    {
+      "url": "https://www.visitlondon.com/things-to-do/place/427197-national-gallery",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "note": "공식 공개정보를 확인했으며 예약 재고·실시간 운행 조회는 하지 않음."
+    },
+    {
+      "url": "https://www.visitlondon.com/things-to-do/place/610825-westminster-abbey",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "note": "공식 공개정보를 확인했으며 예약 재고·실시간 운행 조회는 하지 않음."
+    },
+    {
+      "url": "https://www.visitlondon.com/traveller-information/travel-to-london/airport/gatwick",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "note": "공식 공개정보를 확인했으며 예약 재고·실시간 운행 조회는 하지 않음."
+    },
+    {
+      "url": "https://www.visitlondon.com/traveller-information/travel-to-london/airport/heathrow",
+      "checkedAt": "2026-10-08",
+      "status": "official_search_index_verified",
+      "note": "공식 사이트의 검색본문에서 관련 사실 확인. 별도 실제 날짜 재고·실시간 운행 조회 없음."
+    },
+    {
+      "url": "https://www.westminster-abbey.org/visit-us/opening-times-and-prices",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "note": "공식 공개정보를 확인했으며 예약 재고·실시간 운행 조회는 하지 않음."
+    },
+    {
+      "url": "https://my.nationalgallery.org.uk/events?k=galleryentry1",
+      "checkedAt": "2026-10-08",
+      "status": "official_linked_booking_page",
+      "note": "공식 National Gallery 일반입장 예약 링크를 직접 따라가 확인. 동적 시간대·재고는 미조회."
+    },
+    {
+      "url": "https://visitorshop.tfl.gov.uk/products/london-day-travelcard",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_linked_product_page",
+      "note": "TfL Visitor Shop 공식 Buy Now 링크를 따라 직접 상품 페이지 열기. Golden Tours 공식 위탁 판매로 표기. 옵션별 재고·배송비 미조회."
+    }
+  ],
+  "klookLinks": [],
+  "transportReferenceExamples": [
+    {
+      "id": "london-payg-caps-z12",
+      "name": "런던 Zones 1–2 PAYG 상한 참고",
+      "city": "london",
+      "currency": "GBP",
+      "priceCurrency": "GBP",
+      "productType": "payg_cap_reference",
+      "isPurchasable": false,
+      "dailyCap": 8.9,
+      "mondaySundayCap": 44.7,
+      "price": null,
+      "individual": null,
+      "pass": null,
+      "difference": null,
+      "officialUrl": "https://content.tfl.gov.uk/adult-fares.pdf",
+      "ruleSource": "https://www.nationalrail.co.uk/tickets-railcards-and-offers/buying-a-ticket/pay-as-you-go-with-contactless/",
+      "checkedAt": "2026-10-08",
+      "assumptions": "성인 1인 동일 Oyster/비접촉 카드 또는 동일 기기 사용. 일일 04:30~다음날 04:29. 주간 cap은 월요일~일요일이며 임의 연속 7일권이 아님. 대상 교통수단·전 구간 Zone 1–2 조건 충족 시 적용.",
+      "notes": "실제 적격 승차요금 합계가 상한보다 작으면 실제 합계만 지불. 상한은 구매하는 패스도 추가로 내는 금액도 아님. 서로 다른 카드/기기의 이용액은 합산되지 않음. 공항·Heathrow Express·고속열차·강교통·케이블카·명소 입장 미포함."
+    }
+  ],
+  "airports": [
+    {
+      "id": "tokyo-airport-hnd",
+      "city": "tokyo",
+      "iata": "HND",
+      "name": "도쿄 하네다 공항",
+      "officialUrl": "https://www.gotokyo.org/en/plan/airport-access/haneda-airport/",
+      "checkedAt": "2026-10-08",
+      "notes": "도쿄도 오타구 소재. 도쿄 여행권역 도착공항으로 연결하며 도심 이동은 항공권/도시 교통권과 별도입니다.",
+      "iataSource": "https://www.gotokyo.org/book/wp-content/uploads/2025/11/2511_mapoftokyo_EN_2_low.pdf"
+    },
+    {
+      "id": "tokyo-airport-nrt",
+      "city": "tokyo",
+      "iata": "NRT",
+      "name": "나리타 국제공항",
+      "officialUrl": "https://www.gotokyo.org/en/plan/airport-access/narita-airport/index.html",
+      "checkedAt": "2026-10-08",
+      "notes": "지바현 나리타시 소재. 도쿄 여행권역 도착공항으로 연결하며 도심 이동은 항공권/도시 교통권과 별도입니다.",
+      "iataSource": "https://www.gotokyo.org/book/wp-content/uploads/2025/11/2511_mapoftokyo_EN_2_low.pdf"
+    },
+    {
+      "id": "paris-cdg",
+      "name": "파리 샤를드골 공항",
+      "city": "paris",
+      "iata": "CDG",
+      "code": "CDG",
+      "country": "FR",
+      "officialUrl": "https://www.parisaeroport.fr/en/passengers/charles-de-gaulle-airport",
+      "source": "https://www.cohor.org/en/airports/paris-orly-airport-ory-lfpo/",
+      "lat": null,
+      "lng": null,
+      "checkedAt": "2026-10-08",
+      "notes": "파리 여행권역 공항 선택용. 터미널별 좌표·공항이동 구간은 별도 확인."
+    },
+    {
+      "id": "paris-ory",
+      "name": "파리 오를리 공항",
+      "city": "paris",
+      "iata": "ORY",
+      "code": "ORY",
+      "country": "FR",
+      "officialUrl": "https://www.parisaeroport.fr/en/passengers/orly-airport",
+      "source": "https://www.cohor.org/en/airports/paris-orly-airport-ory-lfpo/",
+      "lat": null,
+      "lng": null,
+      "checkedAt": "2026-10-08",
+      "notes": "파리 여행권역 공항 선택용. 터미널별 좌표·공항이동 구간은 별도 확인."
+    },
+    {
+      "id": "london-heathrow-lhr",
+      "iata": "LHR",
+      "code": "LHR",
+      "name": "런던 히스로 공항",
+      "city": "london",
+      "cityName": "London",
+      "countryCode": "GB",
+      "currency": "GBP",
+      "priceCurrency": "GBP",
+      "officialUrl": "https://www.heathrow.com/",
+      "source": "https://www.visitlondon.com/traveller-information/travel-to-london/airport/heathrow",
+      "checkedAt": "2026-10-08",
+      "cityMappingVerified": true,
+      "notes": "공식 런던 관광안내에서 London Heathrow Airport (LHR), 런던 중심 서쪽 32km 확인. Heathrow Express·Elizabeth line·Piccadilly line은 서로 다른 운임·서비스.",
+      "groundTransportSource": "https://www.heathrow.com/transport-and-directions/by-rail-or-train",
+      "lat": null,
+      "lng": null,
+      "coordinateSource": null,
+      "coordinateNote": "공항 도시·IATA 연결만 검증. 터미널별 정확한 위치 미검증."
+    },
+    {
+      "id": "london-gatwick-lgw",
+      "iata": "LGW",
+      "code": "LGW",
+      "name": "런던 개트윅 공항",
+      "city": "london",
+      "cityName": "London",
+      "countryCode": "GB",
+      "currency": "GBP",
+      "priceCurrency": "GBP",
+      "officialUrl": "https://www.gatwickairport.com/",
+      "source": "https://vinci-airports.com/en/our-airports/united-kingdom/london-gatwick-airport/",
+      "checkedAt": "2026-10-08",
+      "cityMappingVerified": true,
+      "notes": "운영사 VINCI가 London Gatwick Airport, IATA LGW로 명시. 런던 여행권역 공항이지만 런던 중심 남쪽 약 45km에 있어 별도 공항 이동 필요. 런던 Zone 1–2 패스에 공항철도 포함으로 처리하지 않음.",
+      "groundTransportSource": "https://www.visitlondon.com/traveller-information/travel-to-london/airport/gatwick",
+      "lat": null,
+      "lng": null,
+      "coordinateSource": null,
+      "coordinateNote": "공항 도시·IATA 연결만 검증. 터미널별 정확한 위치 미검증."
+    }
+  ],
+  "calculationRules": [
+    "JPY·EUR·GBP를 환율 없이 합산하지 않습니다.",
+    "스카이트리의 price=null은 무료가 아닙니다. 동적 최저가를 여행일의 확정 총액에 넣지 않습니다.",
+    "종이권/카드 터치 운임과 교통 IC 운임을 구분합니다. 개별 기본 합계는 fare(종이권/터치) 기준이며 IC 할인액을 이중 차감하지 않습니다.",
+    "도쿄 24시간권 두 종류는 포함 운영사와 유효시간이 다르므로 실제 이용 노선에만 적용합니다.",
+    "공휴일·시즌 휴관 예외를 구현하지 않았으면 확정 휴관으로 자동 판정하지 말고 안내만 표시합니다.",
+    "공식 역 대표점과 명소 지도핀은 호텔 문전 또는 정확한 출입구 위치가 아닙니다.",
+    "모든 가격은 명시된 대상의1인 EUR. 다른 통화와 환율 없이 합산 금지.",
+    "null 식비/좌표는 무료/원점이 아님. 좌표 미확인 장소는 자동거리계산 제외.",
+    "개선문은 여행월·요일로16/22유로 선택. 날짜별 요금규칙을 지원하지 않으면 확정총액으로 표시하지 않음.",
+    "루브르·생트샤펠은 EEA 시민권/거주자·연령 자격을 구분. 한국어 이용자라는 이유로 국적을 추정하지 않음.",
+    "나비고 하루권과 파리비지트1일권은 연속24시간권이 아님. 유효일 규칙을 구현하지 않으면 자동패스 비교 금지.",
+    "Metro–Train–RER 티켓은 개찰망을 나가지 않고2시간 내 대상철도 환승 가능. 버스·트램 환승 미포함. 별도 명소방문 후 새 진입은 새 여정.",
+    "표시된 교통요금은 새편도여정당2.55유로. 승차매체 구매비·숙소접근·공항접근은 별도.",
+    "모든 이동시간은 계획용 예상, 실시간 최적경로·운행보장 아님. 6호선 지정운휴일 경로는 사용불가 처리.",
+    "관람시간에는 비정상 혼잡·매진·보안대기 보장이 없음. 개관일·최종입장·예약시각과 날짜별 예외 확인.",
+    "모든 금액은 성인 1인 GBP. GBP·EUR·JPY를 환율 없이 더하지 않음.",
+    "null 가격/운임/식비는 무료가 아니라 미확정이며 총비용 미포함 항목으로 표시.",
+    "London Eye 온라인 최저 £29는 실제 선택일 확정 가격이 아니므로 price를 null로 유지.",
+    "런던 지하철 대표 구간은 Zone 1 내 PAYG 피크 £3.10/오프피크 £3.00. 날짜·시각 미지정 상태에서 한 요금을 전체 여정에 자동 확정하지 않음.",
+    "PAYG cap은 구매 패스가 아님. 일일·월~일 주간 상한과 Travelcard의 선택 시작일 연속 유효기간을 구분.",
+    "Day Travelcard는 최초 개찰부터 24시간이 아님. 7 Day Travelcard도 시간제로 168시간이라고 계산하지 않음.",
+    "런던탑·타워 브리지·웨스트민스터 사원·런던 아이 입장권은 서로 별도. TfL 교통권에 명소 입장 없음.",
+    "숙소→기준역 이동·공항접근·환전/카드 수수료·신규 Oyster 발급비·식사·특별전은 별도 확인.",
+    "좌표는 대표점이며 입구·보행 경로·실시간 길찾기가 아님. null 좌표는 지도/거리 계산에서 제외.",
+    "관람·식사·문전 이동시간은 계획용 추정. 당일 휴관·예약 시간·보안검사·운행변경과 대기는 별도 확인."
+  ]
+}

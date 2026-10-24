@@ -1,0 +1,1071 @@
+{
+  "checkedAt": "2026-10-08",
+  "meta": {
+    "city": "seoul",
+    "currency": "KRW",
+    "timezone": "Asia/Seoul",
+    "liveData": false,
+    "notice": "2026-10-08 공개 공식안내 확인. 이동·체류시간은 예상이고 실제 운영·가격·재고는 방문 전 확인. KRW는 환율 적용 없이 원화 그대로 표시.",
+    "coverage": "명소6곳·식당6곳·역2곳·검증 합성 구간6개. N서울타워 오르는 버스 상세구간과 공항운임은 미수록."
+  },
+  "pois": [
+    {
+      "id": "seoul-gyeongbokgung",
+      "name": "경복궁",
+      "city": "seoul",
+      "currency": "KRW",
+      "priceCurrency": "KRW",
+      "lat": 37.57590409118165,
+      "lng": 126.97684292625048,
+      "district": "광화문·경복궁",
+      "category": "culture",
+      "duration": 120,
+      "durationIsEstimate": true,
+      "price": 3000,
+      "description": "조선 왕궁 건축과 넓은 궁궐 마당을 둘러보는 역사 코스.",
+      "officialUrl": "https://royal.khs.go.kr/ROYAL/contents/R703000000.do",
+      "coordinateSource": "https://english.visitseoul.net/attractions/Gyeongbokgung/ENP000072/1000",
+      "coordinatePrecision": "official_page_named_route_marker",
+      "coordinateNote": "서울관광재단 VisitSeoul의 장소명 지도점(f_open_route_map). 출입구·보행 경로 시작점과 일치한다는 보장은 없습니다.",
+      "checkedAt": "2026-10-08",
+      "recommendationReason": "공식 서울 관광 안내에 소개된 대표 방문지. 순서는 일정용 편집 추천이며 이용자 평점 순위가 아닙니다.",
+      "googleRating": null,
+      "googleReviewCount": null,
+      "priceScope": "성인 일반 유료입장 1인. 내국인 만25–64세, 외국인 만19–64세. 특별행사 제외.",
+      "priceNote": "내국인 만24세 이하·만65세 이상 및 외국인 만18세 이하·만65세 이상은 증빙 조건으로 무료. 한복 등 감면 자격은 공식 기준 확인.",
+      "hours": "1–2월·11–12월 09:00–17:00; 3–5월·9–10월 09:00–18:00; 6–8월 09:00–18:30. 입장 마감 1시간 전. 화요일 휴궁이나 공휴일 예외 있음.",
+      "hoursSource": "https://royal.khs.go.kr/ROYAL/contents/R702000000.do",
+      "reservation": "일반 관람은 현장 매표소 구매. 특별관람·야간행사는 별도 예매.",
+      "purchaseMethod": "on_site",
+      "conditionalClosureRule": {
+        "weekday": 2,
+        "holidayException": true,
+        "rule": "휴궁일이 공휴일·대체공휴일이면 개방하고 다음 첫 비공휴일 휴궁. 여행일 공식 달력 확인 필요.",
+        "automaticExclusionSafe": false
+      }
+    },
+    {
+      "id": "seoul-changdeokgung",
+      "name": "창덕궁 전각",
+      "city": "seoul",
+      "currency": "KRW",
+      "priceCurrency": "KRW",
+      "lat": 37.57886838333377,
+      "lng": 126.9897115843584,
+      "district": "안국·창덕궁",
+      "category": "culture",
+      "duration": 100,
+      "durationIsEstimate": true,
+      "price": 3000,
+      "description": "궁궐 전각을 둘러보는 코스. 후원 관람은 별도 예약과 추가요금이 필요합니다.",
+      "officialUrl": "https://royal.khs.go.kr/ROYAL/contents/R601000000.do?schGroupCode=cdg",
+      "coordinateSource": "https://english.visitseoul.net/attractions/changdeokgung-palace/ENP000295",
+      "coordinatePrecision": "official_page_named_route_marker",
+      "coordinateNote": "서울관광재단 VisitSeoul의 장소명 지도점(f_open_route_map). 출입구·보행 경로 시작점과 일치한다는 보장은 없습니다.",
+      "checkedAt": "2026-10-08",
+      "recommendationReason": "공식 서울 관광 안내에 소개된 대표 방문지. 순서는 일정용 편집 추천이며 이용자 평점 순위가 아닙니다.",
+      "googleRating": null,
+      "googleReviewCount": null,
+      "priceScope": "전각만 성인 일반입장 1인. 내국인 만25–64세, 외국인 만19–64세. 후원 제외.",
+      "priceNote": "후원 성인 별도5,000원과 전각 관람권이 필요. 전각 연령별 무료입장 자격과 문화가 있는 날은 공식 기준 확인.",
+      "hours": "2–5월·9–10월 09:00–18:00; 6–8월 09:00–18:30; 11–1월 09:00–17:30. 입장 마감 1시간 전. 월요일 휴궁이나 공휴일 예외 있음.",
+      "hoursSource": "https://royal.khs.go.kr/ROYAL/contents/R702000000.do",
+      "reservation": "전각은 당일 현장 구매 가능, 인원 제한 없음. 온라인은 관람일 제외6일 전10:00부터 전날까지. 후원은 별도 한정 예약.",
+      "reservationUrl": "https://royal.khs.go.kr/ROYAL/contents/R601000000.do?schGroupCode=cdg",
+      "purchaseMethod": "official_booking_hub_or_on_site",
+      "ticketLinkNote": "공식 예약 허브의 전각관람 예약하기를 이용하세요. 외부 예매 링크에는 운영자가 채우는 값이 있어 임의 deep link를 제공하지 않습니다.",
+      "conditionalClosureRule": {
+        "weekday": 1,
+        "holidayException": true,
+        "rule": "휴궁일이 공휴일·대체공휴일이면 개방하고 다음 첫 비공휴일 휴궁.",
+        "automaticExclusionSafe": false
+      }
+    },
+    {
+      "id": "seoul-bukchon",
+      "name": "북촌 한옥마을",
+      "city": "seoul",
+      "currency": "KRW",
+      "priceCurrency": "KRW",
+      "lat": 37.57906987420643,
+      "lng": 126.98642849263337,
+      "district": "안국·북촌",
+      "category": "culture",
+      "duration": 70,
+      "durationIsEstimate": true,
+      "price": 0,
+      "description": "주민이 거주하는 한옥 골목. 조용히 걷고 관광 허용 시간과 현장 구역 표지를 지켜 주세요.",
+      "officialUrl": "https://english.visitseoul.net/other/Bukchon-Hanok-Village/ENP000261",
+      "coordinateSource": "https://english.visitseoul.net/other/Bukchon-Hanok-Village/ENP000261",
+      "coordinatePrecision": "official_page_named_route_marker",
+      "coordinateNote": "VisitSeoul의 북촌문화센터(계동길37) 기준 지도점입니다. 북촌 전체 중심이나 제한구역 출입구 좌표가 아닙니다.",
+      "checkedAt": "2026-10-08",
+      "recommendationReason": "공식 서울 관광 안내에 소개된 대표 방문지. 순서는 일정용 편집 추천이며 이용자 평점 순위가 아닙니다.",
+      "googleRating": null,
+      "googleReviewCount": null,
+      "priceScope": "한옥마을 공공 골목 산책. 유료 체험·시설·음식 제외.",
+      "priceNote": "주거지역 방문 제한을 준수해야 합니다.",
+      "hours": "관광객 레드존 방문 허용10:00–17:00, 17:00–다음날10:00 방문 제한. 세부 구역은 현장 표지 확인.",
+      "hoursSource": "https://english.visitseoul.net/other/Bukchon-Hanok-Village/ENP000261",
+      "reservation": "공공 골목 일반 방문 예약 없음. 주민 주거지 내부 촬영·무단 출입 금지.",
+      "visitWindow": {
+        "start": "10:00",
+        "end": "17:00",
+        "scope": "관광객 레드존",
+        "timezone": "Asia/Seoul"
+      },
+      "sourceUrls": [
+        "https://english.visitseoul.net/other/Bukchon-Hanok-Village/ENP000261",
+        "https://english.visitseoul.net/announcements/Bukchon-is-a-RESIDENTIAL-AREA/ENB013860?curPage=1"
+      ]
+    },
+    {
+      "id": "seoul-national-museum",
+      "name": "국립중앙박물관 상설전시",
+      "city": "seoul",
+      "currency": "KRW",
+      "priceCurrency": "KRW",
+      "lat": 37.523038034943326,
+      "lng": 126.98223494651572,
+      "district": "이촌·용산",
+      "category": "museum",
+      "duration": 150,
+      "durationIsEstimate": true,
+      "price": 0,
+      "description": "한국의 역사와 미술을 만나는 실내 코스. 특별전시는 별도 요금입니다.",
+      "officialUrl": "https://www.museum.go.kr/ENG/contents/E0101000000.do",
+      "coordinateSource": "https://english.visitseoul.net/attractions/TheNationalMuseumofKorea/ENP000433",
+      "coordinatePrecision": "official_page_named_route_marker",
+      "coordinateNote": "서울관광재단 VisitSeoul의 장소명 지도점(f_open_route_map). 출입구·보행 경로 시작점과 일치한다는 보장은 없습니다.",
+      "checkedAt": "2026-10-08",
+      "recommendationReason": "공식 서울 관광 안내에 소개된 대표 방문지. 순서는 일정용 편집 추천이며 이용자 평점 순위가 아닙니다.",
+      "googleRating": null,
+      "googleReviewCount": null,
+      "priceScope": "상설전시 일반입장. 유료 특별전시·어린이박물관 예약 프로그램 제외.",
+      "priceNote": "상설전시 무료. 특별전시 가격은 개별 확인.",
+      "hours": "월·화·목·금·일09:30–17:30, 수·토09:30–21:00. 입장 마감30분 전. 1월1일·설날·추석 당일 및 분기 정기휴실 확인.",
+      "hoursSource": "https://www.museum.go.kr/ENG/contents/E0101000000.do",
+      "reservation": "상설전시 일반 관람 무료. 특별전시·어린이박물관은 별도 예약·티켓 조건 확인.",
+      "closedDates": [
+        "2026-01-01",
+        "2026-02-17",
+        "2026-06-01",
+        "2026-09-07",
+        "2026-09-25",
+        "2026-12-07"
+      ],
+      "conditionalClosureRule": {
+        "months": [
+          3,
+          6,
+          9,
+          12
+        ],
+        "weekday": 1,
+        "occurrence": 1,
+        "scope": "상설전시실·특별전시실",
+        "exceptionDates": [
+          "2026-03-02"
+        ],
+        "rule": "3·6·9·12월 첫 월요일 전시실 휴실. 2026년3월은 휴실 없음. 야외정원은 별도 운영.",
+        "automaticExclusionSafe": false
+      },
+      "closureCalendarVerifiedThrough": "2026-12-31"
+    },
+    {
+      "id": "seoul-n-seoul-tower",
+      "name": "N서울타워 전망대",
+      "city": "seoul",
+      "currency": "KRW",
+      "priceCurrency": "KRW",
+      "lat": 37.55112112997282,
+      "lng": 126.9878685172273,
+      "district": "남산",
+      "category": "view",
+      "duration": 90,
+      "durationIsEstimate": true,
+      "price": 29000,
+      "description": "남산 정상의 유료 실내 전망대. 산책·교통·식사와 전망대 입장을 구분해 계획하세요.",
+      "officialUrl": "https://www.nseoultower.co.kr/visit/use2.asp",
+      "coordinateSource": "https://english.visitseoul.net/attractions/N-Seoul-Tower_/37",
+      "coordinatePrecision": "official_page_named_route_marker",
+      "coordinateNote": "서울관광재단 VisitSeoul의 장소명 지도점(f_open_route_map). 출입구·보행 경로 시작점과 일치한다는 보장은 없습니다.",
+      "checkedAt": "2026-10-08",
+      "recommendationReason": "공식 서울 관광 안내에 소개된 대표 방문지. 순서는 일정용 편집 추천이며 이용자 평점 순위가 아닙니다.",
+      "googleRating": null,
+      "googleReviewCount": null,
+      "priceScope": "전망대 일반 성인(만13세 이상) 1인 현장 정가. 남산 이동·케이블카·식사 제외.",
+      "priceNote": "성인29,000원, 어린이 만3–12세·경로 만65세 이상23,000원. 온라인 상품은 날짜·프로모션별 결제금액 확인.",
+      "hours": "평일10:00–22:30, 주말·공휴일10:00–23:00. 입장 마감30분 전. 기상·운영 상황에 따라 변동.",
+      "hoursSource": "https://www.nseoultower.co.kr/visit/use.asp",
+      "reservation": "현장 발권 또는 공식 홈페이지가 연결한 예매처 이용. 한쿡 예약 시 제공되는 전망대권은 해당 예약 조건 확인 후 중복 구매를 피하세요.",
+      "reservationUrl": "https://naver.me/FmV6CVtO",
+      "ticketLinkNote": "운영자 홈페이지가 직접 연결한 전망대 상품 링크. 목적지 상세/실시간 가격/재고는 도구로 확인하지 못했으므로 방문 확인 필요.",
+      "ticketSourceUrl": "https://www.nseoultower.co.kr/index.asp"
+    },
+    {
+      "id": "seoul-gwangjang-market",
+      "name": "광장시장 먹자골목",
+      "city": "seoul",
+      "currency": "KRW",
+      "priceCurrency": "KRW",
+      "lat": 37.57005709848657,
+      "lng": 126.9989495461201,
+      "district": "종로5가",
+      "category": "food",
+      "duration": 75,
+      "durationIsEstimate": true,
+      "price": 0,
+      "description": "서울관광재단이 소개하는 전통시장 먹거리 구역. 공용 거리 방문은 무료이며 주문·쇼핑은 별도입니다.",
+      "officialUrl": "https://english.visitseoul.net/PalaceArea/Gwangjang-Market/ENP000286",
+      "coordinateSource": "https://english.visitseoul.net/PalaceArea/Gwangjang-Market/ENP000286",
+      "coordinatePrecision": "official_page_named_route_marker",
+      "coordinateNote": "서울관광재단 VisitSeoul의 장소명 지도점(f_open_route_map). 출입구·보행 경로 시작점과 일치한다는 보장은 없습니다.",
+      "checkedAt": "2026-10-08",
+      "recommendationReason": "공식 서울 관광 안내에 소개된 대표 방문지. 순서는 일정용 편집 추천이며 이용자 평점 순위가 아닙니다.",
+      "googleRating": null,
+      "googleReviewCount": null,
+      "priceScope": "먹자골목 공용 공간 방문. 음식·쇼핑·주문 비용 제외.",
+      "priceNote": "먹거리 가격과 전체 식사비는 상점·주문에 따라 사용자 입력.",
+      "hours": "공식 관광안내상 먹자골목09:00–23:00 연중 운영. 일반 상점09:00–18:00·일요일 휴무, 빈티지 상점은 별도. 개별 점포 영업시간 우선.",
+      "hoursSource": "https://english.visitseoul.net/PalaceArea/Gwangjang-Market/ENP000286",
+      "reservation": "시장 방문 예약 없음. 개별 식당 휴무·마감·대기 확인."
+    }
+  ],
+  "restaurants": [
+    {
+      "id": "seoul-tosokchon-samgyetang",
+      "name": "토속촌삼계탕",
+      "city": "seoul",
+      "lat": 37.57760304027,
+      "lng": 126.971632166657,
+      "district": "경복궁·서촌",
+      "cuisine": "삼계탕",
+      "address": "서울특별시 종로구 자하문로5길 5",
+      "priceRange": {
+        "min": null,
+        "max": null,
+        "currency": "KRW",
+        "basis": "공식 1인 전체 식사비 평균·범위 미확인. 주문 메뉴·수량에 따라 사용자 입력."
+      },
+      "currency": "KRW",
+      "priceCurrency": "KRW",
+      "duration": 65,
+      "durationIsEstimate": true,
+      "officialUrl": "https://korean.visitseoul.net/restaurants/TosokchonSamgyetang/KOPywjsmm",
+      "source": "https://korean.visitseoul.net/restaurants/TosokchonSamgyetang/KOPywjsmm",
+      "coordinateSource": "https://korean.visitseoul.net/restaurants/TosokchonSamgyetang/KOPywjsmm",
+      "coordinatePrecision": "official_page_named_route_marker",
+      "coordinateNote": "VisitSeoul HTML f_open_route_map의 토속촌삼계탕 이름 지도점 좌표. 지도의 기본 중심값을 쓰지 않음.",
+      "reservationUrl": null,
+      "reservationStatus": "unverified",
+      "reservation": "공식 공개자료에서 예약 가능 여부를 확인하지 못했습니다. 매장에 확인하세요.",
+      "checkedAt": "2026-10-08",
+      "mealServices": [
+        "lunch",
+        "dinner"
+      ],
+      "googleRating": null,
+      "googleReviewCount": null,
+      "ratingSource": null,
+      "hours": "매일 10:00–22:00, 마지막 주문 21:00.",
+      "hoursSource": "https://chinese.visitkorea.or.kr/svc/contents/contentsView.do?vcontsId=80974",
+      "closureNote": "한국관광공사 공개안내상 연중무휴. 임시휴무는 방문 전 확인.",
+      "phone": "+82-2-737-7444",
+      "notes": "대표메뉴는 삼계탕. 현행 단품 가격은 공식 자료에서 검증하지 못해 금액을 넣지 않았습니다. 영어·일본어·중국어 메뉴판 제공.",
+      "recommendationReason": "서울관광재단이 소개하는 경복궁 근처 한옥 삼계탕 전문점으로 경복궁·서촌 일정에 연결하기 좋습니다.",
+      "serviceNotes": "공식 10:00–22:00 영업안내로 점심·저녁 후보에 포함. 식사시간 65분은 대기를 제외한 계획용 추정.",
+      "menuPriceStatus": "unverified",
+      "verificationSources": [
+        "https://korean.visitseoul.net/restaurants/TosokchonSamgyetang/KOPywjsmm",
+        "https://chinese.visitkorea.or.kr/svc/contents/contentsView.do?vcontsId=80974"
+      ]
+    },
+    {
+      "id": "seoul-gaeseong-mandu-koong",
+      "name": "개성만두 궁",
+      "city": "seoul",
+      "lat": 37.57423,
+      "lng": 126.985393,
+      "district": "인사동·안국",
+      "cuisine": "개성만두·만두전골",
+      "address": "서울특별시 종로구 인사동10길 11-3",
+      "priceRange": {
+        "min": null,
+        "max": null,
+        "currency": "KRW",
+        "basis": "공식 1인 전체 식사비 평균·범위 미확인. 주문 메뉴·수량에 따라 사용자 입력."
+      },
+      "currency": "KRW",
+      "priceCurrency": "KRW",
+      "duration": 70,
+      "durationIsEstimate": true,
+      "officialUrl": "https://korean.visitseoul.net/restaurants/%EA%B6%81/KOP011155",
+      "source": "https://korean.visitseoul.net/restaurants/%EA%B6%81/KOP011155",
+      "coordinateSource": "https://korean.visitseoul.net/restaurants/%EA%B6%81/KOP011155",
+      "coordinatePrecision": "official_page_named_route_marker",
+      "coordinateNote": "VisitSeoul HTML f_open_route_map의 궁 이름 지도점 좌표.",
+      "reservationUrl": null,
+      "reservationStatus": "unverified",
+      "reservation": "공식 공개자료에서 예약 가능 여부를 확인하지 못했습니다. 매장에 확인하세요.",
+      "checkedAt": "2026-10-08",
+      "mealServices": [
+        "lunch",
+        "dinner"
+      ],
+      "googleRating": null,
+      "googleReviewCount": null,
+      "ratingSource": null,
+      "hours": "서울관광재단 2026-05-07 수정 안내: 일·월·화 11:30–20:00, 수·목·금·토 11:30–21:00. 월–금 휴식 15:00–16:00.",
+      "hoursSource": "https://korean.visitseoul.net/restaurants/%EA%B6%81/KOP011155",
+      "closureNote": "서울관광재단은 명절 휴무로 안내. 한국관광공사 영문 페이지는 연중무휴 및 다른 마감시간으로 안내해 상충하므로 방문일 직접 확인.",
+      "phone": "+82-2-733-9240",
+      "notes": "공식 소개 대표메뉴는 만두·만두전골. 현행 단품 가격은 확인하지 못했습니다. 2023년 관광공사 기사 속 가격은 현재 예산에 사용하지 않습니다.",
+      "recommendationReason": "서울관광재단이 전통 개성만두 식당으로 소개하며 인사동·안국 동선의 따뜻한 식사 후보입니다.",
+      "serviceNotes": "공식 영업시간에 점심과 저녁 시간이 포함되어 두 끼 후보로 사용. 평일 15:00–16:00 휴식과 명절 휴무 확인 필요.",
+      "menuPriceStatus": "unverified",
+      "verificationSources": [
+        "https://korean.visitseoul.net/restaurants/%EA%B6%81/KOP011155",
+        "https://english.visitkorea.or.kr/svc/contents/contentsView.do?menuSn=352&vcontsId=100337"
+      ],
+      "dataConflicts": [
+        "KTO 영문: 월–토 11:30–21:30, 일 11:30–20:00, 매일 15:00–16:00 휴식·연중무휴. VisitSeoul 한국어 2026-05-07 수정 본문의 요일별 시간을 우선 표시하되 현행 확정으로 자동 판정하지 않음."
+      ]
+    },
+    {
+      "id": "seoul-mokmyeoksanbang-main",
+      "name": "목멱산방 본점",
+      "city": "seoul",
+      "lat": 37.5581161015051,
+      "lng": 126.986887946092,
+      "district": "명동·남산 북쪽",
+      "cuisine": "비빔밥·전",
+      "address": "서울특별시 중구 퇴계로20길 71",
+      "priceRange": {
+        "min": null,
+        "max": null,
+        "currency": "KRW",
+        "basis": "공식 1인 전체 식사비 평균·범위 미확인. 주문 메뉴·수량에 따라 사용자 입력."
+      },
+      "currency": "KRW",
+      "priceCurrency": "KRW",
+      "duration": 60,
+      "durationIsEstimate": true,
+      "officialUrl": "https://english.visitseoul.net/area/Mongmyeok-Sanbang-EN/ENP014763",
+      "source": "https://english.visitseoul.net/area/Mongmyeok-Sanbang-EN/ENP014763",
+      "coordinateSource": "https://english.visitseoul.net/area/Mongmyeok-Sanbang-EN/ENP014763",
+      "coordinatePrecision": "official_page_named_route_marker",
+      "coordinateNote": "VisitSeoul HTML f_open_route_map의 Mongmyeok Sanbang 이름 지도점 좌표. 남산타워점과 구별.",
+      "reservationUrl": null,
+      "reservationStatus": "unverified",
+      "reservation": "공식 공개자료에서 예약 가능 여부를 확인하지 못했습니다. 매장에 확인하세요.",
+      "checkedAt": "2026-10-08",
+      "mealServices": [
+        "lunch",
+        "dinner"
+      ],
+      "googleRating": null,
+      "googleReviewCount": null,
+      "ratingSource": null,
+      "hours": "11:00–20:00, 마지막 주문 19:20(한국관광공사 안내).",
+      "hoursSource": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?vcontsId=51958",
+      "closureNote": "휴무 안내 상충: VisitSeoul은 화요일 휴무, 한국관광공사는 연중무휴. 화요일 및 방문일 영업을 매장에 확인하세요.",
+      "phone": "+82-2-318-4790",
+      "notes": "대표메뉴는 산방비빔밥, 곤드레간장비빔밥, 두부된장비빔밥, 불고기비빔밥. 공식 관광청에서 현행 단품 금액을 확인하지 못해 사용자 입력으로 남깁니다.",
+      "recommendationReason": "두 공식 관광청이 소개한 남산 인근 비빔밥 식당. 명동에서 남산 방향으로 이동하는 일정에 적합한 후보입니다.",
+      "serviceNotes": "두 관광청 모두 11:00–20:00 영업으로 소개하여 점심·이른 저녁 후보에 포함. 휴무요일 상충으로 방문 전 확인이 필요합니다.",
+      "menuPriceStatus": "unverified",
+      "verificationSources": [
+        "https://english.visitseoul.net/area/Mongmyeok-Sanbang-EN/ENP014763",
+        "https://english.visitkorea.or.kr/svc/contents/contentsView.do?vcontsId=51958"
+      ],
+      "dataConflicts": [
+        "화요일 휴무 여부가 공식 관광청 두 곳에서 다름. 요일 자동제외/무휴 단정 금지."
+      ]
+    },
+    {
+      "id": "seoul-hancook-n-seoul-tower",
+      "name": "한쿡 N서울타워",
+      "city": "seoul",
+      "lat": 37.55112112997282,
+      "lng": 126.9878685172273,
+      "district": "남산",
+      "cuisine": "한우 그릴·한식 코스",
+      "address": "서울특별시 용산구 남산공원길 105 N서울타워 Tower 3F",
+      "priceRange": {
+        "min": null,
+        "max": null,
+        "currency": "KRW",
+        "basis": "공식 1인 전체 식사비 평균·범위 미확인. 주문 메뉴·수량에 따라 사용자 입력."
+      },
+      "currency": "KRW",
+      "priceCurrency": "KRW",
+      "duration": 100,
+      "durationIsEstimate": true,
+      "officialUrl": "https://www.nseoultower.co.kr/visit/restaurant2.asp",
+      "source": "https://www.nseoultower.co.kr/visit/restaurant2.asp",
+      "coordinateSource": "https://english.visitseoul.net/attractions/N-Seoul-Tower_/37",
+      "coordinatePrecision": "official_building_route_marker",
+      "coordinateNote": "서울관광청의 Namsan Seoul Tower 이름 지도점으로, 식당이 있는 건물 대표점입니다. 한쿡은 Tower 3F이며 식당 출입문 좌표가 아닙니다.",
+      "reservationUrl": "https://www.nseoultower.co.kr/visit/restaurant7.asp",
+      "reservationStatus": "available",
+      "reservation": "캐치테이블 또는 영업시간 12:00–22:00에 전화(02-3455-9291/9292)로 예약 가능. 실제 잔여좌석 미조회.",
+      "checkedAt": "2026-10-08",
+      "mealServices": [
+        "lunch",
+        "dinner"
+      ],
+      "googleRating": null,
+      "googleReviewCount": null,
+      "ratingSource": null,
+      "hours": "평일 12:00–22:00. 주말·공휴일 런치 12:00–13:40 / 14:00–15:40, 디너 17:30–19:10 / 20:00–21:40. 운영표 주문마감 20:00, 휴식 16:00–17:30 안내.",
+      "hoursSource": "https://www.nseoultower.co.kr/visit/use.asp",
+      "closureNote": "운영사 전체 이용안내상 연중무휴. 기후·운영 일정에 따라 변동 가능.",
+      "phone": "+82-2-3455-9291",
+      "notes": "공식 메뉴 PDF: 평일 런치 스페셜의 숯불 한우구이와 된장찌개 반상 69,000원(1인, 평일 런치 주문 16시까지); 남산 한우 그릴 코스 125,000원/인, 스페셜 한우 그릴 코스 150,000원/인. 부가세 포함, 선택 변경·추가 주문 별도. 한쿡 예약 고객은 플라자 5층 안내데스크에서 예약자명 확인 후 전망대 무료티켓 발권 가능하므로, 예약 혜택이 적용되면 타워 입장료를 별도 중복 합산하지 마세요.",
+      "menuPriceStatus": "verified_specific_menu_only",
+      "menuPriceSource": "https://www.nseoultower.co.kr/visit/menu_file.asp?brand=hancook&kind=menu1",
+      "menuPriceSourcePages": [
+        4,
+        5,
+        7
+      ],
+      "recommendationReason": "운영사가 직접 안내하는 남산 전망 한식 코스 식당. 일반 식당보다 높은 예산을 쓰는 예약 식사 대안입니다.",
+      "serviceNotes": "운영사의 점심·저녁 시간표와 메뉴 PDF에서 런치/디너를 모두 확인. 100분은 계획용이며 주말·공휴일은 부별 1시간 40분 운영. 평일 디너 PDF는 17:00–22:00으로 안내하므로 예약시간을 우선 확인.",
+      "includedBenefit": {
+        "name": "N서울타워 전망대 무료티켓",
+        "condition": "한쿡 예약 고객이며 현장 안내데스크에서 예약자명 확인 후 발권",
+        "source": "https://www.nseoultower.co.kr/visit/restaurant2.asp",
+        "automaticDeductionAllowed": false
+      },
+      "verificationSources": [
+        "https://www.nseoultower.co.kr/visit/restaurant2.asp",
+        "https://www.nseoultower.co.kr/visit/use.asp",
+        "https://www.nseoultower.co.kr/visit/restaurant7.asp",
+        "https://www.nseoultower.co.kr/visit/menu_file.asp?brand=hancook&kind=menu1",
+        "https://english.visitseoul.net/attractions/N-Seoul-Tower_/37"
+      ]
+    },
+    {
+      "id": "seoul-soonheenae-bindaetteok",
+      "name": "순희네빈대떡",
+      "city": "seoul",
+      "lat": null,
+      "lng": null,
+      "district": "광장시장",
+      "cuisine": "녹두빈대떡·고기완자",
+      "address": "서울특별시 종로구 종로32길 5",
+      "priceRange": {
+        "min": null,
+        "max": null,
+        "currency": "KRW",
+        "basis": "공식 1인 전체 식사비 평균·범위 미확인. 주문 메뉴·수량에 따라 사용자 입력."
+      },
+      "currency": "KRW",
+      "priceCurrency": "KRW",
+      "duration": 50,
+      "durationIsEstimate": true,
+      "officialUrl": "https://english.visitkorea.or.kr/svc/whereToGo/locIntrdn/rgnContentsView.do?vcontsId=194106",
+      "source": "https://english.visitkorea.or.kr/svc/whereToGo/locIntrdn/rgnContentsView.do?vcontsId=194106",
+      "coordinateSource": null,
+      "coordinatePrecision": "unverified",
+      "coordinateNote": "공식 명시 좌표 또는 검증된 장소 핀을 확보하지 못해 null. 주소를 좌표로 추정하지 않음.",
+      "reservationUrl": null,
+      "reservationStatus": "unverified",
+      "reservation": "공식 공개자료에서 예약 가능 여부를 확인하지 못했습니다. 매장에 확인하세요.",
+      "checkedAt": "2026-10-08",
+      "mealServices": [
+        "lunch",
+        "dinner"
+      ],
+      "googleRating": null,
+      "googleReviewCount": null,
+      "ratingSource": null,
+      "hours": "09:00–21:00, 마지막 주문 20:30.",
+      "hoursSource": "https://english.visitkorea.or.kr/svc/whereToGo/locIntrdn/rgnContentsView.do?vcontsId=194106",
+      "closureNote": "한국관광공사 안내상 연중무휴. 실제 방문일 영업은 매장 확인.",
+      "phone": "+82-2-2264-5057",
+      "notes": "한국관광공사 대표메뉴는 녹두빈대떡, 고기완자 등. 카드 결제·포장 가능으로 안내합니다. 현행 단품 가격·예약 정책은 공식 공개자료에서 확인하지 못했습니다.",
+      "recommendationReason": "한국관광공사가 광장시장 내 빈대떡 식당으로 소개한 곳으로 시장 먹거리 체험 동선에 적합합니다.",
+      "serviceNotes": "공식 09:00–21:00 영업안내로 점심·저녁 후보에 포함. 시장 전체 영업시간을 이 점포의 시간으로 대신하지 않았습니다.",
+      "menuPriceStatus": "unverified",
+      "verificationSources": [
+        "https://english.visitkorea.or.kr/svc/whereToGo/locIntrdn/rgnContentsView.do?vcontsId=194106"
+      ]
+    },
+    {
+      "id": "seoul-imun-seolnongtang",
+      "name": "이문설농탕",
+      "city": "seoul",
+      "lat": null,
+      "lng": null,
+      "district": "종각·인사동",
+      "cuisine": "설농탕·도가니탕",
+      "address": "서울특별시 종로구 우정국로 38-13",
+      "priceRange": {
+        "min": null,
+        "max": null,
+        "currency": "KRW",
+        "basis": "공식 1인 전체 식사비 평균·범위 미확인. 주문 메뉴·수량에 따라 사용자 입력."
+      },
+      "currency": "KRW",
+      "priceCurrency": "KRW",
+      "duration": 50,
+      "durationIsEstimate": true,
+      "officialUrl": "https://english.visitkorea.or.kr/svc/whereToGo/locIntrdn/rgnContentsView.do?vcontsId=100222",
+      "source": "https://english.visitkorea.or.kr/svc/whereToGo/locIntrdn/rgnContentsView.do?vcontsId=100222",
+      "coordinateSource": null,
+      "coordinatePrecision": "unverified",
+      "coordinateNote": "공식 명시 좌표 또는 검증된 장소 핀을 확보하지 못해 null. 주소를 좌표로 추정하지 않음.",
+      "reservationUrl": null,
+      "reservationStatus": "contact_restaurant",
+      "reservation": "미쉐린 공식 안내는 예약을 식당에서 직접 관리하므로 식당에 연락하도록 안내. 실제 예약 가능 시간·좌석은 미확인.",
+      "checkedAt": "2026-10-08",
+      "mealServices": [
+        "breakfast",
+        "lunch"
+      ],
+      "googleRating": null,
+      "googleReviewCount": null,
+      "ratingSource": null,
+      "hours": "한국관광공사: 월–토 08:00–21:00, 일 08:00–20:00. 휴식 15:00–16:30, 주문마감 종료 30분 전.",
+      "hoursSource": "https://english.visitkorea.or.kr/svc/whereToGo/locIntrdn/rgnContentsView.do?vcontsId=100222",
+      "closureNote": "한국관광공사 안내상 연중무휴. 방문일 확인 필요.",
+      "phone": "+82-2-733-6526",
+      "notes": "대표메뉴는 설농탕, 도가니탕 등. 한국관광공사에 현행 단품 가격은 없습니다. 미쉐린 공개 영업시간은 매일 08:00–15:00으로 달라, 저녁 영업을 확인하기 전 저녁 자동추천에서는 제외합니다.",
+      "recommendationReason": "한국관광공사가 소개하는 종각 인근 설농탕 식당. 공식 08:00 개점 안내가 있어 한국식 아침·점심 후보로 활용할 수 있습니다.",
+      "serviceNotes": "08:00 개점과 점심 영업을 공식 자료로 확인. KTO는 저녁 영업도 안내하지만 미쉐린 시간표와 상충하여 dinner는 등록하지 않음.",
+      "menuPriceStatus": "unverified",
+      "reservationSource": "https://guide.michelin.com/kr/ko/seoul-capital-area/kr-seoul/restaurant/imun-seolnongtang",
+      "verificationSources": [
+        "https://english.visitkorea.or.kr/svc/whereToGo/locIntrdn/rgnContentsView.do?vcontsId=100222",
+        "https://guide.michelin.com/kr/ko/seoul-capital-area/kr-seoul/restaurant/imun-seolnongtang"
+      ],
+      "dataConflicts": [
+        "KTO는 저녁 영업을 안내하지만 미쉐린 현재 시간표는 매일 08:00–15:00. 저녁 이용 전 직접 확인 필요."
+      ]
+    }
+  ],
+  "bases": [
+    {
+      "id": "seoul-myeongdong-station",
+      "name": "명동역 (4호선)",
+      "city": "seoul",
+      "lat": 37.561055,
+      "lng": 126.988271,
+      "officialUrl": "https://data.seoul.go.kr/dataList/OA-22534/S/1/datasetView.do",
+      "coordinateSource": "https://data.seoul.go.kr/dataList/OA-22534/S/1/datasetView.do",
+      "coordinatePrecision": "operator_published_station_coordinate",
+      "coordinateNote": "서울교통공사 역사 좌표 CSV 2025-08-14판의 해당 역 행. 출구별 위치가 아닌 역사 대표점.",
+      "checkedAt": "2026-10-08"
+    },
+    {
+      "id": "seoul-gwanghwamun-station",
+      "name": "광화문역 (5호선)",
+      "city": "seoul",
+      "lat": 37.570545,
+      "lng": 126.976568,
+      "officialUrl": "https://data.seoul.go.kr/dataList/OA-22534/S/1/datasetView.do",
+      "coordinateSource": "https://data.seoul.go.kr/dataList/OA-22534/S/1/datasetView.do",
+      "coordinatePrecision": "operator_published_station_coordinate",
+      "coordinateNote": "서울교통공사 역사 좌표 CSV 2025-08-14판의 해당 역 행. 출구별 위치가 아닌 역사 대표점.",
+      "checkedAt": "2026-10-08"
+    }
+  ],
+  "transitLegs": [
+    {
+      "id": "seoul-myeongdong-to-gyeongbokgung",
+      "fromId": "seoul-myeongdong-station",
+      "toId": "seoul-gyeongbokgung",
+      "durationMinutes": 30,
+      "durationIsEstimate": true,
+      "fare": 1550,
+      "fareSingleJourney": 1650,
+      "currency": "KRW",
+      "priceCurrency": "KRW",
+      "fareScope": "성인1인 편도 교통카드 기본요금(10km 이내). 1회용 승차권 운임1,650원; 카드 구매/환급 보증금은 운임에 포함하지 않음.",
+      "mode": "metro",
+      "operator": "seoul_metro",
+      "line": "4호선→충무로역 환승→3호선",
+      "fromStation": "명동 424",
+      "toStation": "경복궁 327",
+      "steps": [
+        "명동역에서4호선 충무로 방면1정거장",
+        "충무로역 개찰구 안에서3호선 구파발·대화 방면 환승",
+        "경복궁역5번 출구에서 공식 안내 도보2분"
+      ],
+      "passIds": [
+        "seoul-climate-short-1d"
+      ],
+      "officialUrl": "https://english.seoul.go.kr/policy/transportation/modes-of-transport/subway/",
+      "routeUrl": "https://royal.khs.go.kr/ROYAL/contents/R707000000.do?schGroupCode=gbg",
+      "sourceUrls": [
+        "https://english.seoul.go.kr/policy/transportation/modes-of-transport/subway/",
+        "https://data.seoul.go.kr/dataList/OA-12034/S/1/datasetView.do",
+        "https://royal.khs.go.kr/ROYAL/contents/R707000000.do?schGroupCode=gbg"
+      ],
+      "routeDistanceKm": 4.1,
+      "checkedAt": "2026-10-08",
+      "notes": "운영자 공개 역간거리(2024-08-10판)와 현재 서울시 성인 기본요금을 합성한 대표 경로. 환승은 개찰구 밖으로 나가지 않는 조건. 도보·대기·환승을 포함한 전체시간은 계획용 추정이며 실시간 최적경로나 출발시각별 운임조회가 아닙니다.",
+      "verificationKind": "composed_from_official_fare_and_station_distance"
+    },
+    {
+      "id": "seoul-myeongdong-to-changdeokgung",
+      "fromId": "seoul-myeongdong-station",
+      "toId": "seoul-changdeokgung",
+      "durationMinutes": 30,
+      "durationIsEstimate": true,
+      "fare": 1550,
+      "fareSingleJourney": 1650,
+      "currency": "KRW",
+      "priceCurrency": "KRW",
+      "fareScope": "성인1인 편도 교통카드 기본요금(10km 이내). 1회용 승차권 운임1,650원; 카드 구매/환급 보증금은 운임에 포함하지 않음.",
+      "mode": "metro",
+      "operator": "seoul_metro",
+      "line": "4호선→충무로역 환승→3호선",
+      "fromStation": "명동 424",
+      "toStation": "안국 328",
+      "steps": [
+        "명동역4호선으로 충무로 이동",
+        "3호선 구파발·대화 방면으로 환승해 안국 하차",
+        "안국역에서 돈화문 방향 도보, 현장 안내 확인"
+      ],
+      "passIds": [
+        "seoul-climate-short-1d"
+      ],
+      "officialUrl": "https://english.seoul.go.kr/policy/transportation/modes-of-transport/subway/",
+      "routeUrl": "https://english.visitseoul.net/attractions/changdeokgung-palace/ENP000295",
+      "sourceUrls": [
+        "https://english.seoul.go.kr/policy/transportation/modes-of-transport/subway/",
+        "https://data.seoul.go.kr/dataList/OA-12034/S/1/datasetView.do",
+        "https://english.visitseoul.net/attractions/changdeokgung-palace/ENP000295"
+      ],
+      "routeDistanceKm": 3.0,
+      "checkedAt": "2026-10-08",
+      "notes": "운영자 공개 역간거리(2024-08-10판)와 현재 서울시 성인 기본요금을 합성한 대표 경로. 환승은 개찰구 밖으로 나가지 않는 조건. 도보·대기·환승을 포함한 전체시간은 계획용 추정이며 실시간 최적경로나 출발시각별 운임조회가 아닙니다.",
+      "verificationKind": "composed_from_official_fare_and_station_distance"
+    },
+    {
+      "id": "seoul-myeongdong-to-bukchon",
+      "fromId": "seoul-myeongdong-station",
+      "toId": "seoul-bukchon",
+      "durationMinutes": 30,
+      "durationIsEstimate": true,
+      "fare": 1550,
+      "fareSingleJourney": 1650,
+      "currency": "KRW",
+      "priceCurrency": "KRW",
+      "fareScope": "성인1인 편도 교통카드 기본요금(10km 이내). 1회용 승차권 운임1,650원; 카드 구매/환급 보증금은 운임에 포함하지 않음.",
+      "mode": "metro",
+      "operator": "seoul_metro",
+      "line": "4호선→충무로역 환승→3호선",
+      "fromStation": "명동 424",
+      "toStation": "안국 328",
+      "steps": [
+        "명동역4호선으로 충무로 이동",
+        "3호선 구파발·대화 방면 안국역 하차",
+        "북촌문화센터 방향 도보 후 관광 허용 시간 안에 산책"
+      ],
+      "passIds": [
+        "seoul-climate-short-1d"
+      ],
+      "officialUrl": "https://english.seoul.go.kr/policy/transportation/modes-of-transport/subway/",
+      "routeUrl": "https://english.visitseoul.net/other/Bukchon-Hanok-Village/ENP000261",
+      "sourceUrls": [
+        "https://english.seoul.go.kr/policy/transportation/modes-of-transport/subway/",
+        "https://data.seoul.go.kr/dataList/OA-12034/S/1/datasetView.do",
+        "https://english.visitseoul.net/other/Bukchon-Hanok-Village/ENP000261"
+      ],
+      "routeDistanceKm": 3.0,
+      "checkedAt": "2026-10-08",
+      "notes": "운영자 공개 역간거리(2024-08-10판)와 현재 서울시 성인 기본요금을 합성한 대표 경로. 환승은 개찰구 밖으로 나가지 않는 조건. 도보·대기·환승을 포함한 전체시간은 계획용 추정이며 실시간 최적경로나 출발시각별 운임조회가 아닙니다.",
+      "verificationKind": "composed_from_official_fare_and_station_distance"
+    },
+    {
+      "id": "seoul-myeongdong-to-museum",
+      "fromId": "seoul-myeongdong-station",
+      "toId": "seoul-national-museum",
+      "durationMinutes": 25,
+      "durationIsEstimate": true,
+      "fare": 1550,
+      "fareSingleJourney": 1650,
+      "currency": "KRW",
+      "priceCurrency": "KRW",
+      "fareScope": "성인1인 편도 교통카드 기본요금(10km 이내). 1회용 승차권 운임1,650원; 카드 구매/환급 보증금은 운임에 포함하지 않음.",
+      "mode": "metro",
+      "operator": "seoul_metro",
+      "line": "4호선 사당·오이도 방면",
+      "fromStation": "명동 424",
+      "toStation": "이촌 430",
+      "steps": [
+        "명동역4호선 남행 탑승",
+        "회현·서울·숙대입구·삼각지·신용산을 지나 이촌역 하차",
+        "이촌역2번 출구 박물관 방향 보행 안내를 따라 이동"
+      ],
+      "passIds": [
+        "seoul-climate-short-1d"
+      ],
+      "officialUrl": "https://english.seoul.go.kr/policy/transportation/modes-of-transport/subway/",
+      "routeUrl": "https://english.visitseoul.net/attractions/TheNationalMuseumofKorea/ENP000433",
+      "sourceUrls": [
+        "https://english.seoul.go.kr/policy/transportation/modes-of-transport/subway/",
+        "https://data.seoul.go.kr/dataList/OA-12034/S/1/datasetView.do",
+        "https://english.visitseoul.net/attractions/TheNationalMuseumofKorea/ENP000433"
+      ],
+      "routeDistanceKm": 5.8,
+      "checkedAt": "2026-10-08",
+      "notes": "운영자 공개 역간거리(2024-08-10판)와 현재 서울시 성인 기본요금을 합성한 대표 경로. 환승은 개찰구 밖으로 나가지 않는 조건. 도보·대기·환승을 포함한 전체시간은 계획용 추정이며 실시간 최적경로나 출발시각별 운임조회가 아닙니다.",
+      "verificationKind": "composed_from_official_fare_and_station_distance"
+    },
+    {
+      "id": "seoul-gwanghwamun-to-market",
+      "fromId": "seoul-gwanghwamun-station",
+      "toId": "seoul-gwangjang-market",
+      "durationMinutes": 25,
+      "durationIsEstimate": true,
+      "fare": 1550,
+      "fareSingleJourney": 1650,
+      "currency": "KRW",
+      "priceCurrency": "KRW",
+      "fareScope": "성인1인 편도 교통카드 기본요금(10km 이내). 1회용 승차권 운임1,650원; 카드 구매/환급 보증금은 운임에 포함하지 않음.",
+      "mode": "metro",
+      "operator": "seoul_metro",
+      "line": "5호선→종로3가역 환승→1호선",
+      "fromStation": "광화문 533",
+      "toStation": "종로5가 129",
+      "steps": [
+        "광화문역5호선 동행으로 종로3가 이동",
+        "개찰구 안에서1호선 동대문·청량리 방면 환승",
+        "종로5가역8번 출구로 나와 광장시장 이동"
+      ],
+      "passIds": [
+        "seoul-climate-short-1d"
+      ],
+      "officialUrl": "https://english.seoul.go.kr/policy/transportation/modes-of-transport/subway/",
+      "routeUrl": "https://english.visitseoul.net/PalaceArea/Gwangjang-Market/ENP000286",
+      "sourceUrls": [
+        "https://english.seoul.go.kr/policy/transportation/modes-of-transport/subway/",
+        "https://data.seoul.go.kr/dataList/OA-12034/S/1/datasetView.do",
+        "https://english.visitseoul.net/PalaceArea/Gwangjang-Market/ENP000286"
+      ],
+      "routeDistanceKm": 2.1,
+      "checkedAt": "2026-10-08",
+      "notes": "운영자 공개 역간거리(2024-08-10판)와 현재 서울시 성인 기본요금을 합성한 대표 경로. 환승은 개찰구 밖으로 나가지 않는 조건. 도보·대기·환승을 포함한 전체시간은 계획용 추정이며 실시간 최적경로나 출발시각별 운임조회가 아닙니다.",
+      "verificationKind": "composed_from_official_fare_and_station_distance"
+    },
+    {
+      "id": "seoul-gwanghwamun-to-gyeongbokgung",
+      "fromId": "seoul-gwanghwamun-station",
+      "toId": "seoul-gyeongbokgung",
+      "durationMinutes": 12,
+      "durationIsEstimate": true,
+      "fare": 0,
+      "fareSingleJourney": 0,
+      "currency": "KRW",
+      "priceCurrency": "KRW",
+      "fareScope": "도보 무료.",
+      "mode": "walk",
+      "operator": "seoul_metro",
+      "line": "도보",
+      "fromStation": "광화문역2번 출구",
+      "toStation": "경복궁",
+      "steps": [
+        "광화문역2번 출구로 나와 경복궁 방향 보행",
+        "공식 안내 출구 기준 약6분, 역내이동과 입구 확인 여유 포함"
+      ],
+      "passIds": [],
+      "officialUrl": "https://royal.khs.go.kr/ROYAL/contents/R707000000.do?schGroupCode=gbg",
+      "routeUrl": "https://royal.khs.go.kr/ROYAL/contents/R707000000.do?schGroupCode=gbg",
+      "sourceUrls": [
+        "https://royal.khs.go.kr/ROYAL/contents/R707000000.do?schGroupCode=gbg"
+      ],
+      "routeDistanceKm": null,
+      "checkedAt": "2026-10-08",
+      "notes": "공식 접근안내를 이용한 도보 계획. 전체시간은 예상입니다.",
+      "verificationKind": "composed_from_official_access"
+    }
+  ],
+  "passes": [
+    {
+      "id": "seoul-climate-short-1d",
+      "name": "기후동행카드 단기1일권",
+      "city": "seoul",
+      "currency": "KRW",
+      "priceCurrency": "KRW",
+      "price": 5000,
+      "upfrontCardCost": 3000,
+      "firstPurchaseTotal": 8000,
+      "autoCompare": false,
+      "validHours": null,
+      "validity": "충전 당일 첫차부터 막차까지의 운영일 기준. 충전일부터 즉시 시작하며24시간권이 아님.",
+      "priceVariants": [
+        {
+          "label": "2일권",
+          "price": 8000
+        },
+        {
+          "label": "3일권",
+          "price": 10000
+        },
+        {
+          "label": "5일권",
+          "price": 15000
+        },
+        {
+          "label": "7일권",
+          "price": 20000
+        }
+      ],
+      "coverage": "수록한 서울1·3·4·5호선 구간 등 공식 적용 지하철·서울면허 시내/마을버스. 전체 적용 구간은 공식 지도 확인.",
+      "exclusions": "단기권 따릉이·한강버스 제외. 신분당선·공항/광역버스·비서울면허 버스 및 범위 외 철도 제외. 인천공항역 승차 불가.",
+      "includedPoiIds": [],
+      "officialUrl": "https://english.seoul.go.kr/policy/transportation/climate-card/",
+      "purchaseMethod": "역사 발매기 등에서 실물카드 별도 구매 후 충전",
+      "checkedAt": "2026-10-08",
+      "cancellation": "환불은 유효기간 내 사용금액과500원 수수료를 제외하는 조건. 실물카드 사전 등록 등 상세조건 확인.",
+      "notes": "실물카드 신규 구매3,000원 추가. 자동 최저가 비교 제외. 30일 선불권은2026-08-31 충전 종료 안내가 있어 추천 목록에 넣지 않음.",
+      "eligiblePredicate": "카드 보유 여부·전체 경로 적용구간·충전 날짜를 직접 확인한 뒤 비교."
+    },
+    {
+      "id": "seoul-palace-combination",
+      "name": "궁궐 통합관람권",
+      "city": "seoul",
+      "currency": "KRW",
+      "priceCurrency": "KRW",
+      "price": 6000,
+      "autoCompare": false,
+      "validHours": null,
+      "validity": "구입일부터6개월 내 대상4궁·종묘 각1회.",
+      "coverage": "경복궁·창덕궁 전각·창경궁·덕수궁·종묘 일반 관람",
+      "exclusions": "창덕궁 후원 및 별도 특별행사 제외. 교통 불포함.",
+      "includedPoiIds": [
+        "seoul-gyeongbokgung",
+        "seoul-changdeokgung"
+      ],
+      "officialUrl": "https://royal.khs.go.kr/ROYAL/contents/R703000000.do",
+      "purchaseMethod": "궁궐·종묘 매표소 현장 구매",
+      "checkedAt": "2026-10-08",
+      "cancellation": "미사용권은 구입 매표소에서 환불. 일부 사용 후 환불 불가.",
+      "notes": "이 데이터에 있는 두 궁궐 일반 성인권 합계도6,000원. 연령·한복·무료일 자격이면 별도입장이 더 저렴할 수 있으므로 자동 절약 보장하지 않음."
+    }
+  ],
+  "catalogTickets": [
+    {
+      "id": "seoul-gyeongbokgung-ticket",
+      "poiId": "seoul-gyeongbokgung",
+      "officialUrl": "https://royal.khs.go.kr/ROYAL/contents/R703000000.do",
+      "purchaseUrl": null,
+      "purchaseMethod": "on_site",
+      "klookUrl": null,
+      "officialPrice": 3000,
+      "klookPrice": null,
+      "currency": "KRW",
+      "priceCurrency": "KRW",
+      "checkedAt": "2026-10-08",
+      "priceScope": "성인 일반 유료입장 1인. 내국인 만25–64세, 외국인 만19–64세. 특별행사 제외.",
+      "priceNote": "내국인 만24세 이하·만65세 이상 및 외국인 만18세 이하·만65세 이상은 증빙 조건으로 무료. 한복 등 감면 자격은 공식 기준 확인.",
+      "cancellation": "구매 채널·선택 상품별 취소규정 확인. 검증되지 않은 무료취소를 약속하지 않음.",
+      "sourceUrl": "https://royal.khs.go.kr/ROYAL/contents/R703000000.do"
+    },
+    {
+      "id": "seoul-changdeokgung-ticket",
+      "poiId": "seoul-changdeokgung",
+      "officialUrl": "https://royal.khs.go.kr/ROYAL/contents/R601000000.do?schGroupCode=cdg",
+      "purchaseUrl": "https://royal.khs.go.kr/ROYAL/contents/R601000000.do?schGroupCode=cdg",
+      "purchaseMethod": "official_booking_hub_or_on_site",
+      "klookUrl": null,
+      "officialPrice": 3000,
+      "klookPrice": null,
+      "currency": "KRW",
+      "priceCurrency": "KRW",
+      "checkedAt": "2026-10-08",
+      "priceScope": "전각만 성인 일반입장 1인. 내국인 만25–64세, 외국인 만19–64세. 후원 제외.",
+      "priceNote": "후원 성인 별도5,000원과 전각 관람권이 필요. 전각 연령별 무료입장 자격과 문화가 있는 날은 공식 기준 확인.",
+      "cancellation": "구매 채널·선택 상품별 취소규정 확인. 검증되지 않은 무료취소를 약속하지 않음.",
+      "sourceUrl": "https://royal.khs.go.kr/ROYAL/contents/R703000000.do"
+    },
+    {
+      "id": "seoul-n-seoul-tower-ticket",
+      "poiId": "seoul-n-seoul-tower",
+      "officialUrl": "https://www.nseoultower.co.kr/visit/use2.asp",
+      "purchaseUrl": "https://naver.me/FmV6CVtO",
+      "purchaseMethod": "operator_linked_or_counter",
+      "klookUrl": null,
+      "officialPrice": 29000,
+      "klookPrice": null,
+      "currency": "KRW",
+      "priceCurrency": "KRW",
+      "checkedAt": "2026-10-08",
+      "priceScope": "전망대 일반 성인(만13세 이상) 1인 현장 정가. 남산 이동·케이블카·식사 제외.",
+      "priceNote": "성인29,000원, 어린이 만3–12세·경로 만65세 이상23,000원. 온라인 상품은 날짜·프로모션별 결제금액 확인.",
+      "cancellation": "구매 채널·선택 상품별 취소규정 확인. 검증되지 않은 무료취소를 약속하지 않음.",
+      "sourceUrl": "https://www.nseoultower.co.kr/index.asp"
+    }
+  ],
+  "airports": [
+    {
+      "id": "seoul-icn",
+      "city": "seoul",
+      "iata": "ICN",
+      "name": "인천국제공항",
+      "officialUrl": "https://www.airport.kr/ap_en/index.do",
+      "source": "https://www.aa.com/web/i18n/travelInformation/destinationInformation/icn-airport.html",
+      "checkedAt": "2026-10-08",
+      "notes": "항공사 공식 안내의 Seoul/ICN 매핑. 실제 위치는 인천이며 서울 도심과 다름."
+    },
+    {
+      "id": "seoul-gmp",
+      "city": "seoul",
+      "iata": "GMP",
+      "name": "김포국제공항",
+      "officialUrl": "https://www.airport.co.kr/gimpo/index.do",
+      "source": "https://www.airport.co.kr/booking/ajaxf/frTrafficGoodsSvc/getAvailAirportList.do",
+      "checkedAt": "2026-10-08",
+      "notes": "한국공항공사 공개 공항 목록의 서울/김포·GMP 매핑."
+    }
+  ],
+  "transportPolicy": {
+    "officialUrl": "https://english.seoul.go.kr/policy/transportation/modes-of-transport/bus/",
+    "checkedAt": "2026-10-08",
+    "subwayBaseAdultCard": 1550,
+    "subwayBaseAdultSingleJourney": 1650,
+    "subwayBaseDistanceKm": 10,
+    "fareEffectiveFrom": "2025-06-28",
+    "cityBusAdultCard": 1500,
+    "circulationBusAdultCard": 1400,
+    "transferNote": "동일 교통카드 승하차 태그, 하차 후30분 이내(21:00–07:00는60분), 최대4회 환승. 동일 번호 버스 재탑승 할인 제외. 최고 기본요금과 통합거리로 계산. 관광지 체류 후 재탑승을 자동 무료환승으로 계산하지 않음.",
+    "sources": [
+      "https://english.seoul.go.kr/policy/transportation/modes-of-transport/subway/",
+      "https://english.seoul.go.kr/policy/transportation/modes-of-transport/bus/"
+    ]
+  },
+  "budgetDefaults": {
+    "breakfastPerPerson": null,
+    "lunchPerPerson": null,
+    "dinnerPerPerson": null,
+    "hotelPerNight": null,
+    "currency": "KRW",
+    "basis": "공식 전체 식사비·숙박 시장평균 미확인. 사용자가 식사·숙박 예산을 입력."
+  },
+  "calculationRules": [
+    "KRW 현지금액은1원=1원이며 환전수수료를 붙이지 않습니다.",
+    "입장료는 자격조건을 만족하는 일반 성인 기준이며 아동·학생·연령·한복 무료 자격을 무시해 실제 결제금액으로 확정하지 않습니다.",
+    "왕궁 휴궁일의 공휴일 예외는 단순 요일 자동배제에 쓰지 않습니다.",
+    "한쿡 전망대 포함은 예약이 확인된 경우에만 적용하며 식당 선택만으로 전망대 비용을 자동 차감하지 않습니다.",
+    "미확인 음식·숙박·공항·추가교통 비용을0원으로 합산하지 않습니다."
+  ],
+  "sources": [
+    {
+      "url": "https://data.seoul.go.kr/dataList/OA-22534/S/1/datasetView.do",
+      "publisher": "서울교통공사 / 서울 열린데이터광장",
+      "dataDate": "2025-08-14",
+      "checkedAt": "2026-10-08",
+      "use": "역 대표 좌표 CSV"
+    },
+    {
+      "url": "https://data.seoul.go.kr/dataList/OA-12034/S/1/datasetView.do",
+      "publisher": "서울교통공사 / 서울 열린데이터광장",
+      "dataDate": "2024-08-10",
+      "checkedAt": "2026-10-08",
+      "use": "기존 노선별 역순서·역간거리, 현재 운임과 별도 합성"
+    },
+    {
+      "url": "https://royal.khs.go.kr/ROYAL/contents/R703000000.do",
+      "publisher": "국가유산청 궁능유적본부",
+      "checkedAt": "2026-10-08"
+    },
+    {
+      "url": "https://royal.khs.go.kr/ROYAL/contents/R702000000.do",
+      "publisher": "국가유산청 궁능유적본부",
+      "checkedAt": "2026-10-08"
+    },
+    {
+      "url": "https://www.museum.go.kr/ENG/contents/E0101000000.do",
+      "publisher": "국립중앙박물관",
+      "checkedAt": "2026-10-08"
+    },
+    {
+      "url": "https://www.nseoultower.co.kr/visit/use2.asp",
+      "publisher": "N서울타워 운영자",
+      "checkedAt": "2026-10-08"
+    },
+    {
+      "url": "https://korean.visitseoul.net/restaurants/TosokchonSamgyetang/KOPywjsmm",
+      "checkedAt": "2026-10-08",
+      "status": "verified_official_public_source"
+    },
+    {
+      "url": "https://chinese.visitkorea.or.kr/svc/contents/contentsView.do?vcontsId=80974",
+      "checkedAt": "2026-10-08",
+      "status": "verified_official_public_source"
+    },
+    {
+      "url": "https://korean.visitseoul.net/restaurants/%EA%B6%81/KOP011155",
+      "checkedAt": "2026-10-08",
+      "status": "verified_official_public_source"
+    },
+    {
+      "url": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?menuSn=352&vcontsId=100337",
+      "checkedAt": "2026-10-08",
+      "status": "verified_official_public_source"
+    },
+    {
+      "url": "https://english.visitseoul.net/area/Mongmyeok-Sanbang-EN/ENP014763",
+      "checkedAt": "2026-10-08",
+      "status": "verified_official_public_source"
+    },
+    {
+      "url": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?vcontsId=51958",
+      "checkedAt": "2026-10-08",
+      "status": "verified_official_public_source"
+    },
+    {
+      "url": "https://www.nseoultower.co.kr/visit/restaurant2.asp",
+      "checkedAt": "2026-10-08",
+      "status": "verified_official_public_source"
+    },
+    {
+      "url": "https://www.nseoultower.co.kr/visit/use.asp",
+      "checkedAt": "2026-10-08",
+      "status": "verified_official_public_source"
+    },
+    {
+      "url": "https://www.nseoultower.co.kr/visit/restaurant7.asp",
+      "checkedAt": "2026-10-08",
+      "status": "verified_official_public_source"
+    },
+    {
+      "url": "https://www.nseoultower.co.kr/visit/menu_file.asp?brand=hancook&kind=menu1",
+      "checkedAt": "2026-10-08",
+      "status": "verified_official_public_source"
+    },
+    {
+      "url": "https://english.visitseoul.net/attractions/N-Seoul-Tower_/37",
+      "checkedAt": "2026-10-08",
+      "status": "verified_official_public_source"
+    },
+    {
+      "url": "https://english.visitkorea.or.kr/svc/whereToGo/locIntrdn/rgnContentsView.do?vcontsId=194106",
+      "checkedAt": "2026-10-08",
+      "status": "verified_official_public_source"
+    },
+    {
+      "url": "https://english.visitkorea.or.kr/svc/whereToGo/locIntrdn/rgnContentsView.do?vcontsId=100222",
+      "checkedAt": "2026-10-08",
+      "status": "verified_official_public_source"
+    },
+    {
+      "url": "https://guide.michelin.com/kr/ko/seoul-capital-area/kr-seoul/restaurant/imun-seolnongtang",
+      "checkedAt": "2026-10-08",
+      "status": "verified_official_public_source"
+    }
+  ],
+  "dataGaps": [
+    "식당2곳 좌표 미검증: 근접 자동추천에서 제외.",
+    "N서울타워 공식 연결 예매처의 상세 재고·프로모션가격·취소조건은 확인하지 못함.",
+    "2027년 이후 음력 공휴일·박물관 임시휴실은 자동 확정하지 않음.",
+    "한쿡 이외 5곳은 현행 단품가격 공식 직접확인이 완료되지 않았습니다.",
+    "한쿡과 이문설농탕 이외 4곳은 예약 가능 여부를 공식 자료로 확인하지 못했습니다.",
+    "순희네빈대떡·이문설농탕 좌표는 확인하지 못해 null입니다."
+  ]
+}

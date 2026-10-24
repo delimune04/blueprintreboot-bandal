@@ -1,0 +1,203 @@
+{
+  "checkedAt": "2026-10-08T04:26:00Z",
+  "maps": {
+    "source": "https://developers.google.com/maps/documentation/urls/get-started",
+    "template": "https://www.google.com/maps/dir/?api=1&origin={encodedPlace}&destination={encodedPlace}&travelmode={mode}",
+    "apiKeyRequired": false,
+    "modes": [
+      "walking",
+      "transit",
+      "driving",
+      "bicycling",
+      "two-wheeler"
+    ],
+    "maximumUrlLength": 2048,
+    "departureTimeSupportedInDocumentedMapsUrl": false,
+    "arrivalTimeSupportedInDocumentedMapsUrl": false,
+    "construction": "Use URLSearchParams. Explicitly provide both endpoints; full place name, city and country, or independently sourced coordinates. Use verified place IDs only.",
+    "waypoints": "Product dependent: three on mobile browser, nine elsewhere. Prefer individual legs.",
+    "notice": "Google Maps에서 여행 날짜와 출발 시각을 선택해 최신 경로·운행 상황을 확인하세요. 이 사이트의 여행 날짜는 지도에 자동 적용되지 않습니다.",
+    "durationMinutes": null,
+    "price": null
+  },
+  "policy": {
+    "sources": [
+      "https://www.google.com/intl/en_US/help/terms_maps/",
+      "https://cloud.google.com/maps-platform/terms"
+    ],
+    "recommendation": "Use outward Maps links. Do not scrape, bulk-copy, cache or turn Google route/ETA content into a local routing dataset. A future API integration has separate licensing, attribution and storage requirements.",
+    "schematicLabel": "방문 순서 안내이며 실제 이동 경로는 Google Maps에서 확인하세요.",
+    "googleRouteDataStored": false
+  },
+  "verification": [
+    {
+      "provider": "Google Maps",
+      "checkedAt": "2026-10-08T04:23:48Z",
+      "url": "https://www.google.com/maps/dir/?api=1&origin=Tokyo+Station%2C+Tokyo%2C+Japan&destination=Senso-ji%2C+Tokyo%2C+Japan&travelmode=transit",
+      "mode": "transit",
+      "departureDateTime": null,
+      "result": "URL resolved to a Google Maps page titled Tokyo to Senso-ji. Full route accessibility/screenshot timed out.",
+      "durationMinutes": null,
+      "price": null,
+      "warning": "Do not call this a completed Google route-time lookup. Date/time and route details not verified."
+    },
+    {
+      "provider": "KAYAK",
+      "checkedAt": "2026-10-08T04:22:59Z",
+      "url": "https://www.kayak.co.kr/flights/FCO-CDG/2026-11-10",
+      "result": "Full results UI verified: one-way, Rome FCO to Paris CDG, November 10, one traveler, Korean/KRW. Example date only.",
+      "price": null
+    },
+    {
+      "provider": "KAYAK",
+      "checkedAt": "2026-10-08T04:24:59Z",
+      "url": "https://www.kayak.co.kr/flights/FCO-LHR/2026-11-10",
+      "result": "Full results UI verified: one-way, Rome FCO to London LHR, November 10, one traveler, Korean/KRW. Example date only.",
+      "price": null
+    }
+  ],
+  "intercityOptions": [
+    {
+      "id": "tokyo-kyoto",
+      "fromCity": "tokyo",
+      "toCity": "kyoto",
+      "mode": "rail",
+      "service": "도카이도 신칸센",
+      "origin": "Tokyo Station, Tokyo, Japan",
+      "destination": "Kyoto Station, Kyoto, Japan",
+      "bookingUrl": "https://smart-ex.jp/en/index.php",
+      "source": "https://global.jr-central.co.jp/en/onlinebooking/",
+      "referenceDuration": "JR Central publishes about 130 minutes; reference only, not the selected trip.",
+      "referenceSource": "https://global.jr-central.co.jp/en/onlinebooking/contents/kyoto/",
+      "durationMinutes": null,
+      "price": null,
+      "availability": null,
+      "reversible": true,
+      "mapsUrl": "https://www.google.com/maps/dir/?api=1&origin=Tokyo%20Station%2C%20Tokyo%2C%20Japan&destination=Kyoto%20Station%2C%20Kyoto%2C%20Japan&travelmode=transit"
+    },
+    {
+      "id": "tokyo-osaka",
+      "fromCity": "tokyo",
+      "toCity": "osaka",
+      "mode": "rail",
+      "service": "도카이도 신칸센",
+      "origin": "Tokyo Station, Tokyo, Japan",
+      "destination": "Shin-Osaka Station, Osaka, Japan",
+      "bookingUrl": "https://smart-ex.jp/en/index.php",
+      "source": "https://global.jr-central.co.jp/en/onlinebooking/",
+      "note": "신오사카역은 오사카역과 달라요. 숙소·관광지까지 별도 시내 이동을 확인해 주세요.",
+      "durationMinutes": null,
+      "price": null,
+      "availability": null,
+      "reversible": true,
+      "mapsUrl": "https://www.google.com/maps/dir/?api=1&origin=Tokyo%20Station%2C%20Tokyo%2C%20Japan&destination=Shin-Osaka%20Station%2C%20Osaka%2C%20Japan&travelmode=transit"
+    },
+    {
+      "id": "osaka-kyoto-local",
+      "fromCity": "osaka",
+      "toCity": "kyoto",
+      "mode": "rail",
+      "service": "JR 교토선 · 신쾌속 선택지",
+      "origin": "Osaka Station, Osaka, Japan",
+      "destination": "Kyoto Station, Kyoto, Japan",
+      "bookingUrl": "https://www.westjr.co.jp/travel-information/en/tickets-passes/",
+      "source": "https://www.westjr.co.jp/global/en/travel/kyototravel/pdf/letsgokyoto.pdf",
+      "ticketGuide": "https://www.westjr.co.jp/travel-information/en/train-usage-guide/howto/ticket-vending-machine/",
+      "note": "JR 일반선·기본운임 선택지예요. 좌석 예약이 필수라는 뜻은 아니며 링크는 미리 채워진 예약 화면이 아닌 공식 구입 안내입니다.",
+      "durationMinutes": null,
+      "price": null,
+      "availability": null,
+      "reversible": true,
+      "mapsUrl": "https://www.google.com/maps/dir/?api=1&origin=Osaka%20Station%2C%20Osaka%2C%20Japan&destination=Kyoto%20Station%2C%20Kyoto%2C%20Japan&travelmode=transit"
+    },
+    {
+      "id": "osaka-kyoto-shinkansen",
+      "fromCity": "osaka",
+      "toCity": "kyoto",
+      "mode": "rail",
+      "service": "도카이도 신칸센 대안",
+      "origin": "Shin-Osaka Station, Osaka, Japan",
+      "destination": "Kyoto Station, Kyoto, Japan",
+      "bookingUrl": "https://smart-ex.jp/en/index.php",
+      "source": "https://global.jr-central.co.jp/en/onlinebooking/",
+      "note": "오사카역 출발 일반선과 비교할 때 신오사카역까지 접근 시간·요금도 함께 확인하세요.",
+      "durationMinutes": null,
+      "price": null,
+      "availability": null,
+      "reversible": true,
+      "mapsUrl": "https://www.google.com/maps/dir/?api=1&origin=Shin-Osaka%20Station%2C%20Osaka%2C%20Japan&destination=Kyoto%20Station%2C%20Kyoto%2C%20Japan&travelmode=transit"
+    },
+    {
+      "id": "paris-london",
+      "fromCity": "paris",
+      "toCity": "london",
+      "mode": "rail",
+      "service": "유로스타",
+      "origin": "Gare du Nord, Paris, France",
+      "destination": "St Pancras International, London, United Kingdom",
+      "bookingUrl": "https://www.eurostar.com/uk-en/train/paris-to-london",
+      "reverseBookingUrl": "https://www.eurostar.com/uk-en/train/london-to-paris",
+      "source": "https://www.eurostar.com/uk-en/train/paris-to-london",
+      "referenceDuration": "Operator publishes Paris to London from 2h17; reverse from 2h16. Not door-to-door or a selected-train duration.",
+      "note": "출발 전 여권·수하물 확인과 역까지 이동할 여유를 포함하세요. 실제 티켓에 안내된 권장 도착 시각을 따라 주세요.",
+      "arrivalGuidance": "https://www.eurostar.com/uk-en/travel-info/your-trip/check-in",
+      "durationMinutes": null,
+      "price": null,
+      "availability": null,
+      "reversible": true,
+      "mapsUrl": "https://www.google.com/maps/dir/?api=1&origin=Gare%20du%20Nord%2C%20Paris%2C%20France&destination=St%20Pancras%20International%2C%20London%2C%20United%20Kingdom&travelmode=transit"
+    },
+    {
+      "id": "rome-paris",
+      "fromCity": "rome",
+      "toCity": "paris",
+      "mode": "flight",
+      "service": "편도 항공권 비교",
+      "originIata": "FCO",
+      "destinationIata": "CDG",
+      "bookingUrlTemplate": "https://www.kayak.co.kr/flights/FCO-CDG/{YYYY-MM-DD}",
+      "reverseBookingUrlTemplate": "https://www.kayak.co.kr/flights/CDG-FCO/{YYYY-MM-DD}",
+      "source": "https://www.google.com/travel/flights/flights-from-rome-to-paris.html",
+      "note": "로마 피우미치노(FCO)와 파리 샤를드골(CDG)의 대표 공항 조합입니다. 다른 공항·수하물·공항 이동과 도착일을 검색 결과에서 다시 확인하세요.",
+      "durationMinutes": null,
+      "price": null,
+      "availability": null,
+      "reversible": true
+    },
+    {
+      "id": "rome-london",
+      "fromCity": "rome",
+      "toCity": "london",
+      "mode": "flight",
+      "service": "편도 항공권 비교",
+      "originIata": "FCO",
+      "destinationIata": "LHR",
+      "bookingUrlTemplate": "https://www.kayak.co.kr/flights/FCO-LHR/{YYYY-MM-DD}",
+      "reverseBookingUrlTemplate": "https://www.kayak.co.kr/flights/LHR-FCO/{YYYY-MM-DD}",
+      "source": "https://www.google.com/travel/flights/flights-from-rome-to-london.html",
+      "note": "로마 피우미치노(FCO)와 런던 히스로(LHR)의 대표 공항 조합입니다. 다른 공항·수하물·입국 및 공항 이동과 도착일을 검색 결과에서 다시 확인하세요.",
+      "durationMinutes": null,
+      "price": null,
+      "availability": null,
+      "reversible": true
+    }
+  ],
+  "jrTimetable": "https://global.jr-central.co.jp/en/info/timetable/",
+  "jrTimetableNote": "JR says the published basic timetable omits some extra trains. Check the operator for a selected date; SmartEX booking requires traveler membership. No registration was performed.",
+  "ticketCityLinks": {
+    "tokyo": "https://www.klook.com/ko/destination/c28-tokyo/",
+    "osaka": "https://www.klook.com/ko/destination/c29-osaka/",
+    "kyoto": "https://www.klook.com/ko/destination/c30-kyoto/",
+    "rome": "https://www.klook.com/ko/destination/c92-rome/",
+    "paris": "https://www.klook.com/ko/destination/c107-paris/",
+    "london": "https://www.klook.com/ko/destination/c106-london/"
+  },
+  "plannerNotes": [
+    "Store ordered city stays and separate transfer dates. Dates are local to each city: Asia/Tokyo, Europe/Rome, Europe/Paris, Europe/London.",
+    "Use one-way flight links for city hops; airport pair must be explicit. Different airports and baggage can change total journey time and cost.",
+    "Never treat unknown duration as zero or estimate public transport time from straight-line map distance. Keep price/duration/availability null until an authorized live source is integrated.",
+    "For rail or ticket sites without verified date-prefill, prompt travelers to reselect dates on the official site.",
+    "The site's destination diagrams must use independently sourced data and be labeled as stop order rather than Google-confirmed route geometry.",
+    "Plain links currently have no affiliate tracking and earn no commission. No signup, credentials, terms acceptance, or paid API was performed."
+  ]
+}

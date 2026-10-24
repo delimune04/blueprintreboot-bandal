@@ -1,0 +1,4297 @@
+{
+  "checkedAt": "2026-10-08",
+  "meta": {
+    "schemaVersion": 1,
+    "cities": [
+      "barcelona",
+      "madrid",
+      "lisbon",
+      "amsterdam",
+      "prague",
+      "vienna"
+    ],
+    "currencies": [
+      "EUR",
+      "CZK"
+    ],
+    "liveData": false,
+    "notice": "유럽1차6도시 공식 공개자료를2026-10-08 확인한 정적 확장자료. 여행일 실제 운행·재고·가격·최단경로를 보장하지 않습니다.",
+    "completedCitiesOnly": true,
+    "nextBatchStatus": "다음 유럽6도시는 조사·통합 보류, 선택가능 목록에 추가하지 않음."
+  },
+  "pois": [
+    {
+      "id": "barcelona-sagrada-familia",
+      "city": "barcelona",
+      "name": "사그라다 파밀리아",
+      "district": "에이샴플레",
+      "category": "culture",
+      "duration": 100,
+      "durationIsEstimate": true,
+      "currency": "EUR",
+      "priceCurrency": "EUR",
+      "price": 26,
+      "priceScope": "일반1인 기본권. 성당·박물관·앱 오디오가이드 포함; 탑·지하성당 제외. 학생·30세 미만 €24, 11세 미만 무료(증빙·예약조건 확인).",
+      "priceNote": "일반1인 기본권. 성당·박물관·앱 오디오가이드 포함; 탑·지하성당 제외. 학생·30세 미만 €24, 11세 미만 무료(증빙·예약조건 확인).",
+      "description": "가우디의 성당 내부와 박물관을 함께 둘러보는 코스.",
+      "officialUrl": "https://sagradafamilia.org/en/sagrada-familia-ticket?inheritRedirect=true",
+      "hours": "11–2월 월–토09:00–18:00, 일10:30–18:00. 3·10월 월–금09:00–19:00, 토18:00까지, 일10:30–19:00. 4–9월 월–금20:00까지, 토18:00까지, 일10:30–20:00.",
+      "reservation": "온라인 시간지정 필수. 기명표·사진 신분증, 보안검색. 16세 미만 성인동반.",
+      "checkedAt": "2026-10-08",
+      "lat": 41.4036299,
+      "lng": 2.1743558,
+      "coordinateSource": "https://sagradafamilia.org/en/schedules-how-to-get",
+      "coordinatePrecision": "official_named_place_marker",
+      "coordinateNote": "공식 연결 Google Maps La Sagrada Familia 장소핀의 !3d41.4036299!4d2.1743558 확인. 카메라 중심 좌표를 쓰지 않음.",
+      "hoursSource": "https://sagradafamilia.org/en/schedules-how-to-get",
+      "closureNote": "종교행사에 따른 임시변경 가능. 12/25·26, 1/1·6은09:00–14:00. 여행일 달력 우선."
+    },
+    {
+      "id": "barcelona-park-guell",
+      "city": "barcelona",
+      "name": "구엘 공원",
+      "district": "그라시아·엘 카르멜",
+      "category": "nature",
+      "duration": 120,
+      "durationIsEstimate": true,
+      "currency": "EUR",
+      "priceCurrency": "EUR",
+      "price": 18,
+      "priceScope": "일반1인 공원 기본입장, VAT포함. 7–12세·65세 초과 €13.50; 0–6세 무료도 티켓 필요. 가우디 하우스 등 결합상품 별도.",
+      "priceNote": "일반1인 공원 기본입장, VAT포함. 7–12세·65세 초과 €13.50; 0–6세 무료도 티켓 필요. 가우디 하우스 등 결합상품 별도.",
+      "description": "가우디 건축과 정원·전망을 함께 보는 언덕 공원. 경사로 보행시간을 넉넉히 잡으세요.",
+      "officialUrl": "https://parkguell.barcelona/en/planning-your-visit/prices-and-times",
+      "hours": "연중 운영. 현재 공개 관광객 판매시간대09:30–19:30. 날짜별 달력 확인. 이른아침·저녁 주민전용시간은 관광객 불가.",
+      "reservation": "온라인 시간지정 예약. 표시시각 후30분 이내 입장, 퇴장 후 재입장 불가.",
+      "checkedAt": "2026-10-08",
+      "lat": 41.413169,
+      "lng": 2.152779,
+      "coordinateSource": "https://parkguell.barcelona/ca/configuracio-planol?_format=json",
+      "coordinatePrecision": "official_named_place_marker",
+      "coordinateNote": "공식 지도 설정의 field_coordenades_entrada[0]를 공식 maps-com.js가 Park Güell 입구 마커로 사용. 지도중심 좌표와 구분.",
+      "closureNote": "보수공사·부분출입 제한은 방문일 공지 확인.",
+      "accessSource": "https://parkguell.barcelona/en/planning-your-visit/how-to-get-there"
+    },
+    {
+      "id": "barcelona-casa-batllo",
+      "city": "barcelona",
+      "name": "카사 바트요",
+      "district": "파세이그 데 그라시아",
+      "category": "culture",
+      "duration": 90,
+      "durationIsEstimate": true,
+      "currency": "EUR",
+      "priceCurrency": "EUR",
+      "price": null,
+      "priceScope": "성인 일반방문 온라인 €29부터. 방문일·시각·등급별 가격변동; 확정가격 미조회. 0–12세 성인동반 무료, 학생·13–17세 할인자격 별도.",
+      "priceNote": "성인 일반방문 온라인 €29부터. 방문일·시각·등급별 가격변동; 확정가격 미조회. 0–12세 성인동반 무료, 학생·13–17세 할인자격 별도.",
+      "description": "가우디 주택의 실내 공간과 오디오가이드를 즐기는 건축 코스.",
+      "officialUrl": "https://www.casabatllo.es/en/online-tickets/",
+      "hours": "연중 운영. 일반방문 첫입장09:00, 마지막19:45. 전체시설08:30–22:30이나 이른방문·야간권은 별도 상품.",
+      "reservation": "방문일·시각·상품 선택 후 공식 구매. 야간권과 일반권 포함범위 구별.",
+      "checkedAt": "2026-10-08",
+      "lat": 41.3916384,
+      "lng": 2.1647697999999,
+      "coordinateSource": "https://www.barcelonabusturistic.cat/es/casa-batllo",
+      "coordinatePrecision": "official_tourism_named_marker",
+      "coordinateNote": "TMB/관광청 공식 Casa Batlló 장소 페이지의 주소 Passeig de Gràcia43 및 명명 지도점 data-set-marker=true, 위경도 직접 확인.",
+      "priceDynamic": true,
+      "priceFrom": 29,
+      "priceRange": {
+        "min": 29,
+        "max": null,
+        "currency": "EUR",
+        "basis": "일반방문 공식 시작가격만 확인. 상한·여행일 실결제 미확정."
+      },
+      "hoursSource": "https://www.casabatllo.es/en/visit/",
+      "closureNote": "정기휴관 없음으로 공식안내. 특별행사·티켓별 접근구역 변경 가능."
+    },
+    {
+      "id": "barcelona-gothic-quarter",
+      "city": "barcelona",
+      "name": "고딕 지구 거리 산책",
+      "district": "시우타트 벨라",
+      "category": "culture",
+      "duration": 90,
+      "durationIsEstimate": true,
+      "currency": "EUR",
+      "priceCurrency": "EUR",
+      "price": 0,
+      "priceScope": "공공거리·광장 자율산책만 무료. 대성당·박물관·유료투어·식음료 입장 및 구매 별도.",
+      "priceNote": "공공거리·광장 자율산책만 무료. 대성당·박물관·유료투어·식음료 입장 및 구매 별도.",
+      "description": "비스베 거리와 산트 자우메·레이 광장 일대의 골목을 걷는 구시가지 코스.",
+      "officialUrl": "https://bid.barcelonaturisme.com/wv3/en/page/1052/gothic-quarter.html",
+      "hours": "공공거리 산책. 개별 문화시설·상점 영업시간과 행사통제 별도.",
+      "reservation": "거리산책 예약 없음. 실내시설은 별도 예약·요금 확인.",
+      "checkedAt": "2026-10-08",
+      "lat": null,
+      "lng": null,
+      "coordinateSource": null,
+      "coordinatePrecision": null,
+      "coordinateNote": "공식 장소 핀 좌표 미검증. 자동 거리·보행시간 계산에서 제외.",
+      "closureNote": "구역 전체의 정기휴관 개념 없음. 행사·보행통제 준수."
+    },
+    {
+      "id": "madrid-prado",
+      "city": "madrid",
+      "name": "프라도 미술관",
+      "district": "파세오 델 아르테",
+      "category": "culture",
+      "duration": 150,
+      "durationIsEstimate": true,
+      "currency": "EUR",
+      "priceCurrency": "EUR",
+      "price": 15,
+      "priceScope": "일반1인 입장: 컬렉션·특별전 포함. 오디오가이드 +€5. 18세 미만·18–25세 학생 등 무료자격, 65세 초과 등€7.50 할인은 증빙 필요.",
+      "priceNote": "일반1인 입장: 컬렉션·특별전 포함. 오디오가이드 +€5. 18세 미만·18–25세 학생 등 무료자격, 65세 초과 등€7.50 할인은 증빙 필요.",
+      "description": "스페인 회화와 유럽 미술 컬렉션을 중심으로 둘러보는 미술관.",
+      "officialUrl": "https://www.museodelprado.es/en/visit/opening-times-and-prices",
+      "hours": "월–토10:00–20:00, 일·공휴일10:00–19:00. 최종입장 마감30분 전. 1/6·12/24·31은10:00–14:00.",
+      "reservation": "시간지정 입장권. 무료시간도 정원·대기 제한이 있어 방문 전 확인.",
+      "checkedAt": "2026-10-08",
+      "lat": 40.41381,
+      "lng": -3.692524,
+      "coordinateSource": "https://www.esmadrid.com/en/tourist-information/museo-del-prado",
+      "coordinatePrecision": "official_named_place_marker",
+      "coordinateNote": "마드리드 공식관광청 지도데이터 formatter_calcule_route.data에서 장소명과 상세페이지 링크가 일치하는 field_coord 점을 확인. 지도 중심·주변 다른 장소 좌표를 사용하지 않음. 건물/공원 대표점으로 실제입구와 다를 수 있음.",
+      "hoursSource": "https://www.esmadrid.com/en/tourist-information/museo-del-prado",
+      "closedDates": [
+        "2026-01-01",
+        "2026-05-01",
+        "2026-12-25"
+      ],
+      "closureNote": "1/1·5/1·12/25 휴관. 연도별 공지와 전시실 휴실 별도.",
+      "freeAdmissionNote": "상설컬렉션 일반무료: 월–토18:00–20:00, 일·공휴일17:00–19:00. 특별전 무료범위는 별도 확인."
+    },
+    {
+      "id": "madrid-royal-palace",
+      "city": "madrid",
+      "name": "마드리드 왕궁",
+      "district": "오스트리아스",
+      "category": "culture",
+      "duration": 100,
+      "durationIsEstimate": true,
+      "currency": "EUR",
+      "priceCurrency": "EUR",
+      "price": 18,
+      "priceScope": "일반1인 셀프가이드 궁전입장 기본요금 €18. 온라인 예약수수료는 구매화면에서 별도 확인. 왕실주방·왕실컬렉션 갤러리 결합권은 별도.",
+      "priceNote": "일반1인 셀프가이드 궁전입장 기본요금 €18. 온라인 예약수수료는 구매화면에서 별도 확인. 왕실주방·왕실컬렉션 갤러리 결합권은 별도.",
+      "description": "왕궁의 의전공간과 장식미술을 둘러보는 코스. 국가행사로 방문범위가 달라질 수 있습니다.",
+      "officialUrl": "https://tickets.patrimonionacional.es/en/tickets/palacio-real-de-madrid",
+      "hours": "10–3월 월–토10:00–18:00, 4–9월 월–토10:00–19:00. 일10:00–16:00. 최종입장·매표 마감1시간 전.",
+      "reservation": "공식 시간지정 예약 권장. 국가행사·시설공사·판매상품별 포함범위 확인.",
+      "checkedAt": "2026-10-08",
+      "lat": 40.417956056591,
+      "lng": -3.714323043823,
+      "coordinateSource": "https://www.esmadrid.com/informacion-turistica/palacio-real",
+      "coordinatePrecision": "official_named_place_marker",
+      "coordinateNote": "마드리드 공식관광청 지도데이터 formatter_calcule_route.data에서 장소명과 상세페이지 링크가 일치하는 field_coord 점을 확인. 지도 중심·주변 다른 장소 좌표를 사용하지 않음. 건물/공원 대표점으로 실제입구와 다를 수 있음.",
+      "closedDates": [
+        "2026-01-01",
+        "2026-01-06",
+        "2026-05-01",
+        "2026-12-25"
+      ],
+      "closureNote": "12/24·31은15:00 폐관(매표14:00까지). 국가행사로 추가휴관 가능.",
+      "eligibilityNote": "5–16세·65세 초과·25세 이하 적격학생 €9. 5세 미만 무료. 월–목 무료시간은 EU국민/거주·취업허가자와 중남미국민 등 자격제한 및 증빙·현장발권이 있어 모두에게 무료로 적용 금지.",
+      "bookingFee": null,
+      "purchaseTotalVerified": false
+    },
+    {
+      "id": "madrid-reina-sofia",
+      "city": "madrid",
+      "name": "레이나 소피아 미술관",
+      "district": "아토차·라바피에스",
+      "category": "culture",
+      "duration": 120,
+      "durationIsEstimate": true,
+      "currency": "EUR",
+      "priceCurrency": "EUR",
+      "price": 12,
+      "priceScope": "일반1인 본관 컬렉션·특별전 기본입장 €12. 오디오가이드 결합 €18(현장). 온라인수수료·무료대상 증빙조건은 구매 전 확인.",
+      "priceNote": "일반1인 본관 컬렉션·특별전 기본입장 €12. 오디오가이드 결합 €18(현장). 온라인수수료·무료대상 증빙조건은 구매 전 확인.",
+      "description": "근현대 미술과 피카소의 게르니카를 만나는 미술관 코스.",
+      "officialUrl": "https://www.museoreinasofia.es/en/visit/",
+      "hours": "월·수–토10:00–21:00, 일10:00–14:30. 화요일 휴관. 전시실은 폐관 전 미리 퇴실.",
+      "reservation": "온라인 구매자는 Nouvel 입구(Ronda de Atocha 2) 이용 권장. 무료시간도 티켓 필요.",
+      "checkedAt": "2026-10-08",
+      "lat": 40.4079189,
+      "lng": -3.6945566,
+      "coordinateSource": "https://www.esmadrid.com/informacion-turistica/museo-reina-sofia",
+      "coordinatePrecision": "official_named_place_marker",
+      "coordinateNote": "마드리드 공식관광청 지도데이터 formatter_calcule_route.data에서 장소명과 상세페이지 링크가 일치하는 field_coord 점을 확인. 지도 중심·주변 다른 장소 좌표를 사용하지 않음. 건물/공원 대표점으로 실제입구와 다를 수 있음.",
+      "closedWeekdays": [
+        2
+      ],
+      "closedDates": [
+        "2026-01-01",
+        "2026-01-06",
+        "2026-05-01",
+        "2026-05-15",
+        "2026-11-09",
+        "2026-12-24",
+        "2026-12-25",
+        "2026-12-31"
+      ],
+      "closureNote": "화요일 및 지정공휴일 휴관. 5/15·11/9는 지역달력에 따라 바뀔 수 있어 공식공지 우선.",
+      "freeAdmissionNote": "개인방문 무료시간 월·수–토19:00–21:00, 일12:30–14:30. 18세미만·65세초과·적격학생 등 무료대상은 현장 증빙. 특별무료일은 해당연도 공지를 확인.",
+      "bookingFee": null,
+      "purchaseTotalVerified": false
+    },
+    {
+      "id": "madrid-retiro-park",
+      "city": "madrid",
+      "name": "레티로 공원",
+      "district": "레티로",
+      "category": "nature",
+      "duration": 90,
+      "durationIsEstimate": true,
+      "currency": "EUR",
+      "priceCurrency": "EUR",
+      "price": 0,
+      "priceScope": "일반 공원산책 무료. 보트·음료·별도행사 등 제외.",
+      "priceNote": "일반 공원산책 무료. 보트·음료·별도행사 등 제외.",
+      "description": "호수와 정원 사이에서 휴식하는 도심 공원 산책.",
+      "officialUrl": "https://www.esmadrid.com/en/tourist-information/parque-del-retiro",
+      "hours": "4–9월06:00–24:00, 10–3월06:00–22:00.",
+      "reservation": "공원 일반산책 예약 없음. 악천후 폐쇄 알림을 확인.",
+      "checkedAt": "2026-10-08",
+      "lat": 40.415260483375,
+      "lng": -3.684499561787,
+      "coordinateSource": "https://www.esmadrid.com/en/tourist-information/parque-del-retiro",
+      "coordinatePrecision": "official_named_place_marker",
+      "coordinateNote": "마드리드 공식관광청 지도데이터 formatter_calcule_route.data에서 장소명과 상세페이지 링크가 일치하는 field_coord 점을 확인. 지도 중심·주변 다른 장소 좌표를 사용하지 않음. 건물/공원 대표점으로 실제입구와 다를 수 있음.",
+      "closureNote": "강풍·악천후 시 전부/일부 폐쇄 가능. 크리스탈 궁전은 공식 미술관안내상 공사로 임시휴관하며 일반 공원개방과 다름.",
+      "closureSource": "https://www.museoreinasofia.es/en/visit/"
+    },
+    {
+      "id": "lisbon-jeronimos",
+      "name": "제로니무스 수도원 회랑",
+      "city": "lisbon",
+      "currency": "EUR",
+      "priceCurrency": "EUR",
+      "lat": 38.697831,
+      "lng": -9.205895,
+      "district": "벨렝",
+      "category": "culture",
+      "duration": 90,
+      "durationIsEstimate": true,
+      "price": 18,
+      "priceScope": "일반 성인 회랑 관람 기본요금. 온라인 예매수수료·유료투어 제외.",
+      "priceNote": "기본18유로. 공식 온라인 판매 화면은18유로에 비용이 더해진19.11유로를 함께 표시하므로 결제 총액 확인. 만13–24세 및65세 초과 감면은 증빙 조건.",
+      "description": "마누엘 양식 회랑을 둘러보는 유네스코 세계유산 코스. 성당 관람시간은 회랑과 다릅니다.",
+      "officialUrl": "https://mosteirojeronimos.torrebelem.gov.pt/en/visitar",
+      "coordinateSource": "https://www.visitlisboa.com/en/places/jeronimos-monastery",
+      "coordinatePrecision": "official_tourism_jsonld_place_coordinates",
+      "coordinateNote": "리스본 관광청의 해당 장소 JSON-LD GeoCoordinates. 출입구와 다를 수 있음.",
+      "checkedAt": "2026-10-08",
+      "recommendationReason": "리스본 관광청이 소개하는 주요 방문지 중 동선·문화·실내활동을 나누어 선정한 편집 추천. 이용자 평점 순위가 아님.",
+      "hours": "화–일09:30–17:30, 최종입장17:00. 매표소16:30 마감. 월요일·1/1·부활절 일요일·5/1·6/13·12/25 휴관.",
+      "closedWeekdays": [
+        1
+      ],
+      "closedDates": [
+        "2026-01-01",
+        "2026-04-05",
+        "2026-05-01",
+        "2026-06-13",
+        "2026-12-25"
+      ],
+      "hoursSource": "https://mosteirojeronimos.torrebelem.gov.pt/en/visitar",
+      "reservation": "온라인 사전예매 권장, 매진 시 당일 구매 불가. Lisboa Card도 실물카드를 수령한 뒤 별도 시간예약 필요, 입장 보장 아님.",
+      "reservationUrl": "https://mmp.bymeoblueticket.pt/pt/event/14759/mosteiro-dos-jeronimos-claustro",
+      "onlineDisplayedPrice": 19.11,
+      "onlinePriceNote": "공식 판매 화면 표시(18유로 기본가와19.11유로 표시); 선택 날짜의 최종 결제 검증 아님."
+    },
+    {
+      "id": "lisbon-sao-jorge-castle",
+      "name": "상 조르제 성",
+      "city": "lisbon",
+      "currency": "EUR",
+      "priceCurrency": "EUR",
+      "lat": 38.713794262212,
+      "lng": -9.13338303565979,
+      "district": "알파마·카스텔루",
+      "category": "culture",
+      "duration": 100,
+      "durationIsEstimate": true,
+      "price": 17,
+      "priceScope": "일반 성인1인 성 입장. 특별 프로그램·선택 서비스 제외.",
+      "priceNote": "일반 성인1인 성 입장. 특별 프로그램·선택 서비스 제외.",
+      "description": "언덕 위 성곽과 전망을 즐기는 코스. 오르막·계단이 많고 성벽 입장 마감은 본시설보다 빠를 수 있습니다.",
+      "officialUrl": "https://castelodesaojorge.pt/en/plan-your-visit/choose-your-ticket/",
+      "coordinateSource": "https://www.visitlisboa.com/en/places/castelo-de-sao-jorge",
+      "coordinatePrecision": "official_tourism_jsonld_place_coordinates",
+      "coordinateNote": "리스본 관광청의 해당 장소 JSON-LD GeoCoordinates. 출입구와 다를 수 있음.",
+      "checkedAt": "2026-10-08",
+      "recommendationReason": "리스본 관광청이 소개하는 주요 방문지 중 동선·문화·실내활동을 나누어 선정한 편집 추천. 이용자 평점 순위가 아님.",
+      "hours": "3–10월09:00–21:00(마지막20:30),11–2월09:00–18:00(마지막17:30).1/1·5/1·12/24·12/25·12/31 휴관.",
+      "hoursSource": "https://castelodesaojorge.pt/en/plan-your-visit/schedules/",
+      "closedDates": [
+        "2026-01-01",
+        "2026-05-01",
+        "2026-12-24",
+        "2026-12-25",
+        "2026-12-31"
+      ],
+      "reservation": "공식 판매처BOL 또는 현장 구매. 만13–25세8.50유로, 만65세 이상14유로 등 증빙 필요.",
+      "reservationUrl": "https://castelosaojorge.bol.pt/",
+      "notes": "확인일 공지: 성 박물관 공간은 화장실 공사로 임시 휴실.10월17일 파업으로 방문 지장 가능 공지가 있어 그 날짜는 재확인. 성 전체 폐쇄로 단정하지 않음.",
+      "serviceAlerts": [
+        {
+          "date": "2026-10-17",
+          "kind": "possible_disruption",
+          "automaticClosure": false,
+          "source": "https://castelodesaojorge.pt/en/plan-your-visit/schedules/"
+        }
+      ]
+    },
+    {
+      "id": "lisbon-oceanario",
+      "name": "리스본 오세아나리움",
+      "city": "lisbon",
+      "currency": "EUR",
+      "priceCurrency": "EUR",
+      "lat": 38.763501,
+      "lng": -9.093777,
+      "district": "파르크 다스 나송이스",
+      "category": "museum",
+      "duration": 120,
+      "durationIsEstimate": true,
+      "price": null,
+      "priceScope": "일반 만13–64세1인, 방문 시간에 따른 가격. 날짜·시간을 선택한 실제 결제금액은 미확인.",
+      "priceNote": "시간대별25.50–29.90유로. 선택시간이 없는 합계에는 확정 입장료로 더하지 않음.",
+      "description": "대형 수조와 해양 전시를 만나는 실내 코스. 예약 시간별 요금 차이를 확인하세요.",
+      "officialUrl": "https://oceanario.pt/planear-visita/",
+      "coordinateSource": "https://www.visitlisboa.com/en/places/oceanario-de-lisboa",
+      "coordinatePrecision": "official_tourism_jsonld_place_coordinates",
+      "coordinateNote": "리스본 관광청의 해당 장소 JSON-LD GeoCoordinates. 출입구와 다를 수 있음.",
+      "checkedAt": "2026-10-08",
+      "recommendationReason": "리스본 관광청이 소개하는 주요 방문지 중 동선·문화·실내활동을 나누어 선정한 편집 추천. 이용자 평점 순위가 아님.",
+      "priceRange": {
+        "min": 25.5,
+        "max": 29.9,
+        "currency": "EUR",
+        "basis": "공식 일반 성인 시간대별 요금표. 온라인 할인 및 선택상품 별도."
+      },
+      "pricingRules": [
+        {
+          "time": "10:00–11:30",
+          "price": 29.9
+        },
+        {
+          "time": "12:00–15:30",
+          "price": 27.7
+        },
+        {
+          "time": "16:00–18:30",
+          "price": 25.5
+        }
+      ],
+      "hours": "매일10:00–20:00, 마지막19:00.12/24·12/31은10:00–19:00,12/25·1/1은11:00–20:00.",
+      "hoursSource": "https://oceanario.pt/planear-visita/",
+      "reservation": "온라인 날짜·시간 선택 또는 당일 잔여분 현장 구매. 만0–2세 무료.",
+      "reservationUrl": "https://tickets.oceanario.pt/?language=en"
+    },
+    {
+      "id": "lisbon-comercio-square",
+      "name": "코메르시우 광장",
+      "city": "lisbon",
+      "currency": "EUR",
+      "priceCurrency": "EUR",
+      "lat": 38.707896,
+      "lng": -9.136547,
+      "district": "바이샤",
+      "category": "culture",
+      "duration": 45,
+      "durationIsEstimate": true,
+      "price": 0,
+      "priceScope": "공공 광장 산책만. 아우구스타 개선문 전망대·박물관·음식 제외.",
+      "priceNote": "공공 광장 산책만. 아우구스타 개선문 전망대·박물관·음식 제외.",
+      "description": "테주강과 연결된 리스본의 대표 광장. 주변 골목과 강변을 함께 걷기 좋습니다.",
+      "officialUrl": "https://www.visitlisboa.com/en/places/praca-do-comercio-terreiro-do-paco",
+      "coordinateSource": "https://www.visitlisboa.com/en/places/praca-do-comercio-terreiro-do-paco",
+      "coordinatePrecision": "official_tourism_jsonld_place_coordinates",
+      "coordinateNote": "리스본 관광청의 해당 장소 JSON-LD GeoCoordinates. 출입구와 다를 수 있음.",
+      "checkedAt": "2026-10-08",
+      "recommendationReason": "리스본 관광청이 소개하는 주요 방문지 중 동선·문화·실내활동을 나누어 선정한 편집 추천. 이용자 평점 순위가 아님.",
+      "hours": "야외 공공광장. 행사·통제·인접시설 운영시간은 별도 확인.",
+      "reservation": "일반 산책 예약 없음. 주변 유료시설은 별도 티켓."
+    },
+    {
+      "id": "amsterdam-rijksmuseum",
+      "name": "레이크스 국립미술관",
+      "city": "amsterdam",
+      "currency": "EUR",
+      "priceCurrency": "EUR",
+      "district": "뮤지엄플레인",
+      "category": "culture",
+      "duration": 150,
+      "durationIsEstimate": true,
+      "price": 25,
+      "priceScope": "성인 일반 입장. 선택 가이드·오디오·식사 제외.",
+      "priceNote": "성인 일반 입장. 선택 가이드·오디오·식사 제외.",
+      "officialUrl": "https://www.rijksmuseum.nl/en/visit/practical-info/opening-hours-and-prices",
+      "hours": "연중 매일 09:00–17:00. 공휴일도 개관.",
+      "reservation": "일반 방문객은 시작시간 예약 필수. 온라인 예매 권장, 현장 소량 판매는 재고에 따름.",
+      "checkedAt": "2026-10-08",
+      "lat": 52.3599976,
+      "lng": 4.8852188,
+      "coordinateSource": "https://www.rijksmuseum.nl/nl/bezoek/praktische-info/adres-en-route",
+      "coordinateMapUrl": "https://www.google.com/maps/place/Rijksmuseum/@52.359998,4.885219,16z/data=!4m5!3m4!1s0x0:0xd54373ae6a408585!8m2!3d52.3599976!4d4.8852188?hl=nl-NL",
+      "coordinatePrecision": "officially_linked_named_place_pin",
+      "coordinateNote": "운영자 공식 방문안내의 실제 장소핀/경로 목적지 좌표. 지도 화면 중심좌표가 아님.",
+      "closedWeekdays": [],
+      "description": "렘브란트와 베르메르 등 네덜란드 미술을 보는 대표 박물관.",
+      "closureNote": "정기 주간휴관일 없음."
+    },
+    {
+      "id": "amsterdam-van-gogh-museum",
+      "name": "반 고흐 미술관",
+      "city": "amsterdam",
+      "currency": "EUR",
+      "priceCurrency": "EUR",
+      "district": "뮤지엄플레인",
+      "category": "culture",
+      "duration": 120,
+      "durationIsEstimate": true,
+      "price": 25,
+      "priceScope": "성인 일반 입장, 상설·현재 기획전 포함. 만18세 미만 무료, 시간예약 필요.",
+      "priceNote": "성인 일반 입장, 상설·현재 기획전 포함. 만18세 미만 무료, 시간예약 필요.",
+      "officialUrl": "https://www.vangoghmuseum.nl/en/visit/tickets-and-ticket-prices",
+      "hours": "매일 개관, 날짜별 09:00–17:00 또는18:00, 일부 금요일21:00. 정확한 날짜별 시간은 공식 달력 확인.",
+      "reservation": "온라인 시간지정권 필수. 할인·무료 대상도 시간예약. I amsterdam City Card로 무료입장 불가.",
+      "checkedAt": "2026-10-08",
+      "lat": 52.3578618,
+      "lng": 4.8814097,
+      "coordinateSource": "https://www.vangoghmuseum.nl/en/visit/address-and-opening-hours",
+      "coordinateMapUrl": "https://goo.gl/maps/wkNZrW6YyrzWPBkm8",
+      "coordinatePrecision": "officially_linked_named_place_pin",
+      "coordinateNote": "공식 페이지의 Museumplein6 주출입구 경로 링크에 지정된 목적지 좌표. 미술관 건물 중앙 핀과 다름.",
+      "closedWeekdays": [],
+      "description": "반 고흐 작품과 동시대 화가를 함께 보는 미술관.",
+      "hoursSource": "https://www.vangoghmuseum.nl/en/visit/address-and-opening-hours",
+      "hoursExceptions": [
+        {
+          "from": "2026-10-01",
+          "through": "2026-10-12",
+          "hours": "09:00–18:00, 금요일21:00까지"
+        },
+        {
+          "date": "2026-10-13",
+          "hours": "09:00–17:00"
+        },
+        {
+          "date": "2026-10-14",
+          "hours": "09:00–18:00"
+        },
+        {
+          "date": "2026-10-15",
+          "hours": "09:00–17:00"
+        },
+        {
+          "date": "2026-10-16",
+          "hours": "09:00–21:00"
+        },
+        {
+          "from": "2026-10-17",
+          "through": "2026-10-31",
+          "hours": "09:00–18:00, 금요일21:00까지"
+        }
+      ]
+    },
+    {
+      "id": "amsterdam-anne-frank-house",
+      "name": "안네 프랑크의 집",
+      "city": "amsterdam",
+      "currency": "EUR",
+      "priceCurrency": "EUR",
+      "district": "요르단·웨스터마르크트",
+      "category": "culture",
+      "duration": 90,
+      "durationIsEstimate": true,
+      "price": 16.5,
+      "priceScope": "성인 박물관 관람, 예약수수료1유로 포함. 별도 입문 프로그램 제외.",
+      "priceNote": "성인 박물관 관람, 예약수수료1유로 포함. 별도 입문 프로그램 제외.",
+      "officialUrl": "https://www.annefrank.org/en/museum/tickets/",
+      "hours": "일반 매일09:00–22:00. 11/7/2026은18:30,12/25·12/31은17:00 마감.",
+      "reservation": "공식 웹사이트에서만 시간지정권 판매. 매주 화요일 현지10:00에6주 뒤 방문분 공개. 현장판매 없음.",
+      "checkedAt": "2026-10-08",
+      "lat": 52.3750225,
+      "lng": 4.8840648,
+      "coordinateSource": "https://www.annefrank.org/en/museum/tickets/",
+      "coordinateMapUrl": "https://goo.gl/maps/tg4hua9re1C2",
+      "coordinatePrecision": "officially_linked_named_place_pin",
+      "coordinateNote": "운영자 공식 방문안내의 실제 장소핀/경로 목적지 좌표. 지도 화면 중심좌표가 아님.",
+      "closedWeekdays": [],
+      "description": "은신처와 일기를 통해 안네 프랑크의 삶을 만나는 역사박물관.",
+      "closedDates": [
+        "2026-09-21"
+      ],
+      "closureNote": "1/1은12:00 개관,4/27·5/4는17:00 마감. 날짜별 예외 재확인.",
+      "accessNotes": "급한 계단과 높은 단차. Westermarkt20 입구 이용. 13/17번 트램 접근안내는 현재 공사와 충돌하므로 사용하지 않음.",
+      "accessSource": "https://gvb.nl/en/oranje-loper"
+    },
+    {
+      "id": "prague-castle",
+      "name": "프라하 성 주요 관람코스",
+      "city": "prague",
+      "currency": "CZK",
+      "priceCurrency": "CZK",
+      "district": "흐라드차니",
+      "category": "culture",
+      "duration": 180,
+      "durationIsEstimate": true,
+      "price": 450,
+      "priceScope": "성인 주요코스 현장 기본권: 구왕궁·성비투스대성당·성조지성당·황금소로. 남탑·별도전시 제외.",
+      "priceNote": "성인 주요코스 현장 기본권: 구왕궁·성비투스대성당·성조지성당·황금소로. 남탑·별도전시 제외.",
+      "description": "왕궁과 성당을 함께 보는 언덕 위 역사 코스.",
+      "officialUrl": "https://www.hrad.cz/en/prague-castle-for-visitors/tickets",
+      "hours": "건물4~10월09:00–17:00,11~3월09:00–16:00. 대성당 일요일12:00 개방. 외부단지06:00–22:00.",
+      "reservation": "현장 구매 또는 운영사 연결 온라인 판매. 표는2일 유효, 건물별1회. 보안검사·종교행사 제한 가능.",
+      "checkedAt": "2026-10-08",
+      "lat": 50.09040320882067,
+      "lng": 14.399041309123248,
+      "coordinateSource": "https://prague.eu/en/objevujte/prague-castle-prazsky-hrad/",
+      "coordinatePrecision": "official_page_explicit_place_marker",
+      "coordinateNote": "공식 관광청 프라하 성 페이지가 지정한 제2중정 Kohlova kašna 장소핀. 성 전체 대표점으로 사용하며 특정 유료 건물 입구가 아님.",
+      "coordinatePlaceId": "ChIJKWHZ9R6VC0cR4C-NnG-JCRw",
+      "hoursSource": "https://www.hrad.cz/en/prague-castle-for-visitors/opening-hours",
+      "closedDates": [
+        "2026-12-24"
+      ],
+      "closureNote": "12/24 유료 건물 휴관, 외부단지는 개방. 2026-10-10 대성당은12:30부터17:00까지(최종입장16:40)."
+    },
+    {
+      "id": "prague-old-town-hall",
+      "name": "구시청사 전망탑·천문시계",
+      "city": "prague",
+      "currency": "CZK",
+      "priceCurrency": "CZK",
+      "district": "스타레 므네스토",
+      "category": "view",
+      "duration": 75,
+      "durationIsEstimate": true,
+      "price": 350,
+      "priceScope": "성인 현장 기본입장: 전망탑·기사의 홀. 실내가이드100/150 CZK, 성인 전망탑 엘리베이터100 CZK 별도. 온라인 우선입장450 CZK.",
+      "priceNote": "성인 현장 기본입장: 전망탑·기사의 홀. 실내가이드100/150 CZK, 성인 전망탑 엘리베이터100 CZK 별도. 온라인 우선입장450 CZK.",
+      "description": "광장과 천문시계를 함께 보는 구시가지 전망 코스.",
+      "officialUrl": "https://prague.eu/en/objevujte/old-town-hall-with-astronomical-clock-staromestska-radnice-s-orlojem/",
+      "hours": "1~3월 매일10:00–19:00,4~12월 매일09:00–20:00. 공휴일 특별운영 확인.",
+      "reservation": "탑은 온라인 구매 가능. 역사적 실내는 당일 가이드시간·현장 추가권 필요. 단체 실내투어 사전예약.",
+      "checkedAt": "2026-10-08",
+      "lat": 50.0869767830406,
+      "lng": 14.420574895106503,
+      "coordinateSource": "https://prague.eu/en/objevujte/old-town-hall-with-astronomical-clock-staromestska-radnice-s-orlojem/",
+      "coordinatePrecision": "official_page_explicit_place_marker",
+      "coordinateNote": "공식 관광청 장소 페이지의 주소·place_id가 있는 지도핀. 지도 중심 좌표가 아니며 실제 출입구와 다를 수 있음.",
+      "coordinatePlaceId": "ChIJfZWHsdOVC0cRSNXlzJhXdY8",
+      "closureNote": "상시 주간휴관일 없음. 사이트의2025년 크리스마스 운영표를2026년으로 재사용하지 않음."
+    },
+    {
+      "id": "prague-charles-bridge",
+      "name": "카를교",
+      "city": "prague",
+      "currency": "CZK",
+      "priceCurrency": "CZK",
+      "district": "스타레 므네스토·말라스트라나",
+      "category": "view",
+      "duration": 45,
+      "durationIsEstimate": true,
+      "price": 0,
+      "priceScope": "공공 보행교 산책. 양끝 전망탑·박물관 별도.",
+      "priceNote": "공공 보행교 산책. 양끝 전망탑·박물관 별도.",
+      "description": "블타바강을 건너며 프라하 성과 구시가지를 바라보는 산책.",
+      "officialUrl": "https://prague.eu/en/objevujte/charles-bridge-karluv-most/",
+      "hours": "공공 보행교. 행사·기상·보수 통제는 별도 확인.",
+      "reservation": "보행교 산책 예약 없음.",
+      "checkedAt": "2026-10-08",
+      "lat": 50.08643440311137,
+      "lng": 14.411906983432402,
+      "coordinateSource": "https://prague.eu/en/objevujte/charles-bridge-karluv-most/",
+      "coordinatePrecision": "official_page_explicit_place_marker",
+      "coordinateNote": "공식 관광청 장소 페이지의 주소·place_id가 있는 지도핀. 지도 중심 좌표가 아니며 실제 출입구와 다를 수 있음.",
+      "coordinatePlaceId": "ChIJr7N4AxuVC0cRHLuN8zSZ7Mc"
+    },
+    {
+      "id": "prague-national-museum",
+      "name": "국립박물관 박물관단지",
+      "city": "prague",
+      "currency": "CZK",
+      "priceCurrency": "CZK",
+      "district": "바츨라프 광장",
+      "category": "culture",
+      "duration": 150,
+      "durationIsEstimate": true,
+      "price": 360,
+      "priceScope": "성인 박물관단지1회 입장. Czech Press Photo·어린이박물관 제외.",
+      "priceNote": "성인 박물관단지1회 입장. Czech Press Photo·어린이박물관 제외.",
+      "description": "역사관과 신관을 잇는 자연사·체코문화 전시 코스.",
+      "officialUrl": "https://www.nm.cz/en/visit-us/buildings/museum-complex-of-the-national-museum",
+      "hours": "매일10:00–18:00. 별도 임시휴관 공지 확인.",
+      "reservation": "일반 전자권은 구입후30일 이내1회. 만원일 때 입장대기 가능. 어린이박물관은 별도 시간지정권.",
+      "checkedAt": "2026-10-08",
+      "lat": 50.07896790708071,
+      "lng": 14.4309357314911,
+      "coordinateSource": "https://prague.eu/en/objevujte/national-museum-museum-complex-of-the-national-museum/",
+      "coordinatePrecision": "official_page_explicit_place_marker",
+      "coordinateNote": "공식 관광청 장소 페이지의 주소·place_id가 있는 지도핀. 지도 중심 좌표가 아니며 실제 출입구와 다를 수 있음.",
+      "coordinatePlaceId": "ChIJua9Ogo2UC0cRpkk9dANajkI",
+      "closureNote": "상시 주간휴관일 없음."
+    },
+    {
+      "id": "vienna-schoenbrunn",
+      "name": "쇤브룬 궁전 Palace Ticket",
+      "city": "vienna",
+      "currency": "EUR",
+      "priceCurrency": "EUR",
+      "district": "히칭",
+      "category": "culture",
+      "duration": 150,
+      "durationIsEstimate": true,
+      "price": 42,
+      "priceScope": "성인 Palace Ticket42 EUR, 오디오가이드/설명지 포함. 특별정원·동물원 별도. 계절 요금변경 가능.",
+      "priceNote": "성인 Palace Ticket42 EUR, 오디오가이드/설명지 포함. 특별정원·동물원 별도. 계절 요금변경 가능.",
+      "description": "황실 거주공간 관람과 일반 정원 산책을 함께 계획하는 코스.",
+      "officialUrl": "https://www.schoenbrunn.at/en/all-tickets/palace-ticket",
+      "hours": "매일08:30 개방. 2026-09-01~11-02 17:30폐장,11-03~2027-03-31 17:00폐장. 최종입장45분전.",
+      "reservation": "시간지정 입장권 사전구매 권장. 공식 온라인 판매는 ImperialTickets. 관람 자체 약75분, 전체150분은 이동·정원 포함 예상.",
+      "checkedAt": "2026-10-08",
+      "lat": 48.18522470137297,
+      "lng": 16.312595843919553,
+      "coordinateSource": "https://www.wien.info/en/art-culture/imperial-sights/schoenbrunn-palace-357558",
+      "coordinatePrecision": "official_page_explicit_place_marker",
+      "coordinateRecordId": "130532",
+      "coordinateName": "Schönbrunn Palace (Schloss Schönbrunn)",
+      "coordinateNote": "비엔나 관광청의 이름·주소가 있는 장소 지도핀. 지도화면 중심이 아니며 정확한 출입구·승강장과 다를 수 있음.",
+      "hoursSource": "https://www.schoenbrunn.at/en/visitor-information/opening-times",
+      "closureNote": "공휴일 포함 매일 운영. 일반 정원 무료, 10월06:30–19:00;11~2월06:30–17:30. 유료정원 겨울휴장 별도.",
+      "publishedVisitMinutes": 75,
+      "priceMayChangeSeasonally": true
+    },
+    {
+      "id": "vienna-upper-belvedere",
+      "name": "벨베데레 상궁",
+      "city": "vienna",
+      "currency": "EUR",
+      "priceCurrency": "EUR",
+      "district": "란트슈트라세",
+      "category": "culture",
+      "duration": 120,
+      "durationIsEstimate": true,
+      "price": null,
+      "priceScope": "상궁 성인1인. 공식 확인일 표시23 EUR이나 여행일별 가격확인이 필요. 하궁·Belvedere21별도.",
+      "priceNote": "상궁 성인1인. 공식 확인일 표시23 EUR이나 여행일별 가격확인이 필요. 하궁·Belvedere21별도.",
+      "description": "클림트 작품과 오스트리아 미술을 보는 상궁 전시 코스.",
+      "officialUrl": "https://www.belvedere.at/en/visit/upper-belvedere",
+      "hours": "매일09:00–18:00. 날짜별 특별운영 별도.",
+      "reservation": "일반 입장은 시간대 지정 필수. 선택시간에 입장한 뒤 개관시간 내 관람. 재고 미조회.",
+      "checkedAt": "2026-10-08",
+      "lat": 48.19167098014179,
+      "lng": 16.381088018242735,
+      "coordinateSource": "https://www.wien.info/de/kunst-kultur/museen-ausstellungen/top-museen/belvedere-341072",
+      "coordinatePrecision": "official_page_explicit_place_marker",
+      "coordinateRecordId": "124310",
+      "coordinateName": "Oberes Belvedere",
+      "coordinateNote": "비엔나 관광청의 이름·주소가 있는 장소 지도핀. 지도화면 중심이 아니며 정확한 출입구·승강장과 다를 수 있음.",
+      "priceDynamic": true,
+      "observedPrice": 23,
+      "observedPriceDate": "2026-10-08",
+      "priceRange": {
+        "min": null,
+        "max": null,
+        "currency": "EUR",
+        "basis": "여행일 범위 미확정. 확인일 표시23 EUR는 최저가 또는 확정 여행일 가격이 아님."
+      },
+      "closureNote": "상궁은 정기 주간휴관 없음. Belvedere21의 월요일휴관을 상궁에 적용하지 않음."
+    },
+    {
+      "id": "vienna-kunsthistorisches",
+      "name": "빈 미술사박물관",
+      "city": "vienna",
+      "currency": "EUR",
+      "priceCurrency": "EUR",
+      "district": "링슈트라세",
+      "category": "culture",
+      "duration": 180,
+      "durationIsEstimate": true,
+      "price": null,
+      "priceScope": "성인 입장권 현행 정확한 가격 미확정. 온라인/현장가격 차이·특별전 조건은 공식 판매화면 확인.",
+      "priceNote": "성인 입장권 현행 정확한 가격 미확정. 온라인/현장가격 차이·특별전 조건은 공식 판매화면 확인.",
+      "description": "합스부르크 미술품과 고대 유물을 함께 보는 박물관.",
+      "officialUrl": "https://www.wien.info/de/kunst-kultur/museen-ausstellungen/top-museen/kunsthistorisches-museum-350478",
+      "hours": "기본화~일10:00–18:00,목21:00까지. 2026-10-05~2027-01-04 매일 개방 예외.",
+      "reservation": "관광청 안내상 시간대 예약 필요. 공식 티켓링크에서무료 입장시간 예약 또는 현장예약; 표값은 별도.",
+      "checkedAt": "2026-10-08",
+      "lat": 48.20375983511466,
+      "lng": 16.361744276196305,
+      "coordinateSource": "https://www.wien.info/de/kunst-kultur/museen-ausstellungen/top-museen/kunsthistorisches-museum-350478",
+      "coordinatePrecision": "official_page_explicit_place_marker",
+      "coordinateRecordId": "128446",
+      "coordinateName": "Kunsthistorisches Museum Wien",
+      "coordinateNote": "비엔나 관광청의 이름·주소가 있는 장소 지도핀. 지도화면 중심이 아니며 정확한 출입구·승강장과 다를 수 있음.",
+      "hoursSource": "https://www.wien.info/en/see-do/discover-vienna/hidden-gems/a-global-city-338076",
+      "closureNote": "2026-09-01~10-04 월요일 휴관,10-05~2027-01-04 월요일도개관. 연중월요일 일괄자동제외 금지.",
+      "conditionalClosureRule": {
+        "weekday": 1,
+        "openPeriods": [
+          {
+            "from": "2026-10-05",
+            "to": "2027-01-04"
+          }
+        ]
+      },
+      "priceVerificationNote": "판매페이지 직접조회는 대기열/접속오류. 오래된 검색가격을 현행확정가로 사용하지 않음."
+    },
+    {
+      "id": "vienna-stadtpark",
+      "name": "슈타트파르크·슈트라우스 기념비",
+      "city": "vienna",
+      "currency": "EUR",
+      "priceCurrency": "EUR",
+      "district": "도심·란트슈트라세",
+      "category": "nature",
+      "duration": 60,
+      "durationIsEstimate": true,
+      "price": 0,
+      "priceScope": "공공 공원 산책. 내부 음식점·별도행사 비용 제외.",
+      "priceNote": "공공 공원 산책. 내부 음식점·별도행사 비용 제외.",
+      "description": "도심에서 잔디와 연못, 음악가 기념비를 따라 걷는 휴식 코스.",
+      "officialUrl": "https://www.wien.gv.at/english/environment/parks/stadtpark.html",
+      "hours": "공공 공원. 별도 고정 폐장시간 미확인;현장 통제·보수 공지 준수.",
+      "reservation": "일반 산책 예약 없음.",
+      "checkedAt": "2026-10-08",
+      "lat": 48.204924686747134,
+      "lng": 16.379837129113753,
+      "coordinateSource": "https://www.wien.info/de/lebenswertes-wien/parks-gruenflaechen/stadtpark-955832",
+      "coordinatePrecision": "official_page_explicit_place_marker",
+      "coordinateRecordId": "125542",
+      "coordinateName": "Stadtpark",
+      "coordinateNote": "비엔나 관광청의 이름·주소가 있는 장소 지도핀. 지도화면 중심이 아니며 정확한 출입구·승강장과 다를 수 있음."
+    }
+  ],
+  "restaurants": [
+    {
+      "id": "barcelona-7-portes",
+      "city": "barcelona",
+      "name": "세븐 포르테스(7 Portes)",
+      "district": "엘 보른·포르트 벨",
+      "cuisine": "카탈루냐식·파에야·쌀요리",
+      "currency": "EUR",
+      "priceCurrency": "EUR",
+      "priceRange": {
+        "min": null,
+        "max": null,
+        "currency": "EUR",
+        "basis": "전체 식사비는 메뉴·인원·음료에 따라 사용자 설정 필요"
+      },
+      "duration": 75,
+      "durationIsEstimate": true,
+      "officialUrl": "https://7portes.com/en/",
+      "reservationUrl": "https://7portes.com/en/",
+      "source": "https://7portes.com/en/",
+      "hours": "매일13:00–24:00.",
+      "notes": "Passeig Isabel II, 14. 공식 메뉴 생선 Parellada 파에야 €29.80, 채소파에야 €22.30. 단품가격이며 음료·전채를 포함한 식사총액 아님.",
+      "checkedAt": "2026-10-08",
+      "rating": null,
+      "ratingSource": null,
+      "selectionBasis": "official_source_curated",
+      "lat": 41.3821314,
+      "lng": 2.1832806,
+      "coordinateSource": "https://www.barcelonabusturistic.cat/en/restaurant-7-portes",
+      "coordinatePrecision": "official_named_place_marker",
+      "coordinateNote": "TMB·Turisme de Barcelona 공식 관광버스 안내의 Restaurant 7 Portes 장소명·주소 아래 Locate 지도점 좌표 명시값. 별도 La Barra 지점 좌표와 구분.",
+      "menuSource": "https://7portes.com/en/restaurant-7-portes-menu/",
+      "menuPriceExamples": [
+        {
+          "label": "Traditional fish Parellada Paella 단품 표시가",
+          "price": 29.8,
+          "currency": "EUR"
+        },
+        {
+          "label": "Vegetable Paella 단품 표시가",
+          "price": 22.3,
+          "currency": "EUR"
+        }
+      ],
+      "recommendationReason": "공식 메뉴에 쌀요리 선택지가 있고 점심부터 늦은 저녁까지 영업해 보른·항구 일정에 조합하기 쉬움.",
+      "mealServices": [
+        "lunch",
+        "dinner"
+      ],
+      "serviceNotes": "공식 영업13:00–24:00 및 식사메뉴 확인. 점심·저녁 후보이며 날짜별 주방마감·예약가능시간은 예약화면에서 확인."
+    },
+    {
+      "id": "barcelona-la-fonda",
+      "city": "barcelona",
+      "name": "라 폰다",
+      "district": "고딕 지구",
+      "cuisine": "지중해식·파에야·타파스",
+      "currency": "EUR",
+      "priceCurrency": "EUR",
+      "priceRange": {
+        "min": null,
+        "max": null,
+        "currency": "EUR",
+        "basis": "전체 식사비는 메뉴·인원·음료에 따라 사용자 설정 필요"
+      },
+      "duration": 75,
+      "durationIsEstimate": true,
+      "officialUrl": "https://andilana.com/en/restaurantes/la-fonda/",
+      "reservationUrl": "https://andilana.com/en/restaurantes/la-fonda/",
+      "source": "https://andilana.com/en/restaurantes/la-fonda/",
+      "hours": "매일12:30–23:00, 변경 가능.",
+      "notes": "Carrer dels Escudellers 10. 공식2026 메뉴 해산물파에야 €16.95/인(최소2인), 채소파에야 €12.65. 가격은 식사총액이 아니며 최소주문·음료 조건 확인.",
+      "checkedAt": "2026-10-08",
+      "rating": null,
+      "ratingSource": null,
+      "selectionBasis": "official_source_curated",
+      "lat": 41.379413240761686,
+      "lng": 2.176213515768454,
+      "coordinateSource": "https://ajuntament.barcelona.cat/sarria-santgervasi/es/guia-del-distrito/equipamientos-por-temas/listado/restaurant-la-fonda-92338210200",
+      "coordinatePrecision": "municipal_named_place_marker",
+      "coordinateNote": "바르셀로나 시 공식 Restaurant La Fonda 상세자료, 주소 Escudellers10과 gmapx/gmapy 및 목적지 이름이 표시된 길찾기 좌표 확인.",
+      "menuSource": "https://andilana.com/wp-content/uploads/2026/01/La_Fonda_ENG.pdf",
+      "menuPriceExamples": [
+        {
+          "label": "해산물파에야 1인분, 최소2인",
+          "price": 16.95,
+          "currency": "EUR",
+          "minimumPeople": 2
+        },
+        {
+          "label": "채소파에야 표시가",
+          "price": 12.65,
+          "currency": "EUR"
+        }
+      ],
+      "recommendationReason": "공식 지점 주소·메뉴·연속영업이 확인돼 고딕지구 산책 전후 점심·저녁 후보로 선정.",
+      "mealServices": [
+        "lunch",
+        "dinner"
+      ],
+      "serviceNotes": "공식 영업12:30–23:00 및 파에야·타파스 메뉴 확인. 점심·저녁 후보이며 당일 메뉴·주문마감은 확인 필요."
+    },
+    {
+      "id": "madrid-botin",
+      "city": "madrid",
+      "name": "보틴",
+      "district": "오스트리아스·마요르광장",
+      "cuisine": "카스티야식·돼지/양고기 로스트",
+      "currency": "EUR",
+      "priceCurrency": "EUR",
+      "priceRange": {
+        "min": null,
+        "max": null,
+        "currency": "EUR",
+        "basis": "전체 식사비는 메뉴·인원·음료에 따라 사용자 설정 필요"
+      },
+      "duration": 75,
+      "durationIsEstimate": true,
+      "officialUrl": "https://botin.es/",
+      "reservationUrl": "https://botin.es/",
+      "source": "https://botin.es/",
+      "hours": "공식 홈페이지 매일13:00–23:30 안내. 관광청 식사시간13:00–16:00/20:00–24:00와 차이가 있어 예약시각 확인.",
+      "notes": "Calle Cuchilleros 17. 공식관광청이 전통 로스트요리 식당으로 소개. 예약 권장. 현행 메뉴 전체금액·예약취소/노쇼 조건은 방문 전 공식예약에서 확인.",
+      "checkedAt": "2026-10-08",
+      "rating": null,
+      "ratingSource": null,
+      "selectionBasis": "official_source_curated",
+      "lat": 40.4141769,
+      "lng": -3.7079547,
+      "coordinateSource": "https://www.esmadrid.com/en/restaurants/botin",
+      "coordinatePrecision": "official_named_place_marker",
+      "coordinateNote": "마드리드 공식관광청 지도데이터 formatter_calcule_route.data에서 장소명과 상세페이지 링크가 일치하는 field_coord 점을 확인. 지도 중심·주변 다른 장소 좌표를 사용하지 않음. 건물/공원 대표점으로 실제입구와 다를 수 있음.",
+      "recommendationReason": "공식관광청의 전통 카스티야 음식 소개와 왕궁·구시가지 주변 위치를 근거로 점심·저녁 후보 선정.",
+      "hoursSource": "https://www.esmadrid.com/en/restaurants/botin",
+      "hoursConflict": true,
+      "mealServices": [
+        "lunch",
+        "dinner"
+      ],
+      "serviceNotes": "공식관광청에 점심13:00–16:00·저녁20:00–24:00 기재. 식당공식 홈의 종료23:30과 차이가 있어 실제예약시간을 우선."
+    },
+    {
+      "id": "madrid-museo-jamon-prado",
+      "city": "madrid",
+      "name": "무세오 델 하몬 프라도점",
+      "district": "파세오 델 아르테",
+      "cuisine": "하몬·보카디요·스페인 가정식",
+      "currency": "EUR",
+      "priceCurrency": "EUR",
+      "priceRange": {
+        "min": null,
+        "max": null,
+        "currency": "EUR",
+        "basis": "전체 식사비는 메뉴·인원·음료에 따라 사용자 설정 필요"
+      },
+      "duration": 75,
+      "durationIsEstimate": true,
+      "officialUrl": "https://www.museodeljamon.com/museos/paseo-prado/",
+      "reservationUrl": "https://www.museodeljamon.com/museos/paseo-prado/",
+      "source": "https://www.museodeljamon.com/museos/paseo-prado/",
+      "hours": "매일09:00–23:30.",
+      "notes": "Paseo del Prado 44. 실내메뉴 하몬 Reserva Tío Felipe 보카디요€3.90, 해산물파에야€30/2인. 단품예시이며 전체 식비 아님. 오늘의 메뉴는 예약 불가.",
+      "checkedAt": "2026-10-08",
+      "rating": null,
+      "ratingSource": null,
+      "selectionBasis": "official_source_curated",
+      "lat": 40.4102229,
+      "lng": -3.6928004,
+      "coordinateSource": "https://www.museodeljamon.com/museos/paseo-prado/",
+      "coordinatePrecision": "officially_linked_named_place_pin",
+      "coordinateNote": "공식 Paseo del Prado 지점 페이지의 지도 링크를 직접 열어 장소명Museo del Jamón·핀!3d40.4102229!4d-3.6928004 확인. 지도 화면 중심좌표는 쓰지 않음.",
+      "menuSource": "https://www.museodeljamon.com/carta/interior/",
+      "menuPriceExamples": [
+        {
+          "label": "Jamón Reserva Tío Felipe 보카디요 단품",
+          "price": 3.9,
+          "currency": "EUR"
+        },
+        {
+          "label": "해산물파에야2인분",
+          "price": 30,
+          "currency": "EUR",
+          "servesPeople": 2
+        }
+      ],
+      "recommendationReason": "공식주소가 프라도·레이나 소피아 사이이고 샌드위치와 식사메뉴·늦은영업이 확인돼 미술관 전후 점심·저녁 후보로 선정.",
+      "mealServices": [
+        "lunch",
+        "dinner"
+      ],
+      "serviceNotes": "공식 지점 영업09:00–23:30 및 실내식사메뉴 확인. 점심·저녁 후보이며 오늘의 메뉴는 예약불가.",
+      "coordinateMapUrl": "https://maps.app.goo.gl/5BrZD4cWp3CjSsy97"
+    },
+    {
+      "id": "lisbon-ramiro",
+      "name": "세르베자리아 하미루",
+      "city": "lisbon",
+      "lat": 38.7201344,
+      "lng": -9.1357483,
+      "district": "인텐덴트·마르팅 모니즈",
+      "cuisine": "포르투갈 해산물",
+      "address": "Avenida Almirante Reis 1-H,1150-007 Lisboa",
+      "currency": "EUR",
+      "priceCurrency": "EUR",
+      "priceRange": {
+        "min": null,
+        "max": null,
+        "currency": "EUR",
+        "basis": "공식1인 전체 식사예산 미확인. 메뉴·중량·주문수량에 따라 사용자 입력."
+      },
+      "duration": 80,
+      "durationIsEstimate": true,
+      "officialUrl": "https://www.cervejariaramiro.com/",
+      "source": "https://www.cervejariaramiro.com/",
+      "coordinateSource": "https://www.cervejariaramiro.com/",
+      "coordinatePrecision": "official_business_structured_location",
+      "coordinateNote": "공식 홈페이지 businessLocationCoordinates.",
+      "reservationUrl": "https://module.lafourchette.com/pt_PT/module/730931-780fc",
+      "reservation": "공식 홈페이지가 연결한 예약창, 잔여시간 확인.",
+      "mealServices": [
+        "lunch",
+        "dinner"
+      ],
+      "serviceNotes": "홈페이지 화–토 자정까지 안내, FAQ는 연속12–23시를 설명해 늦은 저녁 마감 확인 필요. 점심·일반 저녁 후보는 두 자료에 공통.",
+      "hours": "홈페이지: 화–토12:00–00:00, 일12:00–23:00. 월요일 휴무. 마지막 주문은 별도 확인.",
+      "checkedAt": "2026-10-08",
+      "googleRating": null,
+      "googleReviewCount": null,
+      "notes": "해산물은 중량과 주문량에 따라 총액이 달라지므로 인당 평균가격을 만들지 않음.",
+      "closedWeekdays": [
+        1
+      ],
+      "recommendationReason": "포르투갈 관광청이 소개하는 해산물 식당. 운영자 연혁상1956년 시작.",
+      "recommendationSource": "https://www.visitportugal.com/pt-pt/content/cervejaria-ramiro"
+    },
+    {
+      "id": "lisbon-pinoquio",
+      "name": "피노키오(헤스타우라도르스)",
+      "city": "lisbon",
+      "lat": null,
+      "lng": null,
+      "district": "헤스타우라도르스·호시우",
+      "cuisine": "포르투갈 해산물·생선·고기",
+      "address": "Praça dos Restauradores79–80,1250-188 Lisboa",
+      "currency": "EUR",
+      "priceCurrency": "EUR",
+      "priceRange": {
+        "min": null,
+        "max": null,
+        "currency": "EUR",
+        "basis": "공식1인 전체 식사예산 미확인. 메뉴·중량·주문수량에 따라 사용자 입력."
+      },
+      "duration": 80,
+      "durationIsEstimate": true,
+      "officialUrl": "https://www.restaurantepinoquio.pt/",
+      "source": "https://www.restaurantepinoquio.pt/",
+      "coordinateSource": null,
+      "coordinatePrecision": "unverified",
+      "coordinateNote": "공식 홈페이지의 포르투갈어/영어 지도 링크 위치가 서로 달라 좌표를확정하지 않음. 텍스트 주소를 우선해 직접 확인.",
+      "reservationUrl": "https://www.restaurantepinoquio.pt/",
+      "reservation": "공식 문의예약 폼. 식당의 확인 답변을 받은 뒤에만 예약 확정.",
+      "mealServices": [
+        "lunch",
+        "dinner"
+      ],
+      "serviceNotes": "공식 영업시간상 점심·저녁 후보. 마지막주문·휴무·예약상황은 방문 전 확인.",
+      "hours": "공식12:00–23:00. 정기휴무일은 미확인, 방문일 확인.",
+      "checkedAt": "2026-10-08",
+      "googleRating": null,
+      "googleReviewCount": null,
+      "notes": "해산물은 중량과 주문량에 따라 총액이 달라지므로 인당 평균가격을 만들지 않음.",
+      "recommendationReason": "운영자 안내상1982년부터 운영한 중심가 포르투갈 식당. 공식 메뉴의 조개·생선·고기 선택지를 기준으로 선정. 공인 평점은 아님."
+    },
+    {
+      "id": "amsterdam-pancakes-centraal",
+      "name": "PANCAKES Amsterdam 센트랄",
+      "city": "amsterdam",
+      "district": "중앙역·담락",
+      "cuisine": "네덜란드식·미국식 팬케이크",
+      "address": "Prins Hendrikkade 48, 1012 AC Amsterdam",
+      "mealRole": "lunch",
+      "mealRoles": [
+        "lunch"
+      ],
+      "mealServices": [
+        "lunch"
+      ],
+      "currency": "EUR",
+      "priceCurrency": "EUR",
+      "price": null,
+      "priceRange": {
+        "min": null,
+        "max": null,
+        "currency": "EUR",
+        "basis": "전체 식비는 실제 주문에 따라 사용자 입력. 메뉴 예시와 평균 식사비를 구분."
+      },
+      "duration": 75,
+      "durationIsEstimate": true,
+      "officialUrl": "https://www.pancakes.amsterdam/nl/locations/pancakes-amsterdam-centraal",
+      "source": "https://www.pancakes.amsterdam/nl/locations/pancakes-amsterdam-centraal",
+      "hours": "매일08:00–17:00. 오래된 검색 요약의20:00 대신 직접 열린 공식 페이지17:00를 적용.",
+      "reservation": "일반 방문은 예약 없이 이용 가능. 단체 문의는 공식 예약안내 확인.",
+      "reservationUrl": "https://www.pancakes.amsterdam/nl/contact/",
+      "closedWeekdays": [],
+      "checkedAt": "2026-10-08",
+      "lat": null,
+      "lng": null,
+      "coordinateSource": null,
+      "coordinatePrecision": "unverified",
+      "googleRating": null,
+      "googleReviewCount": null,
+      "menuPriceExamples": [
+        {
+          "name": "Green Deal: Veggie Queen 팬케이크+그린스무디",
+          "price": 26,
+          "currency": "EUR",
+          "source": "https://www.pancakes.amsterdam/nl/locations/pancakes-amsterdam-centraal",
+          "scope": "공식 특정 세트 가격, 일반 점심 평균 또는 필수 지출 아님."
+        }
+      ],
+      "serviceNotes": "공식 페이지에 점심 서비스 명시. 저녁은 현행17:00 마감과 맞지 않아 저녁 후보로 자동배치하지 않음."
+    },
+    {
+      "id": "amsterdam-moeders",
+      "name": "무더스(Moeders)",
+      "city": "amsterdam",
+      "district": "요르단·로젠흐라흐트",
+      "cuisine": "네덜란드 가정식",
+      "address": "Rozengracht 251, 1016 SX Amsterdam",
+      "mealRole": "dinner",
+      "mealRoles": [
+        "dinner"
+      ],
+      "mealServices": [
+        "dinner"
+      ],
+      "currency": "EUR",
+      "priceCurrency": "EUR",
+      "price": null,
+      "priceRange": {
+        "min": null,
+        "max": null,
+        "currency": "EUR",
+        "basis": "전체 식비는 실제 주문에 따라 사용자 입력. 메뉴 예시와 평균 식사비를 구분."
+      },
+      "duration": 75,
+      "durationIsEstimate": true,
+      "officialUrl": "https://moeders.com/en/menu",
+      "source": "https://moeders.com/en/menu",
+      "hours": "매일17:00–23:30/24:00, 주방 마지막 주문22:00 전.",
+      "reservation": "공식 온라인 예약 권장. 최대5주 전부터, 최대6–7명. 당일16:00 전 예약 재확인 필요.",
+      "reservationUrl": "https://www.moeders.com/en/reservations",
+      "closedWeekdays": [],
+      "checkedAt": "2026-10-08",
+      "lat": null,
+      "lng": null,
+      "coordinateSource": null,
+      "coordinatePrecision": "unverified",
+      "googleRating": null,
+      "googleReviewCount": null,
+      "serviceNotes": "운영자 페이지가 매일17:00부터 저녁 서비스임을 명시.",
+      "cancellation": "보증금을 요청한 경우 식사금액에서 차감. 예약4시간 전까지 취소하면 환불, 이후 취소는 보증금 환불불가. 실제 금액은 예약창 확인.",
+      "notes": "공식2026 메뉴 PDF의 열람이 완료되지 않아 요리를 평균가격으로 환산하지 않음. 운영자 교통안내도 공사와 달라 그대로 경로에 사용하지 않음."
+    },
+    {
+      "id": "prague-cafe-louvre",
+      "name": "카페 루브르",
+      "city": "prague",
+      "district": "노베 므네스토",
+      "cuisine": "체코식 카페·점심",
+      "mealRole": "lunch",
+      "mealRoles": [
+        "lunch",
+        "dinner"
+      ],
+      "currency": "CZK",
+      "priceCurrency": "CZK",
+      "price": null,
+      "priceRange": {
+        "min": null,
+        "max": null,
+        "currency": "CZK",
+        "basis": "전체 식비는 주문에 따라 사용자 입력"
+      },
+      "duration": 75,
+      "durationIsEstimate": true,
+      "officialUrl": "https://www.cafelouvre.cz/en/Contact",
+      "reservationUrl": "https://www.cafelouvre.cz/en/Contact",
+      "source": "https://www.cafelouvre.cz/en/Contact",
+      "hours": "월~금08:00–23:30,토·일09:00–23:30.",
+      "reservation": "공식 웹사이트 예약 기능 이용. 예약·재고 미조회.",
+      "notes": "Národní 22 지점. 공식 예약 링크 이용 가능. 여행일 메뉴·총액은 미확정.",
+      "checkedAt": "2026-10-08",
+      "lat": 50.08206824875635,
+      "lng": 14.418618750279823,
+      "coordinateSource": "https://prague.eu/en/objevujte/cafe-louvre/",
+      "coordinatePrecision": "official_page_explicit_place_marker",
+      "coordinateNote": "공식 관광청 장소 페이지의 주소·place_id가 있는 지도핀. 지도 중심 좌표가 아니며 실제 출입구와 다를 수 있음.",
+      "coordinatePlaceId": "ChIJj5XMEO6UC0cRSdD6zoOKd3k",
+      "mealServices": [
+        "lunch",
+        "dinner"
+      ],
+      "serviceNotes": "공식점심·저녁메뉴각각확인.영업시간과실제주방마감은구별,여행일확인.",
+      "serviceSourceUrls": [
+        "https://www.cafelouvre.cz/en/lunch",
+        "https://www.cafelouvre.cz/en/dinner"
+      ]
+    },
+    {
+      "id": "prague-lokal-dlouha",
+      "name": "로칼 드로우하",
+      "city": "prague",
+      "district": "스타레 므네스토",
+      "cuisine": "체코 가정식·맥주",
+      "mealRole": "dinner",
+      "mealRoles": [
+        "lunch",
+        "dinner"
+      ],
+      "currency": "CZK",
+      "priceCurrency": "CZK",
+      "price": null,
+      "priceRange": {
+        "min": null,
+        "max": null,
+        "currency": "CZK",
+        "basis": "전체 식비는 주문에 따라 사용자 입력"
+      },
+      "duration": 75,
+      "durationIsEstimate": true,
+      "officialUrl": "https://lokal-dlouha.ambi.cz/en/",
+      "reservationUrl": "https://lokal-dlouha.ambi.cz/en/",
+      "source": "https://lokal-dlouha.ambi.cz/en/",
+      "hours": "월~토11:00–24:00,일11:00–22:00.",
+      "reservation": "공식 웹사이트 예약 기능 이용. 예약·재고 미조회.",
+      "notes": "Dlouhá 33 지점. 저녁 예약 권장. 일별 메뉴가 바뀌므로 식사총액 사용자 입력.",
+      "checkedAt": "2026-10-08",
+      "lat": 50.090656014443674,
+      "lng": 14.425803207969272,
+      "coordinateSource": "https://prague.eu/cs/objevujte/lokal-dlouhaaa/",
+      "coordinatePrecision": "official_page_explicit_place_marker",
+      "coordinateNote": "공식 관광청 장소 페이지의 주소·place_id가 있는 지도핀. 지도 중심 좌표가 아니며 실제 출입구와 다를 수 있음.",
+      "coordinatePlaceId": "ChIJif6B_cGUC0cR4VpyKg92V5Y",
+      "mealServices": [
+        "lunch",
+        "dinner"
+      ],
+      "serviceNotes": "공식주간메뉴와밤메뉴확인.11:00개점,일요일22:00마감/그외24:00.주문가능품목은시간대별상이.",
+      "serviceSourceUrls": [
+        "https://lokal-dlouha.ambi.cz/en/menu/denni-menu",
+        "https://lokal-dlouha.ambi.cz/en/menu/night-menu"
+      ]
+    },
+    {
+      "id": "vienna-figlmueller-baeckerstrasse",
+      "name": "피그뮐러 베커슈트라세",
+      "city": "vienna",
+      "district": "이너레슈타트",
+      "cuisine": "슈니첼·오스트리아 요리",
+      "mealRole": "lunch",
+      "mealRoles": [
+        "lunch",
+        "dinner"
+      ],
+      "mealServices": [
+        "lunch",
+        "dinner"
+      ],
+      "serviceNotes": "공식 지점 안내의 점심부터저녁까지 영업과 식사메뉴를 확인. 라스트오더·휴일운영은 여행일 재확인.",
+      "currency": "EUR",
+      "priceCurrency": "EUR",
+      "price": null,
+      "priceRange": {
+        "min": null,
+        "max": null,
+        "currency": "EUR",
+        "basis": "전체 식비는 주문에 따라 사용자 입력"
+      },
+      "duration": 80,
+      "durationIsEstimate": true,
+      "officialUrl": "https://www.figlmueller.at/baeckerstrasse/",
+      "reservationUrl": "https://www.figlmueller.at/baeckerstrasse/reservieren/",
+      "source": "https://www.figlmueller.at/baeckerstrasse/",
+      "hours": "매일11:30–23:30,주방11:30–22:00.",
+      "reservation": "공식 웹사이트 예약 권장. 예약·재고 미조회.",
+      "notes": "Bäckerstraße6 지점. Wollzeile지점과 혼동하지 않기. 공식 지점별 예약 권장.",
+      "lat": 48.2092519,
+      "lng": 16.3755254,
+      "coordinateSource": "https://www.figlmueller.at/baeckerstrasse/",
+      "coordinateMapUrl": "https://maps.app.goo.gl/WHPZPwAs7GTEBekL9",
+      "coordinatePrecision": "officially_linked_place_pin",
+      "coordinateNote": "공식 지점 페이지에서 연결한 Google 장소의!3d/!4d핀. @지도중심은 사용하지 않음.",
+      "checkedAt": "2026-10-08"
+    },
+    {
+      "id": "vienna-plachutta-wollzeile",
+      "name": "플라후타 볼차일레",
+      "city": "vienna",
+      "district": "이너레슈타트",
+      "cuisine": "타펠슈피츠·빈식 요리",
+      "mealRole": "dinner",
+      "mealRoles": [
+        "lunch",
+        "dinner"
+      ],
+      "mealServices": [
+        "lunch",
+        "dinner"
+      ],
+      "serviceNotes": "공식 지점 안내의 점심부터저녁까지 영업과 식사메뉴를 확인. 라스트오더·휴일운영은 여행일 재확인.",
+      "currency": "EUR",
+      "priceCurrency": "EUR",
+      "price": null,
+      "priceRange": {
+        "min": null,
+        "max": null,
+        "currency": "EUR",
+        "basis": "전체 식비는 주문에 따라 사용자 입력"
+      },
+      "duration": 80,
+      "durationIsEstimate": true,
+      "officialUrl": "https://www.plachutta.at/restaurant/wollzeile/",
+      "reservationUrl": "https://www.plachutta.at/?reservation=show",
+      "source": "https://www.plachutta.at/restaurant/wollzeile/",
+      "hours": "매일11:30–23:30. 주방마감은 별도확인.",
+      "reservation": "공식 웹사이트 예약 권장. 예약·재고 미조회.",
+      "notes": "Wollzeile38 지점. 공식 예약에서 지점과시간을 확인. 전체 식사비는 주문에 따라 사용자입력.",
+      "lat": 48.207521,
+      "lng": 16.378672,
+      "coordinateSource": "https://www.plachutta.at/restaurant/wollzeile/",
+      "coordinateMapUrl": null,
+      "coordinatePrecision": "officially_linked_place_pin",
+      "coordinateNote": "공식 지점 페이지에서 연결한 Google 장소의!3d/!4d핀. @지도중심은 사용하지 않음.",
+      "checkedAt": "2026-10-08"
+    }
+  ],
+  "bases": [
+    {
+      "id": "barcelona-sants-station",
+      "city": "barcelona",
+      "name": "산츠 에스타시오역 기준점",
+      "officialUrl": "https://www.tmb.cat/es/transporte-barcelona/servicios-estaciones-metro",
+      "checkedAt": "2026-10-08",
+      "notes": "숙소가 아닌 메트로역 노선별 기준점. 숙소 접근 및 지하승강장까지 시간은 별도. 정확한 거리출입구·접근성은 여행일 확인.",
+      "lat": 41.379984,
+      "lng": 2.140424,
+      "coordinateSource": "https://opendata-ajuntament.barcelona.cat/data/dataset/e0c34739-823f-470d-8045-e10f28e80f2d/resource/e07dec0d-4aeb-40f3-b987-e1f35e088ce2/download",
+      "coordinatePrecision": "municipal_transport_station_representative_point",
+      "coordinateNote": "바르셀로나 시 공식 Transports.csv의 EQUIPAMENT 역명·노선과 LATITUD/LONGITUD를 직접 확인. 역 노선별 대표점이며 호텔입구·거리 출입구 좌표가 아님.",
+      "coordinateRecordName": "METRO (L5) - Sants Estació-"
+    },
+    {
+      "id": "barcelona-catalunya-station",
+      "city": "barcelona",
+      "name": "카탈루냐역 기준점",
+      "officialUrl": "https://noticies.tmb.cat/historia/lorigen-nom-de-estacions-de-xarxa-metro-de-barcelona-linia-3",
+      "checkedAt": "2026-10-08",
+      "notes": "숙소가 아닌 메트로역 노선별 기준점. 숙소 접근 및 지하승강장까지 시간은 별도. 정확한 거리출입구·접근성은 여행일 확인.",
+      "lat": 41.38635,
+      "lng": 2.170118,
+      "coordinateSource": "https://opendata-ajuntament.barcelona.cat/data/dataset/e0c34739-823f-470d-8045-e10f28e80f2d/resource/e07dec0d-4aeb-40f3-b987-e1f35e088ce2/download",
+      "coordinatePrecision": "municipal_transport_station_representative_point",
+      "coordinateNote": "바르셀로나 시 공식 Transports.csv의 EQUIPAMENT 역명·노선과 LATITUD/LONGITUD를 직접 확인. 역 노선별 대표점이며 호텔입구·거리 출입구 좌표가 아님.",
+      "coordinateRecordName": "METRO (L3) - Catalunya-"
+    },
+    {
+      "id": "madrid-sol-station",
+      "city": "madrid",
+      "name": "솔역 기준점",
+      "officialUrl": "https://www.crtm.es/datos_lineas/esquemas/4001.pdf",
+      "checkedAt": "2026-10-08",
+      "notes": "숙소가 아닌 메트로역 기준점. 숙소 접근 및 지하승강장까지 시간은 별도. 정확한 거리출입구·접근성은 여행일 확인.",
+      "lat": 40.416876060894,
+      "lng": -3.70326164857528,
+      "coordinateSource": "https://services5.arcgis.com/UxADft6QPcvFyDU1/arcgis/rest/services/M4_Red/FeatureServer/0/query?where=DENOMINACION+%3D+%27SOL%27+OR+DENOMINACION+LIKE+%27%25ARTE%25%27&outFields=IDESTACION%2CDENOMINACION%2CCODIGOESTACION%2CFECHAACTUAL%2CLINEAS&returnGeometry=true&outSR=4326&f=geojson",
+      "coordinatePrecision": "official_transport_station_point",
+      "coordinateNote": "CRTM 공식 공개 M4_Estaciones Point에서 역명·ID를 확인하고 outSR=4326 GeoJSON으로 받은 좌표. 출입구·승강장 또는 지도 중심이 아닌 공식 역대표점. Sol의 복수 공식 역레코드 중4_12점을 기준으로 사용; 평균좌표를 만들지 않음.",
+      "coordinateRecordId": "4_12",
+      "coordinateRecordName": "SOL",
+      "coordinateDataUpdatedAt": "2026-05-29"
+    },
+    {
+      "id": "madrid-estacion-del-arte",
+      "city": "madrid",
+      "name": "에스타시온 델 아르테역 기준점",
+      "officialUrl": "https://www.crtm.es/media/3xzmpcaj/plano_zonal_metro_estaciondelarte.pdf",
+      "checkedAt": "2026-10-08",
+      "notes": "숙소가 아닌 메트로역 기준점. 숙소 접근 및 지하승강장까지 시간은 별도. 정확한 거리출입구·접근성은 여행일 확인.",
+      "lat": 40.4088515983755,
+      "lng": -3.69248727105058,
+      "coordinateSource": "https://services5.arcgis.com/UxADft6QPcvFyDU1/arcgis/rest/services/M4_Red/FeatureServer/0/query?where=DENOMINACION+%3D+%27SOL%27+OR+DENOMINACION+LIKE+%27%25ARTE%25%27&outFields=IDESTACION%2CDENOMINACION%2CCODIGOESTACION%2CFECHAACTUAL%2CLINEAS&returnGeometry=true&outSR=4326&f=geojson",
+      "coordinatePrecision": "official_transport_station_point",
+      "coordinateNote": "CRTM 공식 공개 M4_Estaciones Point에서 역명·ID를 확인하고 outSR=4326 GeoJSON으로 받은 좌표. 출입구·승강장 또는 지도 중심이 아닌 공식 역대표점. ",
+      "coordinateRecordId": "4_15",
+      "coordinateRecordName": "ESTACION DEL ARTE",
+      "coordinateDataUpdatedAt": "2026-05-29"
+    },
+    {
+      "id": "lisbon-rossio-station",
+      "name": "Rossio 메트로역 기준점",
+      "city": "lisbon",
+      "lat": 38.7140387351334,
+      "lng": -9.13788558416029,
+      "officialUrl": "https://dados.cm-lisboa.pt/dataset/estacoes-de-metro",
+      "coordinateSource": "https://dados.cm-lisboa.pt/dataset/estacoes-de-metro",
+      "coordinateDataUrl": "https://services.arcgis.com/1dSrzEWVQn5kHHyK/arcgis/rest/services/POITransportes/FeatureServer/1/query?f=geojson&outFields=%2A&where=1%3D1",
+      "coordinatePrecision": "municipal_geojson_station_point",
+      "coordinateNote": "리스본시 공식 지하철 지리자료의 해당 역명 Point. 출구별 좌표 아님.",
+      "checkedAt": "2026-10-08"
+    },
+    {
+      "id": "lisbon-oriente-station",
+      "name": "Oriente 메트로역 기준점",
+      "city": "lisbon",
+      "lat": 38.7679599444634,
+      "lng": -9.0998135518355,
+      "officialUrl": "https://dados.cm-lisboa.pt/dataset/estacoes-de-metro",
+      "coordinateSource": "https://dados.cm-lisboa.pt/dataset/estacoes-de-metro",
+      "coordinateDataUrl": "https://services.arcgis.com/1dSrzEWVQn5kHHyK/arcgis/rest/services/POITransportes/FeatureServer/1/query?f=geojson&outFields=%2A&where=1%3D1",
+      "coordinatePrecision": "municipal_geojson_station_point",
+      "coordinateNote": "리스본시 공식 지하철 지리자료의 해당 역명 Point. 출구별 좌표 아님.",
+      "checkedAt": "2026-10-08"
+    },
+    {
+      "id": "amsterdam-centraal",
+      "name": "암스테르담 중앙역 기준점",
+      "city": "amsterdam",
+      "lat": 52.3789078,
+      "lng": 4.9006204,
+      "officialUrl": "https://www.gvb.nl/en/travel-information/line/GVB/52",
+      "coordinateSource": "https://maps.amsterdam.nl/open_geodata/?k=649",
+      "coordinateDataUrl": "https://maps.amsterdam.nl/open_geodata/geojson_lnglat.php?KAARTLAAG=TRAMMETRO_PUNTEN_2026&THEMA=trammetro",
+      "coordinateRecordId": 182,
+      "coordinatePrecision": "municipal_named_stop_group_point",
+      "coordinateNote": "암스테르담시2026년 공식 지리자료의 역그룹 Point. 가까운 정류장을 합친 대표점이며 출입구·플랫폼·호텔 문전이 아님.",
+      "attribution": "Gemeente Amsterdam - Ruimte en Duurzaamheid. 원본 데이터는 시 홈페이지에서 누구나 무료로 제공받을 수 있으며 원본 이용조건이 적용됨. 시의 추천·보증을 뜻하지 않음.",
+      "licenseUrl": "https://maps.amsterdam.nl/open_geodata/terms.php",
+      "coordinateSourceYear": 2026,
+      "checkedAt": "2026-10-08"
+    },
+    {
+      "id": "amsterdam-zuid",
+      "name": "암스테르담 자위트역 기준점",
+      "city": "amsterdam",
+      "lat": 52.340165,
+      "lng": 4.873144,
+      "officialUrl": "https://www.gvb.nl/en/travel-information/line/GVB/52",
+      "coordinateSource": "https://maps.amsterdam.nl/open_geodata/?k=649",
+      "coordinateDataUrl": "https://maps.amsterdam.nl/open_geodata/geojson_lnglat.php?KAARTLAAG=TRAMMETRO_PUNTEN_2026&THEMA=trammetro",
+      "coordinateRecordId": 152,
+      "coordinatePrecision": "municipal_named_stop_group_point",
+      "coordinateNote": "암스테르담시2026년 공식 지리자료의 역그룹 Point. 가까운 정류장을 합친 대표점이며 출입구·플랫폼·호텔 문전이 아님.",
+      "attribution": "Gemeente Amsterdam - Ruimte en Duurzaamheid. 원본 데이터는 시 홈페이지에서 누구나 무료로 제공받을 수 있으며 원본 이용조건이 적용됨. 시의 추천·보증을 뜻하지 않음.",
+      "licenseUrl": "https://maps.amsterdam.nl/open_geodata/terms.php",
+      "coordinateSourceYear": 2026,
+      "checkedAt": "2026-10-08",
+      "accessNotes": "2026-11-01부터 Brittenpassage 입구·메트로 승강장으로 전환 예정. 기존 Minervapassage 폐쇄에 유의.",
+      "accessSource": "https://www.gvb.nl/zuidasdok"
+    },
+    {
+      "id": "prague-hlavni-nadrazi",
+      "name": "흘라브니 나드라지 메트로역 기준점",
+      "city": "prague",
+      "lat": 50.0831146,
+      "lng": 14.4337864,
+      "officialUrl": "https://pid.cz/en/metro/",
+      "coordinateSource": "https://data.pid.cz/stops/json/stops.json",
+      "coordinatePrecision": "official_named_station_data_point",
+      "coordinateNote": "C선 Háje 방면 승강장. 출입구·호텔 문전과 다름.",
+      "coordinateRecordId": "142/102",
+      "coordinateDataGeneratedAt": "2026-10-08T03:54:09",
+      "attribution": "Prague Integrated Transport (PID), CC-BY; 선택·한국어 설명을 추가함.",
+      "checkedAt": "2026-10-08"
+    },
+    {
+      "id": "prague-mustek",
+      "name": "무스테크역 기준점",
+      "city": "prague",
+      "lat": 50.08347,
+      "lng": 14.4239731,
+      "officialUrl": "https://pid.cz/en/metro/",
+      "coordinateSource": "https://data.pid.cz/stops/json/stops.json",
+      "coordinatePrecision": "official_named_station_data_point",
+      "coordinateNote": "A/B선 공식 역그룹 대표점. 출입구·호텔 문전과 다름.",
+      "coordinateRecordId": "1072",
+      "coordinateDataGeneratedAt": "2026-10-08T03:54:09",
+      "attribution": "Prague Integrated Transport (PID), CC-BY; 선택·한국어 설명을 추가함.",
+      "checkedAt": "2026-10-08"
+    },
+    {
+      "id": "vienna-hauptbahnhof",
+      "name": "빈 중앙역 기준점",
+      "city": "vienna",
+      "officialUrl": "https://www.wien.info/en/travel-info/arrival-departure/stations-359950",
+      "checkedAt": "2026-10-08",
+      "lat": 48.18521659423137,
+      "lng": 16.37808322906494,
+      "coordinateSource": "https://www.wien.info/en/travel-info/arrival-departure/stations-359950",
+      "coordinatePrecision": "official_page_explicit_place_marker",
+      "coordinateRecordId": "133300",
+      "coordinateName": "Vienna Main Station (Wien Hauptbahnhof)",
+      "coordinateNote": "비엔나 관광청의 이름·주소가 있는 장소 지도핀. 지도화면 중심이 아니며 정확한 출입구·승강장과 다를 수 있음."
+    },
+    {
+      "id": "vienna-westbahnhof",
+      "name": "빈 서역 기준점",
+      "city": "vienna",
+      "officialUrl": "https://www.wien.info/en/travel-info/arrival-departure/stations-359950",
+      "checkedAt": "2026-10-08",
+      "lat": 48.1968689,
+      "lng": 16.33792930000004,
+      "coordinateSource": "https://www.wien.info/en/travel-info/arrival-departure/stations-359950",
+      "coordinatePrecision": "official_page_explicit_place_marker",
+      "coordinateRecordId": "131348",
+      "coordinateName": "Vienna Westbahnhof Station",
+      "coordinateNote": "비엔나 관광청의 이름·주소가 있는 장소 지도핀. 지도화면 중심이 아니며 정확한 출입구·승강장과 다를 수 있음."
+    }
+  ],
+  "transitLegs": [
+    {
+      "id": "barcelona-sants-to-sagrada",
+      "city": "barcelona",
+      "fromId": "barcelona-sants-station",
+      "toId": "barcelona-sagrada-familia",
+      "durationMinutes": 30,
+      "durationIsEstimate": true,
+      "fare": 2.9,
+      "currency": "EUR",
+      "priceCurrency": "EUR",
+      "fareScope": "성인1인 새 편도 지하철 여정. 매체구입비·숙소접근·공항추가요금 별도.",
+      "mode": "metro",
+      "operator": "tmb",
+      "line": "L5, Vall d’Hebron 방면",
+      "fromStation": "Sants Estació",
+      "toStation": "Sagrada Família",
+      "steps": [
+        "산츠역에서 L5 Vall d’Hebron 방면 승차",
+        "Sagrada Família 하차",
+        "Marina 거리의 티켓상 성당입구까지 도보"
+      ],
+      "passIds": [
+        "barcelona-t-dia-1zone"
+      ],
+      "officialUrl": "https://www.tmb.cat/en/barcelona-fares-metro-bus",
+      "routeUrl": "https://www.tmb.cat/ca/barcelona/metro-v2/-/lineametro/L5",
+      "checkedAt": "2026-10-08",
+      "serviceRequiresDateCheck": true,
+      "verificationKind": "composed_from_official_line_fare_and_venue_access_sources",
+      "notes": "전체 이동시간은 역내이동·대기·도보를 포함한 계획용 예상. 여행일 운행·공사·입장대기는 별도 확인.",
+      "walkingSource": "https://sagradafamilia.org/en/schedules-how-to-get"
+    },
+    {
+      "id": "barcelona-catalunya-to-park-guell",
+      "city": "barcelona",
+      "fromId": "barcelona-catalunya-station",
+      "toId": "barcelona-park-guell",
+      "durationMinutes": 45,
+      "durationIsEstimate": true,
+      "fare": 2.9,
+      "currency": "EUR",
+      "priceCurrency": "EUR",
+      "fareScope": "성인1인 새 편도 지하철 여정. 매체구입비·숙소접근·공항추가요금 별도.",
+      "mode": "metro",
+      "operator": "tmb",
+      "line": "L3, Trinitat Nova 방면",
+      "fromStation": "Catalunya",
+      "toStation": "Lesseps",
+      "steps": [
+        "Catalunya에서 L3 Trinitat Nova 방면 승차",
+        "Lesseps 하차",
+        "공식안내 도보약20분으로 Santuari de Sant Josep de la Muntanya 입구 접근"
+      ],
+      "passIds": [
+        "barcelona-t-dia-1zone"
+      ],
+      "officialUrl": "https://www.tmb.cat/en/barcelona-fares-metro-bus",
+      "routeUrl": "https://noticies.tmb.cat/historia/lorigen-nom-de-estacions-de-xarxa-metro-de-barcelona-linia-3",
+      "checkedAt": "2026-10-08",
+      "serviceRequiresDateCheck": true,
+      "verificationKind": "composed_from_official_line_fare_and_venue_access_sources",
+      "notes": "전체 이동시간은 역내이동·대기·도보를 포함한 계획용 예상. 여행일 운행·공사·입장대기는 별도 확인.",
+      "walkingSource": "https://parkguell.barcelona/en/planning-your-visit/how-to-get-there"
+    },
+    {
+      "id": "barcelona-catalunya-to-casa-batllo",
+      "city": "barcelona",
+      "fromId": "barcelona-catalunya-station",
+      "toId": "barcelona-casa-batllo",
+      "durationMinutes": 20,
+      "durationIsEstimate": true,
+      "fare": 2.9,
+      "currency": "EUR",
+      "priceCurrency": "EUR",
+      "fareScope": "성인1인 새 편도 지하철 여정. 매체구입비·숙소접근·공항추가요금 별도.",
+      "mode": "metro",
+      "operator": "tmb",
+      "line": "L3, Trinitat Nova 방면",
+      "fromStation": "Catalunya",
+      "toStation": "Passeig de Gràcia",
+      "steps": [
+        "Catalunya에서 L3 Trinitat Nova 방면 승차",
+        "Passeig de Gràcia 하차",
+        "Passeig de Gràcia 43으로 도보"
+      ],
+      "passIds": [
+        "barcelona-t-dia-1zone"
+      ],
+      "officialUrl": "https://www.tmb.cat/en/barcelona-fares-metro-bus",
+      "routeUrl": "https://noticies.tmb.cat/historia/lorigen-nom-de-estacions-de-xarxa-metro-de-barcelona-linia-3",
+      "checkedAt": "2026-10-08",
+      "serviceRequiresDateCheck": true,
+      "verificationKind": "composed_from_official_line_fare_and_venue_access_sources",
+      "notes": "전체20분 계획용 예상. 카탈루냐에서 도보만으로 약10분이라는 명소 공식 안내도 있어 이 짧은 구간은 도보 대안 검토.",
+      "walkingSource": "https://www.casabatllo.es/en/visit/"
+    },
+    {
+      "id": "barcelona-casa-batllo-to-sagrada",
+      "city": "barcelona",
+      "fromId": "barcelona-casa-batllo",
+      "toId": "barcelona-sagrada-familia",
+      "durationMinutes": 25,
+      "durationIsEstimate": true,
+      "fare": 2.9,
+      "currency": "EUR",
+      "priceCurrency": "EUR",
+      "fareScope": "성인1인 새 편도 지하철 여정. 매체구입비·숙소접근·공항추가요금 별도.",
+      "mode": "metro",
+      "operator": "tmb",
+      "line": "L2, Badalona Pompeu Fabra 방면",
+      "fromStation": "Passeig de Gràcia",
+      "toStation": "Sagrada Família",
+      "steps": [
+        "카사 바트요에서 Passeig de Gràcia L2 승강장까지 도보",
+        "L2 Badalona Pompeu Fabra 방면 승차",
+        "Sagrada Família 하차 후 성당입구까지 이동"
+      ],
+      "passIds": [
+        "barcelona-t-dia-1zone"
+      ],
+      "officialUrl": "https://www.tmb.cat/en/barcelona-fares-metro-bus",
+      "routeUrl": "https://www.tmb.cat/es/barcelona/metro-v2/-/lineametro/L2",
+      "checkedAt": "2026-10-08",
+      "serviceRequiresDateCheck": true,
+      "verificationKind": "composed_from_official_line_fare_and_venue_access_sources",
+      "notes": "전체 이동시간은 역내이동·대기·도보를 포함한 계획용 예상. 여행일 운행·공사·입장대기는 별도 확인.",
+      "walkingSource": "https://sagradafamilia.org/en/schedules-how-to-get"
+    },
+    {
+      "id": "barcelona-sagrada-to-park-guell",
+      "city": "barcelona",
+      "fromId": "barcelona-sagrada-familia",
+      "toId": "barcelona-park-guell",
+      "durationMinutes": 50,
+      "durationIsEstimate": true,
+      "fare": 2.9,
+      "currency": "EUR",
+      "priceCurrency": "EUR",
+      "fareScope": "성인1인 새 편도 지하철 여정. 매체구입비·숙소접근·공항추가요금 별도.",
+      "mode": "metro",
+      "operator": "tmb",
+      "line": "L5 Cornellà Centre 방면 → Diagonal에서 L3 Trinitat Nova 방면",
+      "fromStation": "Sagrada Família",
+      "toStation": "Lesseps",
+      "steps": [
+        "Sagrada Família에서 L5 Cornellà Centre 방면 승차",
+        "Diagonal에서 개찰망 안 L3 Trinitat Nova 방면 환승",
+        "Lesseps 하차, 공식안내 약20분 도보로 공원 접근"
+      ],
+      "passIds": [
+        "barcelona-t-dia-1zone"
+      ],
+      "officialUrl": "https://www.tmb.cat/en/barcelona-fares-metro-bus",
+      "routeUrl": "https://www.tmb.cat/ca/barcelona/metro-v2/-/lineametro/L5",
+      "checkedAt": "2026-10-08",
+      "serviceRequiresDateCheck": true,
+      "verificationKind": "composed_from_official_line_fare_and_venue_access_sources",
+      "notes": "전체 이동시간은 역내이동·대기·도보를 포함한 계획용 예상. 여행일 운행·공사·입장대기는 별도 확인.",
+      "walkingSource": "https://parkguell.barcelona/en/planning-your-visit/how-to-get-there",
+      "sourceUrls": [
+        "https://www.tmb.cat/ca/barcelona/metro-v2/-/lineametro/L5",
+        "https://noticies.tmb.cat/historia/lorigen-nom-de-estacions-de-xarxa-metro-de-barcelona-linia-3",
+        "https://www.tmb.cat/en/barcelona-fares-metro-bus"
+      ]
+    },
+    {
+      "id": "madrid-sol-to-palace",
+      "city": "madrid",
+      "fromId": "madrid-sol-station",
+      "toId": "madrid-royal-palace",
+      "durationMinutes": 25,
+      "durationIsEstimate": true,
+      "fare": 1.5,
+      "currency": "EUR",
+      "priceCurrency": "EUR",
+      "fareScope": "성인1인 Zona A 메트로 새 편도여정 €1.50. 2026년10월 적용 당국 공지 기준. 신규 Multi 카드€2.50·공항추가€3·숙소접근 별도.",
+      "mode": "metro",
+      "operator": "metro_madrid",
+      "line": "L2, Cuatro Caminos 방면",
+      "fromStation": "Sol",
+      "toStation": "Ópera",
+      "steps": [
+        "Sol에서 L2 Cuatro Caminos 방면 승차",
+        "한 정거장 뒤 Ópera 하차",
+        "Plaza de Oriente를 지나 티켓상 왕궁입구까지 도보"
+      ],
+      "passIds": [
+        "madrid-tourist-a-1day"
+      ],
+      "officialUrl": "https://www.crtm.es/comunicacion/sala-de-prensa/noticias/noticias/10092026-diaz-ayuso-anuncia-tarifa-unica-de-1-5-euros-para-el-billete-sencillo-de-la-zona-a-de-metro-desde-octubre/?lang=es",
+      "routeUrl": "https://www.crtm.es/datos_lineas/esquemas/4002.pdf",
+      "checkedAt": "2026-10-08",
+      "serviceRequiresDateCheck": true,
+      "verificationKind": "composed_from_official_line_fare_and_venue_access_sources",
+      "notes": "전체 이동시간은 역내이동·대기·도보를 포함한 계획용 예상. 여행일 운행·공사·입장대기는 별도 확인.",
+      "walkingSource": "https://www.esmadrid.com/informacion-turistica/palacio-real",
+      "fareEffectiveMonth": "2026-10"
+    },
+    {
+      "id": "madrid-sol-to-prado",
+      "city": "madrid",
+      "fromId": "madrid-sol-station",
+      "toId": "madrid-prado",
+      "durationMinutes": 30,
+      "durationIsEstimate": true,
+      "fare": 1.5,
+      "currency": "EUR",
+      "priceCurrency": "EUR",
+      "fareScope": "성인1인 Zona A 메트로 새 편도여정 €1.50. 2026년10월 적용 당국 공지 기준. 신규 Multi 카드€2.50·공항추가€3·숙소접근 별도.",
+      "mode": "metro",
+      "operator": "metro_madrid",
+      "line": "L2, Las Rosas 방면",
+      "fromStation": "Sol",
+      "toStation": "Banco de España",
+      "steps": [
+        "Sol에서 L2 Las Rosas 방면 승차",
+        "Sevilla 다음 Banco de España 하차",
+        "프라도 미술관 선택입구까지 도보(공식접근안내 약650m)"
+      ],
+      "passIds": [
+        "madrid-tourist-a-1day"
+      ],
+      "officialUrl": "https://www.crtm.es/comunicacion/sala-de-prensa/noticias/noticias/10092026-diaz-ayuso-anuncia-tarifa-unica-de-1-5-euros-para-el-billete-sencillo-de-la-zona-a-de-metro-desde-octubre/?lang=es",
+      "routeUrl": "https://www.crtm.es/datos_lineas/esquemas/4002.pdf",
+      "checkedAt": "2026-10-08",
+      "serviceRequiresDateCheck": true,
+      "verificationKind": "composed_from_official_line_fare_and_venue_access_sources",
+      "notes": "전체 이동시간은 역내이동·대기·도보를 포함한 계획용 예상. 여행일 운행·공사·입장대기는 별도 확인.",
+      "walkingSource": "https://www.museodelprado.es/en/visit/getting-here",
+      "fareEffectiveMonth": "2026-10"
+    },
+    {
+      "id": "madrid-sol-to-retiro",
+      "city": "madrid",
+      "fromId": "madrid-sol-station",
+      "toId": "madrid-retiro-park",
+      "durationMinutes": 25,
+      "durationIsEstimate": true,
+      "fare": 1.5,
+      "currency": "EUR",
+      "priceCurrency": "EUR",
+      "fareScope": "성인1인 Zona A 메트로 새 편도여정 €1.50. 2026년10월 적용 당국 공지 기준. 신규 Multi 카드€2.50·공항추가€3·숙소접근 별도.",
+      "mode": "metro",
+      "operator": "metro_madrid",
+      "line": "L2, Las Rosas 방면",
+      "fromStation": "Sol",
+      "toStation": "Retiro",
+      "steps": [
+        "Sol에서 L2 Las Rosas 방면 승차",
+        "Sevilla·Banco de España 다음 Retiro 하차",
+        "공원 북쪽 입구로 도보"
+      ],
+      "passIds": [
+        "madrid-tourist-a-1day"
+      ],
+      "officialUrl": "https://www.crtm.es/comunicacion/sala-de-prensa/noticias/noticias/10092026-diaz-ayuso-anuncia-tarifa-unica-de-1-5-euros-para-el-billete-sencillo-de-la-zona-a-de-metro-desde-octubre/?lang=es",
+      "routeUrl": "https://www.crtm.es/datos_lineas/esquemas/4002.pdf",
+      "checkedAt": "2026-10-08",
+      "serviceRequiresDateCheck": true,
+      "verificationKind": "composed_from_official_line_fare_and_venue_access_sources",
+      "notes": "전체 이동시간은 역내이동·대기·도보를 포함한 계획용 예상. 여행일 운행·공사·입장대기는 별도 확인.",
+      "walkingSource": "https://www.esmadrid.com/en/tourist-information/parque-del-retiro",
+      "fareEffectiveMonth": "2026-10"
+    },
+    {
+      "id": "madrid-sol-to-reina",
+      "city": "madrid",
+      "fromId": "madrid-sol-station",
+      "toId": "madrid-reina-sofia",
+      "durationMinutes": 25,
+      "durationIsEstimate": true,
+      "fare": 1.5,
+      "currency": "EUR",
+      "priceCurrency": "EUR",
+      "fareScope": "성인1인 Zona A 메트로 새 편도여정 €1.50. 2026년10월 적용 당국 공지 기준. 신규 Multi 카드€2.50·공항추가€3·숙소접근 별도.",
+      "mode": "metro",
+      "operator": "metro_madrid",
+      "line": "L1, Valdecarros 방면",
+      "fromStation": "Sol",
+      "toStation": "Estación del Arte",
+      "steps": [
+        "Sol에서 L1 Valdecarros 방면 승차",
+        "Tirso de Molina·Antón Martín 다음 Estación del Arte 하차",
+        "선택한 Sabatini/Nouvel 입구로 도보"
+      ],
+      "passIds": [
+        "madrid-tourist-a-1day"
+      ],
+      "officialUrl": "https://www.crtm.es/comunicacion/sala-de-prensa/noticias/noticias/10092026-diaz-ayuso-anuncia-tarifa-unica-de-1-5-euros-para-el-billete-sencillo-de-la-zona-a-de-metro-desde-octubre/?lang=es",
+      "routeUrl": "https://www.crtm.es/datos_lineas/esquemas/4001.pdf",
+      "checkedAt": "2026-10-08",
+      "serviceRequiresDateCheck": true,
+      "verificationKind": "composed_from_official_line_fare_and_venue_access_sources",
+      "notes": "전체 이동시간은 역내이동·대기·도보를 포함한 계획용 예상. 여행일 운행·공사·입장대기는 별도 확인.",
+      "walkingSource": "https://www.esmadrid.com/informacion-turistica/museo-reina-sofia",
+      "fareEffectiveMonth": "2026-10"
+    },
+    {
+      "id": "madrid-arte-to-palace",
+      "city": "madrid",
+      "fromId": "madrid-estacion-del-arte",
+      "toId": "madrid-royal-palace",
+      "durationMinutes": 35,
+      "durationIsEstimate": true,
+      "fare": 1.5,
+      "currency": "EUR",
+      "priceCurrency": "EUR",
+      "fareScope": "성인1인 Zona A 메트로 새 편도여정 €1.50. 2026년10월 적용 당국 공지 기준. 신규 Multi 카드€2.50·공항추가€3·숙소접근 별도.",
+      "mode": "metro",
+      "operator": "metro_madrid",
+      "line": "L1 Pinar de Chamartín 방면 → Sol에서 L2 Cuatro Caminos 방면",
+      "fromStation": "Estación del Arte",
+      "toStation": "Ópera",
+      "steps": [
+        "Estación del Arte에서 L1 Pinar de Chamartín 방면 승차",
+        "Sol에서 개찰망 안 L2 Cuatro Caminos 방면 환승",
+        "Ópera 하차 후 왕궁입구까지 도보"
+      ],
+      "passIds": [
+        "madrid-tourist-a-1day"
+      ],
+      "officialUrl": "https://www.crtm.es/comunicacion/sala-de-prensa/noticias/noticias/10092026-diaz-ayuso-anuncia-tarifa-unica-de-1-5-euros-para-el-billete-sencillo-de-la-zona-a-de-metro-desde-octubre/?lang=es",
+      "routeUrl": "https://www.crtm.es/datos_lineas/esquemas/4001.pdf",
+      "checkedAt": "2026-10-08",
+      "serviceRequiresDateCheck": true,
+      "verificationKind": "composed_from_official_line_fare_and_venue_access_sources",
+      "notes": "전체 이동시간은 역내이동·대기·도보를 포함한 계획용 예상. 여행일 운행·공사·입장대기는 별도 확인.",
+      "walkingSource": "https://www.esmadrid.com/informacion-turistica/palacio-real",
+      "sourceUrls": [
+        "https://www.crtm.es/datos_lineas/esquemas/4001.pdf",
+        "https://www.crtm.es/datos_lineas/esquemas/4002.pdf",
+        "https://www.crtm.es/comunicacion/sala-de-prensa/noticias/noticias/10092026-diaz-ayuso-anuncia-tarifa-unica-de-1-5-euros-para-el-billete-sencillo-de-la-zona-a-de-metro-desde-octubre/?lang=es"
+      ],
+      "fareEffectiveMonth": "2026-10"
+    },
+    {
+      "id": "lisbon-rossio-to-oceanario",
+      "city": "lisbon",
+      "fromId": "lisbon-rossio-station",
+      "toId": "lisbon-oceanario",
+      "durationMinutes": 40,
+      "durationIsEstimate": true,
+      "fare": 1.9,
+      "currency": "EUR",
+      "priceCurrency": "EUR",
+      "mode": "metro",
+      "line": "Green→Alameda 환승→Red",
+      "fromStation": "Rossio",
+      "toStation": "Oriente",
+      "steps": [
+        "Rossio에서Green 북행으로 Alameda 이동",
+        "개찰구 안에서Red Aeroporto 방면 환승 후Oriente 하차",
+        "오세아나리움까지 도보, 현장 보행안내 확인"
+      ],
+      "passIds": [
+        "lisbon-carris-metro-24h",
+        "lisbon-card-24h"
+      ],
+      "officialUrl": "https://www.metrolisboa.pt/wp-content/uploads/2026/08/DiagramaRedeAgosto2026.pdf",
+      "routeUrl": "https://www.metrolisboa.pt/wp-content/uploads/2026/08/DiagramaRedeAgosto2026.pdf",
+      "sourceUrls": [
+        "https://www.metrolisboa.pt/wp-content/uploads/2026/08/DiagramaRedeAgosto2026.pdf",
+        "https://www.metrolisboa.pt/en/wp-content/uploads/sites/3/2025/12/Tarifas_site_2026_UK-1.pdf",
+        "https://oceanario.pt/planear-visita/",
+        "https://dados.cm-lisboa.pt/dataset/estacoes-de-metro"
+      ],
+      "fareScope": "성인1인 Carris/Metro 사전충전1회권1.90유로. 최초navegante카드0.50유로 별도.",
+      "checkedAt": "2026-10-08",
+      "notes": "공식 노선·운임·접근안내를 합성한 대표 예시. 전체시간은 도보·대기 포함 계획용 예상이며 실시간 최적경로가 아님.",
+      "verificationKind": "composed_from_official_line_fare_access",
+      "fareContactlessBankCard": 1.92,
+      "fareZapping": 1.72
+    },
+    {
+      "id": "lisbon-oriente-to-castle",
+      "city": "lisbon",
+      "fromId": "lisbon-oriente-station",
+      "toId": "lisbon-sao-jorge-castle",
+      "durationMinutes": 45,
+      "durationIsEstimate": true,
+      "fare": 1.9,
+      "currency": "EUR",
+      "priceCurrency": "EUR",
+      "mode": "metro",
+      "line": "Red→Alameda 환승→Green",
+      "fromStation": "Oriente",
+      "toStation": "Rossio",
+      "steps": [
+        "Oriente에서Red São Sebastião 방면 탑승",
+        "Alameda에서Green Cais do Sodré 방면으로 환승해Rossio 하차",
+        "Praça da Figueira 출구부터 성 공식 접근안내 도보경로 이용"
+      ],
+      "passIds": [
+        "lisbon-carris-metro-24h",
+        "lisbon-card-24h"
+      ],
+      "officialUrl": "https://castelodesaojorge.pt/en/plan-your-visit/how-to-arrive/",
+      "routeUrl": "https://castelodesaojorge.pt/en/plan-your-visit/how-to-arrive/",
+      "sourceUrls": [
+        "https://www.metrolisboa.pt/wp-content/uploads/2026/08/DiagramaRedeAgosto2026.pdf",
+        "https://www.metrolisboa.pt/en/wp-content/uploads/sites/3/2025/12/Tarifas_site_2026_UK-1.pdf",
+        "https://castelodesaojorge.pt/en/plan-your-visit/how-to-arrive/"
+      ],
+      "fareScope": "성인1인 Carris/Metro 사전충전1회권1.90유로. 최초navegante카드0.50유로 별도.",
+      "checkedAt": "2026-10-08",
+      "notes": "공식 노선·운임·접근안내를 합성한 대표 예시. 전체시간은 도보·대기 포함 계획용 예상이며 실시간 최적경로가 아님.",
+      "verificationKind": "composed_from_official_line_fare_access",
+      "fareContactlessBankCard": 1.92,
+      "fareZapping": 1.72,
+      "accessNotes": "공식Rossio 출구부터도보11분은 안내값. 오르막·보조승강기 운영·대기에 따라 더 걸림."
+    },
+    {
+      "id": "lisbon-rossio-to-castle",
+      "city": "lisbon",
+      "fromId": "lisbon-rossio-station",
+      "toId": "lisbon-sao-jorge-castle",
+      "durationMinutes": 25,
+      "durationIsEstimate": true,
+      "fare": 1.9,
+      "currency": "EUR",
+      "priceCurrency": "EUR",
+      "mode": "bus",
+      "line": "CARRIS737 Castelo 방면",
+      "fromStation": "Pç. Figueira",
+      "toStation": "Castelo",
+      "steps": [
+        "Rossio역에서 Praça da Figueira 버스정류장으로 도보",
+        "737 Castelo 방면 승차 후종점하차",
+        "Rua de Santa Cruz do Castelo로 공식도보2분"
+      ],
+      "passIds": [
+        "lisbon-carris-metro-24h",
+        "lisbon-card-24h"
+      ],
+      "officialUrl": "https://carris.pt/viaje/carreiras/737/",
+      "routeUrl": "https://carris.pt/viaje/carreiras/737/",
+      "sourceUrls": [
+        "https://carris.pt/viaje/carreiras/737/",
+        "https://www.carris.pt/compre/viagens-ocasionais/",
+        "https://castelodesaojorge.pt/en/plan-your-visit/how-to-arrive/"
+      ],
+      "fareScope": "성인1인 Carris/Metro 사전충전1회권1.90유로. 최초navegante카드0.50유로 별도.",
+      "checkedAt": "2026-10-08",
+      "notes": "공식 노선·운임·접근안내를 합성한 대표 예시. 전체시간은 도보·대기 포함 계획용 예상이며 실시간 최적경로가 아님.",
+      "verificationKind": "composed_from_official_line_fare_access",
+      "fareOnBoard": 2.3
+    },
+    {
+      "id": "lisbon-comercio-to-jeronimos",
+      "city": "lisbon",
+      "fromId": "lisbon-comercio-square",
+      "toId": "lisbon-jeronimos",
+      "durationMinutes": 40,
+      "durationIsEstimate": true,
+      "fare": 1.9,
+      "currency": "EUR",
+      "priceCurrency": "EUR",
+      "mode": "bus",
+      "line": "CARRIS728 Restelo 방면",
+      "fromStation": "Pç. Comércio",
+      "toStation": "Mosteiro Jerónimos",
+      "steps": [
+        "광장 근처Pç. Comércio 정류장에서728 Restelo 방면",
+        "Mosteiro Jerónimos 정류장 하차 후회랑입구로 도보",
+        "단축·증편편은 행선지 확인"
+      ],
+      "passIds": [
+        "lisbon-carris-metro-24h",
+        "lisbon-card-24h"
+      ],
+      "officialUrl": "https://www.carris.pt/viaje/carreiras/728/",
+      "routeUrl": "https://www.carris.pt/viaje/carreiras/728/",
+      "sourceUrls": [
+        "https://www.carris.pt/viaje/carreiras/728/",
+        "https://www.metrolisboa.pt/en/wp-content/uploads/sites/3/2025/12/Tarifas_site_2026_UK-1.pdf",
+        "https://www.carris.pt/compre/viagens-ocasionais/"
+      ],
+      "fareScope": "성인1인 Carris/Metro 사전충전1회권1.90유로. 최초navegante카드0.50유로 별도.",
+      "checkedAt": "2026-10-08",
+      "notes": "공식 노선·운임·접근안내를 합성한 대표 예시. 전체시간은 도보·대기 포함 계획용 예상이며 실시간 최적경로가 아님.",
+      "verificationKind": "composed_from_official_line_fare_access",
+      "fareOnBoard": 2.3
+    },
+    {
+      "id": "lisbon-jeronimos-to-comercio",
+      "city": "lisbon",
+      "fromId": "lisbon-jeronimos",
+      "toId": "lisbon-comercio-square",
+      "durationMinutes": 40,
+      "durationIsEstimate": true,
+      "fare": 1.9,
+      "currency": "EUR",
+      "priceCurrency": "EUR",
+      "mode": "bus",
+      "line": "CARRIS728 Portela 방면",
+      "fromStation": "Mosteiro Jerónimos",
+      "toStation": "Pç. Comércio",
+      "steps": [
+        "Mosteiro Jerónimos 정류장에서728 Portela 방면",
+        "Pç. Comércio에서하차 후광장으로 도보"
+      ],
+      "passIds": [
+        "lisbon-carris-metro-24h",
+        "lisbon-card-24h"
+      ],
+      "officialUrl": "https://www.carris.pt/viaje/carreiras/728/",
+      "routeUrl": "https://www.carris.pt/viaje/carreiras/728/",
+      "sourceUrls": [
+        "https://www.carris.pt/viaje/carreiras/728/",
+        "https://www.metrolisboa.pt/en/wp-content/uploads/sites/3/2025/12/Tarifas_site_2026_UK-1.pdf",
+        "https://www.carris.pt/compre/viagens-ocasionais/"
+      ],
+      "fareScope": "성인1인 Carris/Metro 사전충전1회권1.90유로. 최초navegante카드0.50유로 별도.",
+      "checkedAt": "2026-10-08",
+      "notes": "공식 노선·운임·접근안내를 합성한 대표 예시. 전체시간은 도보·대기 포함 계획용 예상이며 실시간 최적경로가 아님.",
+      "verificationKind": "composed_from_official_line_fare_access",
+      "fareOnBoard": 2.3
+    },
+    {
+      "id": "lisbon-oriente-to-oceanario",
+      "city": "lisbon",
+      "fromId": "lisbon-oriente-station",
+      "toId": "lisbon-oceanario",
+      "durationMinutes": 20,
+      "durationIsEstimate": true,
+      "fare": 0,
+      "currency": "EUR",
+      "priceCurrency": "EUR",
+      "mode": "walk",
+      "line": "도보",
+      "fromStation": "Oriente",
+      "toStation": "Oceanário",
+      "steps": [
+        "Oriente역에서 Parque das Nações 남쪽의 Oceanário 방향 도보",
+        "공식 오세아나리움 접근안내의Oriente역 기준 연결"
+      ],
+      "passIds": [],
+      "officialUrl": "https://oceanario.pt/planear-visita/",
+      "routeUrl": "https://oceanario.pt/planear-visita/",
+      "sourceUrls": [
+        "https://oceanario.pt/planear-visita/"
+      ],
+      "fareScope": "도보이동 무료.",
+      "checkedAt": "2026-10-08",
+      "notes": "공식 노선·운임·접근안내를 합성한 대표 예시. 전체시간은 도보·대기 포함 계획용 예상이며 실시간 최적경로가 아님.",
+      "verificationKind": "composed_from_official_line_fare_access"
+    },
+    {
+      "id": "amsterdam-centraal-to-rijksmuseum",
+      "city": "amsterdam",
+      "fromId": "amsterdam-centraal",
+      "toId": "amsterdam-rijksmuseum",
+      "durationMinutes": 30,
+      "durationIsEstimate": true,
+      "fare": 3.4,
+      "currency": "EUR",
+      "priceCurrency": "EUR",
+      "ticketValidityMinutes": 60,
+      "fareScope": "성인1인 GVB1시간권3.40유로. OVpay 거리비례 실제 청구액과 다름.",
+      "mode": "metro",
+      "operator": "gvb",
+      "line": "메트로52 Zuid 방면",
+      "fromStation": "Centraal Station",
+      "toStation": "Vijzelgracht",
+      "steps": [
+        "중앙역 메트로52 Zuid 방면 승차",
+        "Vijzelgracht 하차",
+        "박물관 공식안내 기준10분 미만 도보로Museumstraat1 이동"
+      ],
+      "passIds": [
+        "amsterdam-gvb-24h",
+        "amsterdam-travel-ticket-1d"
+      ],
+      "officialUrl": "https://www.rijksmuseum.nl/nl/bezoek/praktische-info/adres-en-route",
+      "routeUrl": "https://www.rijksmuseum.nl/nl/bezoek/praktische-info/adres-en-route",
+      "sourceUrls": [
+        "https://www.rijksmuseum.nl/nl/bezoek/praktische-info/adres-en-route",
+        "https://www.gvb.nl/tarieven",
+        "https://gvb.nl/en/travel-products/hour-and-day-tickets/gvb-1-hour-ticket",
+        "https://gvb.nl/reisinformatie/halte/pdf?direction=Inbound&lineNumber=52&startDate=2026-10-06&stopCode=NL%3AS%3A30009579"
+      ],
+      "verificationKind": "composed_from_official_route_fare_access",
+      "notes": "공식 노선·요금·접근안내를 합성한 예시. 도보·대기를 포함한 시간은 계획용 예상이며 실시간 최적경로가 아님.",
+      "checkedAt": "2026-10-08"
+    },
+    {
+      "id": "amsterdam-zuid-to-rijksmuseum",
+      "city": "amsterdam",
+      "fromId": "amsterdam-zuid",
+      "toId": "amsterdam-rijksmuseum",
+      "durationMinutes": 30,
+      "durationIsEstimate": true,
+      "fare": 3.4,
+      "currency": "EUR",
+      "priceCurrency": "EUR",
+      "ticketValidityMinutes": 60,
+      "fareScope": "성인1인 GVB1시간권3.40유로. OVpay 거리비례 실제 청구액과 다름.",
+      "mode": "metro",
+      "operator": "gvb",
+      "line": "메트로52 Noord 방면",
+      "fromStation": "Station Zuid",
+      "toStation": "Vijzelgracht",
+      "steps": [
+        "Zuid에서 메트로52 Noord 방면 승차",
+        "Vijzelgracht 하차 후Museumstraat1까지 도보"
+      ],
+      "passIds": [
+        "amsterdam-gvb-24h",
+        "amsterdam-travel-ticket-1d"
+      ],
+      "officialUrl": "https://www.rijksmuseum.nl/nl/bezoek/praktische-info/adres-en-route",
+      "routeUrl": "https://www.rijksmuseum.nl/nl/bezoek/praktische-info/adres-en-route",
+      "sourceUrls": [
+        "https://www.rijksmuseum.nl/nl/bezoek/praktische-info/adres-en-route",
+        "https://www.gvb.nl/tarieven",
+        "https://gvb.nl/en/travel-products/hour-and-day-tickets/gvb-1-hour-ticket",
+        "https://gvb.nl/reisinformatie/halte/pdf?direction=Inbound&lineNumber=52&startDate=2026-10-06&stopCode=NL%3AS%3A30009579"
+      ],
+      "verificationKind": "composed_from_official_route_fare_access",
+      "notes": "공식 노선·요금·접근안내를 합성한 예시. 도보·대기를 포함한 시간은 계획용 예상이며 실시간 최적경로가 아님.",
+      "checkedAt": "2026-10-08"
+    },
+    {
+      "id": "amsterdam-centraal-to-van-gogh",
+      "city": "amsterdam",
+      "fromId": "amsterdam-centraal",
+      "toId": "amsterdam-van-gogh-museum",
+      "durationMinutes": 35,
+      "durationIsEstimate": true,
+      "fare": 3.4,
+      "currency": "EUR",
+      "priceCurrency": "EUR",
+      "ticketValidityMinutes": 60,
+      "fareScope": "성인1인 GVB1시간권3.40유로. OVpay 거리비례 실제 청구액과 다름.",
+      "mode": "tram",
+      "operator": "gvb",
+      "line": "트램2 Nieuw Sloten 방면",
+      "fromStation": "Centraal Station",
+      "toStation": "Museumplein",
+      "steps": [
+        "중앙역에서 트램2 Nieuw Sloten 방면 승차",
+        "Museumplein 하차 후Museumplein6 입구로 도보"
+      ],
+      "passIds": [
+        "amsterdam-gvb-24h",
+        "amsterdam-travel-ticket-1d"
+      ],
+      "officialUrl": "https://www.gvb.nl/en/travel-information/line/GVB/2",
+      "routeUrl": "https://www.gvb.nl/en/travel-information/line/GVB/2",
+      "sourceUrls": [
+        "https://www.gvb.nl/en/travel-information/line/GVB/2",
+        "https://www.gvb.nl/tarieven",
+        "https://gvb.nl/en/travel-products/hour-and-day-tickets/gvb-1-hour-ticket",
+        "https://www.vangoghmuseum.nl/en/visit/address-and-opening-hours"
+      ],
+      "verificationKind": "composed_from_official_route_fare_access",
+      "notes": "공식 노선·요금·접근안내를 합성한 예시. 도보·대기를 포함한 시간은 계획용 예상이며 실시간 최적경로가 아님.",
+      "checkedAt": "2026-10-08"
+    },
+    {
+      "id": "amsterdam-zuid-to-centraal",
+      "city": "amsterdam",
+      "fromId": "amsterdam-zuid",
+      "toId": "amsterdam-centraal",
+      "durationMinutes": 25,
+      "durationIsEstimate": true,
+      "fare": 3.4,
+      "currency": "EUR",
+      "priceCurrency": "EUR",
+      "ticketValidityMinutes": 60,
+      "fareScope": "성인1인 GVB1시간권3.40유로. OVpay 거리비례 실제 청구액과 다름.",
+      "mode": "metro",
+      "operator": "gvb",
+      "line": "메트로52 Noord 방면",
+      "fromStation": "Station Zuid",
+      "toStation": "Centraal Station",
+      "steps": [
+        "Zuid에서 메트로52 Noord 방면",
+        "Centraal Station 하차"
+      ],
+      "passIds": [
+        "amsterdam-gvb-24h",
+        "amsterdam-travel-ticket-1d"
+      ],
+      "officialUrl": "https://gvb.nl/reisinformatie/halte/pdf?direction=Inbound&lineNumber=52&startDate=2026-10-06&stopCode=NL%3AS%3A30009579",
+      "routeUrl": "https://gvb.nl/reisinformatie/halte/pdf?direction=Inbound&lineNumber=52&startDate=2026-10-06&stopCode=NL%3AS%3A30009579",
+      "sourceUrls": [
+        "https://gvb.nl/reisinformatie/halte/pdf?direction=Inbound&lineNumber=52&startDate=2026-10-06&stopCode=NL%3AS%3A30009579",
+        "https://www.gvb.nl/tarieven",
+        "https://gvb.nl/en/travel-products/hour-and-day-tickets/gvb-1-hour-ticket"
+      ],
+      "verificationKind": "composed_from_official_route_fare_access",
+      "notes": "공식 노선·요금·접근안내를 합성한 예시. 도보·대기를 포함한 시간은 계획용 예상이며 실시간 최적경로가 아님.",
+      "checkedAt": "2026-10-08"
+    },
+    {
+      "id": "amsterdam-airport-to-centraal",
+      "city": "amsterdam",
+      "fromId": "amsterdam-airport-ams",
+      "toId": "amsterdam-centraal",
+      "durationMinutes": 35,
+      "durationIsEstimate": true,
+      "fare": null,
+      "currency": "EUR",
+      "priceCurrency": "EUR",
+      "ticketValidityMinutes": null,
+      "fareScope": "NS2등석 편도는 정확한 현재 요금을 공식 결제창에서 확인하지 못해null.0유로 아님. GVB1시간권/24시간권 적용불가.",
+      "mode": "train",
+      "operator": "ns",
+      "line": "NS Airport Sprinter",
+      "fromStation": "Schiphol Airport",
+      "toStation": "Amsterdam Centraal",
+      "steps": [
+        "터미널아래Schiphol Airport역에서NS Airport Sprinter 승차",
+        "Lelylaan·Sloterdijk를 거쳐Amsterdam Centraal 하차",
+        "출발직전NS전광판에서실제행선지·승강장 확인"
+      ],
+      "passIds": [
+        "amsterdam-travel-ticket-1d"
+      ],
+      "officialUrl": "https://www.schiphol.nl/en/from-to-schiphol/by-public-transport/train/",
+      "routeUrl": "https://www.schiphol.nl/en/from-to-schiphol/by-public-transport/train/",
+      "sourceUrls": [
+        "https://www.schiphol.nl/en/from-to-schiphol/by-public-transport/train/",
+        "https://www.schiphol.nl/en/blog/can-i-quickly-get-from-schiphol-to-amsterdam-by-train/",
+        "https://www.ns.nl/producten/amsterdam-travel-ticket"
+      ],
+      "verificationKind": "composed_from_official_route_fare_access",
+      "notes": "공항운영자는 기차주행14–17분 안내. 수하물수취·입국심사를 제외한 역접근·대기 포함 계획용35분. 실시간열차/운임 미조회.",
+      "checkedAt": "2026-10-08",
+      "fareSource": null,
+      "purchaseUrl": "https://www.ns.nl/"
+    },
+    {
+      "id": "amsterdam-centraal-to-anne-frank",
+      "city": "amsterdam",
+      "fromId": "amsterdam-centraal",
+      "toId": "amsterdam-anne-frank-house",
+      "durationMinutes": 25,
+      "durationIsEstimate": true,
+      "fare": 0,
+      "currency": "EUR",
+      "priceCurrency": "EUR",
+      "ticketValidityMinutes": null,
+      "fareScope": "공공도로 도보 무료.",
+      "mode": "walk",
+      "operator": null,
+      "line": "도보",
+      "fromStation": "Amsterdam Centraal",
+      "toStation": "Westermarkt20",
+      "steps": [
+        "중앙역에서Westermarkt20 박물관입구까지 도보",
+        "운영자 도보20분 안내에 여유를 더한 계획용25분"
+      ],
+      "passIds": [],
+      "officialUrl": "https://www.annefrank.org/en/museum/tickets/",
+      "routeUrl": "https://www.annefrank.org/en/museum/tickets/",
+      "sourceUrls": [
+        "https://www.annefrank.org/en/museum/tickets/",
+        "https://gvb.nl/en/oranje-loper"
+      ],
+      "verificationKind": "composed_from_official_route_fare_access",
+      "notes": "2027-02-27까지 Westermarkt에 트램13/17이 정차하지 않는 공사공지 우선. 박물관의 낡은 트램안내를 재사용하지 않음.",
+      "checkedAt": "2026-10-08"
+    },
+    {
+      "id": "prague-airport-to-mustek",
+      "fromId": "prague-airport-prg",
+      "toId": "prague-mustek",
+      "durationMinutes": 55,
+      "durationIsEstimate": true,
+      "fare": 50,
+      "fareApp": 46,
+      "currency": "CZK",
+      "priceCurrency": "CZK",
+      "ticketValidityMinutes": 90,
+      "fareScope": "성인1인 PID 90분 종이권. 앱 할인 별도. 유효시간 안에서 환승 가능.",
+      "mode": "transit",
+      "operator": "pid",
+      "line": "트롤리버스59 → 메트로A",
+      "fromStation": "PRG Terminal 1/2",
+      "toStation": "Můstek",
+      "steps": [
+        "공항 T1/T2 앞59번 탑승",
+        "Nádraží Veleslavín에서 메트로A Depo Hostivař/Skalka 방면 환승",
+        "Můstek 하차"
+      ],
+      "passIds": [
+        "prague-pid-24h",
+        "prague-pid-72h"
+      ],
+      "officialUrl": "https://pid.cz/en/tickets-and-fare/",
+      "routeUrl": "https://www.prg.aero/en/public-transport-buses",
+      "sourceUrls": [
+        "https://pid.cz/en/tickets-and-fare/",
+        "https://pid.cz/en/metro/",
+        "https://www.prg.aero/en/public-transport-buses"
+      ],
+      "verificationKind": "composed_from_official_fare_and_access_sources",
+      "notes": "공식 노선·정류장 안내를 연결한 예시. 전체시간은 대기·도보 포함 계획용이며 실시간 최적경로가 아님. 표 유효시간 초과시 새 표 필요.",
+      "checkedAt": "2026-10-08"
+    },
+    {
+      "id": "prague-hlavni-to-museum",
+      "fromId": "prague-hlavni-nadrazi",
+      "toId": "prague-national-museum",
+      "durationMinutes": 20,
+      "durationIsEstimate": true,
+      "fare": 39,
+      "fareApp": 36,
+      "currency": "CZK",
+      "priceCurrency": "CZK",
+      "ticketValidityMinutes": 30,
+      "fareScope": "성인1인 PID 30분 종이권. 앱 할인 별도. 유효시간 안에서 환승 가능.",
+      "mode": "transit",
+      "operator": "pid",
+      "line": "메트로C Háje 방면",
+      "fromStation": "Hlavní nádraží",
+      "toStation": "Muzeum",
+      "steps": [
+        "C선 Háje 방면 한 정거장",
+        "Muzeum 하차 후 국립박물관까지 도보"
+      ],
+      "passIds": [
+        "prague-pid-24h",
+        "prague-pid-72h"
+      ],
+      "officialUrl": "https://pid.cz/en/tickets-and-fare/",
+      "routeUrl": "https://www.nm.cz/en/visit-us/buildings/museum-complex-of-the-national-museum",
+      "sourceUrls": [
+        "https://pid.cz/en/tickets-and-fare/",
+        "https://pid.cz/en/metro/",
+        "https://www.nm.cz/en/visit-us/buildings/museum-complex-of-the-national-museum"
+      ],
+      "verificationKind": "composed_from_official_fare_and_access_sources",
+      "notes": "공식 노선·정류장 안내를 연결한 예시. 전체시간은 대기·도보 포함 계획용이며 실시간 최적경로가 아님. 표 유효시간 초과시 새 표 필요.",
+      "checkedAt": "2026-10-08"
+    },
+    {
+      "id": "prague-mustek-to-castle",
+      "fromId": "prague-mustek",
+      "toId": "prague-castle",
+      "durationMinutes": 40,
+      "durationIsEstimate": true,
+      "fare": 50,
+      "fareApp": 46,
+      "currency": "CZK",
+      "priceCurrency": "CZK",
+      "ticketValidityMinutes": 90,
+      "fareScope": "성인1인 PID 90분 종이권. 앱 할인 별도. 유효시간 안에서 환승 가능.",
+      "mode": "transit",
+      "operator": "pid",
+      "line": "메트로A Nemocnice Motol 방면",
+      "fromStation": "Můstek",
+      "toStation": "Malostranská",
+      "steps": [
+        "Můstek에서 A선 Nemocnice Motol 방면",
+        "Malostranská 하차",
+        "Old Castle Stairs를 올라 Na Opyši 입구로 이동"
+      ],
+      "passIds": [
+        "prague-pid-24h",
+        "prague-pid-72h"
+      ],
+      "officialUrl": "https://pid.cz/en/tickets-and-fare/",
+      "routeUrl": "https://www.hrad.cz/en/prague-castle-for-visitors/how-to-get-to-castle",
+      "sourceUrls": [
+        "https://pid.cz/en/tickets-and-fare/",
+        "https://pid.cz/en/metro/",
+        "https://www.hrad.cz/en/prague-castle-for-visitors/how-to-get-to-castle"
+      ],
+      "verificationKind": "composed_from_official_fare_and_access_sources",
+      "notes": "공식 노선·정류장 안내를 연결한 예시. 전체시간은 대기·도보 포함 계획용이며 실시간 최적경로가 아님. 표 유효시간 초과시 새 표 필요.",
+      "checkedAt": "2026-10-08"
+    },
+    {
+      "id": "prague-mustek-to-hall",
+      "fromId": "prague-mustek",
+      "toId": "prague-old-town-hall",
+      "durationMinutes": 25,
+      "durationIsEstimate": true,
+      "fare": 39,
+      "fareApp": 36,
+      "currency": "CZK",
+      "priceCurrency": "CZK",
+      "ticketValidityMinutes": 30,
+      "fareScope": "성인1인 PID 30분 종이권. 앱 할인 별도. 유효시간 안에서 환승 가능.",
+      "mode": "transit",
+      "operator": "pid",
+      "line": "메트로A Nemocnice Motol 방면",
+      "fromStation": "Můstek",
+      "toStation": "Staroměstská",
+      "steps": [
+        "A선 한 정거장 Staroměstská 하차",
+        "구시가광장 구시청사로 도보"
+      ],
+      "passIds": [
+        "prague-pid-24h",
+        "prague-pid-72h"
+      ],
+      "officialUrl": "https://pid.cz/en/tickets-and-fare/",
+      "routeUrl": "https://prague.eu/en/objevujte/old-town-hall-with-astronomical-clock-staromestska-radnice-s-orlojem/",
+      "sourceUrls": [
+        "https://pid.cz/en/tickets-and-fare/",
+        "https://pid.cz/en/metro/",
+        "https://prague.eu/en/objevujte/old-town-hall-with-astronomical-clock-staromestska-radnice-s-orlojem/"
+      ],
+      "verificationKind": "composed_from_official_fare_and_access_sources",
+      "notes": "공식 노선·정류장 안내를 연결한 예시. 전체시간은 대기·도보 포함 계획용이며 실시간 최적경로가 아님. 표 유효시간 초과시 새 표 필요.",
+      "checkedAt": "2026-10-08"
+    },
+    {
+      "id": "prague-museum-to-bridge",
+      "fromId": "prague-national-museum",
+      "toId": "prague-charles-bridge",
+      "durationMinutes": 30,
+      "durationIsEstimate": true,
+      "fare": 39,
+      "fareApp": 36,
+      "currency": "CZK",
+      "priceCurrency": "CZK",
+      "ticketValidityMinutes": 30,
+      "fareScope": "성인1인 PID 30분 종이권. 앱 할인 별도. 유효시간 안에서 환승 가능.",
+      "mode": "transit",
+      "operator": "pid",
+      "line": "메트로A Nemocnice Motol 방면",
+      "fromStation": "Muzeum",
+      "toStation": "Staroměstská",
+      "steps": [
+        "박물관에서 Muzeum A선으로 이동",
+        "Staroměstská 하차 후 블타바강 쪽으로 도보",
+        "카를교 동쪽 입구로 이동"
+      ],
+      "passIds": [
+        "prague-pid-24h",
+        "prague-pid-72h"
+      ],
+      "officialUrl": "https://pid.cz/en/tickets-and-fare/",
+      "routeUrl": "https://prague.eu/en/objevujte/charles-bridge-karluv-most/",
+      "sourceUrls": [
+        "https://pid.cz/en/tickets-and-fare/",
+        "https://pid.cz/en/metro/",
+        "https://prague.eu/en/objevujte/charles-bridge-karluv-most/"
+      ],
+      "verificationKind": "composed_from_official_fare_and_access_sources",
+      "notes": "공식 노선·정류장 안내를 연결한 예시. 전체시간은 대기·도보 포함 계획용이며 실시간 최적경로가 아님. 표 유효시간 초과시 새 표 필요.",
+      "checkedAt": "2026-10-08"
+    },
+    {
+      "id": "vienna-airport-to-hauptbahnhof",
+      "fromId": "vienna-airport-vie",
+      "toId": "vienna-hauptbahnhof",
+      "durationMinutes": 40,
+      "durationIsEstimate": true,
+      "fare": 5.5,
+      "fareApp": null,
+      "currency": "EUR",
+      "priceCurrency": "EUR",
+      "fareScope": "성인2등석 편도5.50 EUR:공항~도시경계2.30+시내3.20. 유효한시내패스가 있으면 외곽추가권2.30 EUR. 좌석예약·상위등급별도.",
+      "mode": "rail",
+      "operator": "oebb",
+      "line": "ÖBB Railjet/InterCity",
+      "fromStation": "Flughafen Wien",
+      "toStation": "Wien Hauptbahnhof",
+      "steps": [
+        "공항 터미널에서 Flughafen Wien 철도역으로 이동",
+        "Wien Hauptbahnhof 정차 Railjet/InterCity 탑승",
+        "중앙역에서 하차 후 숙소방향 이동"
+      ],
+      "passIds": [],
+      "officialUrl": "https://www.wien.info/en/travel-info/transport/tickets-361360",
+      "routeUrl": "https://www.wien.info/en/travel-info/arrival-departure/airport-to-center/intercityexpress-349074",
+      "sourceUrls": [
+        "https://www.wien.info/en/travel-info/arrival-departure/airport-to-center/intercityexpress-349074",
+        "https://www.wien.info/en/travel-info/arrival-departure/airport-to-center/express-train-s7-345644"
+      ],
+      "verificationKind": "composed_from_official_fare_and_access_sources",
+      "notes": "공항은 시내교통패스 경계밖. 패스로 전체공항운임을0으로 만들지 않음. 2026-09~2027-10 공사기간에S7/REX7의도심직통을 기본경로로 쓰지 않음.",
+      "checkedAt": "2026-10-08",
+      "fareWithValidCityPass": 2.3,
+      "cityPassPartialCoverage": [
+        "vienna-24h",
+        "vienna-7days"
+      ],
+      "purchaseUrl": "https://tickets.oebb.at/",
+      "publishedRideMinutes": 15
+    },
+    {
+      "id": "vienna-hauptbahnhof-to-schoenbrunn",
+      "fromId": "vienna-hauptbahnhof",
+      "toId": "vienna-schoenbrunn",
+      "durationMinutes": 45,
+      "durationIsEstimate": true,
+      "fare": 3.2,
+      "fareApp": 3,
+      "currency": "EUR",
+      "priceCurrency": "EUR",
+      "fareScope": "성인 시내 편도종이권3.20 EUR/디지털3.00 EUR.80분내 한방향 이동, 환승가능·관광중단/왕복불가.",
+      "mode": "metro",
+      "operator": "wiener_linien",
+      "line": "U1 → U4",
+      "fromStation": "Südtiroler Platz–Hauptbahnhof",
+      "toStation": "Schönbrunn",
+      "steps": [
+        "U1 Leopoldau방면 탑승 후 Karlsplatz 하차",
+        "U4 Hütteldorf방면 환승,Schönbrunn하차",
+        "궁전 입구까지 도보"
+      ],
+      "passIds": [
+        "vienna-24h",
+        "vienna-7days"
+      ],
+      "officialUrl": "https://www.wien.info/en/travel-info/transport/tickets-361360",
+      "routeUrl": "https://www.schoenbrunn.at/en/visitor-information/how-to-get-here",
+      "sourceUrls": [
+        "https://www.wien.info/en/travel-info/transport/tickets-361360",
+        "https://www.schoenbrunn.at/en/visitor-information/how-to-get-here"
+      ],
+      "verificationKind": "composed_from_official_fare_and_access_sources",
+      "notes": "대기·환승·도보 포함 계획용 예상. 실시간 최적경로 또는 여행일 운행 보장 아님.",
+      "checkedAt": "2026-10-08"
+    },
+    {
+      "id": "vienna-westbahnhof-to-schoenbrunn",
+      "fromId": "vienna-westbahnhof",
+      "toId": "vienna-schoenbrunn",
+      "durationMinutes": 30,
+      "durationIsEstimate": true,
+      "fare": 3.2,
+      "fareApp": 3,
+      "currency": "EUR",
+      "priceCurrency": "EUR",
+      "fareScope": "성인 시내 편도종이권3.20 EUR/디지털3.00 EUR.80분내 한방향 이동, 환승가능·관광중단/왕복불가.",
+      "mode": "tram",
+      "operator": "wiener_linien",
+      "line": "트램60 서쪽방면",
+      "fromStation": "Westbahnhof",
+      "toStation": "Schloss Schönbrunn",
+      "steps": [
+        "서역 앞60번트램 서쪽방면 탑승",
+        "Schloss Schönbrunn하차 후 궁전까지 도보"
+      ],
+      "passIds": [
+        "vienna-24h",
+        "vienna-7days"
+      ],
+      "officialUrl": "https://www.wien.info/en/travel-info/transport/tickets-361360",
+      "routeUrl": "https://www.schoenbrunn.at/en/visitor-information/how-to-get-here",
+      "sourceUrls": [
+        "https://www.wien.info/en/travel-info/transport/tickets-361360",
+        "https://www.schoenbrunn.at/en/visitor-information/how-to-get-here"
+      ],
+      "verificationKind": "composed_from_official_fare_and_access_sources",
+      "notes": "대기·환승·도보 포함 계획용 예상. 실시간 최적경로 또는 여행일 운행 보장 아님.",
+      "checkedAt": "2026-10-08",
+      "publishedRideMinutes": 15
+    },
+    {
+      "id": "vienna-hauptbahnhof-to-belvedere",
+      "fromId": "vienna-hauptbahnhof",
+      "toId": "vienna-upper-belvedere",
+      "durationMinutes": 25,
+      "durationIsEstimate": true,
+      "fare": 0,
+      "fareApp": null,
+      "currency": "EUR",
+      "priceCurrency": "EUR",
+      "fareScope": "도보 무료. 박물관입장권별도.",
+      "mode": "walk",
+      "operator": null,
+      "line": "중앙역 → 벨베데레상궁 도보",
+      "fromStation": "Wien Hauptbahnhof",
+      "toStation": "Upper Belvedere",
+      "steps": [
+        "중앙역에서 외부 보행출구로 이동",
+        "상궁 Prinz-Eugen-Straße27 입구로 도보"
+      ],
+      "passIds": [],
+      "officialUrl": "https://www.wien.info/en/travel-info/transport/tickets-361360",
+      "routeUrl": "https://www.belvedere.at/en/visit/upper-belvedere",
+      "sourceUrls": [
+        "https://www.wien.info/en/travel-info/transport/tickets-361360",
+        "https://www.belvedere.at/en/visit/upper-belvedere"
+      ],
+      "verificationKind": "composed_from_official_fare_and_access_sources",
+      "notes": "상궁 공식안내는 U1 Hauptbahnhof에서 도보약15분. 큰 철도역내이동까지25분예상.",
+      "checkedAt": "2026-10-08",
+      "publishedWalkMinutes": 15
+    },
+    {
+      "id": "vienna-schoenbrunn-to-stadtpark",
+      "fromId": "vienna-schoenbrunn",
+      "toId": "vienna-stadtpark",
+      "durationMinutes": 40,
+      "durationIsEstimate": true,
+      "fare": 3.2,
+      "fareApp": 3,
+      "currency": "EUR",
+      "priceCurrency": "EUR",
+      "fareScope": "성인 시내 편도종이권3.20 EUR/디지털3.00 EUR.80분내 한방향 이동, 환승가능·관광중단/왕복불가.",
+      "mode": "metro",
+      "operator": "wiener_linien",
+      "line": "U4 Heiligenstadt방면",
+      "fromStation": "Schönbrunn",
+      "toStation": "Stadtpark",
+      "steps": [
+        "궁전에서 U4 Schönbrunn역으로 도보",
+        "Heiligenstadt방면 탑승,Stadtpark하차",
+        "공원 산책로로 이동"
+      ],
+      "passIds": [
+        "vienna-24h",
+        "vienna-7days"
+      ],
+      "officialUrl": "https://www.wien.info/en/travel-info/transport/tickets-361360",
+      "routeUrl": "https://moderne.wien.info/en/experiment/otto-wagner",
+      "sourceUrls": [
+        "https://www.wien.info/en/travel-info/transport/tickets-361360",
+        "https://moderne.wien.info/en/experiment/otto-wagner"
+      ],
+      "verificationKind": "composed_from_official_fare_and_access_sources",
+      "notes": "대기·환승·도보 포함 계획용 예상. 실시간 최적경로 또는 여행일 운행 보장 아님.",
+      "checkedAt": "2026-10-08"
+    }
+  ],
+  "passes": [
+    {
+      "id": "barcelona-t-dia-1zone",
+      "city": "barcelona",
+      "name": "T-dia 1존 24시간권",
+      "currency": "EUR",
+      "priceCurrency": "EUR",
+      "price": 12,
+      "priceScope": "성인1인 1존. 현재2026 공개요금. T-mobilitat 카드·매체발급비 별도 가능.",
+      "validity": "첫 유효승차부터 연속24시간. 1인 사용.",
+      "validHours": 24,
+      "validityKind": "rolling_hours",
+      "coverage": "선택1존의 대상 통합대중교통 무제한. L9 Sud Aeroport T1/T2 출발1회·도착1회 포함.",
+      "exclusions": "관광버스·케이블카·명소입장 미포함. 1존 외 이동은 추가조건 확인.",
+      "includedPoiIds": [],
+      "officialUrl": "https://static-web.tmb.cat/es/tarifas-metro-bus-barcelona/t-dia",
+      "priceSource": "https://www.tmb.cat/en/barcelona-fares-metro-bus",
+      "checkedAt": "2026-10-08",
+      "eligiblePredicate": "1인, 첫승차 기준24시간, 구입존 내 대상교통.",
+      "autoCompare": false,
+      "benefitNote": "연속24시간·매체비·공항사용횟수 조건을 계산할 때만 개별승차와 비교. 명소입장 절감 없음.",
+      "cancellation": "구입채널의 환불·매체 조건을 구매 전에 확인."
+    },
+    {
+      "id": "madrid-tourist-a-1day",
+      "city": "madrid",
+      "name": "관광교통권 Zone A 1일",
+      "currency": "EUR",
+      "priceCurrency": "EUR",
+      "price": 10.3,
+      "priceScope": "일반1인 Zone A1일. 공식현재가격. 실물 Multi 카드비 포함. 11세 미만50% 할인은 구매자격 확인.",
+      "validity": "첫 사용일의 달력하루. 해당 야간서비스는 다음날05:00까지 연장. 활성화 후24시간권 아님.",
+      "validHours": null,
+      "validityKind": "calendar_day_with_night_extension",
+      "coverage": "Zona A 메트로·EMT일반버스·해당 Cercanías·ML1. 메트로 공항추가요금 포함.",
+      "exclusions": "공항익스프레스버스·Renfe지역열차·고속열차·관광열차·명소입장 미포함.",
+      "includedPoiIds": [],
+      "officialUrl": "https://www.crtm.es/billete-turistico",
+      "checkedAt": "2026-10-08",
+      "eligiblePredicate": "1인 기명성 사용, 첫사용일 달력기준·Zona A대상교통.",
+      "autoCompare": false,
+      "benefitNote": "운행일과 야간05:00 연장을 적용할 때만 개별승차와 비교. 카드비포함과 공항제외버스를 구분.",
+      "cancellation": "구입채널 환불·사용개시 조건은 구매 전에 확인."
+    },
+    {
+      "id": "lisbon-carris-metro-24h",
+      "name": "Carris/Metro24시간권",
+      "city": "lisbon",
+      "currency": "EUR",
+      "priceCurrency": "EUR",
+      "price": 7.25,
+      "validHours": 24,
+      "upfrontCardCost": 0.5,
+      "firstPurchaseTotal": 7.75,
+      "autoCompare": false,
+      "validity": "첫사용부터 연속24시간. 충전카드 별도0.50유로.",
+      "coverage": "CARRIS·Metro 전구간, 공항Metro포함. 수록737·728과지하철 적용.",
+      "exclusions": "CP기차·페리·타사업자·관광투어 제외. 관광지 입장료 불포함.",
+      "includedPoiIds": [],
+      "officialUrl": "https://www.carris.pt/compre/viagens-ocasionais/",
+      "checkedAt": "2026-10-08",
+      "cancellation": "환불·잔여금 규정은 구매처에 확인.",
+      "eligiblePredicate": "새 카드비·첫사용시점·노선포함을 확인해 수동 비교."
+    },
+    {
+      "id": "lisbon-card-24h",
+      "name": "Lisboa Card24시간 성인권",
+      "city": "lisbon",
+      "currency": "EUR",
+      "priceCurrency": "EUR",
+      "price": 31,
+      "validHours": 24,
+      "autoCompare": false,
+      "priceValidThrough": "2027-03-31",
+      "priceVariants": [
+        {
+          "label": "48시간 성인",
+          "price": 51
+        },
+        {
+          "label": "72시간 성인",
+          "price": 62
+        }
+      ],
+      "validity": "실물카드 첫사용부터24시간. 온라인바우처는6개월내 실물로 교환, 날짜·시간·서명 및검증절차 필요.",
+      "coverage": "공식대상명소·CARRIS·Metro,CPSintra/Cascais. 수록제로니무스회랑과상조르제성 일반성인입장 포함.",
+      "exclusions": "오세아나리움은 무료입장아님(공식관광청15%할인별도). 식사·특별상품 제외. 어린이카드13–15세의EGEAC성입장 별도.",
+      "includedPoiIds": [
+        "lisbon-jeronimos",
+        "lisbon-sao-jorge-castle"
+      ],
+      "officialUrl": "https://shop.visitlisboa.com/products/lisboa-card?variant=35883699732644",
+      "checkedAt": "2026-10-08",
+      "cancellation": "바우처만료 후, 실물교환 후 또는사용후 취소/환불불가. 다른경우판매약관확인.",
+      "reservationNotes": "제로니무스는실물카드수령후카드번호로시간예약, 매진 시입장불가. 성은Lisboa Card/Residents 매표줄 이용.",
+      "eligiblePredicate": "실물교환시간·필수명소예약재고·관람일휴무·성인자격확인후비교.",
+      "sources": [
+        "https://shop.visitlisboa.com/products/lisboa-card?variant=35883699732644",
+        "https://shop.visitlisboa.com/blogs/news/important-to-know-about-lisboa-card",
+        "https://castelodesaojorge.pt/en/plan-your-visit/choose-your-ticket/",
+        "https://www.visitlisboa.com/en/places/oceanario-de-lisboa"
+      ]
+    },
+    {
+      "id": "amsterdam-gvb-24h",
+      "name": "GVB24시간권",
+      "city": "amsterdam",
+      "currency": "EUR",
+      "priceCurrency": "EUR",
+      "price": 10,
+      "validHours": 24,
+      "mediumCost": 0,
+      "mediumCostNote": "앱/Wallet 바코드권 기준 별도 재사용 교통카드 구입 불필요. 종이권 구입조건은 판매처 확인.",
+      "validity": "첫 체크인부터 연속24시간. 매 승하차 체크인·체크아웃.",
+      "coverage": "GVB 트램·메트로·주간/야간버스. 수록 GVB노선 포함.",
+      "exclusions": "NS 공항기차, Connexxion397/N97, EBS 등 다른 운영사 제외. 명소입장 불포함. 공항까지의 일부GVB 노선은 범위에 있어도 NS/397 공항직행을 포함하지 않음.",
+      "includedPoiIds": [],
+      "officialUrl": "https://www.gvb.nl/en/travel-products/hour-and-day-tickets/gvb-day-ticket",
+      "purchaseUrl": "https://www.gvb.nl/en/travel-products/hour-and-day-tickets/gvb-day-ticket",
+      "sources": [
+        "https://www.gvb.nl/tarieven",
+        "https://www.gvb.nl/en/travel-products/hour-and-day-tickets/gvb-day-ticket",
+        "https://gvb.nl/tourist-english"
+      ],
+      "cancellation": "선택 매체·구매처 환불조건 확인. 무료취소 미검증.",
+      "autoCompare": false,
+      "eligiblePredicate": "개별승차 요금이 아닌1시간권 기준의 예시와만 수동 비교. 실제승차시간·GVB운영사 일치 확인.",
+      "checkedAt": "2026-10-08"
+    },
+    {
+      "id": "amsterdam-travel-ticket-1d",
+      "name": "Amsterdam Travel Ticket1일권",
+      "city": "amsterdam",
+      "currency": "EUR",
+      "priceCurrency": "EUR",
+      "price": 20,
+      "priceVariants": [
+        {
+          "label": "2일",
+          "price": 27,
+          "currency": "EUR"
+        },
+        {
+          "label": "3일",
+          "price": 34,
+          "currency": "EUR"
+        }
+      ],
+      "validHours": null,
+      "validCalendarDays": 1,
+      "validity": "첫 체크인부터 마지막 유효 달력일 다음날04:00까지. 연속24시간권이 아님.",
+      "mediumCost": null,
+      "mediumCostNote": "일회용 칩카드 상품. 별도 매체 할증이 명시되어 있지 않아 추가요금0으로 단정하지 않음. 온라인 바우처는NS매표소/지정관광객기계에서 실물권 교환.",
+      "coverage": "GVB 시내교통+Schiphol↔지정 암스테르담역 NS2등석, Connexxion397/N97 공항연결. 중앙역·Zuid 포함.",
+      "exclusions": "기타 Connexxion/EBS/Arriva, 외곽 여행,1등석·명소입장 제외.",
+      "includedPoiIds": [],
+      "officialUrl": "https://www.gvb.nl/en/travel-products/tourists/amsterdam-travel-ticket",
+      "purchaseUrl": "https://www.gvb.nl/en/travel-products/tourists/amsterdam-travel-ticket",
+      "sources": [
+        "https://www.gvb.nl/tarieven",
+        "https://www.gvb.nl/en/travel-products/tourists/amsterdam-travel-ticket",
+        "https://www.ns.nl/producten/amsterdam-travel-ticket"
+      ],
+      "priceNote": "GVB2026 요금표20/27/34유로 적용. NS 안내페이지에 남아 있는18/24/30유로는 가격근거에서 제외.",
+      "cancellation": "바우처·실물권의 구매처 환불조건 확인. 무료취소 미검증.",
+      "autoCompare": false,
+      "eligiblePredicate": "공항여행 포함여부, 달력일 마감, 실물권교환·사업자별 체크인/아웃 확인 후 수동 비교.",
+      "checkedAt": "2026-10-08"
+    },
+    {
+      "id": "prague-pid-24h",
+      "name": "PID 프라하 24시간권",
+      "city": "prague",
+      "currency": "CZK",
+      "priceCurrency": "CZK",
+      "price": 150,
+      "priceVariants": [
+        {
+          "label": "성인 종이권",
+          "price": 150,
+          "currency": "CZK"
+        },
+        {
+          "label": "성인 PID Lítačka 앱권",
+          "price": 140,
+          "currency": "CZK"
+        }
+      ],
+      "validHours": 24,
+      "validity": "처음 유효해진 시점부터 연속24시간. 달력일권 아님. 종이권 최초1회만 검인; 앱권 활성화1분 후부터 승차.",
+      "coverage": "프라하 PID 메트로·트램·버스·페리·시내열차. 공항59·100번 포함. 운행중인 페트르진 푸니쿨라도 포함.",
+      "exclusions": "AE Airport Express·관광/빈티지노선K·41·42 및 프라하 외곽 추가구간 제외. 명소입장 제외.",
+      "includedPoiIds": [],
+      "officialUrl": "https://pid.cz/en/tickets-and-fare/",
+      "purchaseUrl": "https://pid.cz/en/tickets-and-fare/how-to-buy-ticket/",
+      "mediumCost": 0,
+      "mediumCostNote": "별도 플라스틱카드 구매가 필요 없는 종이/앱 단기권.",
+      "eligibility": "성인 일반요금 기준. 할인·무료대상 증빙은 별도.",
+      "eligiblePredicate": "대상구간과 실제 유효시간 안의 승차만 대체. 중복 패스할인 금지.",
+      "cancellation": "활성화 후 취소불가. 구입형태별 미사용권 환불조건 확인.",
+      "checkedAt": "2026-10-08"
+    },
+    {
+      "id": "prague-pid-72h",
+      "name": "PID 프라하 72시간권",
+      "city": "prague",
+      "currency": "CZK",
+      "priceCurrency": "CZK",
+      "price": 350,
+      "priceVariants": [
+        {
+          "label": "성인 종이권",
+          "price": 350,
+          "currency": "CZK"
+        },
+        {
+          "label": "성인 PID Lítačka 앱권",
+          "price": 340,
+          "currency": "CZK"
+        }
+      ],
+      "validHours": 72,
+      "validity": "처음 유효해진 시점부터 연속72시간. 달력일권 아님. 종이권 최초1회만 검인; 앱권 활성화1분 후부터 승차.",
+      "coverage": "프라하 PID 메트로·트램·버스·페리·시내열차. 공항59·100번 포함. 운행중인 페트르진 푸니쿨라도 포함.",
+      "exclusions": "AE Airport Express·관광/빈티지노선K·41·42 및 프라하 외곽 추가구간 제외. 명소입장 제외.",
+      "includedPoiIds": [],
+      "officialUrl": "https://pid.cz/en/tickets-and-fare/",
+      "purchaseUrl": "https://pid.cz/en/tickets-and-fare/how-to-buy-ticket/",
+      "mediumCost": 0,
+      "mediumCostNote": "별도 플라스틱카드 구매가 필요 없는 종이/앱 단기권.",
+      "eligibility": "성인 일반요금 기준. 할인·무료대상 증빙은 별도.",
+      "eligiblePredicate": "대상구간과 실제 유효시간 안의 승차만 대체. 중복 패스할인 금지.",
+      "cancellation": "활성화 후 취소불가. 구입형태별 미사용권 환불조건 확인.",
+      "checkedAt": "2026-10-08"
+    },
+    {
+      "id": "vienna-24h",
+      "name": "빈24시간교통권",
+      "city": "vienna",
+      "currency": "EUR",
+      "priceCurrency": "EUR",
+      "price": 10.2,
+      "priceVariants": [
+        {
+          "label": "성인종이권",
+          "price": 10.2,
+          "currency": "EUR"
+        },
+        {
+          "label": "성인디지털권",
+          "price": 9.7,
+          "currency": "EUR"
+        }
+      ],
+      "validHours": 24,
+      "validCalendarDays": null,
+      "validity": "선택한 시작시간/종이권검인부터 연속24시간. 달력일권 아님.",
+      "coverage": "빈 핵심구역(Kernzone Wien)의 지하철·트램·버스·대상도시철도.",
+      "exclusions": "빈공항은구역밖. CAT·공항급행버스·외곽추가구간·명소입장제외. Railjet공항이동은추가권 필요.",
+      "includedPoiIds": [],
+      "officialUrl": "https://tramwm.wienerlinien.at/web/guest/24-stunden-wien",
+      "priceSource": "https://www.wienerlinien.at/zeitkarten?sfns=mo",
+      "purchaseUrl": "https://shop.wienmobil.at/",
+      "mediumCost": 0,
+      "mediumCostNote": "별도플라스틱매체구매 불필요. 종이표/휴대폰디지털권.",
+      "eligibility": "디지털권은기명·양도불가,검표시신분증준비. 종이권검인전승차금지.",
+      "eligiblePredicate": "시내핵심구역·유효기간내승차만대체.공항구간을전체무료처리하지 않음.",
+      "cancellation": "디지털시내교통권은취소·변경·환불불가. 종이권조건별도확인.",
+      "cancellationSource": "https://shop.wienerlinien.at/en/General-Terms-and-Conditions/",
+      "checkedAt": "2026-10-08"
+    },
+    {
+      "id": "vienna-7days",
+      "name": "빈7일교통권",
+      "city": "vienna",
+      "currency": "EUR",
+      "priceCurrency": "EUR",
+      "price": 28.9,
+      "priceVariants": [
+        {
+          "label": "성인종이권",
+          "price": 28.9,
+          "currency": "EUR"
+        },
+        {
+          "label": "성인디지털권",
+          "price": 25.2,
+          "currency": "EUR"
+        }
+      ],
+      "validHours": null,
+      "validCalendarDays": 7,
+      "validity": "선택한시작일 포함 연속7개달력일,8번째날01:00까지.168시간권으로계산하지 않음.",
+      "coverage": "빈 핵심구역(Kernzone Wien)의 지하철·트램·버스·대상도시철도.",
+      "exclusions": "빈공항은구역밖. CAT·공항급행버스·외곽추가구간·명소입장제외. Railjet공항이동은추가권 필요.",
+      "includedPoiIds": [],
+      "officialUrl": "https://www.wienerlinien.at/web/wl-en/tickets/7-days-vienna",
+      "priceSource": "https://www.wienerlinien.at/zeitkarten?sfns=mo",
+      "purchaseUrl": "https://shop.wienmobil.at/",
+      "mediumCost": 0,
+      "mediumCostNote": "별도플라스틱매체구매 불필요. 종이표/휴대폰디지털권.",
+      "eligibility": "디지털권은기명·양도불가,검표시신분증준비. 종이권검인전승차금지.",
+      "eligiblePredicate": "시내핵심구역·유효기간내승차만대체.공항구간을전체무료처리하지 않음.",
+      "cancellation": "디지털시내교통권은취소·변경·환불불가. 종이권조건별도확인.",
+      "cancellationSource": "https://shop.wienerlinien.at/en/General-Terms-and-Conditions/",
+      "checkedAt": "2026-10-08",
+      "autoCompare": false,
+      "validityKind": "calendar_days",
+      "comparisonNote": "달력7일권을168시간권으로 가정하지 않도록 자동 비교 제외. 시작일·8일째01시 종료를 적용할 수 있는 수동 비교만 사용."
+    }
+  ],
+  "catalogTickets": [
+    {
+      "poiId": "barcelona-sagrada-familia",
+      "officialUrl": "https://tickets.sagradafamilia.org/en/1-individual/4375-sagrada-familia",
+      "klookUrl": null,
+      "officialPrice": 26,
+      "klookPrice": null,
+      "currency": "EUR",
+      "priceCurrency": "EUR",
+      "checkedAt": "2026-10-08",
+      "priceScope": "일반1인 기본권. 성당·박물관·앱 오디오가이드 포함; 탑·지하성당 제외. 학생·30세 미만 €24, 11세 미만 무료(증빙·예약조건 확인).",
+      "priceSource": "https://sagradafamilia.org/en/sagrada-familia-ticket?inheritRedirect=true",
+      "cancellation": "선택 상품의 변경·취소·환불규정은 구매 전 공식 판매화면에서 확인.",
+      "officialLinkType": "opened_official_ticket_office",
+      "priceDateDependent": false
+    },
+    {
+      "poiId": "barcelona-park-guell",
+      "officialUrl": "https://www.parkguellonline.cat/pg_muslinkIII/venda/index.jsp?grupActiv=1&lang=3&nom_cache=PARC&property=PARC",
+      "klookUrl": null,
+      "officialPrice": 18,
+      "klookPrice": null,
+      "currency": "EUR",
+      "priceCurrency": "EUR",
+      "checkedAt": "2026-10-08",
+      "priceScope": "일반1인 공원 기본입장, VAT포함. 7–12세·65세 초과 €13.50; 0–6세 무료도 티켓 필요. 가우디 하우스 등 결합상품 별도.",
+      "priceSource": "https://parkguell.barcelona/en/planning-your-visit/prices-and-times",
+      "cancellation": "선택 상품의 변경·취소·환불규정은 구매 전 공식 판매화면에서 확인.",
+      "officialLinkType": "opened_official_ticket_office",
+      "priceDateDependent": false
+    },
+    {
+      "poiId": "barcelona-casa-batllo",
+      "officialUrl": "https://www.casabatllo.es/en/online-tickets/",
+      "klookUrl": null,
+      "officialPrice": null,
+      "klookPrice": null,
+      "currency": "EUR",
+      "priceCurrency": "EUR",
+      "checkedAt": "2026-10-08",
+      "priceScope": "성인 일반방문 온라인 €29부터. 방문일·시각·등급별 가격변동; 확정가격 미조회. 0–12세 성인동반 무료, 학생·13–17세 할인자격 별도.",
+      "priceSource": "https://www.casabatllo.es/en/online-tickets/",
+      "cancellation": "선택 상품의 변경·취소·환불규정은 구매 전 공식 판매화면에서 확인.",
+      "officialLinkType": "official_information_and_purchase_entrypoint",
+      "priceDateDependent": true,
+      "priceFrom": 29,
+      "priceRange": {
+        "min": 29,
+        "max": null,
+        "currency": "EUR",
+        "basis": "일반방문 공식 시작가격만 확인. 상한·여행일 실결제 미확정."
+      }
+    },
+    {
+      "poiId": "barcelona-gothic-quarter",
+      "officialUrl": "https://bid.barcelonaturisme.com/wv3/en/page/1052/gothic-quarter.html",
+      "klookUrl": null,
+      "officialPrice": 0,
+      "klookPrice": null,
+      "currency": "EUR",
+      "priceCurrency": "EUR",
+      "checkedAt": "2026-10-08",
+      "priceScope": "공공거리·광장 자율산책만 무료. 대성당·박물관·유료투어·식음료 입장 및 구매 별도.",
+      "priceSource": "https://bid.barcelonaturisme.com/wv3/en/page/1052/gothic-quarter.html",
+      "cancellation": "선택 상품의 변경·취소·환불규정은 구매 전 공식 판매화면에서 확인.",
+      "officialLinkType": "official_information_and_purchase_entrypoint",
+      "priceDateDependent": false
+    },
+    {
+      "poiId": "madrid-prado",
+      "officialUrl": "https://entradas.museodelprado.es/",
+      "klookUrl": null,
+      "officialPrice": 15,
+      "klookPrice": null,
+      "currency": "EUR",
+      "priceCurrency": "EUR",
+      "checkedAt": "2026-10-08",
+      "priceScope": "일반1인 입장: 컬렉션·특별전 포함. 오디오가이드 +€5. 18세 미만·18–25세 학생 등 무료자격, 65세 초과 등€7.50 할인은 증빙 필요.",
+      "priceSource": "https://www.museodelprado.es/en/visit/opening-times-and-prices",
+      "cancellation": "선택 상품의 변경·취소·환불규정은 구매 전 공식 판매화면에서 확인.",
+      "officialLinkType": "official_ticket_domain_verified_by_official_search_index",
+      "priceDateDependent": false
+    },
+    {
+      "poiId": "madrid-royal-palace",
+      "officialUrl": "https://tickets.patrimonionacional.es/en/tickets/palacio-real-de-madrid",
+      "klookUrl": null,
+      "officialPrice": 18,
+      "klookPrice": null,
+      "currency": "EUR",
+      "priceCurrency": "EUR",
+      "checkedAt": "2026-10-08",
+      "priceScope": "일반1인 셀프가이드 궁전입장 기본요금 €18. 온라인 예약수수료는 구매화면에서 별도 확인. 왕실주방·왕실컬렉션 갤러리 결합권은 별도.",
+      "priceSource": "https://tickets.patrimonionacional.es/en/tickets/palacio-real-de-madrid",
+      "cancellation": "선택 상품의 변경·취소·환불규정은 구매 전 공식 판매화면에서 확인.",
+      "officialLinkType": "opened_official_ticket_office",
+      "priceDateDependent": false,
+      "bookingFee": null,
+      "purchaseTotalVerified": false
+    },
+    {
+      "poiId": "madrid-reina-sofia",
+      "officialUrl": "https://entradas.museoreinasofia.es/en/143-web-individual/470-general-ticket",
+      "klookUrl": null,
+      "officialPrice": 12,
+      "klookPrice": null,
+      "currency": "EUR",
+      "priceCurrency": "EUR",
+      "checkedAt": "2026-10-08",
+      "priceScope": "일반1인 본관 컬렉션·특별전 기본입장 €12. 오디오가이드 결합 €18(현장). 온라인수수료·무료대상 증빙조건은 구매 전 확인.",
+      "priceSource": "https://www.museoreinasofia.es/en/visit/",
+      "cancellation": "선택 상품의 변경·취소·환불규정은 구매 전 공식 판매화면에서 확인.",
+      "officialLinkType": "opened_official_ticket_office",
+      "priceDateDependent": false,
+      "bookingFee": null,
+      "purchaseTotalVerified": false
+    },
+    {
+      "poiId": "madrid-retiro-park",
+      "officialUrl": "https://www.esmadrid.com/en/tourist-information/parque-del-retiro",
+      "klookUrl": null,
+      "officialPrice": 0,
+      "klookPrice": null,
+      "currency": "EUR",
+      "priceCurrency": "EUR",
+      "checkedAt": "2026-10-08",
+      "priceScope": "일반 공원산책 무료. 보트·음료·별도행사 등 제외.",
+      "priceSource": "https://www.esmadrid.com/en/tourist-information/parque-del-retiro",
+      "cancellation": "선택 상품의 변경·취소·환불규정은 구매 전 공식 판매화면에서 확인.",
+      "officialLinkType": "official_information_and_purchase_entrypoint",
+      "priceDateDependent": false
+    },
+    {
+      "id": "lisbon-jeronimos-ticket",
+      "poiId": "lisbon-jeronimos",
+      "officialUrl": "https://mmp.bymeoblueticket.pt/pt/event/14759/mosteiro-dos-jeronimos-claustro",
+      "sourceUrl": "https://mosteirojeronimos.torrebelem.gov.pt/en/visitar",
+      "klookUrl": null,
+      "officialPrice": 18,
+      "priceRange": null,
+      "klookPrice": null,
+      "currency": "EUR",
+      "priceCurrency": "EUR",
+      "checkedAt": "2026-10-08",
+      "priceScope": "일반 성인 회랑 관람 기본요금. 온라인 예매수수료·유료투어 제외.",
+      "priceNote": "기본18유로. 공식 온라인 판매 화면은18유로에 비용이 더해진19.11유로를 함께 표시하므로 결제 총액 확인. 만13–24세 및65세 초과 감면은 증빙 조건.",
+      "cancellation": "선택 티켓의 취소·변경 조건을 결제 전에 확인. 무료취소 미검증."
+    },
+    {
+      "id": "lisbon-sao-jorge-castle-ticket",
+      "poiId": "lisbon-sao-jorge-castle",
+      "officialUrl": "https://castelosaojorge.bol.pt/",
+      "sourceUrl": "https://castelodesaojorge.pt/en/plan-your-visit/choose-your-ticket/",
+      "klookUrl": null,
+      "officialPrice": 17,
+      "priceRange": null,
+      "klookPrice": null,
+      "currency": "EUR",
+      "priceCurrency": "EUR",
+      "checkedAt": "2026-10-08",
+      "priceScope": "일반 성인1인 성 입장. 특별 프로그램·선택 서비스 제외.",
+      "priceNote": "일반 성인1인 성 입장. 특별 프로그램·선택 서비스 제외.",
+      "cancellation": "선택 티켓의 취소·변경 조건을 결제 전에 확인. 무료취소 미검증."
+    },
+    {
+      "id": "lisbon-oceanario-ticket",
+      "poiId": "lisbon-oceanario",
+      "officialUrl": "https://tickets.oceanario.pt/?language=en",
+      "sourceUrl": "https://oceanario.pt/planear-visita/",
+      "klookUrl": null,
+      "officialPrice": null,
+      "priceRange": {
+        "min": 25.5,
+        "max": 29.9,
+        "currency": "EUR",
+        "basis": "공식 일반 성인 시간대별 요금표. 온라인 할인 및 선택상품 별도."
+      },
+      "klookPrice": null,
+      "currency": "EUR",
+      "priceCurrency": "EUR",
+      "checkedAt": "2026-10-08",
+      "priceScope": "일반 만13–64세1인, 방문 시간에 따른 가격. 날짜·시간을 선택한 실제 결제금액은 미확인.",
+      "priceNote": "시간대별25.50–29.90유로. 선택시간이 없는 합계에는 확정 입장료로 더하지 않음.",
+      "cancellation": "오세아나리움은 일반적으로 구매후환불불가(시설접근/서비스불가 예외)."
+    },
+    {
+      "id": "amsterdam-rijksmuseum-ticket",
+      "poiId": "amsterdam-rijksmuseum",
+      "officialUrl": "https://www.rijksmuseum.nl/en/visit/practical-info/opening-hours-and-prices",
+      "purchaseUrl": "https://www.rijksmuseum.nl/en/visit/practical-info/opening-hours-and-prices",
+      "sourceUrl": "https://www.rijksmuseum.nl/en/visit/practical-info/opening-hours-and-prices",
+      "klookUrl": null,
+      "officialPrice": 25,
+      "priceRange": null,
+      "klookPrice": null,
+      "currency": "EUR",
+      "priceCurrency": "EUR",
+      "priceScope": "성인 일반 입장. 선택 가이드·오디오·식사 제외.",
+      "priceNote": "성인 일반 입장. 선택 가이드·오디오·식사 제외.",
+      "checkedAt": "2026-10-08",
+      "cancellation": "잔여시간이 있으면 공식 문의를 통한 날짜변경 가능. 환불가능이라고 단정하지 않음.",
+      "purchaseLinkNote": "공식 방문페이지의 Book your tickets 버튼 이용. 직접판매URL은 검사도구에서 리디렉션 반복으로 공개안내페이지 사용."
+    },
+    {
+      "id": "amsterdam-van-gogh-museum-ticket",
+      "poiId": "amsterdam-van-gogh-museum",
+      "officialUrl": "https://tickets.vangoghmuseum.nl/en/tickets",
+      "purchaseUrl": "https://tickets.vangoghmuseum.nl/en/tickets",
+      "sourceUrl": "https://www.vangoghmuseum.nl/en/visit/tickets-and-ticket-prices",
+      "klookUrl": null,
+      "officialPrice": 25,
+      "priceRange": null,
+      "klookPrice": null,
+      "currency": "EUR",
+      "priceCurrency": "EUR",
+      "priceScope": "성인 일반 입장, 상설·현재 기획전 포함. 만18세 미만 무료, 시간예약 필요.",
+      "priceNote": "성인 일반 입장, 상설·현재 기획전 포함. 만18세 미만 무료, 시간예약 필요.",
+      "checkedAt": "2026-10-08",
+      "cancellation": "선택 티켓의 취소·변경조건을 구매 전 확인. 무료취소 미검증."
+    },
+    {
+      "id": "amsterdam-anne-frank-house-ticket",
+      "poiId": "amsterdam-anne-frank-house",
+      "officialUrl": "https://www.annefrank.org/en/museum/tickets/choose-your-ticket/",
+      "purchaseUrl": "https://www.annefrank.org/en/museum/tickets/choose-your-ticket/",
+      "sourceUrl": "https://www.annefrank.org/en/museum/tickets/",
+      "klookUrl": null,
+      "officialPrice": 16.5,
+      "priceRange": null,
+      "klookPrice": null,
+      "currency": "EUR",
+      "priceCurrency": "EUR",
+      "priceScope": "성인 박물관 관람, 예약수수료1유로 포함. 별도 입문 프로그램 제외.",
+      "priceNote": "성인 박물관 관람, 예약수수료1유로 포함. 별도 입문 프로그램 제외.",
+      "checkedAt": "2026-10-08",
+      "cancellation": "교환·환불·양도 불가. 지정날짜·시간만 유효."
+    },
+    {
+      "id": "prague-castle-ticket",
+      "poiId": "prague-castle",
+      "officialUrl": "https://www.hrad.cz/en/prague-castle-for-visitors/tickets",
+      "purchaseUrl": "https://www.hrad.cz/en/prague-castle-for-visitors/tickets",
+      "purchaseLinkNote": "공식 페이지의 구매 버튼으로 연결. 웹폼 POST 구매 주소를 임의 GET 링크로 만들지 않음.",
+      "klookUrl": null,
+      "officialPrice": null,
+      "officialPriceFrom": null,
+      "klookPrice": null,
+      "currency": "CZK",
+      "priceCurrency": "CZK",
+      "checkedAt": "2026-10-08",
+      "priceScope": "성인 현장 주요코스450 CZK. 운영사 승인 온라인 파트너가격은 미확정이며현장가격으로 자동 비교하지 않음.",
+      "priceSource": "https://www.hrad.cz/en/prague-castle-for-visitors/tickets",
+      "cancellation": "구매권종 판매화면의 취소조건 확인.",
+      "onsitePrice": 450,
+      "authorizedSellerUrl": "https://www.getyourguide.com/prague-l10/prague-prague-castle-ticket-t406279/"
+    },
+    {
+      "id": "prague-old-town-hall-ticket",
+      "poiId": "prague-old-town-hall",
+      "officialUrl": "https://prague.eu/en/objevujte/old-town-hall-with-astronomical-clock-staromestska-radnice-s-orlojem/",
+      "purchaseUrl": "https://prague.eu/en/objevujte/old-town-hall-with-astronomical-clock-staromestska-radnice-s-orlojem/",
+      "purchaseLinkNote": "공식 페이지의 구매 버튼으로 연결. 웹폼 POST 구매 주소를 임의 GET 링크로 만들지 않음.",
+      "klookUrl": null,
+      "officialPrice": 450,
+      "officialPriceFrom": null,
+      "klookPrice": null,
+      "currency": "CZK",
+      "priceCurrency": "CZK",
+      "checkedAt": "2026-10-08",
+      "priceScope": "온라인 성인 전망탑 우선입장450 CZK. 현장 기본권350 CZK와 다른 상품.",
+      "priceSource": "https://prague.eu/en/objevujte/old-town-hall-with-astronomical-clock-staromestska-radnice-s-orlojem/",
+      "cancellation": "구매권종 판매화면의 취소조건 확인."
+    },
+    {
+      "id": "prague-national-museum-ticket",
+      "poiId": "prague-national-museum",
+      "officialUrl": "https://www.nm.cz/en/visit-us/buildings/museum-complex-of-the-national-museum",
+      "purchaseUrl": "https://www.nm.cz/en/visit-us/buildings/museum-complex-of-the-national-museum",
+      "purchaseLinkNote": "공식 페이지의 구매 버튼으로 연결. 웹폼 POST 구매 주소를 임의 GET 링크로 만들지 않음.",
+      "klookUrl": null,
+      "officialPrice": 360,
+      "officialPriceFrom": null,
+      "klookPrice": null,
+      "currency": "CZK",
+      "priceCurrency": "CZK",
+      "checkedAt": "2026-10-08",
+      "priceScope": "성인 박물관단지 일반권360 CZK; 제외전시 별도.",
+      "priceSource": "https://www.nm.cz/en/visit-us/buildings/museum-complex-of-the-national-museum",
+      "cancellation": "구매 티켓 반환·변경 불가.",
+      "cancellationSource": "https://www.nm.cz/en/visit-us/buildings/museum-complex-of-the-national-museum"
+    },
+    {
+      "id": "vienna-schoenbrunn-ticket",
+      "poiId": "vienna-schoenbrunn",
+      "officialUrl": "https://www.imperialtickets.com/en/schoenbrunn-palace/grand-tour-schoenbrunn-palace/45",
+      "purchaseUrl": "https://www.imperialtickets.com/en/schoenbrunn-palace/grand-tour-schoenbrunn-palace/45",
+      "klookUrl": null,
+      "officialPrice": 42,
+      "officialPriceFrom": null,
+      "klookPrice": null,
+      "currency": "EUR",
+      "priceCurrency": "EUR",
+      "checkedAt": "2026-10-08",
+      "priceScope": "성인Palace Ticket.계절요금변경가능,선택날짜확인.",
+      "priceSource": "https://www.schoenbrunn.at/en/all-tickets/palace-ticket",
+      "cancellation": "판매화면의선택권종취소·변경조건을구매전확인."
+    },
+    {
+      "id": "vienna-belvedere-ticket",
+      "poiId": "vienna-upper-belvedere",
+      "officialUrl": "https://www.belvedere.at/go/tickets?location%5B%5D=1",
+      "purchaseUrl": "https://www.belvedere.at/go/tickets?location%5B%5D=1",
+      "klookUrl": null,
+      "officialPrice": null,
+      "officialPriceFrom": null,
+      "klookPrice": null,
+      "currency": "EUR",
+      "priceCurrency": "EUR",
+      "checkedAt": "2026-10-08",
+      "priceScope": "상궁성인시간지정권.확인일표시23 EUR이나여행일미확정.",
+      "priceSource": "https://www.belvedere.at/en/visit/upper-belvedere",
+      "cancellation": "판매화면의선택권종취소·변경조건을구매전확인.",
+      "observedPrice": 23,
+      "priceDynamic": true,
+      "priceRange": {
+        "min": null,
+        "max": null,
+        "currency": "EUR",
+        "basis": "여행일 범위 미확정. 확인일 표시23 EUR는 최저가 또는 확정 여행일 가격이 아님."
+      }
+    },
+    {
+      "id": "vienna-kunsthistorisches-ticket",
+      "poiId": "vienna-kunsthistorisches",
+      "officialUrl": "https://shop.khm.at/tickets/kunsthistorisches-museum-200000000001001-T001-01",
+      "purchaseUrl": "https://shop.khm.at/tickets/kunsthistorisches-museum-200000000001001-T001-01",
+      "klookUrl": null,
+      "officialPrice": null,
+      "officialPriceFrom": null,
+      "klookPrice": null,
+      "currency": "EUR",
+      "priceCurrency": "EUR",
+      "checkedAt": "2026-10-08",
+      "priceScope": "미술사박물관성인입장.현재정확한가격미확정,시간대예약필요.",
+      "priceSource": "https://www.wien.info/de/kunst-kultur/museen-ausstellungen/top-museen/kunsthistorisches-museum-350478",
+      "cancellation": "판매화면의선택권종취소·변경조건을구매전확인.",
+      "verificationNote": "공식관광청에서연결한판매URL확인.직접판매페이지는대기열/접속오류,가격·재고미조회."
+    }
+  ],
+  "catalogPasses": [
+    {
+      "passId": "barcelona-t-dia-1zone",
+      "officialUrl": "https://static-web.tmb.cat/es/tarifas-metro-bus-barcelona/t-dia",
+      "klookUrl": null,
+      "officialPrice": 12,
+      "klookPrice": null,
+      "currency": "EUR",
+      "priceCurrency": "EUR",
+      "checkedAt": "2026-10-08",
+      "priceScope": "성인1인 1존. 현재2026 공개요금. T-mobilitat 카드·매체발급비 별도 가능.",
+      "notes": "첫 유효승차부터 연속24시간. 1인 사용. 관광버스·케이블카·명소입장 미포함. 1존 외 이동은 추가조건 확인."
+    },
+    {
+      "passId": "madrid-tourist-a-1day",
+      "officialUrl": "https://www.crtm.es/billete-turistico",
+      "klookUrl": null,
+      "officialPrice": 10.3,
+      "klookPrice": null,
+      "currency": "EUR",
+      "priceCurrency": "EUR",
+      "checkedAt": "2026-10-08",
+      "priceScope": "일반1인 Zone A1일. 공식현재가격. 실물 Multi 카드비 포함. 11세 미만50% 할인은 구매자격 확인.",
+      "notes": "첫 사용일의 달력하루. 해당 야간서비스는 다음날05:00까지 연장. 활성화 후24시간권 아님. 공항익스프레스버스·Renfe지역열차·고속열차·관광열차·명소입장 미포함."
+    }
+  ],
+  "sources": [
+    {
+      "url": "https://www.tmb.cat/ca/barcelona/metro-v2/-/lineametro/L5",
+      "checkedAt": "2026-10-08",
+      "status": "official_search_index_crosscheck",
+      "note": "직접 구형 노선 URL 읽기는 실패. 운영사 검색색인 노선·역 목록을 현재 역서비스 안내 및 명소 접근안내와 교차검증."
+    },
+    {
+      "url": "https://www.tmb.cat/es/barcelona/metro-v2/-/lineametro/L2",
+      "checkedAt": "2026-10-08",
+      "status": "official_search_index_crosscheck",
+      "note": "직접 구형 노선 URL 읽기는 실패. 운영사 검색색인 L2 Passeig de Gràcia–Sagrada Família 확인, 여행일 공식 경로검색 필요."
+    },
+    {
+      "url": "https://parkguell.barcelona/themes/park_guell/js/maps-com.js",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "note": "field_coordenades_entrada를 Park Güell 입구명 마커로 연결하는 공식 지도코드 확인. 공개지도 중심점은 미사용."
+    },
+    {
+      "url": "https://sagradafamilia.org/en/sagrada-familia-ticket?inheritRedirect=true",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "note": ""
+    },
+    {
+      "url": "https://sagradafamilia.org/en/schedules-how-to-get",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "note": ""
+    },
+    {
+      "url": "https://parkguell.barcelona/en/planning-your-visit/prices-and-times",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "note": ""
+    },
+    {
+      "url": "https://parkguell.barcelona/ca/configuracio-planol?_format=json",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "note": ""
+    },
+    {
+      "url": "https://www.casabatllo.es/en/online-tickets/",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "note": ""
+    },
+    {
+      "url": "https://www.casabatllo.es/en/visit/",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "note": ""
+    },
+    {
+      "url": "https://bid.barcelonaturisme.com/wv3/en/page/1052/gothic-quarter.html",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "note": ""
+    },
+    {
+      "url": "https://7portes.com/en/",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "note": ""
+    },
+    {
+      "url": "https://7portes.com/en/restaurant-7-portes-menu/",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "note": ""
+    },
+    {
+      "url": "https://andilana.com/en/restaurantes/la-fonda/",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "note": ""
+    },
+    {
+      "url": "https://andilana.com/wp-content/uploads/2026/01/La_Fonda_ENG.pdf",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "note": ""
+    },
+    {
+      "url": "https://www.tmb.cat/es/transporte-barcelona/servicios-estaciones-metro",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "note": ""
+    },
+    {
+      "url": "https://noticies.tmb.cat/historia/lorigen-nom-de-estacions-de-xarxa-metro-de-barcelona-linia-3",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "note": ""
+    },
+    {
+      "url": "https://static-web.tmb.cat/es/tarifas-metro-bus-barcelona/t-dia",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "note": ""
+    },
+    {
+      "url": "https://www.tmb.cat/en/barcelona-fares-metro-bus",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "note": ""
+    },
+    {
+      "url": "https://www.aena.es/en/josep-tarradellas-barcelona-el-prat.html",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "note": ""
+    },
+    {
+      "url": "https://desarrollo-logistico.aena.es/es/aerolineas/aeropuertos-y-destinos/nuestros-aeropuertos.html",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "note": ""
+    },
+    {
+      "url": "https://parkguell.barcelona/en/planning-your-visit/how-to-get-there",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "note": ""
+    },
+    {
+      "url": "https://www.barcelonabusturistic.cat/en/restaurant-7-portes",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "note": "Restaurant 7 Portes, Passeig d’Isabel II14 명칭·주소와 명시 좌표41.3821314,2.1832806 확인."
+    },
+    {
+      "url": "https://opendata-ajuntament.barcelona.cat/data/dataset/e0c34739-823f-470d-8045-e10f28e80f2d/resource/e07dec0d-4aeb-40f3-b987-e1f35e088ce2/download",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "note": "공식CSV에서 METRO (L5) - Sants Estació- 및 METRO (L3) - Catalunya-의 위경도 직접확인."
+    },
+    {
+      "url": "https://datos.gob.es/es/catalogo/l01080193-transportes-de-la-ciudad-de-barcelona",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "note": "국가공공데이터포털에서 발행자가 Ayuntamiento de Barcelona이며 공개CSV·CC BY4.0임을 확인."
+    },
+    {
+      "url": "https://www.museodelprado.es/en/visit/opening-times-and-prices",
+      "checkedAt": "2026-10-08",
+      "status": "official_search_index_crosscheck",
+      "note": "직접 방문정보 페이지403. 미술관 공식검색색인 요금·시간을 마드리드 공식관광청 현재 안내와 교차확인."
+    },
+    {
+      "url": "https://www.museodelprado.es/en/visit/getting-here",
+      "checkedAt": "2026-10-08",
+      "status": "official_search_index_crosscheck",
+      "note": "공식검색색인에서 Banco de España650m 확인; 공식관광청 역접근안내로 교차확인."
+    },
+    {
+      "url": "https://entradas.museodelprado.es/",
+      "checkedAt": "2026-10-08",
+      "status": "official_search_index_crosscheck",
+      "note": "미술관 공식발권도메인 검색색인 확인. 직접발권사이트 요청은 timeout, 재고·결제 미확인."
+    },
+    {
+      "url": "https://botin.es/",
+      "checkedAt": "2026-10-08",
+      "status": "official_search_index_crosscheck",
+      "note": "공식홈 검색색인의13:00–23:30와 관광청13:00–16:00/20:00–24:00 차이가 있어 hoursConflict 명시."
+    },
+    {
+      "url": "https://www.esmadrid.com/en/madrid-tourist-travel-pass",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "note": "현재 관광권€10.30, Multi별도€2.50, 공항추가€3와 대상교통 확인."
+    },
+    {
+      "url": "https://www.esmadrid.com/en/tourist-information/museo-del-prado",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "note": ""
+    },
+    {
+      "url": "https://tickets.patrimonionacional.es/en/tickets/palacio-real-de-madrid",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "note": ""
+    },
+    {
+      "url": "https://www.esmadrid.com/informacion-turistica/palacio-real",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "note": ""
+    },
+    {
+      "url": "https://www.museoreinasofia.es/en/visit/",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "note": ""
+    },
+    {
+      "url": "https://www.esmadrid.com/informacion-turistica/museo-reina-sofia",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "note": ""
+    },
+    {
+      "url": "https://www.esmadrid.com/en/tourist-information/parque-del-retiro",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "note": ""
+    },
+    {
+      "url": "https://www.esmadrid.com/en/restaurants/botin",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "note": ""
+    },
+    {
+      "url": "https://www.museodeljamon.com/museos/paseo-prado/",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "note": ""
+    },
+    {
+      "url": "https://www.museodeljamon.com/carta/interior/",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "note": ""
+    },
+    {
+      "url": "https://www.crtm.es/datos_lineas/esquemas/4001.pdf",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "note": ""
+    },
+    {
+      "url": "https://www.crtm.es/media/3xzmpcaj/plano_zonal_metro_estaciondelarte.pdf",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "note": ""
+    },
+    {
+      "url": "https://www.crtm.es/billete-turistico",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "note": ""
+    },
+    {
+      "url": "https://www.aena.es/en/adolfo-suarez-madrid-barajas.html",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "note": ""
+    },
+    {
+      "url": "https://www.crtm.es/comunicacion/sala-de-prensa/noticias/noticias/10092026-diaz-ayuso-anuncia-tarifa-unica-de-1-5-euros-para-el-billete-sencillo-de-la-zona-a-de-metro-desde-octubre/?lang=es",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "note": ""
+    },
+    {
+      "url": "https://www.crtm.es/datos_lineas/esquemas/4002.pdf",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "note": ""
+    },
+    {
+      "url": "https://datos.crtm.es/maps/0a6c45e7bdd94679b67a2ae662c8838b/about",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "note": "CRTM 공식 공개데이터포털의 지하철망 데이터. ArcGIS item 소유자 ConsorcioRegional, access public."
+    },
+    {
+      "url": "https://services5.arcgis.com/UxADft6QPcvFyDU1/arcgis/rest/services/M4_Red/FeatureServer/0",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "note": "M4_Estaciones, esriGeometryPoint, ©CRTM. 공식공개 역데이터층."
+    },
+    {
+      "url": "https://services5.arcgis.com/UxADft6QPcvFyDU1/arcgis/rest/services/M4_Red/FeatureServer/0/query?where=DENOMINACION+%3D+%27SOL%27+OR+DENOMINACION+LIKE+%27%25ARTE%25%27&outFields=IDESTACION%2CDENOMINACION%2CCODIGOESTACION%2CFECHAACTUAL%2CLINEAS&returnGeometry=true&outSR=4326&f=geojson",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "note": "ID4_12 SOL 및4_15 ESTACION DEL ARTE 위경도 확인. 레코드FECHAACTUAL=20260529; outSR4326 GeoJSON. 계정·키없이 공개조회."
+    },
+    {
+      "url": "https://dados.cm-lisboa.pt/dataset/estacoes-de-metro",
+      "publisher": "Município de Lisboa",
+      "checkedAt": "2026-10-08",
+      "sourceUpdatedAt": "2026-05-20",
+      "use": "공식GeoJSON역대표좌표",
+      "license": "CC0"
+    },
+    {
+      "url": "https://www.metrolisboa.pt/wp-content/uploads/2026/08/DiagramaRedeAgosto2026.pdf",
+      "publisher": "Metropolitano de Lisboa",
+      "checkedAt": "2026-10-08",
+      "sourceDate": "2026-08",
+      "use": "노선연결"
+    },
+    {
+      "url": "https://www.metrolisboa.pt/en/wp-content/uploads/sites/3/2025/12/Tarifas_site_2026_UK-1.pdf",
+      "publisher": "Metropolitano de Lisboa",
+      "checkedAt": "2026-10-08",
+      "effectiveFrom": "2026-01-01",
+      "use": "운임"
+    },
+    {
+      "url": "https://www.carris.pt/compre/viagens-ocasionais/",
+      "publisher": "CARRIS",
+      "checkedAt": "2026-10-08",
+      "use": "운임/카드/패스조건"
+    },
+    {
+      "url": "https://mosteirojeronimos.torrebelem.gov.pt/en/visitar",
+      "publisher": "Museus e Monumentos de Portugal",
+      "checkedAt": "2026-10-08"
+    },
+    {
+      "url": "https://castelodesaojorge.pt/en/plan-your-visit/choose-your-ticket/",
+      "publisher": "EGEAC Castelo de São Jorge",
+      "checkedAt": "2026-10-08"
+    },
+    {
+      "url": "https://oceanario.pt/planear-visita/",
+      "publisher": "Oceanário de Lisboa",
+      "checkedAt": "2026-10-08"
+    },
+    {
+      "url": "https://shop.visitlisboa.com/products/lisboa-card?variant=35883699732644",
+      "publisher": "Turismo de Lisboa / Lismarketing",
+      "checkedAt": "2026-10-08"
+    },
+    {
+      "url": "https://www.rijksmuseum.nl/en/visit/practical-info/opening-hours-and-prices",
+      "publisher": "Rijksmuseum",
+      "checkedAt": "2026-10-08",
+      "use": "입장료·시간·예약"
+    },
+    {
+      "url": "https://www.rijksmuseum.nl/nl/bezoek/praktische-info/adres-en-route",
+      "publisher": "Rijksmuseum",
+      "checkedAt": "2026-10-08",
+      "use": "대중교통·장소핀"
+    },
+    {
+      "url": "https://www.vangoghmuseum.nl/en/visit/tickets-and-ticket-prices",
+      "publisher": "Van Gogh Museum",
+      "checkedAt": "2026-10-08",
+      "use": "입장료·예약"
+    },
+    {
+      "url": "https://www.vangoghmuseum.nl/en/visit/address-and-opening-hours",
+      "publisher": "Van Gogh Museum",
+      "checkedAt": "2026-10-08",
+      "use": "시간·접근·장소핀"
+    },
+    {
+      "url": "https://www.annefrank.org/en/museum/tickets/",
+      "publisher": "Anne Frank House",
+      "checkedAt": "2026-10-08",
+      "use": "입장료·시간·예약·장소핀"
+    },
+    {
+      "url": "https://www.gvb.nl/tarieven",
+      "publisher": "GVB",
+      "checkedAt": "2026-10-08",
+      "use": "2026운임"
+    },
+    {
+      "url": "https://gvb.nl/en/travel-products/hour-and-day-tickets/gvb-1-hour-ticket",
+      "publisher": "GVB",
+      "checkedAt": "2026-10-08",
+      "use": "1시간권유효조건"
+    },
+    {
+      "url": "https://gvb.nl/tourist-english",
+      "publisher": "GVB",
+      "checkedAt": "2026-10-08",
+      "use": "시내권범위·공항제외"
+    },
+    {
+      "url": "https://www.gvb.nl/en/travel-products/tourists/amsterdam-travel-ticket",
+      "publisher": "GVB",
+      "checkedAt": "2026-10-08",
+      "use": "2026공항포함권가격"
+    },
+    {
+      "url": "https://www.ns.nl/producten/amsterdam-travel-ticket",
+      "publisher": "NS",
+      "checkedAt": "2026-10-08",
+      "use": "패스범위·달력일유효조건, 가격은제외"
+    },
+    {
+      "url": "https://gvb.nl/reisinformatie/halte/pdf?direction=Inbound&lineNumber=52&startDate=2026-10-06&stopCode=NL%3AS%3A30009579",
+      "publisher": "GVB",
+      "checkedAt": "2026-10-08",
+      "use": "2026-10-05~11메트로52실제정차역"
+    },
+    {
+      "url": "https://www.gvb.nl/en/travel-information/line/GVB/2",
+      "publisher": "GVB",
+      "checkedAt": "2026-10-08",
+      "use": "트램2실제정차역"
+    },
+    {
+      "url": "https://gvb.nl/en/oranje-loper",
+      "publisher": "GVB",
+      "checkedAt": "2026-10-08",
+      "use": "Westermarkt공사우회"
+    },
+    {
+      "url": "https://www.gvb.nl/zuidasdok",
+      "publisher": "GVB",
+      "checkedAt": "2026-10-08",
+      "use": "2026-11-01역입구변경"
+    },
+    {
+      "url": "https://maps.amsterdam.nl/open_geodata/?k=649",
+      "publisher": "Gemeente Amsterdam",
+      "checkedAt": "2026-10-08",
+      "use": "2026역그룹좌표"
+    },
+    {
+      "url": "https://www.schiphol.nl/en/from-to-schiphol/by-public-transport/train/",
+      "publisher": "Royal Schiphol Group",
+      "checkedAt": "2026-10-08",
+      "use": "공항열차연결"
+    },
+    {
+      "url": "https://www.pancakes.amsterdam/nl/locations/pancakes-amsterdam-centraal",
+      "publisher": "PANCAKES Amsterdam",
+      "checkedAt": "2026-10-08",
+      "use": "점심시간·특정세트가격"
+    },
+    {
+      "url": "https://moeders.com/en/menu",
+      "publisher": "Moeders",
+      "checkedAt": "2026-10-08",
+      "use": "저녁영업"
+    },
+    {
+      "url": "https://www.moeders.com/en/reservations",
+      "publisher": "Moeders",
+      "checkedAt": "2026-10-08",
+      "use": "예약·보증금조건"
+    },
+    {
+      "url": "https://maps.amsterdam.nl/open_geodata/geojson_lnglat.php?KAARTLAAG=TRAMMETRO_PUNTEN_2026&THEMA=trammetro",
+      "publisher": "Gemeente Amsterdam - Ruimte en Duurzaamheid",
+      "checkedAt": "2026-10-08",
+      "sourceYear": 2026,
+      "use": "역그룹대표좌표",
+      "licenseUrl": "https://maps.amsterdam.nl/open_geodata/terms.php",
+      "redistributionNotice": "원본 데이터는 Gemeente Amsterdam에서 누구나 무료로 받을 수 있으며 링크된 이용조건은 이 추출자료에도 적용됩니다."
+    },
+    {
+      "url": "https://data.pid.cz/stops/json/stops.json",
+      "checkedAt": "2026-10-08",
+      "status": "verified_official_public_source"
+    },
+    {
+      "url": "https://lokal-dlouha.ambi.cz/en/",
+      "checkedAt": "2026-10-08",
+      "status": "verified_official_public_source"
+    },
+    {
+      "url": "https://pid.cz/en/metro/",
+      "checkedAt": "2026-10-08",
+      "status": "verified_official_public_source"
+    },
+    {
+      "url": "https://pid.cz/en/opendata/",
+      "checkedAt": "2026-10-08",
+      "status": "verified_official_public_source"
+    },
+    {
+      "url": "https://pid.cz/en/tickets-and-fare/",
+      "checkedAt": "2026-10-08",
+      "status": "verified_official_public_source"
+    },
+    {
+      "url": "https://pid.cz/en/tickets-and-fare/how-to-buy-ticket/",
+      "checkedAt": "2026-10-08",
+      "status": "verified_official_public_source"
+    },
+    {
+      "url": "https://prague.eu/cs/objevujte/lokal-dlouhaaa/",
+      "checkedAt": "2026-10-08",
+      "status": "verified_official_public_source"
+    },
+    {
+      "url": "https://prague.eu/en/objevujte/cafe-louvre/",
+      "checkedAt": "2026-10-08",
+      "status": "verified_official_public_source"
+    },
+    {
+      "url": "https://prague.eu/en/objevujte/charles-bridge-karluv-most/",
+      "checkedAt": "2026-10-08",
+      "status": "verified_official_public_source"
+    },
+    {
+      "url": "https://prague.eu/en/objevujte/national-museum-museum-complex-of-the-national-museum/",
+      "checkedAt": "2026-10-08",
+      "status": "verified_official_public_source"
+    },
+    {
+      "url": "https://prague.eu/en/objevujte/old-town-hall-with-astronomical-clock-staromestska-radnice-s-orlojem/",
+      "checkedAt": "2026-10-08",
+      "status": "verified_official_public_source"
+    },
+    {
+      "url": "https://prague.eu/en/objevujte/prague-castle-prazsky-hrad/",
+      "checkedAt": "2026-10-08",
+      "status": "verified_official_public_source"
+    },
+    {
+      "url": "https://www.cafelouvre.cz/en/Contact",
+      "checkedAt": "2026-10-08",
+      "status": "verified_official_public_source"
+    },
+    {
+      "url": "https://www.easa.europa.eu/en/downloads/137393/en",
+      "checkedAt": "2026-10-08",
+      "status": "verified_official_public_source"
+    },
+    {
+      "url": "https://www.hrad.cz/en/prague-castle-for-visitors/how-to-get-to-castle",
+      "checkedAt": "2026-10-08",
+      "status": "verified_official_public_source"
+    },
+    {
+      "url": "https://www.hrad.cz/en/prague-castle-for-visitors/opening-hours",
+      "checkedAt": "2026-10-08",
+      "status": "verified_official_public_source"
+    },
+    {
+      "url": "https://www.hrad.cz/en/prague-castle-for-visitors/tickets",
+      "checkedAt": "2026-10-08",
+      "status": "verified_official_public_source"
+    },
+    {
+      "url": "https://www.nm.cz/en/visit-us/buildings/museum-complex-of-the-national-museum",
+      "checkedAt": "2026-10-08",
+      "status": "verified_official_public_source"
+    },
+    {
+      "url": "https://www.prg.aero/en/public-transport-buses",
+      "checkedAt": "2026-10-08",
+      "status": "verified_official_public_source"
+    },
+    {
+      "url": "https://www.cafelouvre.cz/en/lunch",
+      "checkedAt": "2026-10-08",
+      "status": "verified_official_public_source"
+    },
+    {
+      "url": "https://www.cafelouvre.cz/en/dinner",
+      "checkedAt": "2026-10-08",
+      "status": "verified_official_public_source"
+    },
+    {
+      "url": "https://lokal-dlouha.ambi.cz/en/menu/denni-menu",
+      "checkedAt": "2026-10-08",
+      "status": "verified_official_public_source"
+    },
+    {
+      "url": "https://lokal-dlouha.ambi.cz/en/menu/night-menu",
+      "checkedAt": "2026-10-08",
+      "status": "verified_official_public_source"
+    },
+    {
+      "url": "https://moderne.wien.info/en/experiment/otto-wagner",
+      "checkedAt": "2026-10-08",
+      "status": "verified_official_public_source"
+    },
+    {
+      "url": "https://shop.wienerlinien.at/en/General-Terms-and-Conditions/",
+      "checkedAt": "2026-10-08",
+      "status": "verified_official_public_source"
+    },
+    {
+      "url": "https://shop.wienmobil.at/",
+      "checkedAt": "2026-10-08",
+      "status": "verified_official_public_source"
+    },
+    {
+      "url": "https://tramwm.wienerlinien.at/web/guest/24-stunden-wien",
+      "checkedAt": "2026-10-08",
+      "status": "official_search_index_verified_crosschecked_with_vienna_tourism"
+    },
+    {
+      "url": "https://www.belvedere.at/en/visit/upper-belvedere",
+      "checkedAt": "2026-10-08",
+      "status": "verified_official_public_source"
+    },
+    {
+      "url": "https://www.belvedere.at/go/tickets?location%5B%5D=1",
+      "checkedAt": "2026-10-08",
+      "status": "verified_official_public_source"
+    },
+    {
+      "url": "https://www.figlmueller.at/baeckerstrasse/",
+      "checkedAt": "2026-10-08",
+      "status": "verified_official_public_source"
+    },
+    {
+      "url": "https://www.figlmueller.at/baeckerstrasse/reservieren/",
+      "checkedAt": "2026-10-08",
+      "status": "verified_official_public_source"
+    },
+    {
+      "url": "https://www.imperialtickets.com/en/schoenbrunn-palace/grand-tour-schoenbrunn-palace/45",
+      "checkedAt": "2026-10-08",
+      "status": "verified_official_public_source"
+    },
+    {
+      "url": "https://www.plachutta.at/?reservation=show",
+      "checkedAt": "2026-10-08",
+      "status": "verified_official_public_source"
+    },
+    {
+      "url": "https://www.plachutta.at/restaurant/wollzeile/",
+      "checkedAt": "2026-10-08",
+      "status": "verified_official_public_source"
+    },
+    {
+      "url": "https://www.schoenbrunn.at/en/all-tickets/palace-ticket",
+      "checkedAt": "2026-10-08",
+      "status": "verified_official_public_source"
+    },
+    {
+      "url": "https://www.schoenbrunn.at/en/visitor-information/how-to-get-here",
+      "checkedAt": "2026-10-08",
+      "status": "verified_official_public_source"
+    },
+    {
+      "url": "https://www.schoenbrunn.at/en/visitor-information/opening-times",
+      "checkedAt": "2026-10-08",
+      "status": "verified_official_public_source"
+    },
+    {
+      "url": "https://www.viennaairport.com/jart/prj3/va/uploads/data-uploads/Zivilflugplatzbenuetzung/ZFBB%20VIE%20V1.0%20amtssigniert.pdf",
+      "checkedAt": "2026-10-08",
+      "status": "verified_official_public_source"
+    },
+    {
+      "url": "https://www.wien.gv.at/english/environment/parks/stadtpark.html",
+      "checkedAt": "2026-10-08",
+      "status": "verified_official_public_source"
+    },
+    {
+      "url": "https://www.wien.info/de/kunst-kultur/museen-ausstellungen/top-museen/belvedere-341072",
+      "checkedAt": "2026-10-08",
+      "status": "verified_official_public_source"
+    },
+    {
+      "url": "https://www.wien.info/de/kunst-kultur/museen-ausstellungen/top-museen/kunsthistorisches-museum-350478",
+      "checkedAt": "2026-10-08",
+      "status": "verified_official_public_source"
+    },
+    {
+      "url": "https://www.wien.info/de/lebenswertes-wien/parks-gruenflaechen/stadtpark-955832",
+      "checkedAt": "2026-10-08",
+      "status": "verified_official_public_source"
+    },
+    {
+      "url": "https://www.wien.info/en/art-culture/imperial-sights/schoenbrunn-palace-357558",
+      "checkedAt": "2026-10-08",
+      "status": "verified_official_public_source"
+    },
+    {
+      "url": "https://www.wien.info/en/see-do/discover-vienna/hidden-gems/a-global-city-338076",
+      "checkedAt": "2026-10-08",
+      "status": "verified_official_public_source"
+    },
+    {
+      "url": "https://www.wien.info/en/travel-info/arrival-departure/airport-to-center/express-train-s7-345644",
+      "checkedAt": "2026-10-08",
+      "status": "verified_official_public_source"
+    },
+    {
+      "url": "https://www.wien.info/en/travel-info/arrival-departure/airport-to-center/intercityexpress-349074",
+      "checkedAt": "2026-10-08",
+      "status": "verified_official_public_source"
+    },
+    {
+      "url": "https://www.wien.info/en/travel-info/arrival-departure/stations-359950",
+      "checkedAt": "2026-10-08",
+      "status": "verified_official_public_source"
+    },
+    {
+      "url": "https://www.wien.info/en/travel-info/transport/tickets-361360",
+      "checkedAt": "2026-10-08",
+      "status": "verified_official_public_source"
+    },
+    {
+      "url": "https://www.wienerlinien.at/web/wl-en/tickets/7-days-vienna",
+      "checkedAt": "2026-10-08",
+      "status": "official_search_index_verified_crosschecked_with_vienna_tourism"
+    },
+    {
+      "url": "https://www.wienerlinien.at/zeitkarten?sfns=mo",
+      "checkedAt": "2026-10-08",
+      "status": "official_search_index_verified_crosschecked_with_vienna_tourism"
+    },
+    {
+      "url": "https://shop.khm.at/tickets/kunsthistorisches-museum-200000000001001-T001-01",
+      "checkedAt": "2026-10-08",
+      "status": "officially_linked_purchase_url_content_unavailable"
+    },
+    {
+      "url": "https://www.barcelonabusturistic.cat/es/casa-batllo",
+      "checkedAt": "2026-10-08",
+      "use": "최종 교차검증에서 추가한 공식 장소 좌표",
+      "poiId": "barcelona-casa-batllo"
+    },
+    {
+      "url": "https://ajuntament.barcelona.cat/sarria-santgervasi/es/guia-del-distrito/equipamientos-por-temas/listado/restaurant-la-fonda-92338210200",
+      "checkedAt": "2026-10-08",
+      "use": "최종 교차검증에서 추가한 공식 장소 좌표",
+      "poiId": "barcelona-la-fonda"
+    },
+    {
+      "url": "https://www.museodeljamon.com/museos/paseo-prado/",
+      "checkedAt": "2026-10-08",
+      "use": "최종 교차검증에서 추가한 공식 장소 좌표",
+      "poiId": "madrid-museo-jamon-prado"
+    }
+  ],
+  "klookLinks": [],
+  "transportReferenceExamples": [],
+  "airports": [
+    {
+      "id": "barcelona-bcn",
+      "city": "barcelona",
+      "name": "바르셀로나 엘프라트 공항",
+      "iata": "BCN",
+      "code": "BCN",
+      "country": "ES",
+      "officialUrl": "https://www.aena.es/en/josep-tarradellas-barcelona-el-prat.html",
+      "source": "https://desarrollo-logistico.aena.es/es/aerolineas/aeropuertos-y-destinos/nuestros-aeropuertos.html",
+      "lat": null,
+      "lng": null,
+      "checkedAt": "2026-10-08",
+      "notes": "공항선택용 IATA 매핑. 터미널별 위치·공항이동은 별도. 시내 메트로 €2.90 단일권은 공항역용이 아님."
+    },
+    {
+      "id": "madrid-mad",
+      "city": "madrid",
+      "name": "마드리드 바라하스 공항",
+      "iata": "MAD",
+      "code": "MAD",
+      "country": "ES",
+      "officialUrl": "https://www.aena.es/en/adolfo-suarez-madrid-barajas.html",
+      "source": "https://www.aena.es/en/adolfo-suarez-madrid-barajas.html",
+      "lat": null,
+      "lng": null,
+      "checkedAt": "2026-10-08",
+      "notes": "공항선택용 IATA 매핑. T1–T4 및 T4S 터미널별 이동·보안구역은 별도. 공항 메트로는 일반시내요금과 추가요금을 구분."
+    },
+    {
+      "id": "lisbon-lis",
+      "city": "lisbon",
+      "iata": "LIS",
+      "name": "리스본 공항(Humberto Delgado)",
+      "officialUrl": "https://www.lisbonairport.pt/fr/taxonomy/term/2",
+      "checkedAt": "2026-10-08",
+      "lat": 38.7699999999,
+      "lng": -9.12800555,
+      "coordinateSource": "https://www.lisbonairport.pt/fr/taxonomy/term/2",
+      "notes": "공항운영자 IATA·좌표 자료. 공항대표점이며 터미널입구 아님."
+    },
+    {
+      "id": "amsterdam-airport-ams",
+      "city": "amsterdam",
+      "iata": "AMS",
+      "name": "암스테르담 스키폴공항",
+      "officialUrl": "https://www.schiphol.nl/en/from-to-schiphol/by-public-transport/train/",
+      "iataSource": "https://www.schiphol.nl/nl/blog/welke-informatie-bevat-je-bagagelabel/",
+      "lat": null,
+      "lng": null,
+      "checkedAt": "2026-10-08",
+      "notes": "공항 NS기차와 GVB 시내교통의 운임·패스 적용을 구분."
+    },
+    {
+      "id": "prague-airport-prg",
+      "city": "prague",
+      "iata": "PRG",
+      "name": "바츨라프 하벨 프라하 공항",
+      "officialUrl": "https://www.prg.aero/en/public-transport-buses",
+      "iataSource": "https://www.easa.europa.eu/en/downloads/137393/en",
+      "lat": null,
+      "lng": null,
+      "checkedAt": "2026-10-08",
+      "notes": "59번 트롤리버스와메트로A의 조합은 일반 PID 운임. AE 공항버스는별도상품."
+    },
+    {
+      "id": "vienna-airport-vie",
+      "city": "vienna",
+      "iata": "VIE",
+      "name": "빈국제공항",
+      "officialUrl": "https://www.wien.info/en/travel-info/arrival-departure/airport-to-center/intercityexpress-349074",
+      "iataSource": "https://www.viennaairport.com/jart/prj3/va/uploads/data-uploads/Zivilflugplatzbenuetzung/ZFBB%20VIE%20V1.0%20amtssigniert.pdf",
+      "lat": null,
+      "lng": null,
+      "checkedAt": "2026-10-08",
+      "notes": "Schwechat소재,시내핵심구역밖.교통패스만으로공항전구간불포함."
+    }
+  ],
+  "calculationRules": [
+    "모든 금액은 EUR이며 명시된 대상1인 기준. 타통화와 환율 없이 합산 금지.",
+    "카사 바트요 가격 null은 무료가 아님. €29는 시작가격이며 날짜·상품 선택 전 확정총액으로 합산 금지.",
+    "null 좌표는 지도원점이 아님. 확인된 장소핀만 지도·거리계산에 사용. 미확인 구간 자동길찾기 생성 금지.",
+    "레스토랑 예시 단품가격을 전체 식비로 사용하지 않음. 라 폰다 해산물파에야 최소2인 조건 적용.",
+    "일반 단일 메트로 여정은 €2.90. 공항 L9 Sud 역은 €5.90 전용권 또는 적격패스 필요.",
+    "각 transitLeg는 새여정 한 번. 개찰망을 나간 뒤 재입장 또는 별도 버스는 별도요금.",
+    "T-dia는 달력하루가 아닌 첫승차 후24시간. 패스는 명소입장 미포함.",
+    "구엘공원 주민전용 시간대는 관광객에게 적용하지 않음. 모든 예약시각·최종입장·행사통제 확인.",
+    "경로는 공식 역·노선·접근안내를 조합한 대표 경로이며 실시간 최적경로가 아님.",
+    "모든 금액은 명시된 대상1인 EUR. 환율 없이 타통화와 합산 금지.",
+    "공식기본요금과 온라인 최종결제액을 구별. 왕궁·레이나소피아 예약수수료는 미확정이며 입장료합계를 최종결제총액으로 표시 금지.",
+    "식당의 단품·2인용가격을 전체1인 식사예산으로 바꾸지 않음. 미확정 식비는 사용자 입력.",
+    "null 좌표는 원점이 아니며 지도·거리계산에서 제외. 공식명소 대표점도 실제 입구와 다를 수 있음.",
+    "메트로는 각 구간마다 새 여정 €1.50. 새 Multi 카드€2.50은 카드당1회, 공항 메트로추가€3은 적격패스 여부에 따라 별도.",
+    "관광교통권1일은 달력일이며 야간서비스 다음날05:00까지. 연속24시간권으로 비교 금지.",
+    "관광교통권에는 명소입장·공항익스프레스버스가 포함되지 않음.",
+    "왕궁 특정시간 무료입장에는 국적·거주·증빙 조건이 있어 모든 사용자에게 적용하지 않음.",
+    "레이나 소피아 화요일·일요일 단축운영, 프라도 휴일, 왕궁 국가행사, 레티로 악천후 폐쇄를 여행일에 확인.",
+    "체류·이동시간은 계획용 예상. 대표경로 외 모든 조합의 실제길찾기/운행상태가 검증된 것은 아님.",
+    "오세아나리움은시간미선택시가격null을0원으로계산하지않습니다.",
+    "온라인예매수수료와navegante카드신규구입비는별도입니다.",
+    "Lisboa Card포함명소도예약·매진·휴관조건을통과해야입장가능합니다.",
+    "저장된운임은1인일반성인기준이며실시간결제가격아닙니다.",
+    "단일Carris/Metro1회권은60분유효하나Metro연속재입장불가. 관광지장시간방문뒤재탑승은새티켓으로계산.",
+    "null 운임·입장료·좌표는0 또는 무료로 간주하지 않음.",
+    "GVB1시간권3.40유로는확인된 관광객용 고정요금 예시이며OVpay 거리비례최저요금 주장이 아님.",
+    "GVB24시간권은공항NS/397을 포함하지 않음. Amsterdam Travel Ticket은 달력일 기준이고공항범위가 다름.",
+    "미술관·박물관 티켓이 있어도 시간예약·실재고 조건을 통과해야 입장 가능.",
+    "좌표가null인식당은 근접 자동추천·도보거리 계산에서 제외하고 주소로 확인.",
+    "정확한 승차시각 없는 패스 자동절약 판정은 비활성화.",
+    "같은1시간권 유효시간 안의GVB환승은 중복운임을 피할 수 있으나 장시간 관람후재승차는 새권 필요.",
+    "CZK와 EUR·JPY·GBP는 환율 없이 합산하지 않습니다.",
+    "null은 무료가 아니며 사용자 입력이나 여행일 확인이 필요합니다.",
+    "종이권·앱권 가격은 별도이며 앱 활성화1분 대기 후 탑승합니다.",
+    "시간제 티켓을 여러 구간에서 이어 쓰면 각 구간마다 운임을 중복 청구하지 않습니다.",
+    "패스비와 개별 운임은 실제 포함구간·유효시간 기준으로만 비교합니다.",
+    "식비·숙박비는 사용자 입력. 메뉴 한 항목 가격을 식사 총액으로 쓰지 않습니다.",
+    "관광청 장소핀과 역 데이터 대표점은 정확한 출입구를 보장하지 않습니다.",
+    "EUR와CZK·JPY·GBP를환율없이합산하지 않습니다.",
+    "null은무료가아님.벨베데레표시가격과미술사박물관미확정가격을여행일확정총액에넣지 않습니다.",
+    "24시간권은연속시간,7일권은시작일포함7개달력일+다음날01:00까지.",
+    "시내단일권은80분내한방향·관광중단없는여정.각관광후새여정은새표필요.",
+    "공항구간은시내패스로전액대체하지 않습니다.5.50중유효시내패스적용후2.30추가권.",
+    "48/72시간WienerLinien권은2026년판매중단.오래된가격·상품을제안하지 않습니다.",
+    "2026-09-07~2027-10말S7/REX7도심직통제한.확인된Railjet대안사용.",
+    "식비·숙박비는사용자입력.정확한메뉴총액을임의추정하지 않습니다.",
+    "KHM월요일휴관은시즌예외가있어연중일괄적용하지 않습니다."
+  ],
+  "cityMeta": {
+    "barcelona": {
+      "city": "barcelona",
+      "checkedAt": "2026-10-08",
+      "schemaVersion": 1,
+      "liveData": false,
+      "currency": "EUR",
+      "currencies": [
+        "EUR"
+      ],
+      "timezone": "Europe/Madrid",
+      "coverage": "바르셀로나 주요 명소4곳·식당2곳·기준역2곳·대표 메트로5구간. 모든 숙소·명소 조합의 실시간 길찾기 아님.",
+      "notice": "2026-10-08 공식 공개안내 확인. 여행일 재고·영업·운임·운행 보장 아님. 체류·이동시간은 계획용 예상. 확인하지 못한 좌표·식비는 null이며 무료나 원점이 아닙니다.",
+      "restaurantNotes": [
+        "공식 메뉴·위치·운영시간을 기준으로 선정. Google 평점·순위를 생성하지 않음.",
+        "식비는 주문에 따라 달라 사용자 설정 필요. 알레르기·좌석 재고·대기시간은 미검증."
+      ],
+      "dataGaps": []
+    },
+    "madrid": {
+      "city": "madrid",
+      "checkedAt": "2026-10-08",
+      "schemaVersion": 1,
+      "liveData": false,
+      "currency": "EUR",
+      "currencies": [
+        "EUR"
+      ],
+      "timezone": "Europe/Madrid",
+      "coverage": "마드리드 주요 명소4곳·식당2곳·기준역2곳·대표 메트로5구간. 모든 숙소·명소 조합의 실시간 길찾기 아님.",
+      "notice": "2026-10-08 공식 공개안내 확인. 여행일 재고·영업·운임·운행 보장 아님. 체류·이동시간은 계획용 예상. 확인하지 못한 좌표·식비는 null이며 무료나 원점이 아닙니다.",
+      "restaurantNotes": [
+        "공식 메뉴·위치·운영시간을 기준으로 선정. Google 평점·순위를 생성하지 않음.",
+        "식비는 주문에 따라 달라 사용자 설정 필요. 알레르기·좌석 재고·대기시간은 미검증."
+      ],
+      "dataGaps": []
+    },
+    "lisbon": {
+      "city": "lisbon",
+      "currency": "EUR",
+      "timezone": "Europe/Lisbon",
+      "liveData": false,
+      "notice": "공개 공식자료 확인일2026-10-08. 이동시간은 예상이며 미래 운영·재고·요금을 보장하지 않습니다.",
+      "dataGaps": [
+        "Pinóquio 공식 언어별 지도링크가다른좌표라위치null,근접자동추천제외.",
+        "15E는확인일임시변경공지가있어대표이동구간에미수록하고728버스를검증.",
+        "공항왕복·장거리·전체도시최적경로는미검증."
+      ]
+    },
+    "amsterdam": {
+      "city": "amsterdam",
+      "currency": "EUR",
+      "timezone": "Europe/Amsterdam",
+      "liveData": false,
+      "notice": "2026-10-08 공식 공개자료 확인. 여행일 운영·요금·재고 재확인. 이동·체류시간은 계획용 예상.",
+      "foodBudget": null,
+      "hotelBudget": null,
+      "dataGaps": [
+        "NS공항편도 공식 확정요금 미확인:fare=null.",
+        "식당2곳은실제공식장소핀좌표를확정하지못해null. Moeders지도링크의viewport좌표는쓰지않음.",
+        "직접예약 재고·실시간지연·모든 출입구의 접근성을 확인한 것이 아님.",
+        "GVB 일부사이트 직접열람403으로 공식 검색색인의2026 요금·노선 결과를 사용.2025가격이 남은NS/영어페이지보다 명시적2026네덜란드요금표를 우선.",
+        "Moeders2026 메뉴PDF 가격은 미검증. PANCAKES검색요약과직접페이지의시간차이는직접페이지를 우선."
+      ]
+    },
+    "prague": {
+      "city": "prague",
+      "currency": "CZK",
+      "timezone": "Europe/Prague",
+      "liveData": false,
+      "notice": "2026-10-08 공식 공개자료 확인. CZK 가격이며 EUR가 아닙니다. 여행일 요금·운영·재고는 재확인; 모든 이동/체류시간은 계획용 예상.",
+      "foodBudget": null,
+      "hotelBudget": null,
+      "dataGaps": []
+    },
+    "vienna": {
+      "city": "vienna",
+      "currency": "EUR",
+      "timezone": "Europe/Vienna",
+      "liveData": false,
+      "notice": "2026-10-08 공식공개자료확인. 여행일요금·운영·재고재확인.이동·체류시간은계획용예상.",
+      "foodBudget": null,
+      "hotelBudget": null,
+      "dataGaps": []
+    }
+  },
+  "budgetDefaultsByCity": {
+    "barcelona": {
+      "breakfastPerPerson": null,
+      "lunchPerPerson": null,
+      "dinnerPerPerson": null,
+      "hotelPerNight": null,
+      "currency": "EUR",
+      "basis": "사용자 입력. 공식 시장 평균 미확인."
+    },
+    "madrid": {
+      "breakfastPerPerson": null,
+      "lunchPerPerson": null,
+      "dinnerPerPerson": null,
+      "hotelPerNight": null,
+      "currency": "EUR",
+      "basis": "사용자 입력. 공식 시장 평균 미확인."
+    },
+    "lisbon": {
+      "breakfastPerPerson": null,
+      "lunchPerPerson": null,
+      "dinnerPerPerson": null,
+      "hotelPerNight": null,
+      "currency": "EUR",
+      "basis": "사용자 입력. 공식 전체식사·숙박평균 미확인."
+    },
+    "amsterdam": {
+      "breakfastPerPerson": null,
+      "lunchPerPerson": null,
+      "dinnerPerPerson": null,
+      "hotelPerNight": null,
+      "currency": "EUR",
+      "basis": "사용자 입력. 식당 메뉴의 특정상품 가격을 여행 평균 식비로 간주하지 않음."
+    },
+    "prague": {
+      "breakfastPerPerson": null,
+      "lunchPerPerson": null,
+      "dinnerPerPerson": null,
+      "hotelPerNight": null,
+      "currency": "CZK",
+      "basis": "사용자 입력. 공식 시장 평균 미확인."
+    },
+    "vienna": {
+      "breakfastPerPerson": null,
+      "lunchPerPerson": null,
+      "dinnerPerPerson": null,
+      "hotelPerNight": null,
+      "currency": "EUR",
+      "basis": "사용자 입력. 공식 시장 평균 미확인."
+    }
+  }
+}

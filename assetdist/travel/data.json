@@ -1,0 +1,930 @@
+{
+  "meta": {
+    "schemaVersion": 1,
+    "checkedAt": "2026-10-08",
+    "checkedAtUTC": "2026-10-07",
+    "timezone": "Asia/Tokyo",
+    "currency": "JPY",
+    "status": "verified_static_mvp",
+    "liveData": false,
+    "notice": "공식 공개안내를 2026-10-08 일본시간 기준 확인한 정적 데이터입니다. 선택한 여행일의 영업·휴관·요금·재고를 보장하지 않습니다. 체류시간은 계획용 추정, 좌표는 대략적인 대표점입니다.",
+    "quotePolicy": "최저가·최적 조합·실제 절감액 보장 없음. 실제 노선·요금 확인이 없는 이동은 견적에 포함하지 않습니다."
+  },
+  "pois": [
+    {
+      "id": "osaka-castle",
+      "name": "오사카성 천수각",
+      "city": "osaka",
+      "district": "오사카성",
+      "category": "culture",
+      "lat": 34.68625,
+      "lng": 135.52579,
+      "duration": 90,
+      "durationIsEstimate": true,
+      "price": 1200,
+      "priceScope": "성인 일반 천수각 관람",
+      "description": "천수각 전시와 전망을 둘러보는 코스. 공원 이동은 따로 여유를 두세요.",
+      "officialUrl": "https://osaka-info.jp/en/spot/osaka-castle-main-keep/",
+      "coordinateSource": "https://osaka-info.jp/en/spot/osaka-castle-main-keep/",
+      "coordinatePrecision": "approximate_official_embedded_map_query_point",
+      "coordinateNote": "공식 관광청 페이지 Google Maps iframe q에 명시된 대표 위치. 실제 입구나 도보 경로의 좌표가 아닙니다.",
+      "hours": "09:00–18:00, 입장 마감 17:30. 12/28–1/1 휴관.",
+      "reservation": "일반 방문 예약 의무는 이 데이터에서 확정하지 않음. 공식 안내 확인.",
+      "checkedAt": "2026-10-08",
+      "priceNote": "성인 일반 천수각 관람"
+    },
+    {
+      "id": "umeda-sky",
+      "name": "우메다 스카이빌딩",
+      "city": "osaka",
+      "district": "우메다",
+      "category": "view",
+      "lat": 34.70531,
+      "lng": 135.49037,
+      "duration": 75,
+      "durationIsEstimate": true,
+      "price": 2000,
+      "priceScope": "중학생 이상 일반 전망대 관람",
+      "description": "우메다 도심 전망대. 주유패스 무료입장은 15시 이전 조건을 확인하세요.",
+      "officialUrl": "https://osaka-info.jp/en/spot/umeda-sky-building/",
+      "coordinateSource": "https://osaka-info.jp/en/spot/umeda-sky-building/",
+      "coordinatePrecision": "approximate_official_embedded_map_query_point",
+      "coordinateNote": "공식 관광청 페이지 Google Maps iframe q에 명시된 대표 위치. 실제 입구나 도보 경로의 좌표가 아닙니다.",
+      "hours": "09:30–22:30. 특별 운영일에는 변경 가능.",
+      "reservation": "일반 방문 예약 의무는 이 데이터에서 확정하지 않음. 공식 안내 확인.",
+      "checkedAt": "2026-10-08",
+      "priceNote": "중학생 이상 일반 전망대 관람"
+    },
+    {
+      "id": "dotonbori",
+      "name": "도톤보리",
+      "city": "osaka",
+      "district": "난바·도톤보리",
+      "category": "food",
+      "lat": 34.66861,
+      "lng": 135.50272,
+      "duration": 90,
+      "durationIsEstimate": true,
+      "price": 0,
+      "priceScope": "공공거리 산책, 식사·쇼핑·유람선 별도",
+      "description": "강변 간판과 먹거리를 함께 둘러보는 산책 구역.",
+      "officialUrl": "https://osaka-info.jp/en/spot/dotonbori/",
+      "coordinateSource": "https://osaka-info.jp/en/spot/dotonbori/",
+      "coordinatePrecision": "approximate_official_embedded_map_query_point",
+      "coordinateNote": "공식 관광청 페이지 Google Maps iframe q에 명시된 대표 위치. 실제 입구나 도보 경로의 좌표가 아닙니다.",
+      "hours": "상점별 영업시간·휴무 상이.",
+      "reservation": "일반 방문 예약 의무는 이 데이터에서 확정하지 않음. 공식 안내 확인.",
+      "checkedAt": "2026-10-08",
+      "priceNote": "공공거리 산책, 식사·쇼핑·유람선 별도"
+    },
+    {
+      "id": "tsutenkaku",
+      "name": "쓰텐카쿠",
+      "city": "osaka",
+      "district": "신세카이",
+      "category": "view",
+      "lat": 34.65256,
+      "lng": 135.50634,
+      "duration": 75,
+      "durationIsEstimate": true,
+      "price": 1500,
+      "priceScope": "일반 전망대, 특별 전망대·체험 별도",
+      "description": "신세카이의 전망대. 현장에서 지정시간 입장권으로 교환해야 합니다.",
+      "officialUrl": "https://osaka-info.jp/en/spot/tsutenkaku/",
+      "coordinateSource": "https://osaka-info.jp/en/spot/tsutenkaku/",
+      "coordinatePrecision": "approximate_official_embedded_map_query_point",
+      "coordinateNote": "공식 관광청 페이지 Google Maps iframe q에 명시된 대표 위치. 실제 입구나 도보 경로의 좌표가 아닙니다.",
+      "hours": "09:00–21:45, 일반 전망대 입장 마감 21:15.",
+      "reservation": "현장 지정시간권 교환 필요; 만석 시 입장 불가",
+      "checkedAt": "2026-10-08",
+      "priceNote": "일반 전망대, 특별 전망대·체험 별도"
+    },
+    {
+      "id": "shinsekai",
+      "name": "신세카이",
+      "city": "osaka",
+      "district": "신세카이",
+      "category": "food",
+      "lat": 34.65233,
+      "lng": 135.50618,
+      "duration": 60,
+      "durationIsEstimate": true,
+      "price": 0,
+      "priceScope": "공공거리 산책, 식사·개별 시설 별도",
+      "description": "쓰텐카쿠 주변의 복고풍 상점가와 식당을 둘러보는 구역.",
+      "officialUrl": "https://osaka-info.jp/en/spot/shinsekai/",
+      "coordinateSource": "https://osaka-info.jp/en/spot/shinsekai/",
+      "coordinatePrecision": "approximate_official_embedded_map_query_point",
+      "coordinateNote": "공식 관광청 페이지 Google Maps iframe q에 명시된 대표 위치. 실제 입구나 도보 경로의 좌표가 아닙니다.",
+      "hours": "상점별 영업시간·휴무 상이.",
+      "reservation": "일반 방문 예약 의무는 이 데이터에서 확정하지 않음. 공식 안내 확인.",
+      "checkedAt": "2026-10-08",
+      "priceNote": "공공거리 산책, 식사·개별 시설 별도"
+    },
+    {
+      "id": "kuromon-market",
+      "name": "구로몬 시장",
+      "city": "osaka",
+      "district": "난바·도톤보리",
+      "category": "food",
+      "lat": 34.66628,
+      "lng": 135.50797,
+      "duration": 60,
+      "durationIsEstimate": true,
+      "price": 0,
+      "priceScope": "시장길 통행, 음식·상품 별도",
+      "description": "니폰바시역 인근의 시장. 상점마다 운영일이 다릅니다.",
+      "officialUrl": "https://osaka-info.jp/en/spot/kuromon-market/",
+      "coordinateSource": "https://osaka-info.jp/en/spot/kuromon-market/",
+      "coordinatePrecision": "approximate_official_embedded_map_query_point",
+      "coordinateNote": "공식 관광청 페이지 Google Maps iframe q에 명시된 대표 위치. 실제 입구나 도보 경로의 좌표가 아닙니다.",
+      "hours": "상점별 영업시간·휴무 상이.",
+      "reservation": "일반 방문 예약 의무는 이 데이터에서 확정하지 않음. 공식 안내 확인.",
+      "checkedAt": "2026-10-08",
+      "priceNote": "시장길 통행, 음식·상품 별도"
+    },
+    {
+      "id": "shinsaibashi",
+      "name": "신사이바시스지",
+      "city": "osaka",
+      "district": "신사이바시",
+      "category": "shopping",
+      "lat": 34.67344,
+      "lng": 135.50163,
+      "duration": 75,
+      "durationIsEstimate": true,
+      "price": 0,
+      "priceScope": "상점가 통행, 쇼핑·식사 별도",
+      "description": "도톤보리와 묶어 둘러보기 좋은 남북 방향 쇼핑거리.",
+      "officialUrl": "https://osaka-info.jp/en/spot/shinsaibashi-suji-shopping-street/",
+      "coordinateSource": "https://osaka-info.jp/en/spot/shinsaibashi-suji-shopping-street/",
+      "coordinatePrecision": "approximate_official_embedded_map_query_point",
+      "coordinateNote": "공식 관광청 페이지 Google Maps iframe q에 명시된 대표 위치. 실제 입구나 도보 경로의 좌표가 아닙니다.",
+      "hours": "상점별 영업시간·휴무 상이.",
+      "reservation": "일반 방문 예약 의무는 이 데이터에서 확정하지 않음. 공식 안내 확인.",
+      "checkedAt": "2026-10-08",
+      "priceNote": "상점가 통행, 쇼핑·식사 별도"
+    },
+    {
+      "id": "shitennoji",
+      "name": "시텐노지",
+      "city": "osaka",
+      "district": "덴노지",
+      "category": "culture",
+      "lat": 34.655456,
+      "lng": 135.517382,
+      "duration": 75,
+      "durationIsEstimate": true,
+      "price": 500,
+      "priceScope": "중심가람 성인; 정원 300엔·보물관 500엔 별도",
+      "description": "중심가람을 중심으로 둘러보는 사찰. 정원·보물관은 별도입니다.",
+      "officialUrl": "https://osaka-info.jp/en/spot/shitennoji/",
+      "coordinateSource": "https://osaka-info.jp/en/spot/shitennoji/",
+      "coordinatePrecision": "approximate_official_embedded_map_query_point",
+      "coordinateNote": "공식 관광청 페이지 Google Maps iframe q에 명시된 대표 위치. 실제 입구나 도보 경로의 좌표가 아닙니다.",
+      "hours": "4–9월 08:30–16:30, 10–3월 08:30–16:00. 매월 21일 연장 운영, 정원 임시휴관 가능.",
+      "reservation": "일반 방문 예약 의무는 이 데이터에서 확정하지 않음. 공식 안내 확인.",
+      "checkedAt": "2026-10-08",
+      "priceNote": "중심가람 성인; 정원 300엔·보물관 500엔 별도"
+    },
+    {
+      "id": "fushimi-inari-taisha",
+      "name": "후시미 이나리 타이샤",
+      "city": "kyoto",
+      "district": "후시미",
+      "category": "culture",
+      "lat": 34.967168,
+      "lng": 135.773297,
+      "duration": 90,
+      "durationIsEstimate": true,
+      "price": 0,
+      "priceScope": "일반 경내 참배. 교토시 공식 관광안내의 무료 태그로 확인. 기도·특별공개 등 별도 서비스는 포함하지 않음.",
+      "description": "붉은 도리이와 경내를 둘러보는 코스. 산 정상 왕복은 추가 시간이 필요합니다.",
+      "officialUrl": "https://inari.jp/en/access/",
+      "coordinateSource": "https://ja.kyoto.travel/tourism/single01.php?category_id=7&tourism_id=448",
+      "coordinatePrecision": "approximate_official_map_query_point",
+      "coordinateNote": "공식 페이지 Google Maps iframe의 q=34.967168,135.773297. 실제 출입구 위치 보증 없음. 임베드 API 키는 저장하지 않음.",
+      "hours": "24시간 참배 가능, 연중무휴",
+      "hoursCaveats": "경내 출입시간과 기도·수여소 운영시간은 다름. 본전 내부 및 출입금지 구역 접근은 허가 필요.",
+      "reservation": "열람한 공식 일반 참배 안내에서 예약 여부를 명시적으로 확인하지 못함.",
+      "checkedAt": "2026-10-08",
+      "sources": [
+        {
+          "url": "https://ja.kyoto.travel/tourism/single01.php?category_id=7&tourism_id=448",
+          "supports": "day/night worship; no gate closing; open year-round; free tag; official mapped point"
+        },
+        {
+          "url": "https://inari.jp/en/request/",
+          "supports": "restricted areas and visitor rules"
+        },
+        {
+          "url": "https://inari.jp/en/access/",
+          "supports": "official access page"
+        }
+      ],
+      "priceNote": "일반 경내 참배. 교토시 공식 관광안내의 무료 태그로 확인. 기도·특별공개 등 별도 서비스는 포함하지 않음."
+    },
+    {
+      "id": "kiyomizu-dera",
+      "name": "기요미즈데라(청수사)",
+      "city": "kyoto",
+      "district": "기온·히가시야마",
+      "category": "culture",
+      "lat": 34.994856,
+      "lng": 135.78505,
+      "duration": 90,
+      "durationIsEstimate": true,
+      "price": null,
+      "priceScope": "일반 유료 참배구역. 본당 입구는 도도로키몬. 최신 일반 입장료표를 공식 페이지에서 확인하지 못해 금액 미확정.",
+      "description": "기요미즈자카 접근로와 본당을 묶는 코스. 언덕과 혼잡을 고려하세요.",
+      "officialUrl": "https://www.kiyomizudera.or.jp/en/location/",
+      "coordinateSource": "https://www.kiyomizudera.or.jp/en/location/",
+      "coordinatePrecision": "approximate_official_map_query_point",
+      "coordinateNote": "사찰 공식 페이지 iframe의 명시적 q 좌표. 사찰 자체가 지도앱의 잘못된 접근 경로에 주의하라고 안내함. 진입은 기요미즈자카 니오몬 방향 또는 차완자카 방재도로 방향.",
+      "hours": "통상 06:00–18:00. 7월 1일–8월 31일은 야간특별관람일을 제외하고 18:30 폐문.",
+      "hoursCaveats": "2026년 야간특별관람: 3/27–4/5, 8/14–8/16, 11/21–11/30은 06:00–21:30, 최종접수 21:00. 별도 행사일은 추가 공지 확인.",
+      "reservation": "열람한 공식 일반 참배 안내에서 예약 여부를 명시적으로 확인하지 못함.",
+      "checkedAt": "2026-10-08",
+      "sources": [
+        {
+          "url": "https://www.kiyomizudera.or.jp/access.php",
+          "supports": "complete 2026 opening schedule and permitted approach routes"
+        },
+        {
+          "url": "https://www.kiyomizudera.or.jp/en/location/",
+          "supports": "map query coordinates; official access"
+        },
+        {
+          "url": "https://www.kiyomizudera.or.jp/faq.php",
+          "supports": "general admission exists; Todoroki-mon is Main Hall entrance; no ordinary fee stated"
+        },
+        {
+          "url": "https://www.kiyomizudera.or.jp/en/news/2026/sennichi-2026.php",
+          "supports": "2026 special-viewing adult 500 JPY only, not used as ordinary tariff"
+        }
+      ],
+      "priceNote": "일반 유료 참배구역. 본당 입구는 도도로키몬. 최신 일반 입장료표를 공식 페이지에서 확인하지 못해 금액 미확정."
+    },
+    {
+      "id": "kinkakuji",
+      "name": "킨카쿠지(금각사)",
+      "city": "kyoto",
+      "district": "기타야마",
+      "category": "culture",
+      "lat": 35.03945423328798,
+      "lng": 135.72871449994253,
+      "duration": 60,
+      "durationIsEstimate": true,
+      "price": 500,
+      "priceScope": "일반 참배 입장료. 초·중학생 300엔.",
+      "description": "금빛 누각과 정원을 둘러보는 코스. 도심 동쪽 구역과는 거리가 있습니다.",
+      "officialUrl": "https://www.shokoku-ji.jp/en/kinkakuji/access/",
+      "coordinateSource": "https://www.shokoku-ji.jp/en/kinkakuji/access/",
+      "coordinatePrecision": "approximate_map_center",
+      "coordinateNote": "공식 접근안내의 Google embed !2d 경도 / !3d 위도. 지도 중심으로만 사용; 입구·건물 정확 위치 아님.",
+      "hours": "09:00–17:00, 연중무휴",
+      "hoursCaveats": "특별공개 기간에는 시간·요금 변경 가능.",
+      "reservation": "공식 FAQ의 예약 불필요 문구는 휠체어 대여에 관한 것임. 일반 관람 예약 여부로 확장하지 않았음.",
+      "checkedAt": "2026-10-08",
+      "sources": [
+        {
+          "url": "https://www.shokoku-ji.jp/en/kinkakuji/access/",
+          "supports": "adult admission, hours, seasonal caveats, official embedded map"
+        },
+        {
+          "url": "https://www.shokoku-ji.jp/en/kinkakuji/faq/",
+          "supports": "reservation text refers to wheelchair hire only"
+        }
+      ],
+      "priceNote": "일반 참배 입장료. 초·중학생 300엔."
+    },
+    {
+      "id": "nijo-castle",
+      "name": "니조성",
+      "city": "kyoto",
+      "district": "교토 도심",
+      "category": "culture",
+      "lat": 35.01404226633859,
+      "lng": 135.74585087409645,
+      "duration": 100,
+      "durationIsEstimate": true,
+      "price": 800,
+      "priceScope": "성 기본 입장권. 니노마루 어전 포함권 1,300엔. 혼마루 어전은 기본 입장료 외 1,000엔; 전시수장관은 별도 100엔.",
+      "description": "성 기본 입장 기준입니다. 니노마루 어전 관람은 포함권이 별도로 필요합니다.",
+      "officialUrl": "https://nijo-jocastle.city.kyoto.lg.jp/?lang=en",
+      "coordinateSource": "https://kyoto.travel/en/destinations/nijojo-castle/",
+      "coordinatePrecision": "approximate_map_center",
+      "coordinateNote": "교토시 공식 관광안내의 지도 중심; 실제 히가시오테몬 입구 좌표 아님.",
+      "hours": "08:45–17:00, 성 최종입장 16:00; 니노마루 접수 08:45–16:10; 혼마루 접수 09:30–16:00",
+      "hoursCaveats": "성 전체 12/29–31 휴관. 니노마루: 1·7·8·12월 매주 화요일(공휴일이면 다음날), 12/26–28, 1/1–3 휴관. 혼마루: 매월 셋째 월요일과 다음날(해당일이 공휴일이면 관람 가능), 12/26–28, 1/1–3 휴관. 2026-12-06은 성 최종입장 12:00, 니노마루 12:10로 단축; 폐성은 17:00 유지.",
+      "reservation": "성 기본 입장·니노마루는 예약 불필요. 혼마루는 공식 기본안내상 사전 시간예약 필수; 같은 공식 FAQ에 종합안내소에서 소량 당일권도 판매한다고 명시. 당일권 확보를 보장하지 말 것.",
+      "checkedAt": "2026-10-08",
+      "sources": [
+        {
+          "url": "https://nijo-jocastle.city.kyoto.lg.jp/admission/fee/",
+          "supports": "ordinary ticket categories and adult prices"
+        },
+        {
+          "url": "https://nijo-jocastle.city.kyoto.lg.jp/guide/annai/?lang=en",
+          "supports": "hours and regular closure dates"
+        },
+        {
+          "url": "https://nijo-jocastle.city.kyoto.lg.jp/guide/faq/?lang=en",
+          "supports": "no reservation for castle/Ninomaru; Honmaru advance booking and limited same-day exception"
+        },
+        {
+          "url": "https://nijo-jocastle.city.kyoto.lg.jp/news/shortened-admission-hours-on-sunday-december-6-2026/?lang=en",
+          "supports": "2026-12-06 earlier last admission"
+        },
+        {
+          "url": "https://kyoto.travel/en/destinations/nijojo-castle/",
+          "supports": "official linked map coordinates"
+        }
+      ],
+      "priceNote": "성 기본 입장권. 니노마루 어전 포함권 1,300엔. 혼마루 어전은 기본 입장료 외 1,000엔; 전시수장관은 별도 100엔."
+    },
+    {
+      "id": "yasaka-shrine",
+      "name": "야사카 신사",
+      "city": "kyoto",
+      "district": "기온·히가시야마",
+      "category": "culture",
+      "lat": 35.0036343,
+      "lng": 135.7785258,
+      "duration": 40,
+      "durationIsEstimate": true,
+      "price": 0,
+      "priceScope": "일반 경내 참배. 교토시 공식 관광안내 무료 태그 확인. 기도·특별행사 비용은 별도.",
+      "description": "기온과 히가시야마 산책 사이에 들르기 좋은 신사입니다.",
+      "officialUrl": "https://ja.kyoto.travel/tourism/single01.php?category_id=7&tourism_id=474",
+      "coordinateSource": "https://ja.kyoto.travel/tourism/single01.php?category_id=7&tourism_id=474",
+      "coordinatePrecision": "approximate_official_map_query_point",
+      "coordinateNote": "공식 페이지 Google Maps iframe의 q=35.0036343,135.7785258. 입구 좌표 보증 없음. 임베드 API 키는 저장하지 않음.",
+      "hours": "24시간 참배 가능",
+      "hoursCaveats": "기도·수여소 운영시간과 다름. 신사 자체 웹사이트는 조회 시 502/내부 오류여서 교토시 공식 관광안내로 교차 확인.",
+      "reservation": "열람한 공식 일반 참배 안내에서 예약 여부를 명시적으로 확인하지 못함.",
+      "checkedAt": "2026-10-08",
+      "sources": [
+        {
+          "url": "https://ja.kyoto.travel/tourism/single01.php?category_id=7&tourism_id=474",
+          "supports": "24-hour worship, free tag, explicit mapped point"
+        },
+        {
+          "url": "https://kyoto.travel/en/destinations/yasakajinja-shrine/",
+          "supports": "official English destination and attraction website link"
+        }
+      ],
+      "priceNote": "일반 경내 참배. 교토시 공식 관광안내 무료 태그 확인. 기도·특별행사 비용은 별도."
+    },
+    {
+      "id": "tenryuji",
+      "name": "덴류지(천룡사)",
+      "city": "kyoto",
+      "district": "아라시야마",
+      "category": "nature",
+      "lat": 35.015859,
+      "lng": 135.673685,
+      "duration": 75,
+      "durationIsEstimate": true,
+      "price": 500,
+      "priceScope": "정원만 성인·고등학생 이상 500엔. 정원+건물은 800엔(300엔 추가). 법당 운룡도 특별관람 500엔 별도.",
+      "description": "정원 관람 기준입니다. 건물과 운룡도 공개는 별도 조건을 확인하세요.",
+      "officialUrl": "https://www.tenryuji.com/en/visit/",
+      "coordinateSource": "https://www.tenryuji.com/en/visit/",
+      "coordinatePrecision": "approximate_map_center",
+      "coordinateNote": "사찰 공식 지도 링크 ll 값. 지도 중심이며 실제 매표소·출입구 좌표 아님.",
+      "hours": "08:30–17:00, 최종입장 16:50",
+      "hoursCaveats": "건물은 법요 등으로 예고 없이 휴관 가능. 2026년 예정 건물 휴관: 4/1 12:30 이후, 10/29–30. 운룡도는 원칙적으로 토·일·공휴일 및 봄·가을 지정기간에 공개; 2026-10-28–30 및 2027-01-02 휴관 공지.",
+      "reservation": "현장 매표소가 안내되어 있으나 일반 관람의 예약 의무 여부를 명시적으로 확인하지 못함. 예약 불가 문구는 주차에 한정됨.",
+      "checkedAt": "2026-10-08",
+      "sources": [
+        {
+          "url": "https://www.tenryuji.com/en/visit/",
+          "supports": "all admission prices, hours, 2026/2027 closures, explicit map center"
+        },
+        {
+          "url": "https://kyoto.travel/en/destinations/tenryuji-temple/",
+          "supports": "official city attraction link"
+        }
+      ],
+      "priceNote": "정원만 성인·고등학생 이상 500엔. 정원+건물은 800엔(300엔 추가). 법당 운룡도 특별관람 500엔 별도."
+    },
+    {
+      "id": "nishiki-market",
+      "name": "니시키 시장",
+      "city": "kyoto",
+      "district": "교토 도심",
+      "category": "food",
+      "lat": 35.005008,
+      "lng": 135.7649016,
+      "duration": 60,
+      "durationIsEstimate": true,
+      "price": 0,
+      "priceScope": "시장 공공도로 통행. 공식 FAQ가 시장길은 공공도로라고 설명하므로 입장료 없는 통행으로 판단; 개별 상점의 상품·음식·체험은 별도.",
+      "description": "시장 상점마다 영업시간이 다릅니다. 먹거리는 구매한 가게에서 즐겨주세요.",
+      "officialUrl": "https://www.kyoto-nishiki.or.jp/contact/",
+      "coordinateSource": "https://www.kyoto-nishiki.or.jp/access/",
+      "coordinatePrecision": "approximate_official_linked_map_place_point",
+      "coordinateNote": "시장 공식 접근안내가 링크한 Google Maps의 place !3d/!4d 좌표. 길게 뻗은 시장의 대표 지점이며 개별 점포·시장 입구 좌표 아님.",
+      "hours": null,
+      "hoursCaveats": "시장 전체 공통 영업시간·정기휴일 없음. 상점마다 확인 필요. 수요일 휴무 상점이 많고, 1/1–1/3에는 쉬는 상점이 많음. 시장 사무소·주차장의 10:00–17:00를 시장 전체 시간으로 쓰지 말 것.",
+      "reservation": "일반 보행·쇼핑 예약 규정은 명시되지 않음. 공식 FAQ의 1개월 전 신청은 취재·촬영·연수·시찰 신청에만 해당.",
+      "checkedAt": "2026-10-08",
+      "sources": [
+        {
+          "url": "https://www.kyoto-nishiki.or.jp/contact/",
+          "supports": "shop-specific hours; Wednesdays/New Year caveats; street is public road"
+        },
+        {
+          "url": "https://www.kyoto-nishiki.or.jp/access/",
+          "supports": "official Google Maps short link"
+        },
+        {
+          "url": "https://kyoto.travel/en/destinations/kyoto-nishiki-food-market/",
+          "supports": "city official market profile and no walking while eating guidance"
+        }
+      ],
+      "priceNote": "시장 공공도로 통행. 공식 FAQ가 시장길은 공공도로라고 설명하므로 입장료 없는 통행으로 판단; 개별 상점의 상품·음식·체험은 별도."
+    }
+  ],
+  "passes": [
+    {
+      "id": "osaka-metro-1day",
+      "name": "오사카 메트로 엔조이 에코카드",
+      "city": "osaka",
+      "price": 820,
+      "priceVariants": [
+        {
+          "label": "평일 성인",
+          "price": 820
+        },
+        {
+          "label": "토·일·일본 공휴일 성인",
+          "price": 620
+        },
+        {
+          "label": "소아",
+          "price": 310
+        }
+      ],
+      "validity": "이용일 하루. 24시간권이 아닙니다.",
+      "cancellation": "미사용권만 환불 가능. 1장당 수수료 220엔.",
+      "coverage": "Osaka Metro 및 Osaka City Bus의 대상 노선",
+      "exclusions": "유메시마역, IKEA 쓰루하마행 및 지정 제외 버스·온디맨드 버스, JR·한큐·게이한 등 타사 구간 제외. 직통열차도 회사 경계 밖 별도.",
+      "officialUrl": "https://subway.osakametro.co.jp/guide/page/enjoy-eco.php",
+      "checkedAt": "2026-10-08",
+      "includedPoiIds": [],
+      "eligibility": "성인 12세 이상. 소아 6–11세 및 12세 초등 재학생. 방문자 국적 제한은 상품 안내에 명시되어 있지 않음.",
+      "nationalityRestriction": null,
+      "validFrom": null,
+      "validUntil": null,
+      "calendarNote": "토·일·일본 공휴일 기준. 연말연시 등 예외일은 공식 재확인. 일본 공휴일 미검증이면 620엔을 자동 적용하지 마세요.",
+      "benefitNote": "관광시설 할인은 자동 계산에서 제외.",
+      "eligiblePredicate": "해당 날짜에 Osaka Metro 대상 구간 또는 Osaka City Bus 대상 노선을 실제 이용한다고 확인된 구간에만 적용. 도시명·POI 수·직선거리만으로 적용 금지."
+    },
+    {
+      "id": "kyoto-subway-bus-1day",
+      "name": "교토 지하철·버스 1일권",
+      "city": "kyoto",
+      "price": 1100,
+      "priceVariants": [
+        {
+          "label": "성인",
+          "price": 1100
+        },
+        {
+          "label": "소아",
+          "price": 550
+        }
+      ],
+      "validity": "이용일 하루. 연중 판매.",
+      "cancellation": "미사용권만 환불 가능. 별도 환불 수수료가 있으며 금액은 구매처 확인.",
+      "coverage": "교토 시영 지하철·시버스 전 노선, 교토버스·게이한버스·서일본JR버스 지정 구간. 관광특급버스 포함.",
+      "exclusions": "JR 철도, 게이한 철도, 한큐, 란덴 등 철도 제외. 일부 민영 버스와 공항·고속·정기관광버스 제외.",
+      "officialUrl": "https://www.city.kyoto.lg.jp/kotsu/page/0000028378.html",
+      "checkedAt": "2026-10-08",
+      "includedPoiIds": [],
+      "eligibility": "성인 12세 이상, 6–11세 및 12세 초등학생은 소아 구분. 국적 제한은 상품 안내에 명시되어 있지 않음.",
+      "nationalityRestriction": null,
+      "validFrom": null,
+      "validUntil": null,
+      "benefitNote": "시설 할인은 자동 계산 제외. 디지털 교환쿠폰은 실물 승차권으로 교환해야 이용 가능.",
+      "eligiblePredicate": "해당 날짜의 Kyoto Municipal Subway/City Bus 이용 또는 공식 지정범위가 확인된 민영버스 구간만 적용. 교토 방문만으로 적용 금지."
+    },
+    {
+      "id": "keihan-kyoto-osaka-1day",
+      "name": "게이한 교토·오사카 관광 1일권",
+      "city": "both",
+      "price": 1650,
+      "priceVariants": [
+        {
+          "label": "1일권",
+          "price": 1650
+        },
+        {
+          "label": "24시간권, 별도상품",
+          "price": 1850
+        }
+      ],
+      "validity": "1일권은 이용일 03:00 이후 개시. 24시간권과 다른 상품.",
+      "cancellation": "공식 판매처의 환불 조건을 구매 전 확인해야 합니다. 이 데이터에서 확정하지 못함.",
+      "coverage": "게이한 본선·우지선·가타노선·이와시미즈하치만구 산도 케이블의 공식 대상 범위",
+      "exclusions": "오쓰선, JR, Osaka Metro, 교토 시영 지하철·버스, 한큐·란덴 등 타사 노선 제외. 유료 지정좌석 서비스는 별도 확인.",
+      "officialUrl": "https://www.keihan.co.jp/travel/en/trains/passes-for-visitors-to-japan/kyoto-osaka.html",
+      "checkedAt": "2026-10-08",
+      "includedPoiIds": [],
+      "eligibility": "외국인 여행자용. 단기체류 자격을 증명할 여권·사증 제시 필요. 소아 요금·유료좌석 추가비용은 공식 판매처 확인.",
+      "nationalityRestriction": "foreign_temporary_visitor",
+      "validFrom": null,
+      "validUntil": null,
+      "eligibilitySource": "https://www.the-kansai-guide.com/ja/directory/item/21283/",
+      "eligiblePredicate": "여행자 자격 확인 AND 같은 이용일의 게이한 대상 철도 구간 확인. 오사카–교토 이동이라는 이유만으로 JR/한큐 구간에 적용 금지."
+    },
+    {
+      "id": "osaka-amazing-1day",
+      "name": "오사카 주유패스 1일권",
+      "city": "osaka",
+      "price": 3500,
+      "priceVariants": [
+        {
+          "label": "1일권",
+          "price": 3500
+        },
+        {
+          "label": "연속 2일권, 별도상품",
+          "price": 5000
+        }
+      ],
+      "validity": "1일권 2027-03-31까지 하루. 구입 후 3개월 이내, 03:00–다음날 02:59 기준. 교통은 첫차–막차.",
+      "cancellation": "유효기간 내 미사용권은 구매 사이트에서 수수료 없이 환불 가능. 사용 개시 후 환불 불가, 휴관·날씨 사유도 불가.",
+      "coverage": "공식 지정 오사카 시내 철도·버스와 참여 관광시설",
+      "exclusions": "JR 및 지정범위 밖 철도 제외. 일반 1일권은 간사이공항 접근을 포함하지 않음. 특급 지정좌석·특별전 별도. 28시간 공항판과 혼동 금지.",
+      "officialUrl": "https://osaka-amazing-pass.com/en/howto_about_1day.html",
+      "checkedAt": "2026-10-08",
+      "includedPoiIds": [
+        "osaka-castle",
+        "shitennoji",
+        "tsutenkaku"
+      ],
+      "conditionalBenefits": [
+        {
+          "poiId": "umeda-sky",
+          "kind": "freeAdmission",
+          "condition": "현지 15:00 이전 입장 및 당시 대상시설 운영 확인",
+          "cutoffLocalTime": "15:00",
+          "defaultSavingsJPY": 0
+        },
+        {
+          "poiId": "tsutenkaku",
+          "kind": "freeAdmission",
+          "condition": "현장에서 시간대 입장권 교환 필요, 매진·대기 확인"
+        }
+      ],
+      "eligibility": "성인·어린이 동일 가격. 국적 제한은 상품 안내에 명시되어 있지 않음. 인터넷 연결된 스마트폰 필요.",
+      "nationalityRestriction": null,
+      "validFrom": "2026-03-25",
+      "validUntil": "2027-03-31",
+      "benefitNote": "각 시설 1회. 포함 목록은 본 데이터의 관람범위만 계산. 우메다 전망대는 시간 조건을 구현하지 않으면 절감액 0. 실제 운영·혼잡 확인 필요.",
+      "eligiblePredicate": "이용일이 유효기간 내 AND 확인된 해당 관람범위와 시간 조건 충족. 교통 절감은 별도 검증된 대상 구간만. 같은 요금/입장권을 다른 패스와 중복 차감하지 않음.",
+      "benefitSource": "https://osaka-amazing-pass.com/en/service_free.html"
+    }
+  ],
+  "excludedProducts": [
+    {
+      "id": "jr-kansai-area-pass",
+      "name": "JR 간사이 에어리어 패스",
+      "status": "sales_ended",
+      "salesEnded": "2026-09-30",
+      "note": "2026-09-30까지 구입한 권은 각 유효기간 동안 사용 가능. 신규구입 추천에서 제외.",
+      "officialUrl": "https://www.westjr.co.jp/travel-information/en/tickets-passes/jrwest-rail-pass/kansai/",
+      "checkedAt": "2026-10-08"
+    }
+  ],
+  "fareReferences": [
+    {
+      "operator": "osaka_metro",
+      "adultFareJPY": [
+        190,
+        240,
+        290,
+        340,
+        390
+      ],
+      "scope": "유메시마 가산구간 제외 일반 운임구간. 철도 영업거리에 따른 요금이며 POI 직선거리로 환산하지 않음.",
+      "source": "https://subway.osakametro.co.jp/guide/fare/fare/price.php"
+    },
+    {
+      "operator": "kyoto_city_bus",
+      "adultFareJPY": 230,
+      "scope": "균일운임구간 보통버스 1회. 관광특급버스는 500엔, 다구간노선 별도.",
+      "source": "https://www2.city.kyoto.lg.jp/kotsu/webguide/ja/fare/fare_bus.html"
+    }
+  ],
+  "calculationRules": [
+    "직선거리 기반 방문순서는 계획 초안이며 보행/환승/운행/장벽을 반영한 길찾기가 아님.",
+    "교통권은 도시 방문 여부로 추천하지 않음. 사업자와 대상구간이 확인된 실제 이용요금 합계만 비교.",
+    "추정 교통비를 쓸 때는 이용자 입력 또는 명시한 가정으로 분리하고 확정 절감액처럼 표시하지 않음.",
+    "price:null은 미확정이며 무료로 바꾸거나 합계에 0원으로 숨기지 않음. 미확정 입장료 별도 표기.",
+    "패스 혜택은 같은 시설·요금에 한 번만 차감. 미대상 유료시설 전체를 자동 무료 처리하지 않음.",
+    "우메다 스카이빌딩 무료입장은 시간 조건 충족 확인 전 계산 제외.",
+    "부가시설/특별전/특급좌석/예약비/식비/쇼핑비를 기본 입장·교통비에 포함한 것으로 보이지 않도록 함.",
+    "현재 데이터 확인일 이후 여행일의 휴관·특별시간·날짜별 요금은 공식 링크에서 재확인."
+  ],
+  "sources": [
+    {
+      "id": "metro-pass",
+      "title": "Osaka Metro 엔조이 에코카드",
+      "url": "https://subway.osakametro.co.jp/guide/page/enjoy-eco.php",
+      "openedAt": "2026-10-08",
+      "status": "opened_official_source"
+    },
+    {
+      "id": "metro-fares",
+      "title": "Osaka Metro 2026 운임표",
+      "url": "https://subway.osakametro.co.jp/guide/libray/kusuuhyou/kusuuhyou20260401.pdf",
+      "openedAt": "2026-10-08",
+      "status": "opened_official_source"
+    },
+    {
+      "id": "metro-fare-page",
+      "title": "Osaka Metro 보통운임",
+      "url": "https://subway.osakametro.co.jp/guide/fare/fare/price.php",
+      "openedAt": "2026-10-08",
+      "status": "opened_official_source"
+    },
+    {
+      "id": "kyoto-pass",
+      "title": "교토시 교통국 지하철·버스 1일권",
+      "url": "https://www.city.kyoto.lg.jp/kotsu/page/0000028378.html",
+      "openedAt": "2026-10-08",
+      "status": "opened_official_source"
+    },
+    {
+      "id": "kyoto-pass-refund",
+      "title": "교토시 교통국 1일권 상세",
+      "url": "https://oneday-pass.kyoto/overview/?lang=en",
+      "openedAt": "2026-10-08",
+      "status": "opened_official_source"
+    },
+    {
+      "id": "kyoto-bus-fare",
+      "title": "교토 시버스 요금",
+      "url": "https://www2.city.kyoto.lg.jp/kotsu/webguide/ja/fare/fare_bus.html",
+      "openedAt": "2026-10-08",
+      "status": "opened_official_source"
+    },
+    {
+      "id": "keihan-pass",
+      "title": "게이한 관광승차권",
+      "url": "https://www.keihan.co.jp/travel/en/trains/passes-for-visitors-to-japan/kyoto-osaka.html",
+      "openedAt": "2026-10-08",
+      "status": "opened_official_source"
+    },
+    {
+      "id": "keihan-coverage",
+      "title": "게이한 공식 상품 비교",
+      "url": "https://www.keihan.co.jp/travel/en/trains/passes-for-visitors-to-japan/pass-comparison.html",
+      "openedAt": "2026-10-08",
+      "status": "opened_official_source"
+    },
+    {
+      "id": "keihan-eligibility",
+      "title": "간사이관광국 게이한 1일권 자격",
+      "url": "https://www.the-kansai-guide.com/ja/directory/item/21283/",
+      "openedAt": "2026-10-08",
+      "status": "opened_official_source"
+    },
+    {
+      "id": "amazing-pass",
+      "title": "주유패스 가격·유효기간",
+      "url": "https://osaka-amazing-pass.com/en/howto_about_1day.html",
+      "openedAt": "2026-10-08",
+      "status": "opened_official_source"
+    },
+    {
+      "id": "amazing-refund",
+      "title": "주유패스 사용·환불조건",
+      "url": "https://osaka-amazing-pass.com/en/info.html",
+      "openedAt": "2026-10-08",
+      "status": "opened_official_source"
+    },
+    {
+      "id": "amazing-facilities",
+      "title": "주유패스 대상시설·시간조건",
+      "url": "https://osaka-amazing-pass.com/en/service_free.html",
+      "openedAt": "2026-10-08",
+      "status": "opened_official_source"
+    },
+    {
+      "id": "jr-kansai-discontinued",
+      "title": "JR 간사이 에어리어 패스 판매 종료",
+      "url": "https://www.westjr.co.jp/travel-information/en/tickets-passes/jrwest-rail-pass/kansai/",
+      "openedAt": "2026-10-08",
+      "status": "opened_official_source"
+    },
+    {
+      "title": "오사카성 천수각",
+      "url": "https://osaka-info.jp/en/spot/osaka-castle-main-keep/",
+      "openedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "supports": "POI facts and official embedded map"
+    },
+    {
+      "title": "우메다 스카이빌딩",
+      "url": "https://osaka-info.jp/en/spot/umeda-sky-building/",
+      "openedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "supports": "POI facts and official embedded map"
+    },
+    {
+      "title": "도톤보리",
+      "url": "https://osaka-info.jp/en/spot/dotonbori/",
+      "openedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "supports": "POI facts and official embedded map"
+    },
+    {
+      "title": "쓰텐카쿠",
+      "url": "https://osaka-info.jp/en/spot/tsutenkaku/",
+      "openedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "supports": "POI facts and official embedded map"
+    },
+    {
+      "title": "신세카이",
+      "url": "https://osaka-info.jp/en/spot/shinsekai/",
+      "openedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "supports": "POI facts and official embedded map"
+    },
+    {
+      "title": "구로몬 시장",
+      "url": "https://osaka-info.jp/en/spot/kuromon-market/",
+      "openedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "supports": "POI facts and official embedded map"
+    },
+    {
+      "title": "신사이바시스지",
+      "url": "https://osaka-info.jp/en/spot/shinsaibashi-suji-shopping-street/",
+      "openedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "supports": "POI facts and official embedded map"
+    },
+    {
+      "title": "시텐노지",
+      "url": "https://osaka-info.jp/en/spot/shitennoji/",
+      "openedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "supports": "POI facts and official embedded map"
+    },
+    {
+      "title": "후시미 이나리 타이샤",
+      "url": "https://ja.kyoto.travel/tourism/single01.php?category_id=7&tourism_id=448",
+      "openedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "supports": "day/night worship; no gate closing; open year-round; free tag; official mapped point"
+    },
+    {
+      "title": "후시미 이나리 타이샤",
+      "url": "https://inari.jp/en/request/",
+      "openedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "supports": "restricted areas and visitor rules"
+    },
+    {
+      "title": "후시미 이나리 타이샤",
+      "url": "https://inari.jp/en/access/",
+      "openedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "supports": "official access page"
+    },
+    {
+      "title": "기요미즈데라(청수사)",
+      "url": "https://www.kiyomizudera.or.jp/access.php",
+      "openedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "supports": "complete 2026 opening schedule and permitted approach routes"
+    },
+    {
+      "title": "기요미즈데라(청수사)",
+      "url": "https://www.kiyomizudera.or.jp/en/location/",
+      "openedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "supports": "map query coordinates; official access"
+    },
+    {
+      "title": "기요미즈데라(청수사)",
+      "url": "https://www.kiyomizudera.or.jp/faq.php",
+      "openedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "supports": "general admission exists; Todoroki-mon is Main Hall entrance; no ordinary fee stated"
+    },
+    {
+      "title": "기요미즈데라(청수사)",
+      "url": "https://www.kiyomizudera.or.jp/en/news/2026/sennichi-2026.php",
+      "openedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "supports": "2026 special-viewing adult 500 JPY only, not used as ordinary tariff"
+    },
+    {
+      "title": "킨카쿠지(금각사)",
+      "url": "https://www.shokoku-ji.jp/en/kinkakuji/access/",
+      "openedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "supports": "adult admission, hours, seasonal caveats, official embedded map"
+    },
+    {
+      "title": "킨카쿠지(금각사)",
+      "url": "https://www.shokoku-ji.jp/en/kinkakuji/faq/",
+      "openedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "supports": "reservation text refers to wheelchair hire only"
+    },
+    {
+      "title": "니조성",
+      "url": "https://nijo-jocastle.city.kyoto.lg.jp/admission/fee/",
+      "openedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "supports": "ordinary ticket categories and adult prices"
+    },
+    {
+      "title": "니조성",
+      "url": "https://nijo-jocastle.city.kyoto.lg.jp/guide/annai/?lang=en",
+      "openedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "supports": "hours and regular closure dates"
+    },
+    {
+      "title": "니조성",
+      "url": "https://nijo-jocastle.city.kyoto.lg.jp/guide/faq/?lang=en",
+      "openedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "supports": "no reservation for castle/Ninomaru; Honmaru advance booking and limited same-day exception"
+    },
+    {
+      "title": "니조성",
+      "url": "https://nijo-jocastle.city.kyoto.lg.jp/news/shortened-admission-hours-on-sunday-december-6-2026/?lang=en",
+      "openedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "supports": "2026-12-06 earlier last admission"
+    },
+    {
+      "title": "니조성",
+      "url": "https://kyoto.travel/en/destinations/nijojo-castle/",
+      "openedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "supports": "official linked map coordinates"
+    },
+    {
+      "title": "야사카 신사",
+      "url": "https://ja.kyoto.travel/tourism/single01.php?category_id=7&tourism_id=474",
+      "openedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "supports": "24-hour worship, free tag, explicit mapped point"
+    },
+    {
+      "title": "야사카 신사",
+      "url": "https://kyoto.travel/en/destinations/yasakajinja-shrine/",
+      "openedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "supports": "official English destination and attraction website link"
+    },
+    {
+      "title": "덴류지(천룡사)",
+      "url": "https://www.tenryuji.com/en/visit/",
+      "openedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "supports": "all admission prices, hours, 2026/2027 closures, explicit map center"
+    },
+    {
+      "title": "덴류지(천룡사)",
+      "url": "https://kyoto.travel/en/destinations/tenryuji-temple/",
+      "openedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "supports": "official city attraction link"
+    },
+    {
+      "title": "니시키 시장",
+      "url": "https://www.kyoto-nishiki.or.jp/contact/",
+      "openedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "supports": "shop-specific hours; Wednesdays/New Year caveats; street is public road"
+    },
+    {
+      "title": "니시키 시장",
+      "url": "https://www.kyoto-nishiki.or.jp/access/",
+      "openedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "supports": "official Google Maps short link"
+    },
+    {
+      "title": "니시키 시장",
+      "url": "https://kyoto.travel/en/destinations/kyoto-nishiki-food-market/",
+      "openedAt": "2026-10-08",
+      "status": "opened_official_source",
+      "supports": "city official market profile and no walking while eating guidance"
+    }
+  ],
+  "checkedAt": "2026-10-08"
+}

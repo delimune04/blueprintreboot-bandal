@@ -1,0 +1,261 @@
+{
+  "schemaVersion": 1,
+  "checkedAt": "2026-10-08T04:26:06Z",
+  "quoteDate": "2026-10-07",
+  "source": "European Central Bank (ECB)",
+  "sourceUrl": "https://www.ecb.europa.eu/stats/policy_and_exchange_rates/euro_reference_exchange_rates/html/index.en.html",
+  "rateType": "일일 참고환율. 같은 날짜의 EUR 기준에서 외화별 원화값을 교차 계산.",
+  "liveData": false,
+  "latestAvailableVerifiedAtCheck": true,
+  "currencyUnitPolicy": "모든 krwPerUnit은 외화 1단위당 원화. JPY도 반드시 1엔 기준이며, 100엔 표시값은 krwPerUnit ×100.",
+  "rates": [
+    {
+      "currency": "JPY",
+      "unit": 1,
+      "targetCurrency": "KRW",
+      "krwPerUnit": 8.460559796437659,
+      "krwPerUnitDecimal": "8.460559796437659033078880407",
+      "quoteDate": "2026-10-07",
+      "rateType": "ECB euro foreign exchange reference rate; EUR-based cross-rate",
+      "isDerived": true,
+      "source": "European Central Bank (ECB)",
+      "sourceUrl": "https://www.ecb.europa.eu/stats/policy_and_exchange_rates/euro_reference_exchange_rates/html/index.en.html",
+      "sourceUnit": {
+        "baseCurrency": "EUR",
+        "baseAmount": 1,
+        "quotedCurrency": "JPY",
+        "quotedCurrencyPerEUR": 176.85,
+        "krwPerEUR": 1496.25
+      },
+      "formula": "1496.25 / 176.85",
+      "displayReferenceUnit": 100,
+      "displayReferenceKRW": 846.0559796437659
+    },
+    {
+      "currency": "EUR",
+      "unit": 1,
+      "targetCurrency": "KRW",
+      "krwPerUnit": 1496.25,
+      "krwPerUnitDecimal": "1496.25",
+      "quoteDate": "2026-10-07",
+      "rateType": "ECB euro foreign exchange reference rate",
+      "isDerived": false,
+      "source": "European Central Bank (ECB)",
+      "sourceUrl": "https://www.ecb.europa.eu/stats/policy_and_exchange_rates/euro_reference_exchange_rates/html/index.en.html",
+      "sourceUnit": {
+        "baseCurrency": "EUR",
+        "baseAmount": 1,
+        "quotedCurrency": "EUR",
+        "quotedCurrencyPerEUR": 1.0,
+        "krwPerEUR": 1496.25
+      },
+      "formula": "1496.25",
+      "displayReferenceUnit": 1,
+      "displayReferenceKRW": 1496.25
+    },
+    {
+      "currency": "GBP",
+      "unit": 1,
+      "targetCurrency": "KRW",
+      "krwPerUnit": 1767.6767676767677,
+      "krwPerUnitDecimal": "1767.676767676767676767676768",
+      "quoteDate": "2026-10-07",
+      "rateType": "ECB euro foreign exchange reference rate; EUR-based cross-rate",
+      "isDerived": true,
+      "source": "European Central Bank (ECB)",
+      "sourceUrl": "https://www.ecb.europa.eu/stats/policy_and_exchange_rates/euro_reference_exchange_rates/html/index.en.html",
+      "sourceUnit": {
+        "baseCurrency": "EUR",
+        "baseAmount": 1,
+        "quotedCurrency": "GBP",
+        "quotedCurrencyPerEUR": 0.84645,
+        "krwPerEUR": 1496.25
+      },
+      "formula": "1496.25 / 0.84645",
+      "displayReferenceUnit": 1,
+      "displayReferenceKRW": 1767.6767676767677
+    },
+    {
+      "currency": "CZK",
+      "unit": 1,
+      "targetCurrency": "KRW",
+      "krwPerUnit": 61.25394031194989,
+      "krwPerUnitDecimal": "61.25394031194989151348917182",
+      "quoteDate": "2026-10-07",
+      "checkedAt": "2026-10-08T07:58:27Z",
+      "rateType": "ECB euro foreign exchange reference rate; EUR-based cross-rate",
+      "isDerived": true,
+      "source": "European Central Bank (ECB)",
+      "sourceUrl": "https://www.ecb.europa.eu/stats/policy_and_exchange_rates/euro_reference_exchange_rates/html/index.en.html",
+      "sourceUnit": {
+        "baseCurrency": "EUR",
+        "baseAmount": 1,
+        "quotedCurrency": "CZK",
+        "quotedCurrencyPerEUR": 24.427,
+        "krwPerEUR": 1496.25
+      },
+      "formula": "1496.25 / 24.427",
+      "displayReferenceUnit": 1,
+      "displayReferenceKRW": 61.25394031194989
+    },
+    {
+      "currency": "HUF",
+      "unit": 1,
+      "targetCurrency": "KRW",
+      "krwPerUnit": 4.079754601226994,
+      "krwPerUnitDecimal": "4.079754601226993865030674847",
+      "quoteDate": "2026-10-07",
+      "checkedAt": "2026-10-08T07:58:27Z",
+      "rateType": "ECB euro foreign exchange reference rate; EUR-based cross-rate",
+      "isDerived": true,
+      "source": "European Central Bank (ECB)",
+      "sourceUrl": "https://www.ecb.europa.eu/stats/policy_and_exchange_rates/euro_reference_exchange_rates/html/index.en.html",
+      "sourceUnit": {
+        "baseCurrency": "EUR",
+        "baseAmount": 1,
+        "quotedCurrency": "HUF",
+        "quotedCurrencyPerEUR": 366.75,
+        "krwPerEUR": 1496.25
+      },
+      "formula": "1496.25 / 366.75",
+      "displayReferenceUnit": 1,
+      "displayReferenceKRW": 4.079754601226994
+    }
+  ],
+  "rawReference": {
+    "date": "2026-10-07",
+    "baseCurrency": "EUR",
+    "baseAmount": 1,
+    "quotes": {
+      "GBP": 0.84645,
+      "JPY": 176.85,
+      "KRW": 1496.25
+    },
+    "sourceLastModifiedUTC": "2026-10-07T13:57:01Z",
+    "sourceFormat": "ECB SDMX CSV/JSON + daily XML cross-check"
+  },
+  "disclaimer": "예상 원화금액입니다. 카드사·은행 환율, 환전 스프레드, 해외결제 수수료, 현지 DCC 및 실제 결제일 환율은 포함하지 않습니다. ECB 참고환율은 거래 체결용 환율이 아닙니다.",
+  "attributionText": "출처: ECB 일일 참고환율. 원화 교차환산: BANDAL. 기준일 2026-10-07.",
+  "uiRecommendations": {
+    "compactLabel": "약 ₩{roundedKRW}",
+    "alwaysShowQuoteDate": true,
+    "detailLabel": "ECB {quoteDate} 기준 · 원화 교차계산 · 결제/환전 수수료 제외",
+    "retainOriginalCurrency": true,
+    "roundDisplayToKRW": 1,
+    "calculation": "nativeAmount * rate.krwPerUnit; 중간 반올림 없이 합계 후 최종표시 반올림.",
+    "manualOverride": "사용자 수정환율은 별도로 보관하고 사용자 입력 및 입력일 표기. ECB 출처표시를 붙이지 않음.",
+    "dateScope": "미래 여행일에도 최신 확인일 기준 예산 환산일 뿐 미래 환율 예측이 아님.",
+    "unknownNativeAmount": "현지 금액이 null이면 KRW도 null. 범위는 양 끝만 환산하고 확정 합계와 구분."
+  },
+  "refresh": {
+    "recommendedMode": "공식 SDMX keyless 클라이언트 조회 + 마지막 검증값/내장 스냅샷 폴백",
+    "officialApiUrl": "https://data-api.ecb.europa.eu/service/data/EXR/D.KRW+JPY+GBP.EUR.SP00.A?lastNObservations=1&format=jsondata",
+    "csvAlternativeUrl": "https://data-api.ecb.europa.eu/service/data/EXR/D.KRW+JPY+GBP.EUR.SP00.A?lastNObservations=1&format=csvdata",
+    "method": "GET",
+    "authentication": "이번 요청에 키·쿠키·Authorization 없이 HTTP200을 확인. 공식 문서도 공개 REST 조회를 안내.",
+    "cors": {
+      "testedOrigin": "https://bandal.app",
+      "testedAt": "2026-10-08T04:26:06Z",
+      "status": 200,
+      "accessControlAllowOrigin": "*",
+      "jsonContentType": "application/vnd.sdmx.data+json;version=1.0.0-wd",
+      "verification": "HTTP응답 헤더 확인. 실제 배포 사이트의 브라우저 fetch/CSP 통과 여부는 빌드 담당이 별도 테스트."
+    },
+    "requestOptions": {
+      "mode": "cors",
+      "credentials": "omit",
+      "referrerPolicy": "no-referrer"
+    },
+    "publicationSchedule": "ECB 안내: TARGET 휴일 제외 영업일 통상16:00 CET경 갱신. 시장 실시간 틱 환율 아님.",
+    "cacheRecommendationHours": 6,
+    "cachePolicyNote": "6시간 캐시는 앱의 보수적 권고이며 ECB가 명시한 호출쿼터가 아닙니다. 페이지 방문마다 반복조회하지 않고 사용자가 새로고침할 때 선택적으로 갱신.",
+    "staleAfterCalendarDays": 4,
+    "stalePolicyNote": "4일은 앱 경고 기준 제안이며 ECB의 SLA가 아닙니다. 휴일로 늦을 수 있으므로 기준일·확인시각을 항상 표시. 오래된 값을 최신으로 표시하지 않음.",
+    "failurePolicy": "네트워크/타임아웃/CORS/파싱오류 시 마지막 정상값을 유지하고 기준일·갱신실패 상태 표시. 정상값이 없으면 환산숨김 또는 사용자입력 필요.",
+    "validationRules": [
+      "KRW·JPY·GBP 세 통화의 TIME_PERIOD가 모두 동일해야 교차계산.",
+      "CURRENCY_DENOM=EUR, FREQ=D, EXR_TYPE=SP00, EXR_SUFFIX=A 확인.",
+      "값은 유한한 양수이며 UNIT_MULT=0이어야 함. 다른 단위배수면 정규화 후검증.",
+      "prepared/validFrom은응답생성시각이며환율기준일이아님. TIME_PERIOD를UI기준일로사용.",
+      "통화순서를가정하지말고 structure.dimensions.series의CURRENCY ID와series key index로매핑.",
+      "JSON응답변경·누락·미래관측일·통화별날짜불일치면신규값적용금지."
+    ],
+    "dailyXmlUrl": "https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml",
+    "dailyXmlBrowserWarning": "bandal.app Origin 요청에 Access-Control-Allow-Origin 헤더가 없었음. 브라우저 직접갱신용으로권고하지않음."
+  },
+  "reuse": {
+    "termsUrl": "https://www.ecb.europa.eu/services/using-our-site/disclaimer/html/index.en.html",
+    "status": "공식 재사용 조건 확인",
+    "conditions": [
+      "정보를 정확하게 재현하고 ECB를 출처로 명시.",
+      "교차환산 등 가공한 사실을 명확히 표시.",
+      "ECB 링크는 iframe에 가두지 않고 전체 창 또는 새 탭으로 열기.",
+      "유료로 판매하는문서에편입할경우ECB에서무료제공되는정보임을추가고지."
+    ],
+    "notClaimed": "ECB의제휴·보증·결제환율 제공으로표현하지않음."
+  },
+  "sources": [
+    {
+      "title": "ECB current euro reference rates",
+      "url": "https://www.ecb.europa.eu/stats/policy_and_exchange_rates/euro_reference_exchange_rates/html/index.en.html"
+    },
+    {
+      "title": "ECB daily reference XML",
+      "url": "https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml"
+    },
+    {
+      "title": "ECB SDMX data API",
+      "url": "https://data-api.ecb.europa.eu/service/data/EXR/D.KRW+JPY+GBP.EUR.SP00.A?lastNObservations=1&format=jsondata"
+    },
+    {
+      "title": "ECB API query documentation",
+      "url": "https://data.ecb.europa.eu/help/api/data"
+    },
+    {
+      "title": "ECB API examples",
+      "url": "https://data.ecb.europa.eu/help/api/data-examples"
+    },
+    {
+      "title": "ECB reuse and disclaimer",
+      "url": "https://www.ecb.europa.eu/services/using-our-site/disclaimer/html/index.en.html"
+    }
+  ],
+  "verificationExamples": [
+    {
+      "nativeAmount": 100,
+      "currency": "JPY",
+      "roundedKRW": 846
+    },
+    {
+      "nativeAmount": 1000,
+      "currency": "JPY",
+      "roundedKRW": 8461
+    },
+    {
+      "nativeAmount": 10,
+      "currency": "EUR",
+      "roundedKRW": 14963
+    },
+    {
+      "nativeAmount": 38,
+      "currency": "GBP",
+      "roundedKRW": 67172
+    }
+  ],
+  "extraSnapshotVerification": {
+    "checkedAt": "2026-10-08T07:58:27Z",
+    "sourceUrl": "https://www.ecb.europa.eu/stats/policy_and_exchange_rates/euro_reference_exchange_rates/html/index.en.html",
+    "rawReference": {
+      "date": "2026-10-07",
+      "baseCurrency": "EUR",
+      "baseAmount": 1,
+      "quotes": {
+        "KRW": 1496.25,
+        "CZK": 24.427,
+        "HUF": 366.75
+      },
+      "sourceFormat": "ECB 공식 일일 HTML 표(2026-10-07) 직접 확인"
+    },
+    "extendedApiVerified": false
+  }
+}
