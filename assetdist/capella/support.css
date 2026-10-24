@@ -1,1 +1,6 @@
-@media(max-width:480px){.top .bar{flex-wrap:wrap;gap:12px}.top .nav{width:100%;justify-content:flex-start;gap:1.5rem}.top .nav a{display:inline-flex;align-items:center;min-height:44px}.top .brand{min-height:44px}}
+/* CAPELLA support page additions; base styles are in legal.css. */
+.capella-faq-search { margin: 0 0 1rem; }
+.capella-faq-tools { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; margin: 0 0 0.5rem; }
+.capella-faq-tools p { margin: 0; color: var(--bu-muted); font-size: 0.84rem; font-weight: 600; }
+.capella-faq-empty { margin: 0.75rem 0 0; color: var(--bu-muted); font-size: 0.9rem; }
+.capella-faq-empty[hidden] { display: none; }
