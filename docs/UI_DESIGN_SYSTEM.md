@@ -549,6 +549,24 @@ load after the shared ones and every rule is scoped to
   compact app bar stays sticky; the Reader keeps the strip because its shell
   never scrolls.
 
+### LabVium symbol (v2)
+
+The symbol is an L (Lab) beside a check (a verified reading) whose end is a
+node (connected evidence). It is vector-first and reads down to 16px.
+
+| File (`frontend/public/brand/`) | Use |
+| --- | --- |
+| `labvium-symbol-v2.svg` | In-app brand (`LabviumBrand`, `.brand__mark`) and the homepage directory. |
+| `labvium-icon-v2.svg` / `.png` | Favicon and touch icon: the white symbol on the violet–indigo tile, legible on light and dark tab bars. |
+| `labvium-symbol-v2.png` | 512px raster fallback where SVG is not accepted. |
+
+Colors: L `#7c3aed`, check `#5b21b6`, node `#a78bfa`; on the tile white,
+`#e9e3ff` and `#c4b5fd`. Keep clear space of at least the node's diameter, do
+not recolor single parts, rotate or outline it, and pair it with the
+`LabVium` / `랩비움` wordmark set in the UI typeface rather than an image.
+`labvium-symbol-v1.png` and `labvium-mark.svg` stay only so existing links
+keep working.
+
 Motion in this skin is decorative and opt-in. Every animation sits inside
 `@media (prefers-reduced-motion: no-preference)`. Content entrances (route
 fade, staggered page sections, dialogs, drawers, menus) use `backwards` fill

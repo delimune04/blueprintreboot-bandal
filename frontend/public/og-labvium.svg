@@ -1,13 +1,12 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
   <rect width="1200" height="630" fill="#f8f8fb"/>
   <path d="M0 78h1200M0 552h1200" stroke="#ddd6eb"/>
-  <rect x="65" y="62" width="8" height="32" fill="#7851ca"/>
+  <rect x="65" y="62" width="8" height="32" fill="#7c3aed"/>
   <text x="92" y="87" fill="#6d617c" font-family="Arial,sans-serif" font-size="20">Bandal Studio</text>
-  <g transform="translate(85 190) scale(3.6)" fill="none">
-    <path d="M14 6h22l7 7v29H14V6Z" fill="#fff" stroke="#2b3032" stroke-width="2"/>
-    <path d="M36 6v8h7M20 24h16M20 30h12M20 36h16" stroke="#b8b0c9" stroke-width="2"/>
-    <path d="M21 3a17 17 0 1 0 0 34c-7-3-11-9-11-17S14 6 21 3Z" fill="#7851ca" stroke="none"/>
-    <path d="m23 18 4 4 7-8" stroke="#7851ca" stroke-width="3"/>
+  <g transform="translate(66 196) scale(1.5)">
+    <path d="M17 23a8.5 8.5 0 0 1 17 0v58a6 6 0 0 0 6 6h10a8.5 8.5 0 0 1 0 17H35a18 18 0 0 1-18-18Z" fill="#7c3aed"/>
+    <path d="M51 61 67 80 94 37" fill="none" stroke="#5b21b6" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="96" cy="32" r="12" fill="#a78bfa"/>
   </g>
   <!-- Geometric Korean wordmark: 랩비움. It remains crisp without a remote font. -->
   <g transform="translate(315 190) scale(2.8)" fill="none" stroke="#25212f" stroke-width="5" stroke-linejoin="miter" stroke-linecap="square">
@@ -18,8 +17,8 @@
   <text x="318" y="429" fill="#514a5b" font-family="Arial,sans-serif" font-size="30">Read papers. Connect evidence. Advance research.</text>
   <g transform="translate(924 189)" fill="none" stroke="#ddd6eb" stroke-width="1.5">
     <path d="M0 0h171v190H0zM16 24h108M16 42h140M16 76h92M16 94h140M16 112h140M16 154h70"/>
-    <path d="m112 127 13 13 31-35" stroke="#7851ca" stroke-width="4"/>
+    <path d="m112 127 13 13 31-35" stroke="#7c3aed" stroke-width="4"/>
   </g>
   <text x="85" y="589" fill="#7a7385" font-family="Arial,sans-serif" font-size="18">Papers  /  Evidence notes  /  Research projects</text>
-  <text x="995" y="589" fill="#7851ca" font-family="Arial,sans-serif" font-size="18">bandal.app</text>
+  <text x="995" y="589" fill="#6d28d9" font-family="Arial,sans-serif" font-size="18">bandal.app</text>
 </svg>
