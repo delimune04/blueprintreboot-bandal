@@ -45,6 +45,8 @@ proxy handling. Missing ARR, segment revenue and analyst opinions remain
 unavailable rather than being inferred from unrelated numbers. Coverage is
 SEC-listed issuers; Korean DART integration is not implemented.
 
+Normalized, dated SEC snapshots and a collected company catalog back research when hosted provider access fails. Run `node scripts/refresh-finance-research.mjs` to refresh public snapshots before rebuilding and deploying. The UI displays collection time; these are not real-time financial feeds.
+
 `SEC_USER_AGENT` must identify the operator and contact email. Optional
 `ALPHAVANTAGE_API_KEY` enables the quote/overview provider where the subscription
 supports it. Missing keys, quotas and source failures are visible in the UI.

@@ -176,3 +176,70 @@ test('market provider quota notices and symbol/currency mismatches stay unavaila
     assert.equal(result.metrics.find(item => item.key === 'per').value, null);
   }
 });
+
+async function snapshotFixture(collectedAt) {
+  const p = provider(), handle = createResearchService({ fetcher: p.fetcher });
+  const payload = await (await handle(request('companies/NVDA'), env, 'companies/NVDA')).json();
+  return { schemaVersion: 1, collectedAt, source: 'SEC EDGAR direct API ingestion', payload };
+}
+function assetBinding(files, calls = []) {
+  return { async fetch(req) { const url = new URL(req.url); calls.push({ origin: url.origin, pathname: url.pathname, search: url.search }); return files[url.pathname] ? Response.json(files[url.pathname]) : new Response('Not found', { status: 404 }); } };
+}
+test('fresh normalized snapshots serve source-backed numbers with collection age and no live-provider claim', async () => {
+  const now = Date.parse('2026-10-24T12:00:00.000Z'), collectedAt = '2026-10-24T11:00:00.000Z', snapshot = await snapshotFixture(collectedAt), assets = [];
+  let external = 0;
+  const handle = createResearchService({ clock: () => now, fetcher: async () => { external++; throw new Error('Hosted SEC unavailable'); } });
+  const response = await handle(request('companies/NVDA?url=https://evil.example'), { ...env, ASSETS: assetBinding({ '/finance/snapshots/NVDA.json': snapshot }, assets) }, 'companies/NVDA');
+  const data = await response.json();
+  assert.equal(data.status, 'available');
+  assert.equal(data.dataMode, 'snapshot');
+  assert.equal(data.collectedAt, collectedAt);
+  assert.equal(data.asOf, collectedAt);
+  assert.equal(data.snapshot.ageHours, 1);
+  assert.equal(data.snapshot.stale, false);
+  assert.equal(data.financials.revenue, 1000);
+  assert.equal(data.period.filed, '2026-02-12');
+  assert.equal(data.evidence.revenue.filed, '2026-02-12');
+  assert.equal(data.sources[0].snapshotCollectedAt, collectedAt);
+  assert.equal(data.quote.status, 'unavailable');
+  assert.equal(external, 0);
+  assert.deepEqual(assets, [{ origin: 'https://bandal.app', pathname: '/finance/snapshots/NVDA.json', search: '' }]);
+  assert.match(data.limitations[0], /실시간 갱신 아님/);
+  assert.match(response.headers.get('cache-control'), /no-store/);
+});
+test('stale snapshots are used only after a live failure and clearly retain old collection/filing dates', async () => {
+  const now = Date.parse('2026-10-24T12:00:00.000Z'), collectedAt = '2026-10-20T11:00:00.000Z', snapshot = await snapshotFixture(collectedAt);
+  let external = 0;
+  const handle = createResearchService({ clock: () => now, fetcher: async () => { external++; throw new Error('Hosted SEC unavailable'); } });
+  const data = await (await handle(request('companies/NVDA'), { ...env, ASSETS: assetBinding({ '/finance/snapshots/NVDA.json': snapshot }) }, 'companies/NVDA')).json();
+  assert.equal(data.snapshot.stale, true);
+  assert.equal(data.snapshot.reason, 'provider-unavailable');
+  assert.equal(data.snapshot.ageHours, 97);
+  assert.equal(data.asOf, collectedAt);
+  assert.equal(data.period.end, '2025-12-31');
+  assert(external > 0);
+  assert.match(data.limitations[0], /24시간이 지났/);
+});
+test('full catalog snapshot provides search beyond the small fallback directory with honest freshness', async () => {
+  const now = Date.parse('2026-10-24T12:00:00.000Z'), collectedAt = '2026-10-24T11:00:00.000Z';
+  const catalog = { schemaVersion: 1, collectedAt, source: { provider: 'SEC EDGAR', url: 'https://www.sec.gov/files/company_tickers.json' }, companies: [{ ticker: 'WXYZ', name: 'Other Co', cik: '12345' }] };
+  let external = 0;
+  const handle = createResearchService({ clock: () => now, fetcher: async () => { external++; throw new Error(); } });
+  const data = await (await handle(request('companies/search?q=WXYZ'), { ASSETS: assetBinding({ '/finance/snapshots/catalog.json': catalog }) }, 'companies/search')).json();
+  assert.equal(data.results[0].ticker, 'WXYZ');
+  assert.equal(data.source.status, 'snapshot');
+  assert.equal(data.source.retrievedAt, collectedAt);
+  assert.equal(data.source.stale, false);
+  assert.equal(external, 0);
+});
+test('missing, future-dated, wrong-company and malformed snapshots fall through without invented values', async () => {
+  const now = Date.parse('2026-10-24T12:00:00.000Z'), valid = await snapshotFixture('2026-10-24T11:00:00.000Z');
+  for (const snapshot of [null, { ...valid, collectedAt: '2026-10-25T11:00:00.000Z' }, { ...valid, payload: { ...valid.payload, company: { ...valid.payload.company, ticker: 'OTHER' } } }, { ...valid, schemaVersion: 99 }]) {
+    const handle = createResearchService({ clock: () => now, fetcher: async () => { throw new Error(); } });
+    const files = snapshot ? { '/finance/snapshots/NVDA.json': snapshot } : {};
+    const data = await (await handle(request('companies/NVDA'), { ASSETS: assetBinding(files) }, 'companies/NVDA')).json();
+    assert.equal(data.status, 'unavailable');
+    assert.equal(data.dataMode, 'live-source');
+    assert.equal(data.financials.revenue, null);
+  }
+});

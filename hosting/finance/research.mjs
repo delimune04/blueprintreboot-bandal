@@ -111,6 +111,47 @@ export function createResearchService({ fetcher = globalThis.fetch, clock = () =
     while (cache.size && (cache.size >= 12 || cacheBytes + bytes > 4 * 1024 * 1024)) { const oldest = cache.keys().next().value; cacheBytes -= cache.get(oldest).bytes; cache.delete(oldest); }
     cache.set(key, { value, expires: clock() + ttl, bytes }); cacheBytes += bytes;
   }
+  async function bundledSnapshot(request, env, name) {
+    if (!env.ASSETS?.fetch || !/^(?:catalog|[A-Z0-9.-]{1,12})$/.test(name)) return null;
+    const key = 'snapshot:' + name, existing = cache.get(key);
+    if (existing && existing.expires > clock()) return existing.value;
+    const max = name === 'catalog' ? 3 * 1024 * 1024 : 256 * 1024;
+    try {
+      const target = new URL(request.url);
+      target.pathname = '/finance/snapshots/' + name + '.json'; target.search = ''; target.hash = '';
+      // ASSETS is the platform's static binding, not a fetch to a visitor URL.
+      const response = await env.ASSETS.fetch(new Request(target, { method: 'GET' }));
+      if (!response.ok || Number(response.headers.get('Content-Length')) > max) { await response.body?.cancel(); return null; }
+      const reader = response.body?.getReader(); if (!reader) return null;
+      const chunks = []; let size = 0;
+      while (true) { const { done, value } = await reader.read(); if (done) break; size += value.length; if (size > max) { await reader.cancel(); return null; } chunks.push(value); }
+      const bytes = new Uint8Array(size); let offset = 0; for (const chunk of chunks) { bytes.set(chunk, offset); offset += chunk.length; }
+      const data = JSON.parse(new TextDecoder().decode(bytes)), collected = Date.parse(data?.collectedAt);
+      if (data?.schemaVersion !== 1 || typeof data.collectedAt !== 'string' || !/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/.test(data.collectedAt) || !Number.isFinite(collected) || collected > clock() + 300000) return null;
+      if (name === 'catalog') {
+        if (!Array.isArray(data.companies) || !data.companies.length || data.companies.length > 30000 || data.source?.url !== TICKERS_URL) return null;
+        if (!data.companies.every(company => /^[A-Z0-9.-]{1,12}$/.test(company.ticker || '') && typeof company.name === 'string' && company.name.length <= 300 && /^\d{1,10}$/.test(String(company.cik)))) return null;
+      } else {
+        const p = data.payload, known = DIRECTORY.find(company => company.ticker === name);
+        if (p?.status !== 'available' || p.company?.ticker !== name || p.company.currency !== 'USD' || !/^\d{1,10}$/.test(String(p.company.cik)) || known && Number(known.cik) !== Number(p.company.cik)) return null;
+        if (!p.period || !validDate(p.period.start) || !validDate(p.period.end) || !validDate(p.period.filed) || days(p.period.start, p.period.end) < 330 || days(p.period.start, p.period.end) > 400 || !String(p.period.sourceUrl || '').startsWith(`https://www.sec.gov/Archives/edgar/data/${Number(p.company.cik)}/`) || !FIELDS.every(field => p.financials?.[field] === null || finite(p.financials?.[field])) || !Array.isArray(p.reports) || p.reports.length > 50 || !Array.isArray(p.sources) || !Array.isArray(p.limitations)) return null;
+        if (!p.sources.some(source => source.provider === 'SEC companyfacts' && source.status === 'available' && source.url === `${SEC_API}/api/xbrl/companyfacts/CIK${String(p.company.cik).padStart(10, '0')}.json`)) return null;
+      }
+      remember(key, data, 300000, size);
+      return data;
+    } catch { return null; }
+  }
+  function snapshotAge(snapshot) { return Math.max(0, (clock() - Date.parse(snapshot.collectedAt)) / 3600000); }
+  async function snapshotResponse(snapshot, ticker, env, reason) {
+    const p = snapshot.payload, ageHours = snapshotAge(snapshot), stale = ageHours > 24, quote = await marketSnapshot(ticker, env);
+    const ratings = Object.entries(quote.analystRatings || {}).filter(([, count]) => Number.isInteger(count) && count >= 0).map(([rating, count]) => ({ rating, count }));
+    const notice = `SEC 공시 스냅샷 · 수집 ${snapshot.collectedAt} · 실시간 갱신 아님.${stale ? ' 수집 후 24시간이 지났으며 새 원문 조회가 실패해 이전 자료를 보여드려요.' : ' 수집 후 24시간 이내 저장 자료예요.'}`;
+    return json({ ...p, asOf: snapshot.collectedAt, collectedAt: snapshot.collectedAt, dataMode: 'snapshot', snapshot: { collectedAt: snapshot.collectedAt, ageHours: Math.round(ageHours * 100) / 100, stale, reason },
+      metrics: calculateMetrics(p.financials, quote), flow: buildFinancialFlow(p.financials, p.period), quote,
+      opinions: { status: ratings.length ? 'available' : 'unavailable', ratings, analystTargetPrice: quote.analystTargetPrice || null, provider: 'Alpha Vantage', retrievedAt: quote.retrievedAt || null, reason: ratings.length ? '제공자의 집계 의견이에요. 개별 보고서 원문·작성일·분석가 목록은 제공하지 않아요.' : '확인 가능한 애널리스트 리서치 제공자가 연결되지 않았어요. 공식 실적 원문을 먼저 확인해 주세요.' },
+      sources: [...p.sources.filter(source => typeof source?.provider === 'string' && source.provider.startsWith('SEC')).map(source => ({ ...source, snapshotCollectedAt: snapshot.collectedAt })), ...(quote.status === 'available' ? [{ provider: 'Alpha Vantage', url: quote.sourceUrl, retrievedAt: quote.retrievedAt, status: 'available' }] : [])],
+      limitations: [notice, ...p.limitations.filter(message => typeof message === 'string' && !/시세 제공자|PER·PSR/.test(message)), ...(quote.status === 'unavailable' ? [quote.reason] : ['PER·PSR은 제공자의 TTM 지표이고, 나머지 SEC 수치는 스냅샷의 연간 공시 기준이에요. 시점과 분모가 달라요.'])] });
+  }
   let lastRequestAt = 0;
   async function marketSnapshot(ticker, env) {
     const unavailable = { status: 'unavailable', price: null, marketCap: null, reportedPE: null, reportedPS: null, provider: 'Alpha Vantage', reason: '시세 제공자 API 키가 연결되지 않았어요. PER·PSR은 확인되지 않은 숫자로 채우지 않아요.' };
@@ -183,7 +224,12 @@ export function createResearchService({ fetcher = globalThis.fetch, clock = () =
     pending.set(url, work);
     try { return await work; } finally { pending.delete(url); }
   }
-  async function catalog(env) {
+  async function catalog(env, request) {
+    const snapshot = request ? await bundledSnapshot(request, env, 'catalog') : null;
+    function snapshotCatalog() {
+      return { companies: snapshot.companies.map(company => { const known = DIRECTORY.find(item => item.ticker === company.ticker); return { ...company, irUrl: known?.irUrl || null, aliases: known?.aliases || '' }; }), source: { provider: 'SEC EDGAR 수집 스냅샷', url: TICKERS_URL, status: 'snapshot', collectedAt: snapshot.collectedAt, retrievedAt: snapshot.collectedAt, stale: snapshotAge(snapshot) > 24 } };
+    }
+    if (snapshot && snapshotAge(snapshot) <= 24) return snapshotCatalog();
     try {
       const body = await fetchJson(TICKERS_URL, env, 24 * 3600000);
       const companies = Object.values(body).filter(row => typeof row?.ticker === 'string' && /^[A-Z0-9.-]{1,12}$/.test(row.ticker) && typeof row.title === 'string' && row.title.length <= 300 && Number.isInteger(row.cik_str) && row.cik_str > 0 && row.cik_str < 1e10).map(row => {
@@ -193,6 +239,7 @@ export function createResearchService({ fetcher = globalThis.fetch, clock = () =
       if (!companies.length) throw new Error('SEC_INVALID_CATALOG');
       return { companies, source: { provider: 'SEC EDGAR', url: TICKERS_URL, status: 'available' } };
     } catch {
+      if (snapshot) return snapshotCatalog();
       return { companies: DIRECTORY, source: { provider: 'BANDAL 공식 IR 주소록', url: 'https://www.sec.gov/edgar/search/', status: 'directory-only' } };
     }
   }
@@ -202,13 +249,16 @@ export function createResearchService({ fetcher = globalThis.fetch, clock = () =
     const url = new URL(request.url), query = (url.searchParams.get('q') || '').trim();
     if (path === 'companies/search') {
       if (!query || query.length > 100) return json({ error: '기업명 또는 종목코드를 100자 이내로 입력해 주세요.' }, 422);
-      const { companies, source } = await catalog(env), needle = query.toLocaleLowerCase();
+      const { companies, source } = await catalog(env, request), needle = query.toLocaleLowerCase();
       const results = companies.filter(company => `${company.ticker} ${company.name} ${company.aliases}`.toLocaleLowerCase().includes(needle)).sort((a, b) => (b.ticker.toLowerCase() === needle ? 1 : 0) - (a.ticker.toLowerCase() === needle ? 1 : 0) || a.ticker.localeCompare(b.ticker)).slice(0, 20).map(({ aliases, ...company }) => company);
-      return json({ results, source: { ...source, retrievedAt: new Date(clock()).toISOString() }, limitations: source.status === 'directory-only' ? ['SEC 목록을 불러오지 못해 주요 미국 기업 주소록만 검색했어요. 최신 재무 수치는 포함하지 않아요.'] : ['현재 SEC에 등록된 미국 상장·공시 기업을 지원해요. 한국 주식 공시는 별도 제공자가 필요해요.'] });
+      return json({ results, source: { ...source, retrievedAt: source.retrievedAt || new Date(clock()).toISOString() }, limitations: source.status === 'directory-only' ? ['SEC 목록을 불러오지 못해 주요 미국 기업 주소록만 검색했어요. 최신 재무 수치는 포함하지 않아요.'] : [...(source.status === 'snapshot' ? [`SEC 기업 목록 스냅샷 · 수집 ${source.collectedAt}${source.stale ? ' · 24시간 경과, 새 목록 조회 실패' : ''}`] : []), '현재 SEC에 등록된 미국 상장·공시 기업을 지원해요. 한국 주식 공시는 별도 제공자가 필요해요.'] });
     }
     const ticker = path.slice('companies/'.length).toUpperCase();
     if (!/^[A-Z0-9.-]{1,12}$/.test(ticker)) return json({ error: '유효한 SEC 종목코드를 입력해 주세요.' }, 422);
-    const { companies, source: catalogSource } = await catalog(env), entry = companies.find(company => company.ticker === ticker);
+    const snapshot = await bundledSnapshot(request, env, ticker);
+    if (snapshot && snapshotAge(snapshot) <= 24) return snapshotResponse(snapshot, ticker, env, 'collected-cache');
+    const { companies, source: catalogSource } = await catalog(env, request), entry = companies.find(company => company.ticker === ticker);
+    if (!entry && snapshot) return snapshotResponse(snapshot, ticker, env, 'provider-unavailable');
     if (!entry) return json({ error: catalogSource.status === 'available' ? 'SEC 목록에서 기업을 찾지 못했어요.' : '현재 주소록에서 기업을 찾지 못했어요. SEC 연결 후 전체 기업을 검색할 수 있어요.', code: catalogSource.status === 'available' ? 'COMPANY_NOT_FOUND' : 'CATALOG_UNAVAILABLE' }, catalogSource.status === 'available' ? 404 : 503);
     const { aliases, ...company } = entry, cik = company.cik.padStart(10, '0'), factsUrl = `${SEC_API}/api/xbrl/companyfacts/CIK${cik}.json`, submissionsUrl = `${SEC_API}/submissions/CIK${cik}.json`;
     const [outcomes, quote] = await Promise.all([Promise.allSettled([fetchJson(factsUrl, env, 3600000), fetchJson(submissionsUrl, env, 3600000)]), marketSnapshot(ticker, env)]);
@@ -217,6 +267,7 @@ export function createResearchService({ fetcher = globalThis.fetch, clock = () =
     const limitations = [];
     if (outcomes[0].status === 'fulfilled' && String(outcomes[0].value.cik).replace(/^0+/, '') === String(Number(cik))) normalized = normalizeCompanyFacts(outcomes[0].value, company.cik);
     else limitations.push('SEC 재무 원문을 불러오지 못했어요. 값을 추정하지 않았으며 공식 공시·IR 링크에서 확인할 수 있어요.');
+    if (!normalized.period && snapshot) return snapshotResponse(snapshot, ticker, env, 'provider-unavailable');
     let reports = [];
     if (outcomes[1].status === 'fulfilled' && String(outcomes[1].value.cik).replace(/^0+/, '') === String(Number(cik))) reports = reportsFromSubmissions(outcomes[1].value, company.cik);
     else limitations.push('최신 보고서·실적 공시 목록을 가져오지 못했어요. 아래 공식 IR과 EDGAR에서 확인해 주세요.');
@@ -224,7 +275,7 @@ export function createResearchService({ fetcher = globalThis.fetch, clock = () =
     reports.push({ title: 'SEC EDGAR 전체 공시', type: 'IR', date: null, url: `https://www.sec.gov/edgar/browse/?CIK=${company.cik}&owner=exclude`, provider: 'SEC EDGAR' });
     const f = normalized.financials;
     const ratings = Object.entries(quote.analystRatings || {}).filter(([, count]) => Number.isInteger(count) && count >= 0).map(([rating, count]) => ({ rating, count }));
-    return json({ company: { ...company, currency: 'USD' }, status: normalized.period ? 'available' : 'unavailable', asOf, period: normalized.period, financials: f, evidence: normalized.evidence, metrics: calculateMetrics(f, quote), flow: buildFinancialFlow(f, normalized.period), reports, swot: swotChecklist(f), quote,
+    return json({ company: { ...company, currency: 'USD' }, status: normalized.period ? 'available' : 'unavailable', dataMode: 'live-source', asOf, period: normalized.period, financials: f, evidence: normalized.evidence, metrics: calculateMetrics(f, quote), flow: buildFinancialFlow(f, normalized.period), reports, swot: swotChecklist(f), quote,
       opinions: { status: ratings.length ? 'available' : 'unavailable', ratings, analystTargetPrice: quote.analystTargetPrice || null, provider: 'Alpha Vantage', retrievedAt: quote.retrievedAt || null, reason: ratings.length ? '제공자의 집계 의견이에요. 개별 보고서 원문·작성일·분석가 목록은 제공하지 않아요.' : '확인 가능한 애널리스트 리서치 제공자가 연결되지 않았어요. 공식 실적 원문을 먼저 확인해 주세요.' },
       sources: [{ provider: 'SEC companyfacts', url: factsUrl, retrievedAt: fetchedAt.get(factsUrl) || null, status: normalized.period ? 'available' : 'unavailable' }, { provider: 'SEC submissions', url: submissionsUrl, retrievedAt: fetchedAt.get(submissionsUrl) || null, status: outcomes[1].status === 'fulfilled' && reports.some(report => report.provider === 'SEC EDGAR' && report.date) ? 'available' : 'unavailable' }, ...(quote.status === 'available' ? [{ provider: 'Alpha Vantage', url: quote.sourceUrl, retrievedAt: quote.retrievedAt, status: 'available' }] : [])], limitations: [...limitations, ...normalized.warnings, ...(quote.status === 'unavailable' ? [quote.reason] : ['PER·PSR은 제공자의 TTM 지표이고, 나머지 SEC 수치는 연간 공시 기준이에요. 시점과 분모가 달라요.'])] });
   };

@@ -129,3 +129,40 @@ A direct live-provider smoke check on 2026-10-24 successfully loaded NVIDIA
 companyfacts and submissions, selected the annual 2025-01-27–2026-01-25 period,
 and produced a reconciled income flow. This validates local provider networking;
 hosted production networking remains a separate check.
+
+## Source-backed publication snapshots
+
+Hosted SEC egress was unavailable in production while the normal, declared local
+SEC API requests succeeded. To keep original filings usable in the hosted app,
+`node scripts/refresh-finance-research.mjs` ingests the official SEC endpoints
+sequentially and writes **normalized public data**, not raw XBRL, to
+`assetdist/finance/snapshots/`. This is an ordinary source-ingestion/cache path;
+it does not use third-party mirrors or circumvent SEC access controls. The
+script declares `SEC_USER_AGENT`, uses bounded reads, preserves old files after a
+failure, and never includes paid quote-provider credentials or private records.
+
+The 2026-10-24 collection produced a 10,425-company SEC ticker catalog and eight
+annual snapshots: NVDA, MSFT, AAPL, GOOGL, META, AMZN, TSLA and CVX. XOM had no
+usable standard annual revenue under the current conservative normalization;
+its financial snapshot was not generated. A catalog search match does not imply
+that a financial snapshot is available for that company. CVX's selected values
+did not support a reconciled income diagram, so its diagram remains unavailable.
+
+Runtime reads use the platform's ASSETS binding with fixed same-origin
+`/finance/snapshots/{validatedTicker}.json` paths. A validated snapshot collected
+within 24 hours is preferred. After 24 hours, runtime tries the normal live SEC
+API first and uses the older snapshot only if those facts are unavailable.
+Malformed, future-dated or mismatched-company snapshots are rejected.
+
+Snapshot responses expose `dataMode: "snapshot"`, `collectedAt`, and
+`snapshot: {collectedAt, ageHours, stale, reason}`. `asOf` stays at the collection
+time, every financial filing date remains unchanged, and the UI identifies the
+data as collected SEC filings rather than a fresh quote. The source timestamps
+and original SEC URLs are preserved. A stale fallback carries an explicit
+24-hour warning. Quote data still follows its independent provider status;
+the SEC snapshots never populate missing current prices, PER/PSR or ratings.
+
+Refresh is an explicit script plus normal build/publication operation. No
+background task or automatic deployment was created. The snapshot tests cover
+fresh/stale behavior, fixed paths, missing/corrupt files, catalog coverage and
+preservation of collection and filing dates.
