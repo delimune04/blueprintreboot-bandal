@@ -1,0 +1,33 @@
+{
+  "checkedAt": "2026-10-08",
+  "affiliateTracking": {
+    "enabled": false,
+    "partnerId": null,
+    "status": "not_enrolled"
+  },
+  "liveFlightPrices": false,
+  "providers": [
+    {
+      "id": "kayak",
+      "name": "KAYAK",
+      "homeUrl": "https://www.kayak.co.kr/",
+      "flightSearchTemplate": "https://www.kayak.co.kr/flights/{origin}-{destination}/{departure}/{return}",
+      "supportsDates": true,
+      "verifiedExample": "https://www.kayak.co.kr/flights/ICN-KIX/2026-11-10/2026-11-15",
+      "defaultPassengers": 1,
+      "defaultCabin": "economy",
+      "sourceNote": "Public consumer route verified by submitting the live search form and reopening the clean URL without tracking query parameters."
+    },
+    {
+      "id": "skyscanner",
+      "name": "Skyscanner",
+      "homeUrl": "https://www.skyscanner.co.kr/",
+      "flightSearchTemplate": "https://www.skyscanner.co.kr/transport/flights/{originLower}/{destinationLower}/{outboundShort}/{inboundShort}/",
+      "supportsDates": true,
+      "verifiedExample": "https://www.skyscanner.co.kr/transport/flights/icn/kix/261110/261115/",
+      "defaultPassengers": 1,
+      "defaultCabin": "economy",
+      "sourceNote": "Date, airports, adult count and economy class verified on the rendered consumer result page."
+    }
+  ]
+}

@@ -1,0 +1,50 @@
+{
+ "note": "Single list of 반달 도구함 tools. scripts/site/site-build.mjs renders the tool menu, the hub cards and the footer from it.",
+ "tools": [
+  {
+   "slug": "salary",
+   "href": "/tools/salary/",
+   "nav": "실수령액",
+   "title": "연봉 실수령액 계산기",
+   "summary": "2026년 4대보험 요율과 근로소득 간이세액표로 매달 받는 금액을 계산해요.",
+   "audience": "사회초년생 · 이직 준비",
+   "icon": "M4 7h16v11H4zM4 10h16M8 14h3"
+  },
+  {
+   "slug": "char-count",
+   "href": "/tools/char-count/",
+   "nav": "글자수",
+   "title": "글자수·바이트 세기",
+   "summary": "자기소개서·생활기록부 글자수를 공백 포함·제외, 바이트까지 바로 세요.",
+   "audience": "취업 · 입시",
+   "icon": "M5 6h14M5 11h14M5 16h9"
+  },
+  {
+   "slug": "gpa",
+   "href": "/tools/gpa/",
+   "nav": "학점",
+   "title": "학점 계산기",
+   "summary": "4.5·4.3 만점 평점평균과 전공 평점, 목표 학점까지 필요한 성적을 계산해요.",
+   "audience": "대학생",
+   "icon": "M3 9l9-4 9 4-9 4zM7 11v4c3 2 7 2 10 0v-4"
+  },
+  {
+   "slug": "rent",
+   "href": "/tools/rent/",
+   "nav": "주거비",
+   "title": "전세·월세 실주거비 비교",
+   "summary": "보증금 이자와 기회비용까지 더해 전세·반전세·월세의 실제 한 달 비용을 비교해요.",
+   "audience": "첫 자취 · 이사",
+   "icon": "M4 11l8-6 8 6v8H4zM10 19v-5h4v5"
+  },
+  {
+   "slug": "cite",
+   "href": "/tools/cite/",
+   "nav": "인용",
+   "title": "논문 인용 생성기",
+   "summary": "DOI 하나로 APA·MLA·Chicago·IEEE·BibTeX 참고문헌을 만들어요.",
+   "audience": "대학생 · 연구자",
+   "icon": "M7 7h4v4H7zM13 7h4v4h-4zM7 11c0 3-1 5-3 6M13 11c0 3-1 5-3 6"
+  }
+ ]
+}

@@ -14,7 +14,7 @@ function createSurface({ request = async () => { throw new Error("Rendering must
   function load(path) {
     if (cache.has(path)) return cache.get(path);
     const compiled = ts.transpileModule(readFileSync(path, "utf8"), { compilerOptions: { module: ts.ModuleKind.CommonJS, jsx: ts.JsxEmit.ReactJSX, target: ts.ScriptTarget.ES2022 } }).outputText;
-    const module = { exports: {} }; cache.set(path, module.exports);
+    const loaded = { exports: {} }; cache.set(path, loaded.exports);
     function localRequire(name) {
       if (name.endsWith(".css")) return {};
       if (name === "react") return hooks;
@@ -29,8 +29,8 @@ function createSurface({ request = async () => { throw new Error("Rendering must
       if (!found) throw new Error(`Missing dependency: ${location}`);
       return load(found);
     }
-    new Function("require", "module", "exports", compiled)(localRequire, module, module.exports);
-    cache.set(path, module.exports); return module.exports;
+    new Function("require", "module", "exports", compiled)(localRequire, loaded, loaded.exports);
+    cache.set(path, loaded.exports); return loaded.exports;
   }
   return load(fileURLToPath(new URL("../app/views/DiscoverView.tsx", import.meta.url)));
 }

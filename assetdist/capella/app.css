@@ -1,0 +1,211 @@
+@charset "UTF-8";
+/* CAPELLA landing on BANDAL UI (/bandal-ui/bandal-ui.css loads first).
+   The lens rings are decorative and aria-hidden; motion follows BANDAL UI. */
+
+.capella-hero h1 { font-size: clamp(2.5rem, 1.4rem + 4vw, 4.8rem); }
+
+/* Lens showcase */
+.capella-lens {
+  position: relative;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 1.1rem;
+  min-height: 24rem;
+  isolation: isolate;
+}
+.capella-lens img {
+  position: relative;
+  z-index: 2;
+  width: min(52%, 13rem);
+  height: auto;
+  border-radius: 24%;
+  box-shadow: 0 30px 60px -24px rgb(49 20 110 / 0.55), 0 0 0 1px rgb(255 255 255 / 0.7);
+}
+.capella-lens p {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  justify-items: center;
+  gap: 0.3rem;
+  margin: 0;
+  color: var(--bu-heading);
+  font-size: 1.35rem;
+  font-weight: 800;
+  letter-spacing: 0.28em;
+  text-indent: 0.28em;
+}
+.capella-lens p span { color: var(--bu-muted); font-size: 0.68rem; font-weight: 650; letter-spacing: 0.24em; }
+.capella-lens__ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 1;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+.capella-lens__ring--outer {
+  width: min(92%, 25rem);
+  aspect-ratio: 1;
+  border: 1px dashed rgb(124 58 237 / 0.28);
+  background: radial-gradient(circle, rgb(255 255 255 / 0.9) 0 46%, rgb(237 233 254 / 0.6) 47% 60%, transparent 61%);
+}
+.capella-lens__ring--inner {
+  width: min(70%, 19rem);
+  aspect-ratio: 1;
+  border: 2px solid transparent;
+  background: linear-gradient(#fff, #fff) padding-box, conic-gradient(from 0deg, #7c3aed, #f0abfc, #6366f1, #a78bfa, #7c3aed) border-box;
+  opacity: 0.85;
+}
+.capella-lens__spark {
+  position: absolute;
+  z-index: 3;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0 0 4px rgb(167 139 250 / 0.35), 0 0 18px 4px rgb(124 58 237 / 0.45);
+}
+.capella-lens__spark--a { top: 16%; right: 22%; }
+.capella-lens__spark--b { bottom: 24%; left: 18%; width: 7px; height: 7px; }
+
+/* Features */
+.capella-features .bu-icon { margin-bottom: 0.9rem; }
+.capella-features .bu-card__meta { font-family: var(--bu-mono); letter-spacing: 0.04em; }
+
+/* Filter lab */
+.capella-lab__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+  align-items: start;
+  gap: clamp(1.25rem, 4vw, 3rem);
+}
+.capella-viewfinder { margin: 0; }
+.capella-viewfinder__frame {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: 22rem;
+  padding: clamp(14px, 2.5vw, 26px);
+  border-radius: var(--bu-radius-xl);
+  background: linear-gradient(160deg, #1d1830, #120d22);
+  box-shadow: var(--bu-shadow-lg);
+}
+.capella-viewfinder canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: min(78vh, 46rem);
+  object-fit: contain;
+  border-radius: 12px;
+  background: #0d0a17;
+}
+.capella-viewfinder__corner {
+  position: absolute;
+  inset: 10px;
+  pointer-events: none;
+  background:
+    linear-gradient(#c4b5fd, #c4b5fd) left top / 18px 2px no-repeat,
+    linear-gradient(#c4b5fd, #c4b5fd) left top / 2px 18px no-repeat,
+    linear-gradient(#c4b5fd, #c4b5fd) right top / 18px 2px no-repeat,
+    linear-gradient(#c4b5fd, #c4b5fd) right top / 2px 18px no-repeat,
+    linear-gradient(#c4b5fd, #c4b5fd) left bottom / 18px 2px no-repeat,
+    linear-gradient(#c4b5fd, #c4b5fd) left bottom / 2px 18px no-repeat,
+    linear-gradient(#c4b5fd, #c4b5fd) right bottom / 18px 2px no-repeat,
+    linear-gradient(#c4b5fd, #c4b5fd) right bottom / 2px 18px no-repeat;
+  opacity: 0.7;
+}
+.capella-viewfinder figcaption { margin-top: 0.7rem; color: var(--bu-muted); font-size: 0.82rem; text-align: center; }
+.capella-controls { display: grid; gap: 1.2rem; padding: clamp(1.1rem, 2.5vw, 1.6rem); }
+.capella-controls fieldset { margin: 0; padding: 0; border: 0; min-width: 0; }
+.capella-controls legend { margin-bottom: 0.5rem; color: var(--bu-heading); font-size: 0.86rem; font-weight: 700; }
+.capella-sliders { display: grid; gap: 0.9rem; }
+.capella-slider { display: grid; gap: 0.35rem; }
+.capella-slider > span {
+  display: flex;
+  justify-content: space-between;
+  color: var(--bu-heading);
+  font-size: 0.86rem;
+  font-weight: 650;
+}
+.capella-slider output { color: var(--bu-violet-700); font-family: var(--bu-mono); font-size: 0.82rem; }
+.capella-slider input[type="range"] {
+  width: 100%;
+  height: 1.6rem;
+  margin: 0;
+  accent-color: var(--bu-violet-600);
+  cursor: pointer;
+}
+.capella-switch {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  width: fit-content;
+  min-height: 2.5rem;
+  color: var(--bu-heading);
+  font-size: 0.9rem;
+  font-weight: 650;
+  cursor: pointer;
+}
+.capella-switch input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.capella-switch__track {
+  position: relative;
+  width: 2.75rem;
+  height: 1.6rem;
+  border-radius: 999px;
+  background: var(--bu-line-strong);
+  transition: background-color 0.25s;
+}
+.capella-switch__track::after {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: calc(1.6rem - 6px);
+  height: calc(1.6rem - 6px);
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: var(--bu-shadow-sm);
+  content: "";
+  transition: transform 0.3s var(--bu-ease-spring);
+}
+.capella-switch input:checked + .capella-switch__track { background: var(--bu-violet-600); }
+.capella-switch input:checked + .capella-switch__track::after { transform: translateX(1.15rem); }
+.capella-switch input:focus-visible + .capella-switch__track { outline: 2px solid var(--bu-violet-500); outline-offset: 3px; }
+.capella-controls__actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.capella-file { position: relative; }
+.capella-file input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+.capella-file:focus-within { outline: 2px solid var(--bu-violet-500); outline-offset: 3px; }
+.capella-controls .bu-segment { display: flex; }
+.capella-controls .bu-segment button { flex: 1 1 auto; }
+
+/* Help */
+.capella-help {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem 2.5rem;
+  padding: clamp(1.6rem, 4vw, 2.75rem);
+  border: 1px solid rgb(124 58 237 / 0.14);
+  border-radius: var(--bu-radius-xl);
+  background: linear-gradient(135deg, var(--bu-violet-50), #fff 60%);
+}
+.capella-help > div:first-child { max-width: 40rem; }
+.capella-help p:not(.bu-label) { margin: 0.6rem 0 0; color: var(--bu-copy); }
+
+@media (prefers-reduced-motion: no-preference) {
+  :root:not(.motion-paused) .capella-lens__ring--inner { animation: capella-spin 26s linear infinite; }
+  :root:not(.motion-paused) .capella-lens__ring--outer { animation: capella-spin 60s linear infinite reverse; }
+  :root:not(.motion-paused) .capella-lens__spark--a { animation: capella-twinkle 3.2s ease-in-out infinite; }
+  :root:not(.motion-paused) .capella-lens__spark--b { animation: capella-twinkle 4.1s ease-in-out -1.4s infinite; }
+  :root:not(.motion-paused) .capella-lens img { animation: capella-float 7s ease-in-out infinite; }
+}
+@keyframes capella-spin { from { transform: translate(-50%, -50%) rotate(0); } to { transform: translate(-50%, -50%) rotate(360deg); } }
+@keyframes capella-twinkle { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.35; transform: scale(0.6); } }
+@keyframes capella-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+
+@media (max-width: 900px) {
+  .capella-lab__grid { grid-template-columns: minmax(0, 1fr); }
+  .capella-lens { min-height: 18rem; }
+}

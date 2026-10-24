@@ -1,0 +1,1766 @@
+{
+  "checkedAt": "2026-10-08",
+  "meta": {
+    "checkedAt": "2026-10-08",
+    "schemaVersion": 1,
+    "liveData": false,
+    "currencies": [
+      "JPY",
+      "EUR"
+    ],
+    "notice": "공식 공개안내를 2026-10-08 기준 확인한 정적 데이터. 여행일 요금·영업·좌석·교통 운행 보장 없음. 좌표는 공식 페이지 대표점이며 입구와 다를 수 있습니다. 문전 이동시간은 계획용 예상입니다.",
+    "dateExample": {
+      "date": "2026-07-12",
+      "weekday": "일요일",
+      "illustrativeOnly": true
+    },
+    "coverage": "오사카·교토 기존 명소 + 제한된 로마 명소 및 대표역 출발 예시. 전 세계·모든 숙소·모든 구간 길찾기 지원 아님.",
+    "restaurantNotes": [
+      "duration 60은 여행 계획용 기본값이며 공식 보장 소요시간이 아님. 식사 대기시간 별도.",
+      "가니도라쿠 본점 좌표는 검증하지 못해 null로 유지. 다른 곳의 좌표는 공식 페이지가 직접 연결·삽입한 지도상의 장소 핀을 확인했으며 지도 카메라 중심을 대신 사용하지 않음.",
+      "나카무라 도키치는 풀서비스 카페이며 공식 교토점 메뉴에 소바 식사가 포함됨. 카페·소바 분류 모두 가능.",
+      "미즈노 예약 불가라는 제3자 정보와 공식 페이지의 예약 관련 문구가 달라 예약 정책을 단정하지 않음.",
+      "확인 시점의 정보이며 여행 날짜의 영업·휴무·메뉴·가격은 방문 전 재확인. 알레르기 안전성·좌석 가용성은 검증하지 않음.",
+      "식당 1인 예산 null을 0엔으로 표시하지 말고 사용자 입력 필요로 처리. 공식 메뉴 예시는 예산 범위와 구분."
+    ]
+  },
+  "pois": [
+    {
+      "id": "rome-colosseum",
+      "name": "콜로세움·포로 로마노·팔라티노",
+      "city": "rome",
+      "currency": "EUR",
+      "district": "콜로세움",
+      "category": "culture",
+      "lat": 41.889373,
+      "lng": 12.492438,
+      "duration": 210,
+      "durationIsEstimate": true,
+      "price": 18,
+      "priceScope": "성인 일반 24h Colosseum, Roman Forum, Palatine 1인. 아레나·지하 제외.",
+      "priceNote": "성인 일반 24h Colosseum, Roman Forum, Palatine 1인. 아레나·지하 제외.",
+      "description": "시간 지정 콜로세움과 고대 로마 유적을 한 묶음으로 둘러봅니다. 별도 포로 로마노 입장료 중복 합산 금지.",
+      "officialUrl": "https://colosseo.it/en/tickets/colosseum-roman-forum-palatine/",
+      "coordinateSource": "https://turismoroma.it/en/places/flavian-amphitheatre-colosseum",
+      "coordinatePrecision": "official_tourism_representative_point",
+      "coordinateNote": "공식 관광청 장소 페이지 대표좌표. 실제 입구·보행 경로 아님.",
+      "hours": "2026-03-29~09-30 08:30–19:15; 10-01~10-24 08:30–18:30; 10-25~2027-02-28 08:30–16:30. 마감 1시간 전 최종입장.",
+      "reservation": "콜로세움 지정시간 예약 필수. 신분증·명칭 규정 구매 시 확인. 예약 15분 전 도착 권장.",
+      "checkedAt": "2026-10-08",
+      "closedDates": [
+        "2026-12-25",
+        "2027-01-01"
+      ],
+      "ticketGroupId": "colosseum-forum-palatine",
+      "visitLimitNote": "콜로세움 체류 최대 75분; 전체 210분은 포로/팔라티노 포함 계획용 추정."
+    },
+    {
+      "id": "rome-vatican-museums",
+      "name": "바티칸 박물관·시스티나 성당",
+      "city": "rome",
+      "currency": "EUR",
+      "district": "바티칸",
+      "category": "culture",
+      "lat": 41.906949,
+      "lng": 12.453317,
+      "duration": 180,
+      "durationIsEstimate": true,
+      "price": 25,
+      "priceScope": "성인 일반 €20 + 공식 온라인 시간예약비 €5. 1인.",
+      "priceNote": "성인 일반 €20 + 공식 온라인 시간예약비 €5. 1인.",
+      "description": "미술관과 시스티나 성당을 함께 관람합니다. 로마 여행권역에 포함했지만 소재지는 바티칸입니다.",
+      "officialUrl": "https://www.museivaticani.va/content/museivaticani/en/organizza-visita/tariffe-e-biglietti.html",
+      "coordinateSource": "https://www.turismoroma.it/en/places/vatican-museums-and-sistine-chapel",
+      "coordinatePrecision": "official_tourism_representative_point",
+      "coordinateNote": "공식 관광청 장소 페이지 대표좌표. 실제 입구·보행 경로 아님.",
+      "hours": "월–토 08:00–20:00, 최종입장 18:00. 매월 마지막 일요일 09:00–14:00, 최종입장 12:30(해당 공휴일 예외).",
+      "reservation": "공식 시간예약 권장, 재고 미확인. 티켓 환불 불가.",
+      "checkedAt": "2026-10-08",
+      "closureRule": {
+        "weekday": 0,
+        "exceptLastOfMonth": true
+      },
+      "closedDates": [
+        "2026-01-01",
+        "2026-01-06",
+        "2026-02-11",
+        "2026-03-19",
+        "2026-04-06",
+        "2026-05-01",
+        "2026-06-29",
+        "2026-08-14",
+        "2026-08-15",
+        "2026-11-01",
+        "2026-12-08",
+        "2026-12-25",
+        "2026-12-26"
+      ],
+      "closureSource": "https://www.museivaticani.va/content/museivaticani/en/info/orari-musei-vaticani.html",
+      "closureNote": "고정일은 2026년 목록만 검증. 마지막 일요일이 부활절·6/29·12/25·12/26·12/31과 겹치면 예외 적용 불가. 특별 부분휴관은 공식 캘린더 확인.",
+      "priceVariants": [
+        {
+          "label": "현장 일반권, 대기·매진 가능",
+          "price": 20
+        },
+        {
+          "label": "공식 온라인 예약 포함",
+          "price": 25
+        },
+        {
+          "label": "마지막 일요일 무료입장, 예외일·시간 확인",
+          "price": 0
+        }
+      ]
+    },
+    {
+      "id": "rome-pantheon",
+      "name": "판테온",
+      "city": "rome",
+      "currency": "EUR",
+      "district": "판테온·나보나",
+      "category": "culture",
+      "lat": 41.898996,
+      "lng": 12.476993,
+      "duration": 45,
+      "durationIsEstimate": true,
+      "price": 7,
+      "priceScope": "성인 일반 1인. 2026-07-01부터 €7.",
+      "priceNote": "성인 일반 1인. 2026-07-01부터 €7.",
+      "description": "원형 돔과 천창을 가까이 보는 짧은 문화 코스.",
+      "officialUrl": "https://direzionemuseiroma.cultura.gov.it/en/pantheon/",
+      "coordinateSource": "https://www.turismoroma.it/en/places/pantheon",
+      "coordinatePrecision": "official_tourism_representative_point",
+      "coordinateNote": "공식 관광청 장소 페이지 대표좌표. 실제 입구·보행 경로 아님.",
+      "hours": "매일 09:00–19:00, 최종입장 18:30. 종교행사에 따라 변동.",
+      "reservation": "공식 Musei Italiani 또는 현장 구입. 실제 날짜·잔여 시간 확인.",
+      "checkedAt": "2026-10-08",
+      "priceEffectiveFrom": "2026-07-01",
+      "priceVerification": "공식 문화부 사이트 검색색인으로 현재 €7 및 2026-07-01 적용을 교차확인. 직접페이지 로드는 시간초과.",
+      "priceSource": "https://direzionemuseiroma.cultura.gov.it/modifica-importo-del-titolo-di-accesso-al-pantheon-basilica-di-santa-maria-ad-martyres-dal-1-luglio-2026/"
+    },
+    {
+      "id": "rome-trevi-fountain",
+      "name": "트레비 분수 근접구역",
+      "city": "rome",
+      "currency": "EUR",
+      "district": "트레비",
+      "category": "view",
+      "lat": 41.900765,
+      "lng": 12.483238,
+      "duration": 40,
+      "durationIsEstimate": true,
+      "price": 2,
+      "priceScope": "비거주 방문객 1인, 분수 안쪽 근접구역. 외곽 광장 관람은 무료.",
+      "priceNote": "비거주 방문객 1인, 분수 안쪽 근접구역. 외곽 광장 관람은 무료.",
+      "description": "가까이 들어가는 구역만 유료입니다. 현재 코스는 근접구역 입장 기준이며, 외곽 광장에서 보는 것은 무료예요.",
+      "officialUrl": "https://fontanaditrevi.roma.it/en",
+      "coordinateSource": "https://www.turismoroma.it/en/places/trevi-fountain",
+      "coordinatePrecision": "official_tourism_representative_point",
+      "coordinateNote": "공식 관광청 장소 페이지 대표좌표. 실제 입구·보행 경로 아님.",
+      "hours": "월·금 11:30–22:00, 나머지 09:00–22:00; 최종입장 21:00. 일부 월요일 14:00 개장.",
+      "reservation": "온라인 미지정일권. 환불·양도 불가. 현장 결제는 카드만.",
+      "checkedAt": "2026-10-08",
+      "priceEffectiveFrom": "2026-02-02",
+      "priceVariants": [
+        {
+          "label": "외곽 광장 무료 관람",
+          "price": 0
+        },
+        {
+          "label": "분수 안쪽 근접구역",
+          "price": 2
+        }
+      ],
+      "specialOpeningTimes": [
+        {
+          "date": "2026-10-12",
+          "open": "14:00"
+        },
+        {
+          "date": "2026-10-26",
+          "open": "14:00"
+        },
+        {
+          "date": "2026-11-09",
+          "open": "14:00"
+        },
+        {
+          "date": "2026-11-23",
+          "open": "14:00"
+        },
+        {
+          "date": "2026-12-07",
+          "open": "14:00"
+        },
+        {
+          "date": "2026-12-21",
+          "open": "14:00"
+        }
+      ]
+    },
+    {
+      "id": "rome-piazza-navona",
+      "name": "나보나 광장",
+      "city": "rome",
+      "currency": "EUR",
+      "district": "판테온·나보나",
+      "category": "view",
+      "lat": 41.899004,
+      "lng": 12.473061,
+      "duration": 40,
+      "durationIsEstimate": true,
+      "price": 0,
+      "priceScope": "공공광장 산책. 주변 박물관·식사 별도.",
+      "priceNote": "공공광장 산책. 주변 박물관·식사 별도.",
+      "description": "분수와 바로크 건축을 둘러보는 야외 산책.",
+      "officialUrl": "https://www.turismoroma.it/en/places/navona-square",
+      "coordinateSource": "https://www.turismoroma.it/en/places/navona-square",
+      "coordinatePrecision": "official_tourism_representative_point",
+      "coordinateNote": "공식 관광청 장소 페이지 대표좌표. 실제 입구·보행 경로 아님.",
+      "hours": "공공광장; 행사·현장 통제 확인.",
+      "reservation": "일반 광장 산책 예약 없음.",
+      "checkedAt": "2026-10-08"
+    },
+    {
+      "id": "rome-spanish-steps",
+      "name": "스페인 광장·스페인 계단",
+      "city": "rome",
+      "currency": "EUR",
+      "district": "스파냐",
+      "category": "view",
+      "lat": 41.905973,
+      "lng": 12.482529,
+      "duration": 40,
+      "durationIsEstimate": true,
+      "price": 0,
+      "priceScope": "공공광장·계단 산책. 상점·식사 별도.",
+      "priceNote": "공공광장·계단 산책. 상점·식사 별도.",
+      "description": "스파냐역 주변에서 광장과 계단을 둘러봅니다.",
+      "officialUrl": "https://turismoroma.it/en/node/1722",
+      "coordinateSource": "https://turismoroma.it/en/node/1722",
+      "coordinatePrecision": "official_tourism_representative_point",
+      "coordinateNote": "공식 관광청 장소 페이지 대표좌표. 실제 입구·보행 경로 아님.",
+      "hours": "공공광장; 행사·현장 통제 확인.",
+      "reservation": "일반 광장 산책 예약 없음.",
+      "checkedAt": "2026-10-08"
+    }
+  ],
+  "restaurants": [
+    {
+      "id": "rome-armando",
+      "name": "아르만도 알 판테온",
+      "city": "rome",
+      "lat": 41.89904933,
+      "lng": 12.47620057,
+      "district": "판테온",
+      "cuisine": "로마식 파스타·전통요리",
+      "priceRange": {
+        "min": null,
+        "max": null,
+        "currency": "EUR",
+        "basis": "사용자 설정 필요; 메뉴·날짜별 실제 가격 미확인"
+      },
+      "duration": 90,
+      "durationIsEstimate": true,
+      "officialUrl": "https://armandoalpantheon.it/",
+      "coordinateSource": "https://www.turismoroma.it/it/accoglienza/armando-al-pantheon",
+      "reservationUrl": "https://armandoalpantheon.it/prenota/",
+      "source": "https://www.turismoroma.it/it/accoglienza/armando-al-pantheon",
+      "hours": "점심 12:30–15:00, 월–금 저녁 18:00–23:00. 토요일 저녁·일요일 휴무.",
+      "notes": "예약은 공식 온라인만. 30일 앞까지 순차 오픈. 관광청 참고 평균 €50(와인 제외)은 실제 견적이 아님.",
+      "checkedAt": "2026-10-08",
+      "closedWeekdays": [
+        0
+      ],
+      "closureNote": "토요일 저녁도 휴무",
+      "referenceAverage": 50
+    },
+    {
+      "id": "rome-roscioli-forno",
+      "name": "안티코 포르노 로시올리",
+      "city": "rome",
+      "lat": 41.89456135,
+      "lng": 12.47425395,
+      "district": "캄포 데 피오리",
+      "cuisine": "조각 피자·빵·간단식",
+      "priceRange": {
+        "min": null,
+        "max": null,
+        "currency": "EUR",
+        "basis": "사용자 설정 필요; 메뉴·날짜별 실제 가격 미확인"
+      },
+      "duration": 45,
+      "durationIsEstimate": true,
+      "officialUrl": "https://anticofornoroscioli.it/",
+      "coordinateSource": "https://turismoroma.it/en/node/130342",
+      "reservationUrl": null,
+      "source": "https://turismoroma.it/en/node/130342",
+      "hours": "공식 안내 월–일 07:30–20:00.",
+      "notes": "Via dei Chiavari 34 지점. 메뉴·중량에 따라 가격이 달라 식비는 사용자 설정.",
+      "checkedAt": "2026-10-08"
+    },
+    {
+      "id": "rome-babingtons",
+      "name": "배빙턴스 티룸",
+      "city": "rome",
+      "lat": 41.906027,
+      "lng": 12.4824171,
+      "district": "스파냐",
+      "cuisine": "홍차·스콘·티룸",
+      "priceRange": {
+        "min": null,
+        "max": null,
+        "currency": "EUR",
+        "basis": "사용자 설정 필요; 메뉴·날짜별 실제 가격 미확인"
+      },
+      "duration": 60,
+      "durationIsEstimate": true,
+      "officialUrl": "https://www.babingtons.com/",
+      "coordinateSource": "https://www.turismoroma.it/it/luoghi/sala-da-babington",
+      "reservationUrl": null,
+      "source": "https://www.turismoroma.it/it/luoghi/sala-da-babington",
+      "hours": "로마 관광청 안내 매일 10:00–21:15, 방문 전 운영자 재확인.",
+      "notes": "차·간식 위주 휴식 후보. 식사 대체 가능 여부와 메뉴 가격은 공식 확인.",
+      "checkedAt": "2026-10-08"
+    },
+    {
+      "id": "osaka-mizuno-dotonbori",
+      "name": "미즈노 도톤보리",
+      "city": "osaka",
+      "lat": 34.6683515,
+      "lng": 135.5032253,
+      "district": "도톤보리·난바",
+      "cuisine": "오코노미야키",
+      "priceRange": {
+        "min": null,
+        "max": null,
+        "currency": "JPY",
+        "basis": "사용자 설정 필요"
+      },
+      "duration": 60,
+      "officialUrl": "https://www.mizuno-osaka.com/sp/shopinfo.html",
+      "coordinateSource": "https://www.mizuno-osaka.com/sp/global_2.html",
+      "reservationUrl": null,
+      "source": "https://www.mizuno-osaka.com/sp/shopinfo.html",
+      "notes": "공식 주소: 大阪府大阪市中央区道頓堀1-4-15. 공식 영업시간 11:00~22:00, 마지막 주문 21:00. 난바·닛폰바시역에서 도보 5분 안내. 공식 영문 메뉴에 미즈노야키 1,580엔, 야마이모야키 1,780엔 표기. 식사 전체 예산과 대기시간은 별도 설정. 예약 가능 여부는 확인 필요.",
+      "coordinateVerification": {
+        "method": "공식 페이지의 Google Maps 링크를 따라가 장소 핀 좌표 확인",
+        "officialMapUrl": "https://goo.gl/maps/2tPzJyQc5Nv",
+        "pinEvidence": "미즈노 장소 핀: !8m2!3d34.6683515!4d135.5032253; 지도 화면 중심 좌표는 사용하지 않음"
+      },
+      "checkedAt": "2026-10-08",
+      "durationIsEstimate": true
+    },
+    {
+      "id": "osaka-kani-doraku-honten",
+      "name": "가니도라쿠 도톤보리 본점",
+      "city": "osaka",
+      "lat": null,
+      "lng": null,
+      "district": "도톤보리·난바",
+      "cuisine": "게 요리",
+      "priceRange": {
+        "min": null,
+        "max": null,
+        "currency": "JPY",
+        "basis": "사용자 설정 필요"
+      },
+      "duration": 60,
+      "officialUrl": "https://douraku.co.jp/kansai/honten/",
+      "coordinateSource": null,
+      "reservationUrl": null,
+      "source": "https://douraku.co.jp/company/network.html",
+      "notes": "공식 사업장 목록에서 본점 주소 大阪府大阪市中央区道頓堀1-6-18와 전화 06-6211-8975 확인. 점포 페이지가 동적으로 로딩되어 이번 확인에서는 코스별 현재 가격·영업시간·지도 핀을 확정하지 못함. 좌표 미확인 상태이므로 자동 거리·이동시간 계산에서 제외하고 공식 주소 확인 링크로 안내.",
+      "checkedAt": "2026-10-08",
+      "durationIsEstimate": true
+    },
+    {
+      "id": "osaka-daruma-lucua",
+      "name": "쿠시카츠 다루마 루쿠아 이레점",
+      "city": "osaka",
+      "lat": 34.7029874,
+      "lng": 135.4954231,
+      "district": "우메다·오사카역",
+      "cuisine": "쿠시카츠",
+      "priceRange": {
+        "min": 1500,
+        "max": 2500,
+        "currency": "JPY",
+        "basis": "공식 점포 안내의 평균 예산, 실제 주문에 따라 달라짐"
+      },
+      "duration": 60,
+      "officialUrl": "https://www.kushikatu-daruma.com/location/lucua",
+      "coordinateSource": "https://www.kushikatu-daruma.com/location/lucua",
+      "reservationUrl": null,
+      "source": "https://www.kushikatu-daruma.com/location/lucua",
+      "notes": "공식 주소: 大阪市北区梅田3-1-3 ルクアイーレ10F. 11:00~23:00, 마지막 주문 30분 전. 예약 불가. 1월 1일 및 2월 셋째 화요일 휴무 안내. 초등학생 이하를 제외하고 1인 1음료 주문 필요. 날짜별 시설 휴무는 방문 전 확인.",
+      "coordinateVerification": {
+        "method": "공식 페이지의 Google Maps iframe 응답에서 해당 장소명·주소와 함께 실린 핀 좌표 확인",
+        "pinEvidence": "元祖串かつだるま ルクアイーレ店, 〒530-0001 大阪府大阪市北区梅田３丁目１−３ ルクアイーレ10F: [34.7029874,135.4954231]",
+        "placeId": "0x6000e68d9521f2ad:0x38f0f76cc2337ba8"
+      },
+      "checkedAt": "2026-10-08",
+      "durationIsEstimate": true
+    },
+    {
+      "id": "kyoto-daiichi-asahi-honten",
+      "name": "혼케 다이이치 아사히 본점",
+      "city": "kyoto",
+      "lat": 34.986696,
+      "lng": 135.762502,
+      "district": "교토역",
+      "cuisine": "라멘",
+      "priceRange": {
+        "min": null,
+        "max": null,
+        "currency": "JPY",
+        "basis": "사용자 설정 필요"
+      },
+      "duration": 60,
+      "officialUrl": "https://www.honke-daiichiasahi.com/shop.html",
+      "coordinateSource": "https://www.honke-daiichiasahi.com/shop.html",
+      "reservationUrl": null,
+      "source": "https://www.honke-daiichiasahi.com/shop.html",
+      "notes": "공식 주소: 京都府京都市下京区東塩小路向畑町845. JR 교토역 도보 4분. 06:00~다음 날 01:00, 목요일 휴무. 공식 메뉴 예: 라멘 980엔, 특제 라멘 1,230엔, 교자 350엔(각 세금 포함). 메뉴 가격은 식사 총액을 뜻하지 않으며 대기시간 별도.",
+      "coordinateVerification": {
+        "method": "공식 본점 구역의 Google Maps iframe에서 장소 핀 좌표 확인",
+        "pinEvidence": "本家 第一旭 本店: [34.98669599999999,135.762502]",
+        "placeId": "0xa5ed2c875338968b"
+      },
+      "checkedAt": "2026-10-08",
+      "durationIsEstimate": true,
+      "closedWeekdays": [
+        4
+      ]
+    },
+    {
+      "id": "kyoto-okabeya-kiyomizu",
+      "name": "기요미즈 준세이 오카베야",
+      "city": "kyoto",
+      "lat": 34.996003,
+      "lng": 135.7811025,
+      "district": "기요미즈데라·히가시야마",
+      "cuisine": "유도후·유바·두부 요리",
+      "priceRange": {
+        "min": null,
+        "max": null,
+        "currency": "JPY",
+        "basis": "사용자 설정 필요"
+      },
+      "duration": 60,
+      "officialUrl": "https://www.okabeya.com/",
+      "coordinateSource": "https://www.okabeya.com/",
+      "reservationUrl": null,
+      "source": "https://www.okabeya.com/menu/yudoufu.html",
+      "notes": "기요미즈데라 참배길 인근. 공식 영업 안내는 10:30 개점, 15:00 마지막 주문, 16:00 폐점. 15:00 이후는 사전 예약한 단체 등만 접수하므로 일반 일정은 점심에 배치. 공식 유도후 후지 코스 2,500엔(세금 포함). 우선 안내 접수와 실제 좌석 예약은 구분 필요.",
+      "coordinateVerification": {
+        "method": "공식 페이지의 Google Maps iframe에서 장소명·주소와 함께 실린 핀 좌표 확인",
+        "pinEvidence": "Okabeya, 2 Chome-239 Kiyomizu, Higashiyama Ward, Kyoto: [34.996003,135.7811025]",
+        "placeId": "0x600108d1e8b2fc5d:0x93bba4a5360d553"
+      },
+      "checkedAt": "2026-10-08",
+      "durationIsEstimate": true,
+      "mealSlots": [
+        "lunch"
+      ],
+      "lastOrder": "15:00",
+      "closingTime": "16:00",
+      "mealServices": [
+        "lunch"
+      ],
+      "serviceNotes": "공식 점심 영업: 16:00 마감, 마지막 주문 15:00. 저녁 자동 추천에서 제외합니다.",
+      "mealTimeWindows": {
+        "lunch": {
+          "lastOrder": "15:00",
+          "close": "16:00"
+        }
+      }
+    },
+    {
+      "id": "kyoto-nakamura-tokichi-station",
+      "name": "나카무라 도키치 교토점",
+      "city": "kyoto",
+      "lat": 34.985124,
+      "lng": 135.7580051,
+      "district": "교토역·JR 교토 이세탄 3층",
+      "cuisine": "덴차 소바·말차 디저트·카페",
+      "priceRange": {
+        "min": null,
+        "max": null,
+        "currency": "JPY",
+        "basis": "사용자 설정 필요"
+      },
+      "duration": 60,
+      "officialUrl": "https://tokichi.pro/pages/kyoto-station-store-page",
+      "coordinateSource": "https://tokichi.pro/pages/kyoto-station-store-page",
+      "reservationUrl": null,
+      "source": "https://tokichi.pro/pages/stores",
+      "notes": "풀서비스 카페. 교토역 JR 서쪽 개찰구 앞 이트 파라다이스 3층. 카페 11:00~22:00, 마지막 주문 21:00. 예약 불가이며 혼잡 시 접수를 더 일찍 마칠 수 있음. 같은 건물 지하 1층의 판매 전용점에는 카페가 없으므로 지점을 혼동하지 않도록 주의. 공식 교토점 메뉴 이미지에서 따뜻한 소바·차가운 소바·유부 소바를 직접 확인. 식사와 디저트 모두 가능.",
+      "coordinateVerification": {
+        "method": "공식 점포 페이지의 Google Maps 링크 리디렉션에서 해당 장소 핀 좌표 확인",
+        "officialMapUrl": "https://goo.gl/maps/BBDTZ4XDA2ATyq7T9",
+        "pinEvidence": "中村藤吉本店 京都駅店: !8m2!3d34.985124!4d135.7580051; 지도 화면 중심 경도 135.7558111은 사용하지 않음"
+      },
+      "checkedAt": "2026-10-08",
+      "menuSource": "https://tokichi.pro/blogs/menu/kyoto_sta",
+      "durationIsEstimate": true
+    }
+  ],
+  "bases": [
+    {
+      "id": "osaka-namba",
+      "name": "난바역·관광안내소 기준점",
+      "city": "osaka",
+      "lat": 34.6637089,
+      "lng": 135.5015124,
+      "officialUrl": "https://osaka-info.jp/en/spot/post_20/",
+      "coordinateSource": "https://osaka-info.jp/en/spot/post_20/",
+      "coordinatePrecision": "official_embedded_or_tourism_map_point",
+      "notes": "난카이 난바역 1층 안내소. 메트로 난바역 4번 출구와 도보 약 2분, 승강장 이동 추가.",
+      "checkedAt": "2026-10-08"
+    },
+    {
+      "id": "osaka-station",
+      "name": "JR 오사카역·중앙 안내소 기준점",
+      "city": "osaka",
+      "lat": 34.702714,
+      "lng": 135.495965,
+      "officialUrl": "https://osaka-info.jp/en/spot/tourist-information-osaka/",
+      "coordinateSource": "https://osaka-info.jp/en/spot/tourist-information-osaka/",
+      "coordinatePrecision": "official_embedded_or_tourism_map_point",
+      "notes": "JR 오사카역 1층 중앙 안내소. Osaka Metro 우메다역과 동일 승강장 아님.",
+      "checkedAt": "2026-10-08"
+    },
+    {
+      "id": "kyoto-station",
+      "name": "교토역·교나비 기준점",
+      "city": "kyoto",
+      "lat": 34.9856511,
+      "lng": 135.7579638,
+      "officialUrl": "https://kyoto.travel/en/information-center/",
+      "coordinateSource": "https://kyoto.travel/en/information-center/",
+      "coordinatePrecision": "official_embedded_or_tourism_map_point",
+      "notes": "교토역 2층 관광안내소 지도핀. JR 승강장·북측 버스정류장까지 추가 이동.",
+      "checkedAt": "2026-10-08"
+    },
+    {
+      "id": "rome-termini",
+      "name": "로마 테르미니역·안내소 기준점",
+      "city": "rome",
+      "lat": 41.900985368797,
+      "lng": 12.502038442625,
+      "officialUrl": "https://www.turismoroma.it/it/luoghi/aree-tourist-information-termini",
+      "coordinateSource": "https://www.turismoroma.it/it/luoghi/aree-tourist-information-termini",
+      "coordinatePrecision": "official_embedded_or_tourism_map_point",
+      "notes": "역 안내소 대표점. 지하철 승강장까지 이동은 별도.",
+      "checkedAt": "2026-10-08"
+    }
+  ],
+  "transitLegs": [
+    {
+      "id": "namba-to-umeda",
+      "fromId": "osaka-namba",
+      "toId": "osaka-station",
+      "durationMinutes": 25,
+      "durationIsEstimate": true,
+      "fare": 240,
+      "currency": "JPY",
+      "fareScope": "성인 1인 편도. 유료좌석·특별서비스 제외.",
+      "mode": "metro",
+      "line": "Osaka Metro 미도스지선",
+      "fromStation": "なんば Namba M20",
+      "toStation": "梅田 Umeda M16",
+      "steps": [
+        "난바 기준점에서 Osaka Metro 난바역으로 이동",
+        "미도스지선 북행(우메다·신오사카 방면) 탑승",
+        "우메다역 하차 후 JR 오사카역 기준점으로 도보"
+      ],
+      "passIds": [
+        "osaka-metro-1day",
+        "osaka-amazing-1day"
+      ],
+      "officialUrl": "https://subway.osakametro.co.jp/guide/page/noritsugi_point_service/osakapoint_guidebook_20251101.pdf",
+      "routeUrl": "https://subway.osakametro.co.jp/guide/page/osakametro_routemap_d/routemap_2025.pdf",
+      "checkedAt": "2026-10-08",
+      "notes": "노선·구간요금 검증. 전체 25분은 보행·대기 포함 계획용 예상. 공식 누적시간표상 난바→우메다 차내 약10분.",
+      "operator": "osaka_metro",
+      "railRideMinutes": 10,
+      "railRideTimeSource": "https://subway.osakametro.co.jp/station_guide/library/joukouichi/m_minohkayano.pdf"
+    },
+    {
+      "id": "namba-to-sky",
+      "fromId": "osaka-namba",
+      "toId": "umeda-sky",
+      "durationMinutes": 35,
+      "durationIsEstimate": true,
+      "fare": 240,
+      "currency": "JPY",
+      "fareScope": "성인 1인 편도. 유료좌석·특별서비스 제외.",
+      "mode": "metro",
+      "line": "Osaka Metro 미도스지선",
+      "fromStation": "なんば Namba M20",
+      "toStation": "梅田 Umeda M16",
+      "steps": [
+        "난바역 미도스지선 북행 탑승",
+        "우메다 M16 하차",
+        "우메다역에서 우메다 스카이빌딩까지 공식 도보 약9분"
+      ],
+      "passIds": [
+        "osaka-metro-1day",
+        "osaka-amazing-1day"
+      ],
+      "officialUrl": "https://subway.osakametro.co.jp/guide/page/noritsugi_point_service/osakapoint_guidebook_20251101.pdf",
+      "routeUrl": "https://subway.osakametro.co.jp/guide/page/osakametro_routemap_d/routemap_2025.pdf",
+      "checkedAt": "2026-10-08",
+      "notes": "전체 35분은 대기·역내 이동 포함 계획용. 공식 관광청 도보 9분 안내.",
+      "operator": "osaka_metro",
+      "walkingSource": "https://osaka-info.jp/en/spot/umeda-sky-building/"
+    },
+    {
+      "id": "osaka-station-to-sky",
+      "fromId": "osaka-station",
+      "toId": "umeda-sky",
+      "durationMinutes": 12,
+      "durationIsEstimate": true,
+      "fare": 0,
+      "currency": "JPY",
+      "fareScope": "성인 1인 편도. 유료좌석·특별서비스 제외.",
+      "mode": "walk",
+      "line": "도보",
+      "fromStation": "JR Osaka",
+      "toStation": "Umeda Sky Building",
+      "steps": [
+        "JR 오사카역에서 우메다 스카이빌딩 방면 도보"
+      ],
+      "passIds": [],
+      "officialUrl": "https://osaka-info.jp/en/spot/umeda-sky-building/",
+      "routeUrl": "https://osaka-info.jp/en/spot/umeda-sky-building/",
+      "checkedAt": "2026-10-08",
+      "notes": "관광청 역 기준 도보 약7분. 안내소 출발·신호 대기 여유를 포함해 12분 계획. 엘리베이터 대기 별도.",
+      "publishedDurationMinutes": 7
+    },
+    {
+      "id": "kyoto-to-kiyomizu",
+      "fromId": "kyoto-station",
+      "toId": "kiyomizu-dera",
+      "durationMinutes": 40,
+      "durationIsEstimate": true,
+      "fare": 230,
+      "currency": "JPY",
+      "fareScope": "성인 1인 편도. 유료좌석·특별서비스 제외.",
+      "mode": "bus",
+      "line": "교토 시버스 206",
+      "fromStation": "京都駅前 Kyoto Station",
+      "toStation": "五条坂 Gojozaka",
+      "steps": [
+        "교토역 북측 시버스 승강장으로 이동",
+        "206번 히가시야마 방면 탑승",
+        "고조자카 하차 후 사찰 진입로로 도보 약10분"
+      ],
+      "passIds": [
+        "kyoto-subway-bus-1day"
+      ],
+      "officialUrl": "https://www2.city.kyoto.lg.jp/kotsu/webguide/en/fare/fare_bus.html",
+      "routeUrl": "https://kyoto.travel/en/travel-inspiration/taking-the-limited-express-bus-from-kyoto-station-to-kiyomizudera-temple/",
+      "checkedAt": "2026-10-08",
+      "notes": "206번 관광청 실측 예시 약16분 + 사찰 공식 도보 약10분. 전체40분은 대기·정체 여유를 넣은 예상. 혼잡 시 더 소요.",
+      "operator": "kyoto_city_bus",
+      "publishedRideMinutes": 16
+    },
+    {
+      "id": "kyoto-to-kiyomizu-ex",
+      "fromId": "kyoto-station",
+      "toId": "kiyomizu-dera",
+      "durationMinutes": 35,
+      "durationIsEstimate": true,
+      "fare": 500,
+      "currency": "JPY",
+      "fareScope": "성인 1인 편도. 유료좌석·특별서비스 제외.",
+      "mode": "bus",
+      "line": "관광특급 EX100/EX101",
+      "fromStation": "京都駅前 D1 Kyoto Station",
+      "toStation": "五条坂 Gojozaka",
+      "steps": [
+        "교토역 D1 승강장에서 관광특급 탑승",
+        "EX100은 고조자카 C, EX101은 B에서 하차",
+        "사찰까지 도보 이동"
+      ],
+      "passIds": [
+        "kyoto-subway-bus-1day"
+      ],
+      "officialUrl": "https://www2.city.kyoto.lg.jp/kotsu/webguide/en/fare/fare_bus.html",
+      "routeUrl": "https://kyoto.travel/en/travel-inspiration/taking-the-limited-express-bus-from-kyoto-station-to-kiyomizudera-temple/",
+      "checkedAt": "2026-10-08",
+      "notes": "원칙 토·일·공휴일 운행. 공식 날짜 확인 전 평일에 자동 배치 금지. 공식 예시 차내 약12분, 도보 약12분; 전체35분은 대기 포함 예상.",
+      "operator": "kyoto_city_bus_express",
+      "validWeekdays": [
+        0,
+        6
+      ],
+      "publicHolidayRequiresVerification": true,
+      "alternativeOnly": true
+    },
+    {
+      "id": "kyoto-to-inari",
+      "fromId": "kyoto-station",
+      "toId": "fushimi-inari-taisha",
+      "durationMinutes": 20,
+      "durationIsEstimate": true,
+      "fare": null,
+      "currency": "JPY",
+      "fareScope": "성인 1인 편도. 유료좌석·특별서비스 제외.",
+      "mode": "rail",
+      "line": "JR 나라선 보통열차",
+      "fromStation": "京都 Kyoto",
+      "toStation": "稲荷 Inari",
+      "steps": [
+        "JR 교토역 나라선 보통열차 탑승",
+        "두 번째 역 이나리 하차",
+        "역 바로 앞 후시미 이나리 입구로 이동"
+      ],
+      "passIds": [],
+      "officialUrl": "https://inari.jp/en/access/",
+      "routeUrl": "https://inari.jp/en/access/",
+      "checkedAt": "2026-10-08",
+      "notes": "사찰 공식 안내 차내 약5분·2정거장. 전체20분은 역내 이동과 대기 포함 예상. 현행 JR 구간운임 미확정, 교토 시영 지하철·버스권 미적용.",
+      "operator": "jr_west",
+      "publishedRideMinutes": 5
+    },
+    {
+      "id": "termini-to-colosseum",
+      "fromId": "rome-termini",
+      "toId": "rome-colosseum",
+      "durationMinutes": 25,
+      "durationIsEstimate": true,
+      "fare": 1.5,
+      "currency": "EUR",
+      "fareScope": "성인 1인 편도. 유료좌석·특별서비스 제외.",
+      "mode": "metro",
+      "line": "Metro B / B1, Laurentina 방면",
+      "fromStation": "Termini",
+      "toStation": "Colosseo",
+      "steps": [
+        "Termini에서 Metro B/B1 Laurentina 방면 탑승",
+        "Cavour 다음 Colosseo에서 하차(2정거장)",
+        "콜로세움 지정 입구까지 도보"
+      ],
+      "passIds": [
+        "rome-transit-24h",
+        "rome-transit-48h",
+        "rome-transit-72h",
+        "roma-pass-48h",
+        "roma-pass-72h"
+      ],
+      "officialUrl": "https://www.atac.roma.it/en/tickets-and-passes/bit",
+      "routeUrl": "https://www.atac.roma.it/docs/default-source/mappe-tpl/mappa-metropolitana-linea-b-b1.pdf?sfvrsn=51dc073c_4",
+      "checkedAt": "2026-10-08",
+      "notes": "노선·역 순서·BIT요금 검증. 25분은 도보·대기 포함 추정. 시간표·운휴 미조회.",
+      "operator": "atac"
+    },
+    {
+      "id": "termini-to-vatican",
+      "fromId": "rome-termini",
+      "toId": "rome-vatican-museums",
+      "durationMinutes": 40,
+      "durationIsEstimate": true,
+      "fare": 1.5,
+      "currency": "EUR",
+      "fareScope": "성인 1인 편도. 유료좌석·특별서비스 제외.",
+      "mode": "metro",
+      "line": "Metro A, Battistini 방면",
+      "fromStation": "Termini",
+      "toStation": "Ottaviano",
+      "steps": [
+        "Termini에서 Metro A Battistini 방면 탑승",
+        "Ottaviano 하차",
+        "Viale Vaticano의 박물관 입구로 도보"
+      ],
+      "passIds": [
+        "rome-transit-24h",
+        "rome-transit-48h",
+        "rome-transit-72h",
+        "roma-pass-48h",
+        "roma-pass-72h"
+      ],
+      "officialUrl": "https://www.atac.roma.it/en/tickets-and-passes/bit",
+      "routeUrl": "https://www.museivaticani.va/content/museivaticani/en/info/come-raggiungerci.html",
+      "checkedAt": "2026-10-08",
+      "notes": "박물관 공식 접근노선 검증. 전체40분은 계획용 추정. 성베드로 광장 입구와 박물관 입구가 다릅니다.",
+      "operator": "atac"
+    },
+    {
+      "id": "termini-to-spagna",
+      "fromId": "rome-termini",
+      "toId": "rome-spanish-steps",
+      "durationMinutes": 25,
+      "durationIsEstimate": true,
+      "fare": 1.5,
+      "currency": "EUR",
+      "fareScope": "성인 1인 편도. 유료좌석·특별서비스 제외.",
+      "mode": "metro",
+      "line": "Metro A, Battistini 방면",
+      "fromStation": "Termini",
+      "toStation": "Spagna",
+      "steps": [
+        "Termini에서 Metro A Battistini 방면 탑승",
+        "Repubblica·Barberini 다음 Spagna 하차",
+        "스페인 광장까지 도보"
+      ],
+      "passIds": [
+        "rome-transit-24h",
+        "rome-transit-48h",
+        "rome-transit-72h",
+        "roma-pass-48h",
+        "roma-pass-72h"
+      ],
+      "officialUrl": "https://www.atac.roma.it/en/tickets-and-passes/bit",
+      "routeUrl": "https://www.atac.roma.it/docs/default-source/mappe-tpl/mappa-metro-e-ferrovie-metropolitane.pdf?sfvrsn=e1e83890_23",
+      "checkedAt": "2026-10-08",
+      "notes": "3정거장 경로와 BIT요금 검증. 전체25분은 도보·대기 포함 추정.",
+      "operator": "atac"
+    },
+    {
+      "id": "umeda-to-namba",
+      "fromId": "osaka-station",
+      "toId": "osaka-namba",
+      "durationMinutes": 25,
+      "durationIsEstimate": true,
+      "fare": 240,
+      "currency": "JPY",
+      "fareScope": "성인 1인 편도. 유료좌석·특별서비스 제외.",
+      "mode": "metro",
+      "line": "Osaka Metro 미도스지선, 나카모즈 방면",
+      "fromStation": "梅田 Umeda M16",
+      "toStation": "なんば Namba M20",
+      "steps": [
+        "JR 오사카역 기준점에서 Osaka Metro 우메다역으로 도보",
+        "미도스지선 남행(난바·나카모즈 방면) 탑승",
+        "난바 M20 하차 후 난바 기준점으로 도보"
+      ],
+      "passIds": [
+        "osaka-metro-1day",
+        "osaka-amazing-1day"
+      ],
+      "officialUrl": "https://subway.osakametro.co.jp/guide/page/noritsugi_point_service/osakapoint_guidebook_20251101.pdf",
+      "routeUrl": "https://subway.osakametro.co.jp/guide/page/osakametro_routemap_d/routemap_2025.pdf",
+      "checkedAt": "2026-10-08",
+      "notes": "노선·구간요금 검증. 전체 25분은 보행·대기 포함 계획용 예상. 공식 누적시간표상 난바→우메다 차내 약10분.",
+      "operator": "osaka_metro",
+      "railRideMinutes": 10,
+      "railRideTimeSource": "https://subway.osakametro.co.jp/station_guide/library/joukouichi/m_minohkayano.pdf"
+    },
+    {
+      "id": "colosseum-to-termini",
+      "fromId": "rome-colosseum",
+      "toId": "rome-termini",
+      "durationMinutes": 25,
+      "durationIsEstimate": true,
+      "fare": 1.5,
+      "currency": "EUR",
+      "fareScope": "성인 1인 편도. 유료좌석·특별서비스 제외.",
+      "mode": "metro",
+      "line": "Metro B / B1, Rebibbia 또는 Jonio 방면",
+      "fromStation": "Colosseo",
+      "toStation": "Termini",
+      "steps": [
+        "콜로세움에서 Colosseo 역으로 도보",
+        "Metro B/B1 Rebibbia 또는 Jonio 방면 탑승",
+        "Cavour 다음 Termini 하차 후 기준점까지 이동"
+      ],
+      "passIds": [
+        "rome-transit-24h",
+        "rome-transit-48h",
+        "rome-transit-72h",
+        "roma-pass-48h",
+        "roma-pass-72h"
+      ],
+      "officialUrl": "https://www.atac.roma.it/en/tickets-and-passes/bit",
+      "routeUrl": "https://www.atac.roma.it/docs/default-source/mappe-tpl/mappa-metropolitana-linea-b-b1.pdf?sfvrsn=51dc073c_4",
+      "checkedAt": "2026-10-08",
+      "notes": "노선·역 순서·BIT요금 검증. 25분은 도보·대기 포함 추정. 시간표·운휴 미조회.",
+      "operator": "atac"
+    },
+    {
+      "id": "vatican-to-termini",
+      "fromId": "rome-vatican-museums",
+      "toId": "rome-termini",
+      "durationMinutes": 40,
+      "durationIsEstimate": true,
+      "fare": 1.5,
+      "currency": "EUR",
+      "fareScope": "성인 1인 편도. 유료좌석·특별서비스 제외.",
+      "mode": "metro",
+      "line": "Metro A, Anagnina 방면",
+      "fromStation": "Ottaviano",
+      "toStation": "Termini",
+      "steps": [
+        "박물관에서 Ottaviano역으로 도보",
+        "Metro A Anagnina 방면 탑승",
+        "Termini 하차 후 역 기준점으로 이동"
+      ],
+      "passIds": [
+        "rome-transit-24h",
+        "rome-transit-48h",
+        "rome-transit-72h",
+        "roma-pass-48h",
+        "roma-pass-72h"
+      ],
+      "officialUrl": "https://www.atac.roma.it/en/tickets-and-passes/bit",
+      "routeUrl": "https://www.museivaticani.va/content/museivaticani/en/info/come-raggiungerci.html",
+      "checkedAt": "2026-10-08",
+      "notes": "박물관 공식 접근노선 검증. 전체40분은 계획용 추정. 성베드로 광장 입구와 박물관 입구가 다릅니다.",
+      "operator": "atac"
+    },
+    {
+      "id": "spagna-to-termini",
+      "fromId": "rome-spanish-steps",
+      "toId": "rome-termini",
+      "durationMinutes": 25,
+      "durationIsEstimate": true,
+      "fare": 1.5,
+      "currency": "EUR",
+      "fareScope": "성인 1인 편도. 유료좌석·특별서비스 제외.",
+      "mode": "metro",
+      "line": "Metro A, Anagnina 방면",
+      "fromStation": "Spagna",
+      "toStation": "Termini",
+      "steps": [
+        "스페인 광장에서 Spagna역으로 도보",
+        "Metro A Anagnina 방면 탑승",
+        "Barberini·Repubblica 다음 Termini 하차"
+      ],
+      "passIds": [
+        "rome-transit-24h",
+        "rome-transit-48h",
+        "rome-transit-72h",
+        "roma-pass-48h",
+        "roma-pass-72h"
+      ],
+      "officialUrl": "https://www.atac.roma.it/en/tickets-and-passes/bit",
+      "routeUrl": "https://www.atac.roma.it/docs/default-source/mappe-tpl/mappa-metro-e-ferrovie-metropolitane.pdf?sfvrsn=e1e83890_23",
+      "checkedAt": "2026-10-08",
+      "notes": "3정거장 경로와 BIT요금 검증. 전체25분은 도보·대기 포함 추정.",
+      "operator": "atac"
+    },
+    {
+      "id": "dotonbori-to-umeda-sky",
+      "fromId": "dotonbori",
+      "toId": "umeda-sky",
+      "durationMinutes": 40,
+      "durationIsEstimate": true,
+      "fare": 240,
+      "currency": "JPY",
+      "fareScope": "성인 1인, Osaka Metro 난바↔우메다 1회 편도. 보행 무료.",
+      "mode": "metro",
+      "operator": "osaka_metro",
+      "line": "Osaka Metro 미도스지선, 신오사카·미노오카야노 방면",
+      "fromStation": "なんば Namba M20",
+      "toStation": "梅田 Umeda M16",
+      "steps": [
+        "도톤보리에서 Osaka Metro 난바역으로 도보",
+        "미도스지선 북행(우메다·신오사카 방면) 탑승",
+        "우메다 M16 하차 후 스카이빌딩으로 도보"
+      ],
+      "passIds": [
+        "osaka-metro-1day",
+        "osaka-amazing-1day"
+      ],
+      "officialUrl": "https://subway.osakametro.co.jp/guide/page/noritsugi_point_service/osakapoint_guidebook_20251101.pdf",
+      "routeUrl": "https://subway.osakametro.co.jp/guide/page/osakametro_routemap_d/routemap_2025.pdf",
+      "checkedAt": "2026-10-08",
+      "notes": "공식 노선도·난바↔우메다 240엔 구간요금·관광청 접근안내를 합성한 대표 경로. 우메다역↔스카이빌딩 공식 도보 약9분. 도톤보리는 넓은 구역으로 출발 위치마다 보행시간이 다름. 전체40분은 역내 이동·대기 포함 계획용 예상이며 실시간 길찾기 결과가 아님.",
+      "verificationKind": "composed_from_official_route_fare_and_access_sources",
+      "sourceUrls": [
+        "https://subway.osakametro.co.jp/guide/page/noritsugi_point_service/osakapoint_guidebook_20251101.pdf",
+        "https://subway.osakametro.co.jp/guide/page/osakametro_routemap_d/routemap_2025.pdf",
+        "https://osaka-info.jp/en/spot/dotonbori/",
+        "https://osaka-info.jp/en/spot/umeda-sky-building/"
+      ]
+    },
+    {
+      "id": "umeda-sky-to-dotonbori",
+      "fromId": "umeda-sky",
+      "toId": "dotonbori",
+      "durationMinutes": 40,
+      "durationIsEstimate": true,
+      "fare": 240,
+      "currency": "JPY",
+      "fareScope": "성인 1인, Osaka Metro 난바↔우메다 1회 편도. 보행 무료.",
+      "mode": "metro",
+      "operator": "osaka_metro",
+      "line": "Osaka Metro 미도스지선, 나카모즈 방면",
+      "fromStation": "梅田 Umeda M16",
+      "toStation": "なんば Namba M20",
+      "steps": [
+        "우메다 스카이빌딩에서 Osaka Metro 우메다역까지 도보",
+        "미도스지선 남행(난바·나카모즈 방면) 탑승",
+        "난바 M20 하차 후 도톤보리로 도보"
+      ],
+      "passIds": [
+        "osaka-metro-1day",
+        "osaka-amazing-1day"
+      ],
+      "officialUrl": "https://subway.osakametro.co.jp/guide/page/noritsugi_point_service/osakapoint_guidebook_20251101.pdf",
+      "routeUrl": "https://subway.osakametro.co.jp/guide/page/osakametro_routemap_d/routemap_2025.pdf",
+      "checkedAt": "2026-10-08",
+      "notes": "공식 노선도·난바↔우메다 240엔 구간요금·관광청 접근안내를 합성한 대표 경로. 우메다역↔스카이빌딩 공식 도보 약9분. 도톤보리는 넓은 구역으로 출발 위치마다 보행시간이 다름. 전체40분은 역내 이동·대기 포함 계획용 예상이며 실시간 길찾기 결과가 아님.",
+      "verificationKind": "composed_from_official_route_fare_and_access_sources",
+      "sourceUrls": [
+        "https://subway.osakametro.co.jp/guide/page/noritsugi_point_service/osakapoint_guidebook_20251101.pdf",
+        "https://subway.osakametro.co.jp/guide/page/osakametro_routemap_d/routemap_2025.pdf",
+        "https://osaka-info.jp/en/spot/dotonbori/",
+        "https://osaka-info.jp/en/spot/umeda-sky-building/"
+      ]
+    },
+    {
+      "id": "colosseum-to-vatican",
+      "fromId": "rome-colosseum",
+      "toId": "rome-vatican-museums",
+      "durationMinutes": 50,
+      "durationIsEstimate": true,
+      "fare": 1.5,
+      "currency": "EUR",
+      "fareScope": "성인 1인 편도, BIT 1장. 첫 검표부터 100분 이내이며 Termini에서 개찰구 밖으로 나가지 않고 역내 환승할 때만.",
+      "mode": "metro",
+      "operator": "atac",
+      "line": "Metro B/B1(Rebibbia 또는 Jonio 방면) → Termini 역내 환승 → A(Battistini 방면)",
+      "fromStation": "Colosseo",
+      "toStation": "Ottaviano",
+      "transferStations": [
+        "Termini"
+      ],
+      "steps": [
+        "콜로세움에서 Colosseo역으로 도보",
+        "Metro B/B1 Rebibbia 또는 Jonio 방면 탑승",
+        "Cavour 다음 Termini에서 개찰구 밖으로 나가지 않고 Metro A Battistini 방면으로 환승",
+        "Ottaviano 하차 후 Viale Vaticano의 박물관 입구로 도보"
+      ],
+      "passIds": [
+        "rome-transit-24h",
+        "rome-transit-48h",
+        "rome-transit-72h",
+        "roma-pass-48h",
+        "roma-pass-72h"
+      ],
+      "officialUrl": "https://www.atac.roma.it/en/tickets-and-passes/bit",
+      "routeUrl": "https://www.atac.roma.it/docs/default-source/mappe-tpl/mappa-metro-e-ferrovie-metropolitane.pdf?sfvrsn=e1e83890_23",
+      "checkedAt": "2026-10-08",
+      "notes": "ATAC는 BIT €1.50로 개찰구 밖으로 나가지 않는 메트로 노선 간 단일여정을 허용. 환승 때 추가 €1.50를 합산하지 않음. 개찰구로 나가 관광·식사를 하거나 재입장하면 새 티켓이 필요. 공식 노선도와 박물관 접근안내를 합성; 전체50분은 보행·역내 환승·대기 포함 추정이고 당일 운행·혼잡은 미조회.",
+      "verificationKind": "composed_from_official_route_fare_and_access_sources",
+      "fareCalculation": {
+        "ticketType": "BIT",
+        "quantity": 1,
+        "unitPrice": 1.5,
+        "requiresWithinMinutes": 100,
+        "requiresInsideGatesTransfer": true,
+        "notValidForRoundTrip": true
+      },
+      "sourceUrls": [
+        "https://www.atac.roma.it/en/tickets-and-passes/bit",
+        "https://www.atac.roma.it/docs/default-source/mappe-tpl/mappa-metropolitana-linea-b-b1.pdf?sfvrsn=51dc073c_4",
+        "https://www.atac.roma.it/docs/default-source/mappe-tpl/mappa-metro-e-ferrovie-metropolitane.pdf?sfvrsn=e1e83890_23",
+        "https://www.museivaticani.va/content/museivaticani/en/info/come-raggiungerci.html"
+      ]
+    },
+    {
+      "id": "vatican-to-colosseum",
+      "fromId": "rome-vatican-museums",
+      "toId": "rome-colosseum",
+      "durationMinutes": 50,
+      "durationIsEstimate": true,
+      "fare": 1.5,
+      "currency": "EUR",
+      "fareScope": "성인 1인 편도, BIT 1장. 첫 검표부터 100분 이내이며 Termini에서 개찰구 밖으로 나가지 않고 역내 환승할 때만.",
+      "mode": "metro",
+      "operator": "atac",
+      "line": "Metro A(Anagnina 방면) → Termini 역내 환승 → B/B1(Laurentina 방면)",
+      "fromStation": "Ottaviano",
+      "toStation": "Colosseo",
+      "transferStations": [
+        "Termini"
+      ],
+      "steps": [
+        "바티칸 박물관 입구에서 Ottaviano역으로 도보",
+        "Metro A Anagnina 방면 탑승",
+        "Termini에서 개찰구 밖으로 나가지 않고 B/B1 Laurentina 방면으로 환승",
+        "Cavour 다음 Colosseo 하차 후 콜로세움 지정 입구로 도보"
+      ],
+      "passIds": [
+        "rome-transit-24h",
+        "rome-transit-48h",
+        "rome-transit-72h",
+        "roma-pass-48h",
+        "roma-pass-72h"
+      ],
+      "officialUrl": "https://www.atac.roma.it/en/tickets-and-passes/bit",
+      "routeUrl": "https://www.atac.roma.it/docs/default-source/mappe-tpl/mappa-metro-e-ferrovie-metropolitane.pdf?sfvrsn=e1e83890_23",
+      "checkedAt": "2026-10-08",
+      "notes": "ATAC는 BIT €1.50로 개찰구 밖으로 나가지 않는 메트로 노선 간 단일여정을 허용. 환승 때 추가 €1.50를 합산하지 않음. 개찰구로 나가 관광·식사를 하거나 재입장하면 새 티켓이 필요. 공식 노선도와 박물관 접근안내를 합성; 전체50분은 보행·역내 환승·대기 포함 추정이고 당일 운행·혼잡은 미조회.",
+      "verificationKind": "composed_from_official_route_fare_and_access_sources",
+      "fareCalculation": {
+        "ticketType": "BIT",
+        "quantity": 1,
+        "unitPrice": 1.5,
+        "requiresWithinMinutes": 100,
+        "requiresInsideGatesTransfer": true,
+        "notValidForRoundTrip": true
+      },
+      "sourceUrls": [
+        "https://www.atac.roma.it/en/tickets-and-passes/bit",
+        "https://www.atac.roma.it/docs/default-source/mappe-tpl/mappa-metropolitana-linea-b-b1.pdf?sfvrsn=51dc073c_4",
+        "https://www.atac.roma.it/docs/default-source/mappe-tpl/mappa-metro-e-ferrovie-metropolitane.pdf?sfvrsn=e1e83890_23",
+        "https://www.museivaticani.va/content/museivaticani/en/info/come-raggiungerci.html"
+      ]
+    }
+  ],
+  "passes": [
+    {
+      "id": "rome-transit-24h",
+      "name": "로마 교통 24시간권",
+      "city": "rome",
+      "currency": "EUR",
+      "price": 8.5,
+      "priceVariants": [
+        {
+          "label": "성인 1인",
+          "price": 8.5
+        }
+      ],
+      "validity": "첫 검표부터 24시간",
+      "validHours": 24,
+      "coverage": "로마 시내 대상 버스·트램·메트로·도시구간 철도",
+      "exclusions": "관광명소 입장료와 Leonardo Express 등 피우미치노 공항 특별연결 제외.",
+      "includedPoiIds": [],
+      "officialUrl": "https://www.atac.roma.it/biglietti-e-abbonamenti/biglietti",
+      "checkedAt": "2026-10-08",
+      "cancellation": "판매처와 선택 상품의 환불 조건 구매 전 확인.",
+      "eligiblePredicate": "검증된 로마 시내 대상 구간에만 적용. 사용시간 범위와 중복 패스 제외.",
+      "benefitNote": "메트로를 한 번 이용할 때 BIT €1.50. 단순 횟수 비교만으로 여러 날 패스 자동 최적화 금지."
+    },
+    {
+      "id": "rome-transit-48h",
+      "name": "로마 교통 48시간권",
+      "city": "rome",
+      "currency": "EUR",
+      "price": 15,
+      "priceVariants": [
+        {
+          "label": "성인 1인",
+          "price": 15
+        }
+      ],
+      "validity": "첫 검표부터 48시간",
+      "validHours": 48,
+      "coverage": "로마 시내 대상 버스·트램·메트로·도시구간 철도",
+      "exclusions": "관광명소 입장료와 Leonardo Express 등 피우미치노 공항 특별연결 제외.",
+      "includedPoiIds": [],
+      "officialUrl": "https://www.atac.roma.it/biglietti-e-abbonamenti/biglietti",
+      "checkedAt": "2026-10-08",
+      "cancellation": "판매처와 선택 상품의 환불 조건 구매 전 확인.",
+      "eligiblePredicate": "검증된 로마 시내 대상 구간에만 적용. 사용시간 범위와 중복 패스 제외.",
+      "benefitNote": "메트로를 한 번 이용할 때 BIT €1.50. 단순 횟수 비교만으로 여러 날 패스 자동 최적화 금지."
+    },
+    {
+      "id": "rome-transit-72h",
+      "name": "로마 교통 72시간권",
+      "city": "rome",
+      "currency": "EUR",
+      "price": 22,
+      "priceVariants": [
+        {
+          "label": "성인 1인",
+          "price": 22
+        }
+      ],
+      "validity": "첫 검표부터 72시간",
+      "validHours": 72,
+      "coverage": "로마 시내 대상 버스·트램·메트로·도시구간 철도",
+      "exclusions": "관광명소 입장료와 Leonardo Express 등 피우미치노 공항 특별연결 제외.",
+      "includedPoiIds": [],
+      "officialUrl": "https://www.atac.roma.it/biglietti-e-abbonamenti/biglietti",
+      "checkedAt": "2026-10-08",
+      "cancellation": "판매처와 선택 상품의 환불 조건 구매 전 확인.",
+      "eligiblePredicate": "검증된 로마 시내 대상 구간에만 적용. 사용시간 범위와 중복 패스 제외.",
+      "benefitNote": "메트로를 한 번 이용할 때 BIT €1.50. 단순 횟수 비교만으로 여러 날 패스 자동 최적화 금지."
+    },
+    {
+      "id": "roma-pass-48h",
+      "name": "로마 패스 48시간",
+      "city": "rome",
+      "currency": "EUR",
+      "price": 38,
+      "validity": "첫 활성화부터 48시간",
+      "validHours": 48,
+      "coverage": "대상 대중교통 + 참여 명소 첫 1곳 무료, 이후 할인",
+      "exclusions": "바티칸 박물관·시스티나 성당 무료입장 및 공항특급 미포함. 특별행사·일부 예약비 별도.",
+      "includedPoiIds": [],
+      "conditionalBenefits": [
+        {
+          "poiId": "rome-colosseum",
+          "condition": "참여 명소 첫 1회 무료 한도 내 사용 + 별도 시간예약 완료",
+          "defaultSavingsEUR": 0
+        }
+      ],
+      "officialUrl": "https://www.turismoroma.it/en/page/roma-pass",
+      "benefitSource": "https://old.romapass.it/en/FAQ/",
+      "checkedAt": "2026-10-08",
+      "cancellation": "일반 청약철회가 적용되지 않는 여가상품 규정. 구매 화면 환불 약관 확인.",
+      "autoCompare": false,
+      "benefitNote": "명소 방문순서·무료 횟수·예약료를 구현하지 않으면 절감액 자동 산출 금지.",
+      "eligiblePredicate": "유효시간·실제 노선·최초 무료명소 횟수·예약조건 확인 필수."
+    },
+    {
+      "id": "roma-pass-72h",
+      "name": "로마 패스 72시간",
+      "city": "rome",
+      "currency": "EUR",
+      "price": 62.9,
+      "validity": "첫 활성화부터 72시간",
+      "validHours": 72,
+      "coverage": "대상 대중교통 + 참여 명소 첫 2곳 무료, 이후 할인",
+      "exclusions": "바티칸 박물관·시스티나 성당 무료입장 및 공항특급 미포함. 특별행사·일부 예약비 별도.",
+      "includedPoiIds": [],
+      "conditionalBenefits": [
+        {
+          "poiId": "rome-colosseum",
+          "condition": "참여 명소 첫 2회 무료 한도 내 사용 + 별도 시간예약 완료",
+          "defaultSavingsEUR": 0
+        }
+      ],
+      "officialUrl": "https://www.turismoroma.it/en/page/roma-pass",
+      "benefitSource": "https://old.romapass.it/en/FAQ/",
+      "checkedAt": "2026-10-08",
+      "cancellation": "일반 청약철회가 적용되지 않는 여가상품 규정. 구매 화면 환불 약관 확인.",
+      "autoCompare": false,
+      "benefitNote": "명소 방문순서·무료 횟수·예약료를 구현하지 않으면 절감액 자동 산출 금지.",
+      "eligiblePredicate": "유효시간·실제 노선·최초 무료명소 횟수·예약조건 확인 필수."
+    }
+  ],
+  "catalogTickets": [
+    {
+      "poiId": "rome-colosseum",
+      "officialUrl": "https://ticketing.colosseo.it",
+      "klookUrl": null,
+      "officialPrice": 18,
+      "klookPrice": null,
+      "currency": "EUR",
+      "checkedAt": "2026-10-08",
+      "priceScope": "성인 일반 24h Colosseum, Roman Forum, Palatine 1인. 아레나·지하 제외.",
+      "cancellation": "구매 화면 선택 상품 환불 조건 확인",
+      "priceSource": "https://colosseo.it/en/tickets/colosseum-roman-forum-palatine/"
+    },
+    {
+      "poiId": "rome-vatican-museums",
+      "officialUrl": "https://tickets.museivaticani.va/home",
+      "klookUrl": null,
+      "officialPrice": 25,
+      "klookPrice": null,
+      "currency": "EUR",
+      "checkedAt": "2026-10-08",
+      "priceScope": "성인 일반 €20 + 공식 온라인 시간예약비 €5. 1인.",
+      "cancellation": "환불 불가",
+      "priceSource": "https://www.museivaticani.va/content/museivaticani/en/organizza-visita/tariffe-e-biglietti.html"
+    },
+    {
+      "poiId": "rome-pantheon",
+      "officialUrl": "https://portale.museiitaliani.it/b2c/buyTicketless/33f77159-0acd-40c4-8524-701f33aae108",
+      "klookUrl": null,
+      "officialPrice": 7,
+      "klookPrice": null,
+      "currency": "EUR",
+      "checkedAt": "2026-10-08",
+      "priceScope": "성인 일반 1인. 2026-07-01부터 €7.",
+      "cancellation": "구매 화면 선택 상품 환불 조건 확인",
+      "priceSource": "https://direzionemuseiroma.cultura.gov.it/en/pantheon/"
+    },
+    {
+      "poiId": "rome-trevi-fountain",
+      "officialUrl": "https://fontanaditrevi.vivaticket.it",
+      "klookUrl": null,
+      "officialPrice": 2,
+      "klookPrice": null,
+      "currency": "EUR",
+      "checkedAt": "2026-10-08",
+      "priceScope": "비거주 방문객 1인, 분수 안쪽 근접구역. 외곽 광장 관람은 무료.",
+      "cancellation": "환불 불가",
+      "priceSource": "https://fontanaditrevi.roma.it/en"
+    },
+    {
+      "poiId": "osaka-castle",
+      "officialUrl": "https://osaka-info.jp/en/spot/osaka-castle-main-keep/",
+      "klookUrl": "https://www.klook.com/activity/30110-osaka-castle-ticket/",
+      "officialPrice": 1200,
+      "klookPrice": null,
+      "currency": "JPY",
+      "checkedAt": "2026-10-08",
+      "priceScope": "성인 일반 천수각 관람",
+      "cancellation": "공식/클룩 선택 옵션별 환불조건 구매 전 확인",
+      "notes": "실제 상품 페이지 직접 열기 확인. 천수각·정원·패스 결합 상품 옵션이 달라 선택한 항목의 포함 범위를 확인.",
+      "officialLinkType": "관광청 공식 안내(구매 링크 연결)",
+      "klookVerifiedDirectProductPage": true
+    },
+    {
+      "poiId": "umeda-sky",
+      "officialUrl": "https://osaka-info.jp/en/spot/umeda-sky-building/",
+      "klookUrl": "https://www.klook.com/activity/35861-umeda-sky-building-kuchu-teien-observatory-ticket/",
+      "officialPrice": 2000,
+      "klookPrice": null,
+      "currency": "JPY",
+      "checkedAt": "2026-10-08",
+      "priceScope": "중학생 이상 일반 전망대 관람",
+      "cancellation": "공식/클룩 선택 옵션별 환불조건 구매 전 확인",
+      "notes": "실제 상품 페이지 직접 열기 확인. 일반 입장·우선 입장·식사·교통 결합 옵션이 있으므로 선택한 상품을 확인.",
+      "officialLinkType": "관광청 공식 안내(구매 링크 연결)",
+      "klookVerifiedDirectProductPage": true
+    }
+  ],
+  "sources": [
+    {
+      "url": "https://anticofornoroscioli.it/",
+      "checkedAt": "2026-10-08",
+      "status": "official_public_source",
+      "note": "일부 구매 링크는 공식 페이지의 연결 대상을 검증했으며 재고는 조회하지 않음."
+    },
+    {
+      "url": "https://armandoalpantheon.it/",
+      "checkedAt": "2026-10-08",
+      "status": "official_public_source",
+      "note": "일부 구매 링크는 공식 페이지의 연결 대상을 검증했으며 재고는 조회하지 않음."
+    },
+    {
+      "url": "https://colosseo.it/en/tickets/colosseum-roman-forum-palatine/",
+      "checkedAt": "2026-10-08",
+      "status": "official_public_source",
+      "note": "일부 구매 링크는 공식 페이지의 연결 대상을 검증했으며 재고는 조회하지 않음."
+    },
+    {
+      "url": "https://direzionemuseiroma.cultura.gov.it/en/pantheon/",
+      "checkedAt": "2026-10-08",
+      "status": "official_search_index_crosscheck",
+      "note": "직접 페이지 로드 시간초과. 문화부 현재 페이지 및 2026-07 요금변경 공지 검색본문 교차확인."
+    },
+    {
+      "url": "https://direzionemuseiroma.cultura.gov.it/modifica-importo-del-titolo-di-accesso-al-pantheon-basilica-di-santa-maria-ad-martyres-dal-1-luglio-2026/",
+      "checkedAt": "2026-10-08",
+      "status": "official_search_index_crosscheck",
+      "note": "직접 페이지 로드 시간초과. 문화부 현재 페이지 및 2026-07 요금변경 공지 검색본문 교차확인."
+    },
+    {
+      "url": "https://fontanaditrevi.roma.it/en",
+      "checkedAt": "2026-10-08",
+      "status": "official_public_source",
+      "note": "일부 구매 링크는 공식 페이지의 연결 대상을 검증했으며 재고는 조회하지 않음."
+    },
+    {
+      "url": "https://fontanaditrevi.vivaticket.it",
+      "checkedAt": "2026-10-08",
+      "status": "official_public_source",
+      "note": "일부 구매 링크는 공식 페이지의 연결 대상을 검증했으며 재고는 조회하지 않음."
+    },
+    {
+      "url": "https://inari.jp/en/access/",
+      "checkedAt": "2026-10-08",
+      "status": "official_public_source",
+      "note": "일부 구매 링크는 공식 페이지의 연결 대상을 검증했으며 재고는 조회하지 않음."
+    },
+    {
+      "url": "https://kyoto.travel/en/information-center/",
+      "checkedAt": "2026-10-08",
+      "status": "official_public_source",
+      "note": "일부 구매 링크는 공식 페이지의 연결 대상을 검증했으며 재고는 조회하지 않음."
+    },
+    {
+      "url": "https://kyoto.travel/en/travel-inspiration/taking-the-limited-express-bus-from-kyoto-station-to-kiyomizudera-temple/",
+      "checkedAt": "2026-10-08",
+      "status": "official_public_source",
+      "note": "일부 구매 링크는 공식 페이지의 연결 대상을 검증했으며 재고는 조회하지 않음."
+    },
+    {
+      "url": "https://old.romapass.it/en/FAQ/",
+      "checkedAt": "2026-10-08",
+      "status": "official_public_source",
+      "note": "일부 구매 링크는 공식 페이지의 연결 대상을 검증했으며 재고는 조회하지 않음."
+    },
+    {
+      "url": "https://osaka-info.jp/en/spot/post_20/",
+      "checkedAt": "2026-10-08",
+      "status": "official_public_source",
+      "note": "일부 구매 링크는 공식 페이지의 연결 대상을 검증했으며 재고는 조회하지 않음."
+    },
+    {
+      "url": "https://osaka-info.jp/en/spot/tourist-information-osaka/",
+      "checkedAt": "2026-10-08",
+      "status": "official_public_source",
+      "note": "일부 구매 링크는 공식 페이지의 연결 대상을 검증했으며 재고는 조회하지 않음."
+    },
+    {
+      "url": "https://osaka-info.jp/en/spot/umeda-sky-building/",
+      "checkedAt": "2026-10-08",
+      "status": "official_public_source",
+      "note": "일부 구매 링크는 공식 페이지의 연결 대상을 검증했으며 재고는 조회하지 않음."
+    },
+    {
+      "url": "https://portale.museiitaliani.it/b2c/buyTicketless/33f77159-0acd-40c4-8524-701f33aae108",
+      "checkedAt": "2026-10-08",
+      "status": "official_public_source",
+      "note": "일부 구매 링크는 공식 페이지의 연결 대상을 검증했으며 재고는 조회하지 않음."
+    },
+    {
+      "url": "https://subway.osakametro.co.jp/guide/page/noritsugi_point_service/osakapoint_guidebook_20251101.pdf",
+      "checkedAt": "2026-10-08",
+      "status": "official_public_source",
+      "note": "일부 구매 링크는 공식 페이지의 연결 대상을 검증했으며 재고는 조회하지 않음."
+    },
+    {
+      "url": "https://subway.osakametro.co.jp/guide/page/osakametro_routemap_d/routemap_2025.pdf",
+      "checkedAt": "2026-10-08",
+      "status": "official_public_source",
+      "note": "일부 구매 링크는 공식 페이지의 연결 대상을 검증했으며 재고는 조회하지 않음."
+    },
+    {
+      "url": "https://subway.osakametro.co.jp/station_guide/library/joukouichi/m_minohkayano.pdf",
+      "checkedAt": "2026-10-08",
+      "status": "official_public_source",
+      "note": "일부 구매 링크는 공식 페이지의 연결 대상을 검증했으며 재고는 조회하지 않음."
+    },
+    {
+      "url": "https://ticketing.colosseo.it",
+      "checkedAt": "2026-10-08",
+      "status": "official_public_source",
+      "note": "일부 구매 링크는 공식 페이지의 연결 대상을 검증했으며 재고는 조회하지 않음."
+    },
+    {
+      "url": "https://tickets.museivaticani.va/home",
+      "checkedAt": "2026-10-08",
+      "status": "official_public_source",
+      "note": "일부 구매 링크는 공식 페이지의 연결 대상을 검증했으며 재고는 조회하지 않음."
+    },
+    {
+      "url": "https://turismoroma.it/en/node/130342",
+      "checkedAt": "2026-10-08",
+      "status": "official_public_source",
+      "note": "일부 구매 링크는 공식 페이지의 연결 대상을 검증했으며 재고는 조회하지 않음."
+    },
+    {
+      "url": "https://turismoroma.it/en/node/1722",
+      "checkedAt": "2026-10-08",
+      "status": "official_public_source",
+      "note": "일부 구매 링크는 공식 페이지의 연결 대상을 검증했으며 재고는 조회하지 않음."
+    },
+    {
+      "url": "https://turismoroma.it/en/places/flavian-amphitheatre-colosseum",
+      "checkedAt": "2026-10-08",
+      "status": "official_public_source",
+      "note": "일부 구매 링크는 공식 페이지의 연결 대상을 검증했으며 재고는 조회하지 않음."
+    },
+    {
+      "url": "https://www.atac.roma.it/biglietti-e-abbonamenti/biglietti",
+      "checkedAt": "2026-10-08",
+      "status": "official_public_source",
+      "note": "일부 구매 링크는 공식 페이지의 연결 대상을 검증했으며 재고는 조회하지 않음."
+    },
+    {
+      "url": "https://www.atac.roma.it/docs/default-source/mappe-tpl/mappa-metro-e-ferrovie-metropolitane.pdf?sfvrsn=e1e83890_23",
+      "checkedAt": "2026-10-08",
+      "status": "official_public_source",
+      "note": "일부 구매 링크는 공식 페이지의 연결 대상을 검증했으며 재고는 조회하지 않음."
+    },
+    {
+      "url": "https://www.atac.roma.it/docs/default-source/mappe-tpl/mappa-metropolitana-linea-b-b1.pdf?sfvrsn=51dc073c_4",
+      "checkedAt": "2026-10-08",
+      "status": "official_public_source",
+      "note": "일부 구매 링크는 공식 페이지의 연결 대상을 검증했으며 재고는 조회하지 않음."
+    },
+    {
+      "url": "https://www.atac.roma.it/en/tickets-and-passes/bit",
+      "checkedAt": "2026-10-08",
+      "status": "official_public_source",
+      "note": "일부 구매 링크는 공식 페이지의 연결 대상을 검증했으며 재고는 조회하지 않음."
+    },
+    {
+      "url": "https://www.babingtons.com/",
+      "checkedAt": "2026-10-08",
+      "status": "official_public_source",
+      "note": "일부 구매 링크는 공식 페이지의 연결 대상을 검증했으며 재고는 조회하지 않음."
+    },
+    {
+      "url": "https://www.museivaticani.va/content/museivaticani/en/info/come-raggiungerci.html",
+      "checkedAt": "2026-10-08",
+      "status": "official_public_source",
+      "note": "일부 구매 링크는 공식 페이지의 연결 대상을 검증했으며 재고는 조회하지 않음."
+    },
+    {
+      "url": "https://www.museivaticani.va/content/museivaticani/en/info/orari-musei-vaticani.html",
+      "checkedAt": "2026-10-08",
+      "status": "official_public_source",
+      "note": "일부 구매 링크는 공식 페이지의 연결 대상을 검증했으며 재고는 조회하지 않음."
+    },
+    {
+      "url": "https://www.museivaticani.va/content/museivaticani/en/organizza-visita/tariffe-e-biglietti.html",
+      "checkedAt": "2026-10-08",
+      "status": "official_public_source",
+      "note": "일부 구매 링크는 공식 페이지의 연결 대상을 검증했으며 재고는 조회하지 않음."
+    },
+    {
+      "url": "https://www.turismoroma.it/en/page/roma-pass",
+      "checkedAt": "2026-10-08",
+      "status": "official_public_source",
+      "note": "일부 구매 링크는 공식 페이지의 연결 대상을 검증했으며 재고는 조회하지 않음."
+    },
+    {
+      "url": "https://www.turismoroma.it/en/places/navona-square",
+      "checkedAt": "2026-10-08",
+      "status": "official_public_source",
+      "note": "일부 구매 링크는 공식 페이지의 연결 대상을 검증했으며 재고는 조회하지 않음."
+    },
+    {
+      "url": "https://www.turismoroma.it/en/places/pantheon",
+      "checkedAt": "2026-10-08",
+      "status": "official_public_source",
+      "note": "일부 구매 링크는 공식 페이지의 연결 대상을 검증했으며 재고는 조회하지 않음."
+    },
+    {
+      "url": "https://www.turismoroma.it/en/places/trevi-fountain",
+      "checkedAt": "2026-10-08",
+      "status": "official_public_source",
+      "note": "일부 구매 링크는 공식 페이지의 연결 대상을 검증했으며 재고는 조회하지 않음."
+    },
+    {
+      "url": "https://www.turismoroma.it/en/places/vatican-museums-and-sistine-chapel",
+      "checkedAt": "2026-10-08",
+      "status": "official_public_source",
+      "note": "일부 구매 링크는 공식 페이지의 연결 대상을 검증했으며 재고는 조회하지 않음."
+    },
+    {
+      "url": "https://www.turismoroma.it/it/accoglienza/armando-al-pantheon",
+      "checkedAt": "2026-10-08",
+      "status": "official_public_source",
+      "note": "일부 구매 링크는 공식 페이지의 연결 대상을 검증했으며 재고는 조회하지 않음."
+    },
+    {
+      "url": "https://www.turismoroma.it/it/luoghi/aree-tourist-information-termini",
+      "checkedAt": "2026-10-08",
+      "status": "official_public_source",
+      "note": "일부 구매 링크는 공식 페이지의 연결 대상을 검증했으며 재고는 조회하지 않음."
+    },
+    {
+      "url": "https://www.turismoroma.it/it/luoghi/sala-da-babington",
+      "checkedAt": "2026-10-08",
+      "status": "official_public_source",
+      "note": "일부 구매 링크는 공식 페이지의 연결 대상을 검증했으며 재고는 조회하지 않음."
+    },
+    {
+      "url": "https://www2.city.kyoto.lg.jp/kotsu/webguide/en/fare/fare_bus.html",
+      "checkedAt": "2026-10-08",
+      "status": "official_public_source",
+      "note": "일부 구매 링크는 공식 페이지의 연결 대상을 검증했으며 재고는 조회하지 않음."
+    },
+    {
+      "url": "https://www.mizuno-osaka.com/sp/shopinfo.html",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source"
+    },
+    {
+      "url": "https://www.mizuno-osaka.com/sp/global_2.html",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source"
+    },
+    {
+      "url": "https://www.mizuno-osaka.com/sp/shopinfo.html",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source"
+    },
+    {
+      "url": "https://douraku.co.jp/kansai/honten/",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source"
+    },
+    {
+      "url": "https://douraku.co.jp/company/network.html",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source"
+    },
+    {
+      "url": "https://www.kushikatu-daruma.com/location/lucua",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source"
+    },
+    {
+      "url": "https://www.kushikatu-daruma.com/location/lucua",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source"
+    },
+    {
+      "url": "https://www.kushikatu-daruma.com/location/lucua",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source"
+    },
+    {
+      "url": "https://www.honke-daiichiasahi.com/shop.html",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source"
+    },
+    {
+      "url": "https://www.honke-daiichiasahi.com/shop.html",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source"
+    },
+    {
+      "url": "https://www.honke-daiichiasahi.com/shop.html",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source"
+    },
+    {
+      "url": "https://www.okabeya.com/",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source"
+    },
+    {
+      "url": "https://www.okabeya.com/",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source"
+    },
+    {
+      "url": "https://www.okabeya.com/menu/yudoufu.html",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source"
+    },
+    {
+      "url": "https://tokichi.pro/pages/kyoto-station-store-page",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source"
+    },
+    {
+      "url": "https://tokichi.pro/pages/kyoto-station-store-page",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source"
+    },
+    {
+      "url": "https://tokichi.pro/pages/stores",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source"
+    },
+    {
+      "url": "https://tokichi.pro/blogs/menu/kyoto_sta",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source"
+    },
+    {
+      "url": "https://www.klook.com/activity/82312-amazing-pass-osaka/",
+      "checkedAt": "2026-10-08",
+      "status": "opened_direct_product_page"
+    },
+    {
+      "url": "https://www.klook.com/activity/30110-osaka-castle-ticket/",
+      "checkedAt": "2026-10-08",
+      "status": "opened_direct_product_page"
+    },
+    {
+      "url": "https://www.klook.com/activity/35861-umeda-sky-building-kuchu-teien-observatory-ticket/",
+      "checkedAt": "2026-10-08",
+      "status": "opened_direct_product_page"
+    },
+    {
+      "url": "https://osaka-info.jp/en/spot/dotonbori/",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source"
+    },
+    {
+      "url": "https://osaka-info.jp/en/spot/umeda-sky-building/",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source"
+    },
+    {
+      "url": "https://subway.osakametro.co.jp/guide/page/noritsugi_point_service/osakapoint_guidebook_20251101.pdf",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source"
+    },
+    {
+      "url": "https://subway.osakametro.co.jp/guide/page/osakametro_routemap_d/routemap_2025.pdf",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source"
+    },
+    {
+      "url": "https://www.atac.roma.it/docs/default-source/mappe-tpl/mappa-metro-e-ferrovie-metropolitane.pdf?sfvrsn=e1e83890_23",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source"
+    },
+    {
+      "url": "https://www.atac.roma.it/docs/default-source/mappe-tpl/mappa-metropolitana-linea-b-b1.pdf?sfvrsn=51dc073c_4",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source"
+    },
+    {
+      "url": "https://www.atac.roma.it/en/tickets-and-passes/bit",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source"
+    },
+    {
+      "url": "https://www.museivaticani.va/content/museivaticani/en/info/come-raggiungerci.html",
+      "checkedAt": "2026-10-08",
+      "status": "opened_official_source"
+    }
+  ],
+  "calculationRules": [
+    "모든 비용은 성인 1인 기준. JPY/EUR를 환율 없이 더하지 않음.",
+    "null 가격은 미확정: 무료 처리하지 말고 미포함 비용으로 표시.",
+    "숙소→기준역 이동은 사용자가 확인해야 하며 기준점 선택만으로 호텔 문전 길찾기가 되지 않음.",
+    "curated 이동경로는 대표 예시이며 실시간 최단/최적 경로가 아님. 모든 전체 이동시간은 예상으로 표시.",
+    "일반 승차권은 실제 개찰/환승규칙대로 계산. BIT 100분 내 버스환승과 메트로 단일여정 제한을 구분.",
+    "식비·숙박·공항접근·예약추가비·미확정운임을 총비용에 숨기지 않음.",
+    "패스는 실제 적용대상 구간·유효시간·시설 포함범위 확인 후 한 번만 차감.",
+    "일요일 휴관·특별휴관을 여행일 기준 적용. 지난 날짜 예시는 과거 가격을 현재가격으로 확정하지 않음."
+  ],
+  "transportReferenceExamples": [
+    {
+      "name": "로마 개별 BIT 6회와 24h권",
+      "currency": "EUR",
+      "individual": 9,
+      "pass": 8.5,
+      "difference": 0.5,
+      "assumptions": "24시간 이내 각각 새 BIT가 필요한 여정 6회. 같은 BIT 재사용·환승 가능성 배제한 비교 예시. 명소입장 별도."
+    }
+  ],
+  "klookLinks": [
+    {
+      "id": "osaka-amazing-pass",
+      "name": "오사카 주유패스",
+      "url": "https://www.klook.com/activity/82312-amazing-pass-osaka/",
+      "provider": "Klook",
+      "verifiedDirectProductPage": true,
+      "checkedAt": "2026-10-08",
+      "notes": "실제 상품 페이지 직접 열기 확인. 1일권·2일권·공항 결합권 등이 있으므로 상품 옵션을 확인. 가격은 통화·날짜·옵션별로 달라 고정하지 않음."
+    },
+    {
+      "id": "osaka-castle",
+      "name": "오사카성 입장권",
+      "url": "https://www.klook.com/activity/30110-osaka-castle-ticket/",
+      "provider": "Klook",
+      "verifiedDirectProductPage": true,
+      "checkedAt": "2026-10-08",
+      "notes": "실제 상품 페이지 직접 열기 확인. 천수각·정원·패스 결합 상품 옵션이 달라 선택한 항목의 포함 범위를 확인."
+    },
+    {
+      "id": "umeda-sky-building",
+      "name": "우메다 스카이빌딩 공중정원 전망대",
+      "url": "https://www.klook.com/activity/35861-umeda-sky-building-kuchu-teien-observatory-ticket/",
+      "provider": "Klook",
+      "verifiedDirectProductPage": true,
+      "checkedAt": "2026-10-08",
+      "notes": "실제 상품 페이지 직접 열기 확인. 일반 입장·우선 입장·식사·교통 결합 옵션이 있으므로 선택한 상품을 확인."
+    }
+  ],
+  "catalogPasses": [
+    {
+      "passId": "osaka-amazing-1day",
+      "officialUrl": "https://osaka-amazing-pass.com/en/howto_about_1day.html",
+      "klookUrl": "https://www.klook.com/activity/82312-amazing-pass-osaka/",
+      "officialPrice": 3500,
+      "klookPrice": null,
+      "currency": "JPY",
+      "checkedAt": "2026-10-08",
+      "priceScope": "일반 1일권 1인. 2일권·공항판 다른 상품.",
+      "notes": "실제 상품 페이지 직접 열기 확인. 1일권·2일권·공항 결합권 등이 있으므로 상품 옵션을 확인. 가격은 통화·날짜·옵션별로 달라 고정하지 않음."
+    }
+  ]
+}

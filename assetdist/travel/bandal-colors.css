@@ -1,0 +1,41 @@
+/* BANDAL violet-night presentation. Layout and native-date safeguards stay in pastel.css. */
+:root{color-scheme:dark;--bg:#0c0813;--paper:#120e1a;--ink:#f7f4fb;--muted:#b5a8c4;--line:#c5afd52e;--accent:#c9b5ef;--soft:#2a1e3c;--lavender:#23182f;--peach:#2b201a}
+body{background:var(--bg);color:var(--ink)}
+a,.text-button,.inline-links a,.ticket-inline{color:var(--accent)}
+::selection{background:var(--accent);color:#160d22}
+button:focus-visible,a:focus-visible,summary:focus-visible,input:focus-visible,select:focus-visible{outline-color:var(--accent)}
+.topbar{background:#0c0813ed;border-color:#c5afd51f}.topbar.scrolled{background:#0c0813fa;border-color:var(--line)}
+.brand{color:var(--ink);letter-spacing:2px}.brand-mark{background:#5b58d6}.product-name{border-color:#c5afd540}.scroll-progress{background:var(--accent)}
+h1,h2,h3{font-weight:600;letter-spacing:-.045em}.eyebrow,.edition{color:#cfc2df;font-weight:400}.edition span{background:#21172d;color:var(--muted)}
+.button{border-radius:3px;font-weight:500}.primary{background:#c9b5ef;color:#160d22;border-color:#c9b5ef}.primary:hover{background:#dcccf8;border-color:#dcccf8}.secondary{background:transparent;border-color:#d3c2e980;color:#f7f4fb}.secondary:hover{background:#251b34;border-color:#d3c2e9}
+.skip-link{background:var(--ink);color:var(--bg)}
+label,legend,.pass-details b,.advanced-options>summary{color:#e1d9eb}
+input:not([type=checkbox]):not([type=radio]),select{background:#17111f;color:var(--ink);border-color:#80718e}
+input::placeholder{color:#ad9fba}input[type=checkbox],input[type=radio]{accent-color:#c9b5ef}
+.city-suggestions,.city-suggestion,.advanced-options,.search-result,.summary-strip,.place-card,.origin-card,.pass-card,.ticket-compare-card,.source-list,dialog,.empty-day{background:var(--paper);border-color:var(--line)}
+.city-suggestion:hover,.city-suggestion.active,.search-result:hover{background:#2a1e3c}.city-suggestions{box-shadow:0 15px 35px #0008}
+.selected-place,.segmented,.card-chips span,.pass-match,.flight-provider{background:#1b1425;border-color:var(--line)}
+.segmented input:checked+span{background:#362545;color:#f7f4fb;box-shadow:none}.segmented span,.interests span{color:var(--muted)}
+.segmented input:focus-visible+span,.interests input:focus-visible+span{outline-color:var(--accent)}
+.interests span{border-color:#80718e}.interests input:checked+span{background:#342642;border-color:#b497d6;color:#e6d8f7}
+.tabs{border-color:var(--line)}.tabs button.active{color:#e0cdf7}.tabs button.active:after{background:var(--accent)}
+.day-tab{background:var(--paper);border-color:#80718e;color:#c2b5d1}.day-tab.active{background:#37254b;border-color:#a68bc9;color:#f3e9ff}
+.day-navigation>.button{background:#21172e;color:#e1cff8;border-color:#806792}
+.day-cost-card{background:#21172e;border-color:#806792}.day-cost-card>summary b{color:#e1cff8}.day-cost-card>summary span,.day-cost-card p{color:#c5b4d9}
+.place-index,.origin-symbol{background:#332643;color:#decaf5}.card-chips .required-chip{background:#35291e;color:#e8c59c}
+.stop-controls button{background:#241a31;border-color:#80718e;color:#e8dff1}
+.transit-row{background:#161824;border-color:#687285}.transit-symbol{background:#2b3045;color:#d4dcee}.verification-tag{border-color:#758099}
+.meal-compact{background:#171e1b;border-color:#53685f}.meal-compact .place-index,.meal-compact .card-chips span{background:#263a2f;color:#c7dccd}.meal-card select{background:#17231c;border-color:#708478}
+.rec button{background:#29213a;border-color:#80718e;color:#e2d4f3}
+.notice{background:#171c2a;border-color:#6b7995;color:#cfdaee}.warning,.unlocated{background:#2b2119;border-color:#9b805b;color:#ead0aa}.error{background:#321b23;border-color:#b17d8c;color:#f5cad5}.unlocated p{color:#dcc5a8}
+.cost-comparison{background:#18251f;border-color:#738e80}.cost-comparison small,.cost-comparison p{color:#c5dbcd}
+.flight-criteria{background:#221a2f;border-color:#806792;color:#decef0}.flight-provider{background:#17111f}
+.destination-image{background:#211a2c}.destination-image img{filter:brightness(.65) saturate(.6)}.destination-image:after{background:linear-gradient(transparent,#10091fcc)}
+dialog::backdrop{background:#07050dd6}#toast{background:#d3c1ec;color:#160d22;box-shadow:0 8px 24px #0005}
+/* All compact explanatory labels remain legible against the night surfaces. */
+.field-help,.small-tag,.privacy-line,.product-name,.intro p,.empty-body p,.simple-notice,.result-heading p,.day-heading p,.stat span,.stat small,.place-card>summary p,.time-rail>span,.source-list p,.source-list summary,.check-grid p,.flight-input p,.flight-provider p,.flight-provider small,.flight-trip-summary small,.photo-credit,.map-caption,.route-external p,.timeline-disclaimer,.discovery-card p,.discovery-location,.pass-card p,.pass-details span,.pass-price small,.ticket-compare-card p,.ticket-price-grid span,.ticket-price-grid small,.rec p,.rec-bottom span,.selected-place small,.detail-caret,.map-place-list>summary,.source-row,.stop-description,.stop-meta,.ticket-inline small,.break-item,.origin-card small,.hotel-access,.section-lead p,.rank-number,.discovery-meta,.pass-city,.pass-match,.flight-date-options summary,.flight-date-options summary small,footer,dialog p,.empty-day{color:var(--muted)}
+.photo-credit{color:var(--muted)!important}.card-chips span,.tabs button{color:#c2b5d1}.time-rail strong{color:#d7c6ec}.place-card>summary:after,.advanced-options>summary>span:before,.add-symbol,.search-wrap>span{color:#bda1da}
+.transit-row>summary,.transit-row>summary strong,.transit-row .detail-caret,.leg-heading>span,.leg-meta,.journey-leg p,.journey-leg ol,.leg-passes{color:#becbe3}
+.meal-compact .card-chips span,.meal-card p,.meal-card .field-help,.meal-card label,.meal-price{color:#c1d6c9}
+/* The third-party basemap stays unfiltered. Its controls/credits use their own light surface. */
+#routeMap{background:#dce3e6;color-scheme:light}.leaflet-control-attribution{background:#fffffff2!important;color:#344655!important}.leaflet-control-attribution a{color:#235875!important}.leaflet-bar{border-color:#566372!important}.leaflet-bar a{background:#fff!important;color:#263c4d!important}.leaflet-bar a:hover{background:#edf1f4!important}.leaflet-popup-content{color:#273c47}.leaflet-popup-content-wrapper,.leaflet-popup-tip{background:#fff}.leaflet-popup-close-button{color:#334655!important}.visit-pin>span{background:#68539a;color:#fff;border-color:#fff}.visit-pin.meal-pin>span{background:#426b53}

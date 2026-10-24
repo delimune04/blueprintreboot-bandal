@@ -1,7 +1,7 @@
 #!/bin/sh
 # Fail closed: this personal fork must never push into the shared upstream.
 case "$2" in
-  https://github.com/delimune04/blueprintreboot-bandal.git|git@github.com:delimune04/blueprintreboot-bandal.git|ssh://git@github.com/delimune04/blueprintreboot-bandal.git)
+  https://github.com/delimune04/blueprintreboot-bandal|https://github.com/delimune04/blueprintreboot-bandal.git|git@github.com:delimune04/blueprintreboot-bandal.git|ssh://git@github.com/delimune04/blueprintreboot-bandal.git)
     exit 0
     ;;
   *)

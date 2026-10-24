@@ -54,7 +54,7 @@ test("source inference preserves recorded PDF URLs and explains which arXiv PDF 
 function downloader({ response, onFetch, clickError } = {}) {
   const sourceCalls = [], fetchCalls = [], blobs = [], timers = [], revoked = [], anchors = [];
   const sourceUrl = "blob:managed-original";
-  const module = { exports: {} };
+  const loaded = { exports: {} };
   const output = ts.transpileModule(readFileSync(new URL("../app/lib/workspace/pdf-access.mjs", import.meta.url), "utf8"), { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 } }).outputText;
   const localRequire = name => name === "../api/client" ? { paperPdfUrl: id => { sourceCalls.push(id); return sourceUrl; } } : require(new URL(`../app/lib/workspace/${name}`, import.meta.url).pathname);
   const document = { body: { appendChild(anchor) { anchor.appended = true; } }, createElement(tag) { assert.equal(tag, "a"); const anchor = { click() { this.clicked = true; if (clickError) throw clickError; }, remove() { this.removed = true; } }; anchors.push(anchor); return anchor; } };
@@ -63,8 +63,8 @@ function downloader({ response, onFetch, clickError } = {}) {
     static revokeObjectURL(url) { revoked.push(url); }
   }
   const fetch = async (url, options) => { fetchCalls.push({ url, options }); onFetch?.(url, options); return response || new Response("%PDF-1.7\nactual bytes\n%%EOF", { headers: { "Content-Type": "application/pdf" } }); };
-  new Function("require", "module", "exports", "fetch", "document", "URL", "setTimeout", output)(localRequire, module, module.exports, fetch, document, BlobURL, callback => { timers.push(callback); });
-  return { download: module.exports.downloadManagedPdf, sourceCalls, fetchCalls, blobs, timers, revoked, anchors };
+  new Function("require", "module", "exports", "fetch", "document", "URL", "setTimeout", output)(localRequire, loaded, loaded.exports, fetch, document, BlobURL, callback => { timers.push(callback); });
+  return { download: loaded.exports.downloadManagedPdf, sourceCalls, fetchCalls, blobs, timers, revoked, anchors };
 }
 
 test("managed download fetches actual PDF bytes and hands a sanitized local PDF to the browser", async () => {

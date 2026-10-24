@@ -59,10 +59,10 @@ function environment(t, { webgl = true, initialWidth = 800 } = {}) {
     useEffect: (effect) => effects.push(effect),
     useImperativeHandle: (ref, create) => { ref.current = create(); },
   };
-  const module = { exports: {} };
+  const loaded = { exports: {} };
   const localRequire = (name) => name === "react" ? react : name === "three" ? { ...THREE, WebGLRenderer: Renderer } : name === "three/addons/controls/OrbitControls.js" ? { OrbitControls: Controls } : name === "./ResearchMap" ? { mapClusterColor: (cluster) => ["#329ee8", "#edbd73"][cluster % 2] } : require(name);
-  new Function("require", "module", "exports", compiled)(localRequire, module, module.exports);
-  module.exports.ResearchMap3D({ layout, works: new Map([{ id: "a", title: "Alpha & evidence", year: 2024 }, { id: "b", title: "Beta", year: 2025 }].map((work) => [work.id, work])), selectedId: null, onSelect: (id) => selected.push(id), locale: "ko", height: 560, descriptionId: "help", onZoomChange: (zoom) => zooms.push(zoom) });
+  new Function("require", "module", "exports", compiled)(localRequire, loaded, loaded.exports);
+  loaded.exports.ResearchMap3D({ layout, works: new Map([{ id: "a", title: "Alpha & evidence", year: 2024 }, { id: "b", title: "Beta", year: 2025 }].map((work) => [work.id, work])), selectedId: null, onSelect: (id) => selected.push(id), locale: "ko", height: 560, descriptionId: "help", onZoomChange: (zoom) => zooms.push(zoom) });
   const cleanups = effects.map((effect) => effect()).filter((cleanup) => typeof cleanup === "function");
   function flush() { for (let step = 0; frames.size && step < 10; step++) { const entries = [...frames.entries()]; frames.clear(); for (const [, fn] of entries) fn(); } assert.equal(frames.size, 0, "no perpetual animation loop"); }
   function dispatch(element, type, values = {}) { const event = new Event(type, { cancelable: true }); Object.assign(event, { pointerId: 1, button: 0, clientX: 300, clientY: 250, shiftKey: false, ...values }); element.dispatchEvent(event); return event; }

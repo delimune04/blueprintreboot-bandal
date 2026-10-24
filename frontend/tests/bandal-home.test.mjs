@@ -83,6 +83,7 @@ const PROJECTS = [
   { id: "travel", href: "/travel/", label: "TRAVEL PLANNER" },
   { id: "capella", href: "/capella/", label: "CAPELLA CAMERA" },
   { id: "finance", href: "/finance/", label: "BANDAL FINANCE" },
+  { id: "tools", href: "/tools/", label: "BANDAL TOOLS" },
 ];
 
 // Match complete section elements so ordering checks use rendered source order,
@@ -121,8 +122,9 @@ test("desktop, compact menu, footer and directory keep the same project order", 
   const html = await read("index.html");
   const nav = navContent(html, 'id="navigation" class="primary-nav" aria-label="주 메뉴"');
   assert.deepEqual(attributes(nav, "href"), [...PROJECTS.map(project => project.href), "#about"]);
-  assert.deepEqual([...nav.matchAll(/<small aria-hidden="true">(\d{2})<\/small>/g)].map(match => match[1]), ["01", "02", "03", "04", "05", "06"]);
-  assert.deepEqual([...nav.matchAll(/style="--i:(\d+)"/g)].map(match => Number(match[1])), [0, 1, 2, 3, 4, 5]);
+  const navNumbers = Array.from({ length: PROJECTS.length + 1 }, (_, index) => String(index + 1).padStart(2, "0"));
+  assert.deepEqual([...nav.matchAll(/<small aria-hidden="true">(\d{2})<\/small>/g)].map(match => match[1]), navNumbers);
+  assert.deepEqual([...nav.matchAll(/style="--i:(\d+)"/g)].map(match => Number(match[1])), navNumbers.map((_, index) => index));
   const cards = [...html.matchAll(/<a class="directory-card[^>]+href="([^"]+)"[^>]*>([\s\S]*?)<\/a>/g)];
   assert.deepEqual(cards.map(match => match[1]), PROJECTS.map(project => project.href));
   for (const [index, card] of cards.entries()) {

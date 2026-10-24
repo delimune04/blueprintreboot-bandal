@@ -11,7 +11,7 @@ const paper={paper_id:'paper-a',title:'Saved paper',missing_pdf:true,metadata_on
 const openAccess={status:'open_access',pdf_url:'https://arxiv.org/pdf/1706.03762',source_url:'https://arxiv.org/abs/1706.03762',can_import:true,reason:'arxiv'};
 function surface({role='owner',request=async()=>openAccess,hooks=React,router={replace(){}},download=async()=>{}}={}) {
   const output=ts.transpileModule(readFileSync(new URL('../app/components/PaperDocumentAccess.tsx',import.meta.url),'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,jsx:ts.JsxEmit.ReactJSX,target:ts.ScriptTarget.ES2022}}).outputText;
-  const module={exports:{}};
+  const loaded={exports:{}};
   function localRequire(name){
     if(name.endsWith('.css'))return {};
     if(name==='react')return hooks;
@@ -24,7 +24,7 @@ function surface({role='owner',request=async()=>openAccess,hooks=React,router={r
     if(name==='./Section')return {Section:({title,children})=>React.createElement('section',null,React.createElement('h2',null,title),children)};
     return require(name);
   }
-  new Function('require','module','exports',output)(localRequire,module,module.exports);return module.exports.PaperDocumentAccess;
+  new Function('require','module','exports',output)(localRequire,loaded,loaded.exports);return loaded.exports.PaperDocumentAccess;
 }
 function treeNodes(tree,predicate){const results=[];function walk(node){if(Array.isArray(node))return node.forEach(walk);if(!node||typeof node!=='object')return;if(predicate(node))results.push(node);walk(node.props?.children);}walk(tree);return results;}
 function button(tree,text){return treeNodes(tree,node=>node.type==='button'&&JSON.stringify(node.props.children).includes(text))[0];}

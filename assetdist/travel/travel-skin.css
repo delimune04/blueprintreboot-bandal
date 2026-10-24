@@ -1,0 +1,274 @@
+@charset "UTF-8";
+/* Travel planner v2 skin: the LabVium look as the last stylesheet layer.
+   Loads after experience.css and only restyles; ids, classes and planner
+   behaviour are unchanged. Decorative layers never hold content and every
+   animation is opt-in through prefers-reduced-motion: no-preference and
+   :root:not(.motion-paused). */
+
+:root {
+  --accent: #6d28d9;
+  --bg: #f8f7fc;
+  --ink: #17151f;
+  --lavender: #f6f3ff;
+  --line: #ebe7f3;
+  --muted: #5f5d70;
+  --paper: #fff;
+  --peach: #fff7e9;
+  --soft: #ede9fe;
+  --font: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", sans-serif;
+  --tv-gradient: linear-gradient(135deg, #7c3aed 0%, #6d28d9 48%, #4f46e5 100%);
+  --tv-gradient-text: linear-gradient(100deg, #5b21b6 0%, #7c3aed 38%, #6366f1 70%, #7c3aed 100%);
+  --tv-shadow-xs: 0 1px 2px rgb(23 21 31 / 0.05);
+  --tv-shadow-md: 0 2px 6px rgb(23 21 31 / 0.04), 0 16px 32px -12px rgb(76 29 149 / 0.2);
+  --tv-shadow-lg: 0 1px 2px rgb(23 21 31 / 0.04), 0 30px 60px -36px rgb(76 29 149 / 0.35);
+  --tv-glow: 0 10px 28px -10px rgb(109 40 217 / 0.6);
+  --tv-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --tv-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font);
+  -webkit-font-smoothing: antialiased;
+}
+body::before {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  content: "";
+  pointer-events: none;
+  background:
+    radial-gradient(56rem 34rem at 96% -10%, rgb(167 139 250 / 0.16), transparent 62%),
+    radial-gradient(46rem 30rem at -10% 110%, rgb(99 102 241 / 0.09), transparent 62%);
+}
+::selection { background: #ddd6fe; color: var(--ink); }
+:is(button, a, summary, input, select):focus-visible { outline: 2px solid #7c3aed; outline-offset: 3px; }
+a, .text-button, .inline-links a, .ticket-inline { color: #5b21b6; }
+.skip-link { border-radius: 999px; background: var(--tv-gradient); color: #fff; }
+.scroll-progress { height: 3px; background: var(--tv-gradient); }
+
+/* Top bar */
+.topbar,
+.topbar.scrolled {
+  border-color: transparent;
+  background: rgb(248 247 252 / 0.74);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  backdrop-filter: blur(18px) saturate(160%);
+}
+.topbar.scrolled { border-color: var(--line); background: rgb(255 255 255 / 0.86); box-shadow: 0 8px 24px -20px rgb(76 29 149 / 0.45); }
+.brand { color: #1d1830; font-weight: 800; letter-spacing: 0.12em; }
+.brand-mark { background: var(--tv-gradient); box-shadow: 0 6px 16px -6px rgb(109 40 217 / 0.7); }
+.product-name { color: #595869; font-weight: 650; }
+.edition {
+  padding: 0.25rem 0.4rem 0.25rem 0.8rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgb(255 255 255 / 0.8);
+  color: #595869;
+  font-weight: 650;
+}
+.edition span { border-radius: 999px; background: var(--tv-gradient); color: #fff; }
+
+/* Type */
+h1, h2, h3 { color: var(--ink); font-weight: 780; letter-spacing: -0.04em; }
+.eyebrow { color: #5b21b6; font-family: var(--font); font-weight: 700; }
+.tv-grad {
+  background: var(--tv-gradient-text);
+  background-size: 220% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Buttons */
+.button { border-radius: 12px; font-weight: 650; transition: box-shadow 0.25s, filter 0.25s, border-color 0.2s, color 0.2s, background-color 0.2s; }
+.primary { border-color: transparent; background: var(--tv-gradient); color: #fff; box-shadow: var(--tv-glow); }
+.primary:hover { border-color: transparent; background: var(--tv-gradient); filter: brightness(1.06); box-shadow: 0 16px 34px -12px rgb(109 40 217 / 0.7); }
+.secondary { border-color: rgb(124 58 237 / 0.22); background: #fff; color: #2c2142; box-shadow: var(--tv-shadow-xs); }
+.secondary:hover { border-color: #c4b5fd; background: #fff; color: #5b21b6; }
+
+/* Fields */
+input:not([type="checkbox"]):not([type="radio"]),
+select {
+  border-color: #ddd6ea;
+  border-radius: 12px;
+  color: var(--ink);
+  transition: border-color 0.2s, box-shadow 0.25s;
+}
+input:not([type="checkbox"]):not([type="radio"]):hover,
+select:hover { border-color: #c4b5fd; }
+input:not([type="checkbox"]):not([type="radio"]):focus,
+select:focus { border-color: #7c3aed; outline: none; box-shadow: 0 0 0 4px rgb(124 58 237 / 0.15); }
+input[type="checkbox"], input[type="radio"] { accent-color: #6d28d9; }
+
+/* Surfaces */
+.panel,
+.advanced-options,
+.summary-strip,
+.place-card,
+.origin-card,
+.pass-card,
+.ticket-compare-card,
+.source-list,
+.empty-day {
+  border-color: var(--line);
+  border-radius: 22px;
+  box-shadow: var(--tv-shadow-xs);
+}
+dialog { border-color: var(--line); border-radius: 22px; box-shadow: var(--tv-shadow-lg); }
+.city-suggestions { border-color: var(--line); border-radius: 16px; box-shadow: var(--tv-shadow-md); }
+.city-suggestion:hover, .city-suggestion.active, .search-result:hover { background: #f6f3ff; }
+.notice { border-color: rgb(124 58 237 / 0.18); border-radius: 14px; background: #f6f3ff; color: #4c4766; }
+.warning, .unlocated { border-color: #f1d8a8; border-radius: 14px; background: #fff8eb; color: #6f4a12; }
+.error { border-radius: 14px; }
+.summary-strip { background: linear-gradient(160deg, #fff, #fbfaff); }
+.summary-strip strong,
+.summary-strip b { background: var(--tv-gradient-text); -webkit-background-clip: text; background-clip: text; color: transparent; }
+
+/* Tabs and days */
+.tabs { border-color: var(--line); }
+.tabs button { color: #5f5d70; font-weight: 650; }
+.tabs button.active { color: #5b21b6; }
+.tabs button.active::after { background: var(--tv-gradient); }
+.day-tab { border-color: #ddd6ea; border-radius: 14px; color: #5f5d70; transition: border-color 0.2s, box-shadow 0.25s, color 0.2s; }
+.day-tab:hover { border-color: #c4b5fd; color: #5b21b6; }
+.day-tab.active { border-color: transparent; background: var(--tv-gradient); color: #fff; box-shadow: var(--tv-glow); }
+.segmented input:checked + span,
+.interests input:checked + span,
+.stay-tabs [aria-pressed="true"],
+.starting-choice [aria-pressed="true"],
+.concept-options button[aria-pressed="true"] { border-color: transparent; background: var(--tv-gradient); color: #fff; }
+.card-chips .required-chip { background: #ede9fe; color: #5b21b6; }
+.place-index, .origin-symbol { background: var(--tv-gradient); color: #fff; }
+.place-card.map-selected { border-color: #a78bfa; box-shadow: 0 0 0 3px rgb(124 58 237 / 0.15); }
+
+/* Floating overview button */
+.trip-overview-launch {
+  border-color: transparent;
+  background: var(--tv-gradient);
+  box-shadow: 0 16px 34px -12px rgb(109 40 217 / 0.7);
+}
+.trip-overview-launch:hover { filter: brightness(1.06); }
+
+/* Onboarding: hero stage */
+.onboarding { max-width: 1040px; padding: clamp(20px, 4vw, 48px) 0 clamp(48px, 7vw, 80px); }
+#onboardingStart,
+#preferenceWizard {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding: clamp(1.75rem, 5vw, 3.5rem);
+  border: 1px solid rgb(255 255 255 / 0.9);
+  border-radius: 28px;
+  background: linear-gradient(160deg, rgb(255 255 255 / 0.96), rgb(250 248 255 / 0.78));
+  box-shadow: var(--tv-shadow-lg);
+}
+#onboardingStart::before,
+#preferenceWizard::before {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  content: "";
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgb(124 58 237 / 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(124 58 237 / 0.07) 1px, transparent 1px);
+  background-size: 2.5rem 2.5rem;
+  -webkit-mask-image: radial-gradient(ellipse 70% 60% at 25% 10%, #000 10%, transparent 72%);
+  mask-image: radial-gradient(ellipse 70% 60% at 25% 10%, #000 10%, transparent 72%);
+}
+#onboardingStart::after,
+#preferenceWizard::after {
+  position: absolute;
+  top: -12rem;
+  right: -8rem;
+  z-index: -1;
+  width: 32rem;
+  height: 32rem;
+  border-radius: 50%;
+  content: "";
+  pointer-events: none;
+  background: radial-gradient(circle, rgb(167 139 250 / 0.45), transparent 66%);
+}
+.onboarding .eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: fit-content;
+  padding: 0.28rem 0.85rem 0.28rem 0.6rem;
+  border: 1px solid rgb(124 58 237 / 0.18);
+  border-radius: 999px;
+  background: rgb(255 255 255 / 0.8);
+  letter-spacing: 0.1em;
+}
+.onboarding .eyebrow::before { width: 0.45rem; height: 0.45rem; border-radius: 50%; background: var(--tv-gradient); content: ""; }
+.onboarding h1 { margin: 1.1rem 0 1.75rem; font-size: clamp(2.2rem, 1.3rem + 3.2vw, 4rem); font-weight: 800; line-height: 1.18; }
+.tv-lead { max-width: 34rem; margin: -0.75rem 0 1.75rem; color: #595869; font-size: 1.05rem; line-height: 1.8; }
+.entry-choices { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.entry-choice,
+.wizard-options button {
+  border-color: var(--line);
+  border-radius: 18px;
+  background: rgb(255 255 255 / 0.9);
+  box-shadow: var(--tv-shadow-xs);
+  transition: border-color 0.25s, box-shadow 0.3s var(--tv-ease), transform 0.3s var(--tv-ease), color 0.2s;
+}
+.entry-choice:hover,
+.wizard-options button:hover { border-color: rgb(124 58 237 / 0.3); color: #5b21b6; box-shadow: var(--tv-shadow-md); }
+.entry-choice:first-child { border-color: transparent; background: var(--tv-gradient); color: #fff; box-shadow: var(--tv-glow); }
+.entry-choice:first-child:hover { color: #fff; filter: brightness(1.06); }
+.wizard-options button[aria-pressed="true"] { border-color: #a78bfa; background: #f6f3ff; color: #5b21b6; }
+.wizard-cities article { border-color: var(--line); border-radius: 20px; background: #fff; box-shadow: var(--tv-shadow-xs); }
+.tv-cities { margin-top: 1.75rem; padding-top: 1.25rem; border-top: 1px dashed #ddd6ea; }
+.tv-cities p { margin: 0 0 0.7rem; color: #5f5d70; font-size: 0.86rem; font-weight: 650; }
+.tv-cities div { display: flex; flex-wrap: wrap; gap: 8px; }
+.tv-cities button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 2.5rem;
+  padding: 0.3rem 0.95rem;
+  border: 1px solid #ddd6ea;
+  border-radius: 999px;
+  background: #fff;
+  color: #2c2142;
+  font-size: 0.9rem;
+  font-weight: 650;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s, box-shadow 0.2s;
+}
+.tv-cities button small { color: #8a87a0; font-size: 0.76rem; font-weight: 600; }
+.tv-cities button:hover { border-color: #a78bfa; color: #5b21b6; box-shadow: var(--tv-shadow-xs); }
+.tv-cities button:disabled { cursor: default; opacity: 0.5; }
+
+/* Planner intro */
+.intro h1 { font-size: clamp(2rem, 1.3rem + 2.4vw, 3.2rem); font-weight: 800; }
+.intro .motion-line:last-child > span {
+  background: var(--tv-gradient-text);
+  background-size: 220% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+.destination-image { border-radius: 18px; overflow: hidden; }
+
+/* Flight widget and affiliate disclosure keep their wording, only the frame changes. */
+.flight-widget { border-radius: 22px; }
+.affiliate-disclosure { border-radius: 12px; }
+
+@media (prefers-reduced-motion: no-preference) {
+  :root:not(.motion-paused) .tv-grad,
+  :root:not(.motion-paused) .intro .motion-line:last-child > span { animation: tv-pan 9s ease-in-out infinite alternate; }
+  :root:not(.motion-paused) #onboardingStart::after { animation: tv-drift 18s ease-in-out infinite alternate; }
+  :root:not(.motion-paused) .entry-choice:hover,
+  :root:not(.motion-paused) .wizard-options button:hover { transform: translateY(-2px); }
+}
+@keyframes tv-pan { from { background-position: 0% 50%; } to { background-position: 100% 50%; } }
+@keyframes tv-drift { from { transform: translate3d(0, 0, 0) scale(1); } to { transform: translate3d(-2.5rem, 1.75rem, 0) scale(1.08); } }
+
+@media (max-width: 600px) {
+  .entry-choices { grid-template-columns: minmax(0, 1fr); }
+  #onboardingStart, #preferenceWizard { border-radius: 22px; padding: 1.5rem 1.15rem; }
+}

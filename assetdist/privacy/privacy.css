@@ -1,0 +1,57 @@
+@charset "UTF-8";
+/* BANDAL privacy hub on BANDAL UI (/bandal-ui/bandal-ui.css loads first). */
+.privacy-hub h1 { font-size: clamp(2.2rem, 1.4rem + 3vw, 3.8rem); }
+.privacy-cards { margin-top: clamp(1.25rem, 3vw, 2rem); }
+.privacy-cards h2 { margin: 0.2rem 0 0.4rem; font-size: 1.35rem; font-weight: 780; letter-spacing: -0.03em; }
+.privacy-cards p { margin: 0.35rem 0 0; }
+.privacy-status {
+  width: fit-content;
+  margin: 0 0 0.6rem !important;
+  padding: 0.15rem 0.6rem;
+  border-radius: 999px;
+  background: #f1eff6;
+  color: var(--bu-muted) !important;
+  font-size: 0.76rem !important;
+  font-weight: 700;
+}
+.privacy-status--on { background: var(--bu-violet-100); color: var(--bu-violet-700) !important; }
+.privacy-alias { color: var(--bu-muted) !important; font-size: 0.82rem !important; font-weight: 600; }
+.privacy-note {
+  margin-top: auto !important;
+  padding: 0.7rem 0.85rem;
+  border-radius: var(--bu-radius);
+  background: var(--bu-surface-soft);
+  font-size: 0.86rem !important;
+}
+.privacy-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1rem;
+  margin-top: auto !important;
+  padding-top: 1rem;
+  font-size: 0.9rem !important;
+}
+.privacy-links a:not(.bu-btn) { color: var(--bu-violet-700); font-weight: 650; text-decoration: underline; text-decoration-color: rgb(124 58 237 / 0.3); text-underline-offset: 4px; }
+.privacy-contact {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem 2rem;
+  margin-top: clamp(2rem, 5vw, 3.5rem);
+  padding: clamp(1.4rem, 3.5vw, 2.25rem);
+  border: 1px solid rgb(124 58 237 / 0.14);
+  border-radius: var(--bu-radius-xl);
+  background: linear-gradient(135deg, var(--bu-violet-50), #fff 60%);
+}
+.privacy-contact h2 { margin: 0; font-size: 1.3rem; font-weight: 780; letter-spacing: -0.03em; }
+.privacy-contact p { max-width: 36rem; margin: 0.4rem 0 0; color: var(--bu-copy); }
+.privacy-ads {
+  margin-top: clamp(2rem, 5vw, 3rem);
+  padding: clamp(1.25rem, 3vw, 1.75rem);
+  border: 1px solid var(--bu-line);
+  border-radius: var(--bu-radius-lg);
+  background: #fff;
+}
+.privacy-ads h2 { margin: 0 0 0.6rem; font-size: 1.2rem; font-weight: 780; letter-spacing: -0.03em; }
+.privacy-ads p { margin: 0.5rem 0 0; color: var(--bu-copy); line-height: 1.8; }

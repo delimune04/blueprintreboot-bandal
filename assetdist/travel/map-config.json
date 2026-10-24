@@ -1,0 +1,13 @@
+{
+  "provider": "OpenStreetMap",
+  "tileUrl": "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+  "attribution": "&copy; <a href=\"https://www.openstreetmap.org/copyright\" target=\"_blank\" rel=\"noopener\">OpenStreetMap contributors</a>",
+  "policyUrl": "https://operations.osmfoundation.org/policies/tiles/",
+  "privacyUrl": "https://osmfoundation.org/wiki/Privacy_Policy",
+  "reportUrl": "https://www.openstreetmap.org/fixthemap",
+  "checkedAt": "2026-10-08",
+  "loadOnlyAfterUserOpensMap": false,
+  "offlinePrefetch": false,
+  "loadWhenPublicItineraryIsVisible": true,
+  "customLocationRequiresExplicitChoice": true
+}
