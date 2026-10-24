@@ -59,6 +59,15 @@ test('월 실수령액 uses the 2026 insurance rates and truncates below 10원',
   assert.equal(calculateSalary(table, { monthly: 150000, nonTaxable: 200000, family: 1 }).taxable, 0, '비과세는 급여를 넘지 않아요');
 });
 
+test('장기요양 uses the exact NHIS ratio before truncating to 10원', () => {
+  // NHIS 2026 notice: health premium × 0.9448% / 7.19%.
+  // Using the rounded 13.14% multiplier incorrectly returns 11,280원 here.
+  const r = calculateSalary(table, { monthly: 2390000, nonTaxable: 0, family: 1 });
+  assert.equal(r.health, 85920);
+  assert.equal(r.care, 11290);
+  assert.equal(RATES.care.ofHealth, 0.009448 / 0.0719);
+});
+
 test('글자수 counts NFC syllables, spaces and both byte conventions', () => {
   const c = countText('가나다 abc\n줄2');
   assert.deepEqual([c.chars, c.charsNoSpace, c.utf8Bytes, c.legacyBytes, c.words, c.lines], [10, 8, 19, 15, 3, 2]);

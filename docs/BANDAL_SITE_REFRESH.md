@@ -29,7 +29,7 @@ The source of each page lives in this repository under `assetdist/` and
 ## Salary calculator basis
 
 - 국민연금 4.75% (9.5% total). 기준소득월액 is floored to 1,000원, with a lower limit of 410,000원 and an upper limit of 6,590,000원 (2026-07 to 2027-06).
-- 건강보험 3.595%, 장기요양 = 건강보험료 × 13.14%, 고용보험 0.9%, 지방소득세 = 근로소득세 × 10%. Each amount is truncated below 10원.
+- 건강보험 3.595%, 장기요양 = 건강보험료 × (0.9448% / 7.19%), 약 13.14%, 고용보험 0.9%, 지방소득세 = 근로소득세 × 10%. Each amount is truncated below 10원.
 - The 근로소득 간이세액표 body (646 rows plus the formulas above 10,000천원) comes from 별표2 as revised on 2024-02-29. The 8–20세 자녀 deduction uses the amounts for pay from 2026-03-01: 20,830원, 45,830원, then 33,330원 for each further child.
 - **Owner check before publishing:** confirm with Hometax's 간이세액표 조회 that the 2026-02-27 revision changed only the child deduction and left the main table as it was.
 
