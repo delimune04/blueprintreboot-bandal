@@ -1,0 +1,42 @@
+/* 전세·월세 비교 layout; shared pieces come from tools.css. */
+.rent-global {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  gap: 1rem;
+  margin-bottom: 1rem;
+  padding: clamp(1rem, 2.5vw, 1.4rem);
+}
+.rent-options { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; }
+.rent-card { gap: 0.8rem; }
+.rent-card__head { display: flex; align-items: center; gap: 0.6rem; }
+.rent-card__letter {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 2.1rem;
+  height: 2.1rem;
+  border-radius: 0.7rem;
+  background: var(--bu-violet-50);
+  color: var(--bu-violet-700);
+  font-weight: 800;
+}
+.rent-card__name {
+  flex: 1;
+  min-width: 0;
+  padding: 0.3rem 0.2rem;
+  border: 0;
+  border-bottom: 1px dashed var(--bu-line-strong);
+  background: transparent;
+  color: var(--bu-ink);
+  font: 750 1.1rem/1.4 var(--bu-font);
+}
+.rent-card__name:focus { border-bottom-color: var(--bu-violet-500); outline: none; }
+.rent-card .bu-field { gap: 4px; }
+.rent-card .tool-hint { min-height: 1em; font-size: 0.74rem; }
+.rent-card__result { margin-top: 0.2rem; }
+.rent-card.is-best { border-color: rgb(124 58 237 / 0.45); box-shadow: 0 0 0 3px rgb(124 58 237 / 0.12), var(--bu-shadow-md); }
+.rent-card.is-best .rent-card__letter { background: var(--bu-gradient); color: #fff; }
+.rent-verdict { position: static; margin-top: 1rem; }
+.rent-verdict .tool-big { font-size: clamp(1.5rem, 1.1rem + 1.6vw, 2.2rem); }
+@media (max-width: 980px) { .rent-options { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 640px) { .rent-global { grid-template-columns: minmax(0, 1fr); } }

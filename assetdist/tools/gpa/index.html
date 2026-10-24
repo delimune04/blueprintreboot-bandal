@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#f8f7fc">
+<meta name="bandal:design" content="tools-labvium-20261024">
+<title>학점 계산기 · 4.5·4.3 평점평균, 전공 평점, 목표 학점 | 반달 도구함</title>
+<meta name="description" content="과목별 학점과 성적을 넣으면 4.5·4.3 만점 평점평균, 전공 평점, 이수학점을 계산해요. 목표 학점까지 남은 학기에 필요한 평균도 알려 줘요.">
+<link rel="canonical" href="https://bandal.app/tools/gpa/">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:site_name" content="반달 도구함 · BANDAL STUDIO">
+<meta property="og:title" content="학점 계산기 | 반달 도구함">
+<meta property="og:description" content="평점평균, 전공 평점, 목표 학점까지 필요한 성적을 계산해요.">
+<meta property="og:url" content="https://bandal.app/tools/gpa/">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/fonts/pretendard/pretendardvariable-dynamic-subset.css">
+<link rel="stylesheet" href="/bandal-ui/bandal-ui.css">
+<link rel="stylesheet" href="/tools/tools.css">
+<link rel="stylesheet" href="/tools/gpa/gpa.css">
+<script>try{if(localStorage.getItem("bandal:motion")==="paused")document.documentElement.classList.add("motion-paused")}catch(e){}</script>
+<script src="/bandal-ui/bandal-ui.js" defer></script>
+<script type="module" src="/tools/gpa/page.mjs"></script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"학점 계산기","url":"https://bandal.app/tools/gpa/","applicationCategory":"EducationalApplication","operatingSystem":"Web","inLanguage":"ko","isAccessibleForFree":true,"publisher":{"@type":"Organization","name":"BANDAL STUDIO","url":"https://bandal.app/"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"반달 도구함","item":"https://bandal.app/tools/"},{"@type":"ListItem","position":2,"name":"학점 계산기","item":"https://bandal.app/tools/gpa/"}]}]}</script>
+</head>
+<body class="bu-page tools-page">
+<a class="bu-skip" href="#main">본문으로 건너뛰기</a>
+<!-- generated:tools-bar current=/tools/gpa/ -->
+<header class="bu-bar"><div class="bu-shell bu-bar__inner"><a class="bu-brand" href="/" aria-label="BANDAL 홈페이지"><span class="bu-brand__mark" aria-hidden="true"></span><span>BANDAL</span></a><span class="bu-bar__divider" aria-hidden="true"></span><a class="bu-product" href="/tools/">반달 도구함</a><nav class="bu-nav" aria-label="도구 메뉴"><a href="/tools/salary/">실수령액</a><a href="/tools/char-count/">글자수</a><a href="/tools/gpa/" aria-current="page">학점</a><a href="/tools/rent/">주거비</a><a href="/tools/cite/">인용</a></nav><div class="bu-bar__actions"><button class="bu-motion" type="button" aria-pressed="false"><svg viewBox="0 0 20 20" width="16" height="16" aria-hidden="true"><path d="M7 5v10M13 5v10" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span>모션 끄기</span></button></div></div></header>
+<!-- /generated:tools-bar -->
+
+<main id="main" class="bu-shell">
+<nav class="tool-crumbs" aria-label="현재 위치"><a href="/tools/">반달 도구함</a><span aria-hidden="true">/</span><span>학점 계산기</span></nav>
+<section class="bu-hero bu-hero--single tool-hero bu-reveal" aria-labelledby="tool-title">
+  <div class="bu-aura" aria-hidden="true"><span></span><span></span><span></span></div>
+  <div class="bu-hero__intro">
+    <p class="bu-kicker"><span class="bu-kicker__dot" aria-hidden="true"></span><span>4.5 · 4.3 만점 · P/NP · 전공 평점</span></p>
+    <h1 id="tool-title">학점 계산기<br><span class="bu-grad">이번 학기부터 졸업까지</span></h1>
+    <p class="bu-hero__lead">과목마다 학점과 성적만 고르면 평점평균과 이수학점을 바로 계산해요. 목표 학점을 넣으면 남은 학점에서 받아야 할 평균도 알려 줘요.</p>
+  </div>
+</section>
+
+<div class="tool-layout">
+  <section class="tool-form bu-glass bu-reveal" aria-labelledby="courses-title">
+    <div class="gpa-head">
+      <h2 id="courses-title">과목</h2>
+      <div class="bu-segment" role="group" aria-label="만점 기준"><button type="button" data-scale="4.5" aria-pressed="true">4.5 만점</button><button type="button" data-scale="4.3" aria-pressed="false">4.3 만점</button></div>
+    </div>
+    <div class="gpa-table-wrap">
+      <table class="gpa-table">
+        <thead><tr><th scope="col">학기</th><th scope="col">과목명</th><th scope="col">학점</th><th scope="col">성적</th><th scope="col">전공</th><th scope="col"><span class="bu-sr">삭제</span></th></tr></thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </div>
+    <div class="gpa-actions"><button type="button" class="bu-btn bu-btn--sm" id="add-row">과목 추가</button><button type="button" class="bu-btn bu-btn--ghost bu-btn--sm" id="add-term">새 학기</button><button type="button" class="bu-btn bu-btn--ghost bu-btn--sm" id="reset">처음부터</button></div>
+    <p class="bu-help">입력한 과목은 이 브라우저에만 저장돼요. 재수강했다면 이전 성적 줄은 지워 주세요.</p>
+  </section>
+
+  <aside class="tool-result bu-reveal" aria-labelledby="result-title" aria-live="polite">
+    <h2 class="tool-result__label" id="result-title">평점평균</h2>
+    <strong class="tool-big" id="gpa">—</strong>
+    <p class="tool-sub" id="gpa-sub">과목을 입력해 주세요.</p>
+    <dl class="tool-rows" id="summary"></dl>
+    <div class="gpa-terms" id="terms"></div>
+    <div class="gpa-target">
+      <h3>목표 학점까지</h3>
+      <div class="tool-row">
+        <div class="bu-field"><label for="target">목표 평점</label><input class="bu-input" id="target" type="number" inputmode="decimal" step="0.01" min="0" max="4.5" value="4.0"></div>
+        <div class="bu-field"><label for="remaining">남은 이수학점</label><input class="bu-input" id="remaining" type="number" inputmode="numeric" step="1" min="0" value="18"></div>
+      </div>
+      <p class="gpa-target__result" id="needed"></p>
+    </div>
+  </aside>
+</div>
+
+<section class="bu-section" aria-labelledby="method-title">
+  <div class="bu-section-head bu-reveal"><div><p class="bu-label">계산 방법</p><h2 id="method-title">평점평균은 이렇게 구해요</h2></div></div>
+  <div class="tool-prose bu-reveal">
+    <p><strong>평점평균 = Σ(과목 학점 × 성적 점수) ÷ 평점에 들어가는 학점 합계</strong>예요. P(통과)는 이수학점에는 더하지만 평점에는 넣지 않고, F는 0점으로 평점에 들어가며 이수학점에서는 빠져요. 결과는 소수 둘째 자리까지 버림으로 보여 주고, 계산값도 함께 표시해요.</p>
+    <p>만점 기준을 바꿀 때 보여 주는 값은 <strong>단순 비례 환산</strong>이에요. 학교와 기업, 대학원마다 환산표가 다르니 제출처의 기준을 확인하세요.</p>
+  </div>
+  <div class="tool-table-wrap bu-reveal" style="margin-top:1rem">
+    <table class="tool-table"><caption>성적별 점수</caption><thead><tr><th scope="col">기준</th><th scope="col">점수</th></tr></thead><tbody id="scale-table"></tbody></table>
+  </div>
+</section>
+
+<section class="bu-section tool-related" aria-labelledby="related-title">
+  <div class="bu-section-head bu-reveal"><div><p class="bu-label">하루편에서 이어 읽기</p><h2 id="related-title">학점 관리가 고민이라면</h2></div></div>
+  <div class="bu-grid" data-bu-stagger>
+<!-- generated:related ids=uni-gpa-management,uni-course-registration,uni-money-scholarship -->
+<article class="bu-card bu-reveal"><p class="bu-card__meta"><span class="bu-tag">하루편 · 대학생활</span><span>20분 읽기</span></p><h3><a class="bu-card__link" href="/harupyeon/tips/uni-gpa-management/">학기 시작, 강의계획서에서 평가 기준부터 찾아요</a></h3><p>출석·과제·시험 비중과 제출 조건을 확인하고 준비 순서를 정해요. 특정 성적 향상을 보장하는 방법은 아니에요.</p></article>
+<article class="bu-card bu-reveal"><p class="bu-card__meta"><span class="bu-tag">하루편 · 대학생활</span><span>16분 읽기</span></p><h3><a class="bu-card__link" href="/harupyeon/tips/uni-course-registration/">수강신청, 클릭 속도보다 졸업요건 표가 먼저예요</a></h3><p>내 졸업요건과 인정 학점을 맞춰 보고, 필수·선수과목부터 정정·철회까지 실제 신청 순서를 준비해요.</p></article>
+<article class="bu-card bu-reveal"><p class="bu-card__meta"><span class="bu-tag">하루편 · 대학생활</span><span>32분 읽기</span></p><h3><a class="bu-card__link" href="/harupyeon/tips/uni-money-scholarship/">장학금·학자금대출, 신청부터 실행까지 확인해요</a></h3><p>국가·교내·교외 장학금부터 학자금대출 신청·실행·상환과 생활비 예산까지, 헷갈리는 조건과 확인 순서를 자세히 살펴봐요.</p></article>
+<!-- /generated:related -->
+  </div>
+</section>
+</main>
+
+<!-- generated:tools-footer -->
+<footer class="bu-footer"><div class="bu-shell bu-footer__inner"><div><a class="bu-footer__brand" href="/">BANDAL STUDIO</a><p>반달 도구함 · 계산은 이 브라우저 안에서 해요.</p><p>© 2026 BANDAL STUDIO</p></div><nav aria-label="하단 메뉴"><a href="/tools/">전체 도구</a><a href="/tools/salary/">연봉 실수령액 계산기</a><a href="/tools/char-count/">글자수·바이트 세기</a><a href="/tools/gpa/">학점 계산기</a><a href="/tools/rent/">전세·월세 실주거비 비교</a><a href="/tools/cite/">논문 인용 생성기</a><a href="/tools/#privacy">정보 처리 안내</a><a href="mailto:support@bandal.app">support@bandal.app</a></nav><div class="bu-footer__projects" data-bu-projects="/tools/" hidden><p>BANDAL PROJECTS</p></div></div><p class="bu-footer__wordmark" aria-hidden="true">TOOLS</p></footer>
+<!-- /generated:tools-footer -->
+</body>
+</html>

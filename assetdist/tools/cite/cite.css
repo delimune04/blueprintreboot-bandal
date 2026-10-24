@@ -1,0 +1,63 @@
+/* 논문 인용 생성기 layout; shared pieces come from tools.css. */
+.cite-form { display: grid; gap: 0.5rem; max-width: 46rem; margin-top: 1.5rem; }
+.cite-form .bu-search button { flex: none; }
+.cite-output {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  align-items: start;
+  gap: clamp(1rem, 3vw, 2rem);
+}
+.cite-output[hidden] { display: none; }
+.cite-meta { display: grid; gap: 0.6rem; padding: clamp(1.1rem, 2.5vw, 1.5rem); }
+.cite-meta h2 { font-size: 1.15rem; font-weight: 780; line-height: 1.45; letter-spacing: -0.02em; }
+.cite-meta p { color: var(--bu-copy); font-size: 0.9rem; line-height: 1.7; }
+.cite-meta dl { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 0.35rem 0.9rem; margin: 0.4rem 0 0; font-size: 0.86rem; }
+.cite-meta dt { color: var(--bu-muted); font-weight: 650; }
+.cite-meta dd { margin: 0; color: var(--bu-ink); overflow-wrap: anywhere; }
+.cite-styles { display: grid; gap: 0.8rem; min-width: 0; }
+.cite-card { position: static; }
+.cite-text {
+  margin: 0.2rem 0 1rem;
+  color: var(--bu-ink);
+  font-size: 1rem;
+  line-height: 1.85;
+  overflow-wrap: anywhere;
+  padding-left: 2em;
+  text-indent: -2em;
+}
+.cite-text--code {
+  padding: 1rem;
+  border-radius: var(--bu-radius);
+  background: #1d1830;
+  color: #ede9fe;
+  font: 0.84rem/1.7 var(--bu-mono);
+  text-indent: 0;
+  white-space: pre-wrap;
+}
+.cite-labvium {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem 1.5rem;
+  padding: 1rem 1.2rem;
+  border: 1px solid rgb(124 58 237 / 0.16);
+  border-radius: var(--bu-radius-lg);
+  background: linear-gradient(135deg, var(--bu-violet-50), #fff 70%);
+}
+.cite-labvium p { margin-top: 0.2rem; color: var(--bu-copy); font-size: 0.88rem; }
+.cite-recent { display: grid; gap: 0.6rem; margin: 0; padding: 0; list-style: none; }
+.cite-recent li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem 1rem;
+  padding: 0.8rem 1rem;
+  border: 1px solid var(--bu-line);
+  border-radius: var(--bu-radius);
+  background: #fff;
+}
+.cite-recent span { min-width: 0; color: var(--bu-copy); font-size: 0.9rem; overflow-wrap: anywhere; }
+.cite-recent span strong { display: block; color: var(--bu-ink); }
+@media (max-width: 900px) { .cite-output { grid-template-columns: minmax(0, 1fr); } }
