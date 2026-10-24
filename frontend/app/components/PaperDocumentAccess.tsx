@@ -42,18 +42,23 @@ export function PaperDocumentAccess({paper, onAttached, autoAction = null}: {pap
   const canRetrieve = Boolean(pdfUrl || access?.can_import);
   const readOnly = getWorkspaceRole() === "viewer";
 
+  // A different paper, PDF revision or attachment state starts a fresh lookup; reset during render
+  // (React's "adjust state when a prop changes") so the effect below only talks to the network.
+  const lookupKey = `${paper.paper_id}\u0000${paper.pdf_revision}\u0000${available}`;
+  const [lookup, setLookup] = useState(lookupKey);
+  if (lookup !== lookupKey) {
+    setLookup(lookupKey); setNeedsRefresh(false); setAccess(null); setNotice(""); setResolving(!available);
+  }
+
   useEffect(() => {
     const scope = ++generation.current; const controller = new AbortController();
-    setNeedsRefresh(false); setAccess(null); setNotice("");
-    if (available) setResolving(false);
-    else {
-      setResolving(true);
+    const current = () => generation.current === scope && !controller.signal.aborted;
+    if (!available) {
       const path = getWorkspaceMode() === "cloud" ? `/papers/${encodeURIComponent(paper.paper_id)}/pdf-access` : publicPdfAccessPath(paper);
-      if (!path) setResolving(false);
-      else void labviumRequest<PdfAccess>(path, {signal: controller.signal})
-        .then(value => { if (generation.current === scope && !controller.signal.aborted) setAccess(value); })
-        .catch(() => { if (generation.current === scope && !controller.signal.aborted) setNotice(tr("공개 원문 조회에 연결하지 못했습니다. 아래 원문 링크를 열거나 잠시 후 다시 시도해 주세요.", "The open-PDF lookup could not be reached. Use the source link or retry shortly.")); })
-        .finally(() => { if (generation.current === scope && !controller.signal.aborted) setResolving(false); });
+      void (path ? labviumRequest<PdfAccess>(path, {signal: controller.signal}) : Promise.resolve(null))
+        .then(value => { if (path && current()) setAccess(value); })
+        .catch(() => { if (current()) setNotice(tr("공개 원문 조회에 연결하지 못했습니다. 아래 원문 링크를 열거나 잠시 후 다시 시도해 주세요.", "The open-PDF lookup could not be reached. Use the source link or retry shortly.")); })
+        .finally(() => { if (current()) setResolving(false); });
     }
     return () => { generation.current += 1; controller.abort(); actionController.current?.abort(); };
     // Paper revision identifies the retained attachment; locale changes do not restart a PDF lookup.
@@ -99,6 +104,9 @@ export function PaperDocumentAccess({paper, onAttached, autoAction = null}: {pap
     if (!autoAction || resolving) return;
     const key = `${paper.paper_id}:${autoAction}`; if (autoDone.current === key) return;
     autoDone.current = key;
+    // The open/download intent arrives in the URL, so acting on it once the paper is shown is this
+    // effect's job; open() updates state exactly as the matching button click does.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     if (readyPdf || canRetrieve) void open(autoAction);
     else setNotice(tr("공개된 PDF 주소를 찾지 못했습니다. 출판사 원문에서 이용 가능 여부를 확인해 주세요. PDF 파일이 있으면 직접 업로드해 읽을 수 있습니다.", "No public PDF link was found. Check access at the publisher, or upload a PDF you already have."));
     // Run once for the explicit open/download navigation after resolution completes.

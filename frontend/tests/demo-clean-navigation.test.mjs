@@ -13,9 +13,9 @@ function loadModule(file, overrides = {}) {
   const code = ts.transpileModule(readFileSync(new URL(file, import.meta.url), "utf8"), {
     compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022, jsx: ts.JsxEmit.ReactJSX },
   }).outputText;
-  const module = { exports: {} };
-  new Function("require", "module", "exports", code)(name => overrides[name] || require(name), module, module.exports);
-  return module.exports;
+  const loaded = { exports: {} };
+  new Function("require", "module", "exports", code)(name => overrides[name] || require(name), loaded, loaded.exports);
+  return loaded.exports;
 }
 
 function setup(initial = "/LabVium") {

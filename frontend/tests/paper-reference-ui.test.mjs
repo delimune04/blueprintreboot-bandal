@@ -12,9 +12,9 @@ function harness(locale = "en") {
   const hooks = {...React, useState(initial) { const id = stateIndex++; if (!(id in states)) states[id] = initial; return [states[id], value => { states[id] = value; }]; }, useRef(initial) { const id = refIndex++; refs[id] ||= {current: initial}; return refs[id]; }};
   const code = ts.transpileModule(readFileSync(new URL("../app/components/PaperReferenceActions.tsx", import.meta.url), "utf8"), {reportDiagnostics: true, compilerOptions: {module: ts.ModuleKind.CommonJS, jsx: ts.JsxEmit.ReactJSX, target: ts.ScriptTarget.ES2022}});
   assert.deepEqual(code.diagnostics, []);
-  const module = {exports: {}};
-  new Function("require", "module", "exports", code.outputText)(name => name === "react" ? hooks : name.endsWith("LocaleProvider") ? {useI18n: () => ({locale})} : name.endsWith("paper-reference.mjs") ? reference : require(name), module, module.exports);
-  return {refs, render() { stateIndex = 0; refIndex = 0; return module.exports.PaperReferenceActions({paper: {title:"A <test>",authors:["Kim"],year:"2026"}}); }};
+  const loaded = {exports: {}};
+  new Function("require", "module", "exports", code.outputText)(name => name === "react" ? hooks : name.endsWith("LocaleProvider") ? {useI18n: () => ({locale})} : name.endsWith("paper-reference.mjs") ? reference : require(name), loaded, loaded.exports);
+  return {refs, render() { stateIndex = 0; refIndex = 0; return loaded.exports.PaperReferenceActions({paper: {title:"A <test>",authors:["Kim"],year:"2026"}}); }};
 }
 function find(node, type) { if (!node || typeof node !== "object") return null; if (node.type === type) return node; for (const child of React.Children.toArray(node.props?.children)) {const found = find(child,type); if(found) return found;} return null; }
 test("renders a labelled read-only preview and bilingual copy controls without raw HTML injection", () => {
