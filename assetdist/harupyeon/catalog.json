@@ -1,0 +1,1108 @@
+{
+ "design": "harupyeon-labvium-20261024",
+ "revision": "harupyeon-71-practical-digital-work-20261011-r1",
+ "categories": [
+  {
+   "slug": "highschool",
+   "label": "고등학교 생활",
+   "href": "/harupyeon/category/highschool/",
+   "count": 14
+  },
+  {
+   "slug": "university",
+   "label": "대학생활",
+   "href": "/harupyeon/category/university/",
+   "count": 22
+  },
+  {
+   "slug": "firstjob",
+   "label": "사회초년생",
+   "href": "/harupyeon/category/firstjob/",
+   "count": 35
+  }
+ ],
+ "tips": [
+  {
+   "id": "hs-ai-verification",
+   "title": "AI로 조사했다면, 제출 전에 확인할 네 가지",
+   "summary": "답을 빨리 얻는 것과 그 답을 설명할 수 있는 것은 달라요. 마지막 확인은 내가 해요.",
+   "category": "고등학교 생활",
+   "minutes": 20,
+   "tags": [
+    "AI활용",
+    "과제",
+    "출처확인"
+   ],
+   "n": 1,
+   "slug": "highschool",
+   "href": "/harupyeon/tips/hs-ai-verification/"
+  },
+  {
+   "id": "hs-account-leak-check",
+   "title": "내 계정이 유출됐는지 의심될 때",
+   "summary": "공식 보안 활동에서 의심 신호를 확인하고, 접속 기기·복구 수단·비밀번호·2단계 인증을 점검해요. 학교 계정과 로그인 불가 상황의 도움 경로도 정리해요.",
+   "category": "고등학교 생활",
+   "minutes": 20,
+   "tags": [
+    "개인정보",
+    "계정보안",
+    "디지털생활"
+   ],
+   "n": 2,
+   "slug": "highschool",
+   "href": "/harupyeon/tips/hs-account-leak-check/"
+  },
+  {
+   "id": "uni-team-roles",
+   "title": "팀플 첫 회의에서 정하면 편해지는 것들",
+   "summary": "팀 과제 기준을 함께 읽고, 담당·결과물·마감부터 공동 문서 권한·변경 합의·기여 기록·제출 확인까지 구체적으로 정해요.",
+   "category": "대학생활",
+   "minutes": 17,
+   "tags": [
+    "팀플",
+    "협업",
+    "회의록"
+   ],
+   "n": 3,
+   "slug": "university",
+   "href": "/harupyeon/tips/uni-team-roles/"
+  },
+  {
+   "id": "uni-file-recovery",
+   "title": "과제 파일, 마지막 버전까지 안전하게 남기는 법",
+   "summary": "원본·작업본·제출본과 별도 백업을 나누고, Google Drive·OneDrive의 복구 방법과 계정별 조건을 확인해요.",
+   "category": "대학생활",
+   "minutes": 19,
+   "tags": [
+    "백업",
+    "과제",
+    "연구자료"
+   ],
+   "n": 4,
+   "slug": "university",
+   "href": "/harupyeon/tips/uni-file-recovery/"
+  },
+  {
+   "id": "job-subscription-audit",
+   "title": "안 쓰는 앱 구독, 결제 전에 정리해요",
+   "summary": "청구 주체와 계정을 찾고 Apple·Google·직접 결제 경로에서 취소 상태를 확인해요. 체험·이용 종료·환불도 따로 읽어요.",
+   "category": "사회초년생",
+   "minutes": 10,
+   "tags": [
+    "구독관리",
+    "고정지출",
+    "아이폰"
+   ],
+   "n": 5,
+   "slug": "firstjob",
+   "href": "/harupyeon/tips/job-subscription-audit/"
+  },
+  {
+   "id": "job-lost-phone",
+   "title": "아이폰을 잃어버렸을 때 먼저 할 일",
+   "summary": "공식 나의 찾기에서 분실 표시와 연결 상태를 확인하고, 도난 연락처 예외·통신사 신고·피싱·원격삭제와 활성화 잠금을 구분해요.",
+   "category": "사회초년생",
+   "minutes": 12,
+   "tags": [
+    "분실대처",
+    "아이폰",
+    "개인정보"
+   ],
+   "n": 6,
+   "slug": "firstjob",
+   "href": "/harupyeon/tips/job-lost-phone/"
+  },
+  {
+   "id": "hs-weekly-reset",
+   "title": "밀린 과제, 한 주 계획으로 다시 시작해요",
+   "summary": "할 일을 더 적기 전에 실제로 쓸 수 있는 시간을 찾고, 첫 행동을 작게 정해요.",
+   "category": "고등학교 생활",
+   "minutes": 18,
+   "tags": [
+    "시간관리",
+    "과제계획",
+    "주간계획"
+   ],
+   "n": 7,
+   "slug": "highschool",
+   "href": "/harupyeon/tips/hs-weekly-reset/"
+  },
+  {
+   "id": "uni-office-hours-question",
+   "title": "교수님께 질문할 때는 막힌 지점을 가져가요",
+   "summary": "강의의 연락·예약 기준을 먼저 보고, 위치·목표·시도·질문을 정리해 메일과 면담에서 확인한 뒤 혼자 다시 풀어 봐요.",
+   "category": "대학생활",
+   "minutes": 18,
+   "tags": [
+    "질문",
+    "오피스아워",
+    "대학생활"
+   ],
+   "n": 8,
+   "slug": "university",
+   "href": "/harupyeon/tips/uni-office-hours-question/"
+  },
+  {
+   "id": "hs-exam-error-review",
+   "title": "오답노트에는 정답보다 다음 행동을 남겨요",
+   "summary": "틀린 문제를 예쁘게 옮기기보다, 어느 단계에서 막혔는지 찾아 다시 풀어 봐요.",
+   "category": "고등학교 생활",
+   "minutes": 21,
+   "tags": [
+    "시험준비",
+    "오답노트",
+    "복습"
+   ],
+   "n": 9,
+   "slug": "highschool",
+   "href": "/harupyeon/tips/hs-exam-error-review/"
+  },
+  {
+   "id": "hs-presentation-rehearsal",
+   "title": "발표 전날에는 슬라이드보다 실제 시간을 재봐요",
+   "summary": "말해 보면 길이가 달라져요. 시작·전환·마무리와 파일 열기까지 한 번에 연습해요.",
+   "category": "고등학교 생활",
+   "minutes": 20,
+   "tags": [
+    "발표",
+    "발표연습",
+    "팀플"
+   ],
+   "n": 10,
+   "slug": "highschool",
+   "href": "/harupyeon/tips/hs-presentation-rehearsal/"
+  },
+  {
+   "id": "job-task-brief",
+   "title": "새 업무를 받으면 완료 기준부터 확인해요",
+   "summary": "“자료 정리 부탁해요”를 대상·결과물·마감·검토 기준으로 바꾸면 재작업을 줄일 수 있어요.",
+   "category": "사회초년생",
+   "minutes": 14,
+   "tags": [
+    "첫직장",
+    "업무정리",
+    "질문"
+   ],
+   "n": 11,
+   "slug": "firstjob",
+   "href": "/harupyeon/tips/job-task-brief/"
+  },
+  {
+   "id": "job-decision-notes",
+   "title": "회의록은 대화보다 결정과 다음 일을 남겨요",
+   "summary": "회의에서 확정한 것과 남은 질문을 나누고, 담당·기한·승인 상태와 변경 이력을 가상 회의록으로 정리해요.",
+   "category": "사회초년생",
+   "minutes": 11,
+   "tags": [
+    "회의록",
+    "협업",
+    "업무정리"
+   ],
+   "n": 12,
+   "slug": "firstjob",
+   "href": "/harupyeon/tips/job-decision-notes/"
+  },
+  {
+   "id": "job-handover-note",
+   "title": "휴가 전 인수인계는 다음 한 번의 행동까지 적어요",
+   "summary": "대체 담당자가 다음 행동을 시작할 수 있도록 상태·자료·권한·예외 대응을 적고, 휴가 전 점검부터 복귀 확인까지 이어가요.",
+   "category": "사회초년생",
+   "minutes": 11,
+   "tags": [
+    "인수인계",
+    "휴가준비",
+    "직장생활"
+   ],
+   "n": 13,
+   "slug": "firstjob",
+   "href": "/harupyeon/tips/job-handover-note/"
+  },
+  {
+   "id": "job-feedback-next-step",
+   "title": "“조금 더 명확하게”라는 피드백을 작업으로 바꿔요",
+   "summary": "모호한 피드백을 위치·기준·작은 수정으로 나누고, 의견 충돌과 긴급 문제를 구분해 실제 다음 행동을 정해요.",
+   "category": "사회초년생",
+   "minutes": 11,
+   "tags": [
+    "피드백",
+    "첫직장",
+    "커뮤니케이션"
+   ],
+   "n": 14,
+   "slug": "firstjob",
+   "href": "/harupyeon/tips/job-feedback-next-step/"
+  },
+  {
+   "id": "home-first-night-box",
+   "title": "첫 자취 이사, 오늘 밤 열 상자부터 따로 챙겨요",
+   "summary": "가진 물건으로 첫날 가방과 당일 상자를 나누고, 건물 이용·가구 반입·안전한 통로부터 다음 날 준비까지 순서대로 확인해요.",
+   "category": "대학생활",
+   "minutes": 12,
+   "tags": [
+    "주거",
+    "자취",
+    "이사준비"
+   ],
+   "n": 15,
+   "slug": "university",
+   "href": "/harupyeon/tips/home-first-night-box/"
+  },
+  {
+   "id": "home-roommate-routines",
+   "title": "룸메이트와는 청소 기준을 행동으로 맞춰요",
+   "summary": "공용 공간의 완료 상태, 조용한 시간, 방문 확인, 공용품 구매·정산을 가상 예문으로 맞추고 생활해 본 뒤 약속을 고쳐요.",
+   "category": "대학생활",
+   "minutes": 12,
+   "tags": [
+    "주거",
+    "룸메이트",
+    "생활정리"
+   ],
+   "n": 16,
+   "slug": "university",
+   "href": "/harupyeon/tips/home-roommate-routines/"
+  },
+  {
+   "id": "home-small-space-reset",
+   "title": "좁은 방은 수납함을 사기 전에 한 구역부터 비워요",
+   "summary": "한 구역을 네 갈래로 분류하고 물건의 돌아갈 자리를 정해요. 보류·소유 확인·서류와 기기 처분·통로 확보까지 실제 순서로 살펴봐요.",
+   "category": "사회초년생",
+   "minutes": 10,
+   "tags": [
+    "주거",
+    "자취",
+    "생활정리"
+   ],
+   "n": 17,
+   "slug": "firstjob",
+   "href": "/harupyeon/tips/home-small-space-reset/"
+  },
+  {
+   "id": "home-shopping-inventory",
+   "title": "장보기 전에 집에 있는 것부터 한 번 확인해요",
+   "summary": "집에 있는 양과 실제 사용 계획으로 필요한 수량을 정하고, 날짜 표시·보관 조건·단가를 함께 확인해 낭비를 줄여요.",
+   "category": "사회초년생",
+   "minutes": 12,
+   "tags": [
+    "자취",
+    "장보기",
+    "생활정리"
+   ],
+   "n": 18,
+   "slug": "firstjob",
+   "href": "/harupyeon/tips/home-shopping-inventory/"
+  },
+  {
+   "id": "hs-elective-choice",
+   "title": "선택과목, 신청 전에 학교 안내문과 내 관심을 맞춰요",
+   "summary": "내 입학연도와 학교 편성표를 기준으로 과목의 기초·평가·신청 조건을 비교하고, 지원 학년도에 맞는 대학 안내를 확인해요.",
+   "category": "고등학교 생활",
+   "minutes": 21,
+   "tags": [
+    "선택과목",
+    "고교학점제",
+    "진로설계"
+   ],
+   "n": 19,
+   "slug": "highschool",
+   "href": "/harupyeon/tips/hs-elective-choice/"
+  },
+  {
+   "id": "uni-first-paper-reading",
+   "title": "처음 읽는 논문, 질문과 근거를 나눠서 읽어요",
+   "summary": "논문을 찾고 원문에 접근하는 순서부터 질문·방법·결과·한계, 표와 통계, 출처 메모와 AI 인용 검증까지 연습해요.",
+   "category": "대학생활",
+   "minutes": 24,
+   "tags": [
+    "논문읽기",
+    "자료조사",
+    "대학생활"
+   ],
+   "n": 20,
+   "slug": "university",
+   "href": "/harupyeon/tips/uni-first-paper-reading/"
+  },
+  {
+   "id": "job-conflicting-deadlines",
+   "title": "마감이 겹치면, 할 일과 바꿀 수 있는 조건을 보여 줘요",
+   "summary": "남은 작업·검토 대기·실제 가용시간을 비교하고, 바꿀 수 있는 조건과 영향을 보여 주며 우선순위를 확인해요.",
+   "category": "사회초년생",
+   "minutes": 11,
+   "tags": [
+    "첫직장",
+    "우선순위",
+    "업무조율"
+   ],
+   "n": 21,
+   "slug": "firstjob",
+   "href": "/harupyeon/tips/job-conflicting-deadlines/"
+  },
+  {
+   "id": "housing-program-map",
+   "title": "서울 첫 자취, 어떤 주거제도부터 볼까?",
+   "summary": "집을 배정받는 경로와 선정 뒤 직접 찾는 경로, 대출·이자지원을 나누고 입주 일정에 맞춰 후보를 좁혀요.",
+   "category": "대학생활",
+   "minutes": 11,
+   "tags": [
+    "주거",
+    "공공임대",
+    "자취",
+    "청년주거"
+   ],
+   "n": 22,
+   "slug": "university",
+   "href": "/harupyeon/tips/housing-program-map/"
+  },
+  {
+   "id": "housing-parent-household",
+   "title": "부모님이 집을 갖고 있어도 청년임대를 볼 수 있을까?",
+   "summary": "무주택·소득·자산·가점마다 누구를 심사하는지 나눠 적고, 부모 주택·주소 분리·피부양자 조건을 공고별로 확인해요.",
+   "category": "대학생활",
+   "minutes": 14,
+   "tags": [
+    "주거",
+    "신청자격",
+    "부모소득",
+    "건강보험"
+   ],
+   "n": 23,
+   "slug": "university",
+   "href": "/harupyeon/tips/housing-parent-household/"
+  },
+  {
+   "id": "housing-youth-loan-comparison",
+   "title": "버팀목·서울 이자지원·보증부월세대출 비교하기",
+   "summary": "세 상품의 대상·비율 한도·금리·상환을 계산하고, 계약 전에 은행·지원기관·보증기관·임대인에게 확인할 질문을 정리해요.",
+   "category": "사회초년생",
+   "minutes": 17,
+   "tags": [
+    "주거",
+    "전세대출",
+    "버팀목",
+    "보증부월세"
+   ],
+   "n": 24,
+   "slug": "firstjob",
+   "href": "/harupyeon/tips/housing-youth-loan-comparison/"
+  },
+  {
+   "id": "housing-janggi-ansim",
+   "title": "장기안심주택, 무이자 보증금 지원은 어떻게 볼까?",
+   "summary": "2026년 장기안심주택 공고의 지원 계산·청년 자격·집 찾기·권리분석·반환과 대출 결합을 단계별로 확인해요.",
+   "category": "사회초년생",
+   "minutes": 15,
+   "tags": [
+    "주거",
+    "장기안심주택",
+    "보증금지원"
+   ],
+   "n": 25,
+   "slug": "firstjob",
+   "href": "/harupyeon/tips/housing-janggi-ansim/"
+  },
+  {
+   "id": "housing-true-monthly-cost",
+   "title": "월세가 싸 보여도 월 총주거비로 비교해요",
+   "summary": "관리비·이자·필수비용이 미확인이면 총액도 미확인으로 남겨요.",
+   "category": "사회초년생",
+   "minutes": 16,
+   "tags": [
+    "주거",
+    "주거비",
+    "관리비",
+    "보증금"
+   ],
+   "n": 26,
+   "slug": "firstjob",
+   "href": "/harupyeon/tips/housing-true-monthly-cost/"
+  },
+  {
+   "id": "housing-notice-to-application",
+   "title": "청약 공고를 실제 신청 준비로 바꾸는 순서",
+   "summary": "후보 주택과 중복 제한을 먼저 좁히고, 일정·증빙·서명·제출 확인을 단계별 실행표로 바꿔요.",
+   "category": "대학생활",
+   "minutes": 13,
+   "tags": [
+    "주거",
+    "청약",
+    "서류",
+    "공공임대"
+   ],
+   "n": 27,
+   "slug": "university",
+   "href": "/harupyeon/tips/housing-notice-to-application/"
+  },
+  {
+   "id": "housing-rental-future-subscription",
+   "title": "임대주택과 분양청약, 무엇을 구분해야 할까?",
+   "summary": "순수임대와 분양전환·분양을 나눠 무주택·통장 재사용·당첨포기·재당첨 제한의 다른 영향을 확인해요.",
+   "category": "사회초년생",
+   "minutes": 13,
+   "tags": [
+    "주거",
+    "청약통장",
+    "무주택",
+    "분양청약"
+   ],
+   "n": 28,
+   "slug": "firstjob",
+   "href": "/harupyeon/tips/housing-rental-future-subscription/"
+  },
+  {
+   "id": "housing-small-supports",
+   "title": "월세·이사비·보증료 지원을 빠뜨리지 않는 법",
+   "summary": "월세·이사비·보증료의 서로 다른 지원 대상과 증빙을 확인하고, 실제 지급 전까지 지출 계획을 따로 세워요.",
+   "category": "사회초년생",
+   "minutes": 13,
+   "tags": [
+    "주거",
+    "청년월세지원",
+    "이사비",
+    "보증료"
+   ],
+   "n": 29,
+   "slug": "firstjob",
+   "href": "/harupyeon/tips/housing-small-supports/"
+  },
+  {
+   "id": "housing-safe-contract-help",
+   "title": "혼자 집을 보러 가기 어렵다면 계약 동행을 활용해요",
+   "summary": "예약부터 현장 질문·미확인 사항 정리까지 준비하고, 동행상담과 대출·보증·법률 판단의 역할을 나눠요.",
+   "category": "사회초년생",
+   "minutes": 11,
+   "tags": [
+    "주거",
+    "전세계약",
+    "안심매니저",
+    "오피스텔"
+   ],
+   "n": 30,
+   "slug": "firstjob",
+   "href": "/harupyeon/tips/housing-safe-contract-help/"
+  },
+  {
+   "id": "housing-dorm-and-announcements",
+   "title": "기숙사형 청년주택과 새로운 주거정책 읽기",
+   "summary": "학적과 입주 날짜, 방의 독립성·생활규칙을 확인하고 실제 모집과 주거정책 발표를 구분해요.",
+   "category": "대학생활",
+   "minutes": 13,
+   "tags": [
+    "주거",
+    "기숙사형청년주택",
+    "복학",
+    "행복기숙사"
+   ],
+   "n": 31,
+   "slug": "university",
+   "href": "/harupyeon/tips/housing-dorm-and-announcements/"
+  },
+  {
+   "id": "hs-performance-rubric",
+   "title": "수행평가, 안내문부터 확인해요",
+   "summary": "평가 요소·배점·반영비율을 구분하고, 수업 안의 수행 과정과 허용 자료·AI·제출·이의신청까지 구체적으로 확인해요.",
+   "category": "고등학교 생활",
+   "minutes": 18,
+   "tags": [
+    "수행평가",
+    "내신"
+   ],
+   "n": 32,
+   "slug": "highschool",
+   "href": "/harupyeon/tips/hs-performance-rubric/"
+  },
+  {
+   "id": "hs-reading-record",
+   "title": "독서 기록, 책에서 생긴 질문을 남겨요",
+   "summary": "책의 근거와 내 생각을 나눠 질문을 만들고, 실제로 읽은 범위·수업 활동·독서 기록 보관과 학생부 기준을 구분해요.",
+   "category": "고등학교 생활",
+   "minutes": 19,
+   "tags": [
+    "생기부",
+    "독서활동",
+    "세특"
+   ],
+   "n": 33,
+   "slug": "highschool",
+   "href": "/harupyeon/tips/hs-reading-record/"
+  },
+  {
+   "id": "hs-mock-exam-review",
+   "title": "모의고사 복습, 결과표에서 먼저 볼 문제를 골라요",
+   "summary": "성적 지표와 문항별 풀이 상태를 구분하고, 불확실하게 맞힌 문제·오답·미응답·시간 기록을 모아 이번 주 복습 우선순위를 정해요.",
+   "category": "고등학교 생활",
+   "minutes": 19,
+   "tags": [
+    "모의고사",
+    "오답노트",
+    "공부법"
+   ],
+   "n": 34,
+   "slug": "highschool",
+   "href": "/harupyeon/tips/hs-mock-exam-review/"
+  },
+  {
+   "id": "hs-exam-4week-plan",
+   "title": "내신 4주 계획, 시험 범위와 학교 자료부터 정리해요",
+   "summary": "학교가 안내한 시험 범위와 수업자료를 중심으로, 읽기와 직접 풀기를 나눠 계획해요.",
+   "category": "고등학교 생활",
+   "minutes": 18,
+   "tags": [
+    "내신",
+    "시험공부",
+    "계획"
+   ],
+   "n": 35,
+   "slug": "highschool",
+   "href": "/harupyeon/tips/hs-exam-4week-plan/"
+  },
+  {
+   "id": "hs-sebtek-topic",
+   "title": "세특 주제는 수업 한 줄에서 시작하면 돼요",
+   "summary": "수업 개념에서 작은 질문을 만들고, 비교 조건·측정·공개 자료·오차와 한계를 확인해 실제 탐구 과정과 발표를 정리해요.",
+   "category": "고등학교 생활",
+   "minutes": 18,
+   "tags": [
+    "세특",
+    "탐구활동",
+    "생기부"
+   ],
+   "n": 36,
+   "slug": "highschool",
+   "href": "/harupyeon/tips/hs-sebtek-topic/"
+  },
+  {
+   "id": "hs-admission-basics",
+   "title": "수시와 정시, 구조부터 알고 시작해요",
+   "summary": "지원 횟수와 합격 후 제한부터 확인하고, 내 지원 학년도의 대학별 전형을 비교해요.",
+   "category": "고등학교 생활",
+   "minutes": 24,
+   "tags": [
+    "대입",
+    "수시",
+    "정시"
+   ],
+   "n": 37,
+   "slug": "highschool",
+   "href": "/harupyeon/tips/hs-admission-basics/"
+  },
+  {
+   "id": "hs-part-time-job",
+   "title": "고등학생 알바, 법이 지켜주는 선이 있어요",
+   "summary": "나이 때문에 최저임금을 덜 받는 일은 없어요. 근로시간과 야간 근무에는 따로 제한도 있어요.",
+   "category": "고등학교 생활",
+   "minutes": 27,
+   "tags": [
+    "아르바이트",
+    "근로계약서",
+    "최저임금"
+   ],
+   "n": 38,
+   "slug": "highschool",
+   "href": "/harupyeon/tips/hs-part-time-job/"
+  },
+  {
+   "id": "hs-major-exploration",
+   "title": "학과는 이름 말고 커리큘럼을 보고 골라요",
+   "summary": "교육과정·필수과목·학위와 졸업요건을 읽고, 공식 진로 도구와 취업·진학 통계를 같은 기준으로 비교해요.",
+   "category": "고등학교 생활",
+   "minutes": 20,
+   "tags": [
+    "진로",
+    "학과선택",
+    "대입"
+   ],
+   "n": 39,
+   "slug": "highschool",
+   "href": "/harupyeon/tips/hs-major-exploration/"
+  },
+  {
+   "id": "uni-course-registration",
+   "title": "수강신청, 클릭 속도보다 졸업요건 표가 먼저예요",
+   "summary": "내 졸업요건과 인정 학점을 맞춰 보고, 필수·선수과목부터 정정·철회까지 실제 신청 순서를 준비해요.",
+   "category": "대학생활",
+   "minutes": 16,
+   "tags": [
+    "수강신청",
+    "학사"
+   ],
+   "n": 40,
+   "slug": "university",
+   "href": "/harupyeon/tips/uni-course-registration/"
+  },
+  {
+   "id": "uni-gpa-management",
+   "title": "학기 시작, 강의계획서에서 평가 기준부터 찾아요",
+   "summary": "출석·과제·시험 비중과 제출 조건을 확인하고 준비 순서를 정해요. 특정 성적 향상을 보장하는 방법은 아니에요.",
+   "category": "대학생활",
+   "minutes": 20,
+   "tags": [
+    "학점",
+    "GPA",
+    "학사"
+   ],
+   "n": 41,
+   "slug": "university",
+   "href": "/harupyeon/tips/uni-gpa-management/"
+  },
+  {
+   "id": "uni-report-writing",
+   "title": "리포트는 분량이 아니라 구조로 채워요",
+   "summary": "과제의 질문과 잠정 주장을 정하고, 실제 자료·출처 메모·문단 구조를 연결해 인용과 제출까지 확인해요. 점수는 구조만으로 보장되지 않아요.",
+   "category": "대학생활",
+   "minutes": 21,
+   "tags": [
+    "과제",
+    "리포트",
+    "글쓰기"
+   ],
+   "n": 42,
+   "slug": "university",
+   "href": "/harupyeon/tips/uni-report-writing/"
+  },
+  {
+   "id": "uni-money-scholarship",
+   "title": "장학금·학자금대출, 신청부터 실행까지 확인해요",
+   "summary": "국가·교내·교외 장학금부터 학자금대출 신청·실행·상환과 생활비 예산까지, 헷갈리는 조건과 확인 순서를 자세히 살펴봐요.",
+   "category": "대학생활",
+   "minutes": 32,
+   "tags": [
+    "장학금",
+    "학자금대출",
+    "생활비"
+   ],
+   "n": 43,
+   "slug": "university",
+   "href": "/harupyeon/tips/uni-money-scholarship/"
+  },
+  {
+   "id": "uni-activity-portfolio",
+   "title": "대외활동, 이력서 한 줄로 남기는 법",
+   "summary": "활동 선택부터 내 역할과 판단, 결과의 근거를 기록하고 공개 가능한 결과물 포트폴리오를 만들어요.",
+   "category": "대학생활",
+   "minutes": 17,
+   "tags": [
+    "대외활동",
+    "공모전",
+    "포트폴리오"
+   ],
+   "n": 44,
+   "slug": "university",
+   "href": "/harupyeon/tips/uni-activity-portfolio/"
+  },
+  {
+   "id": "uni-first-resume",
+   "title": "첫 인턴 지원, 경력 없는 이력서 쓰는 법",
+   "summary": "공고에서 조건을 찾고, 실제 경험을 문장으로 정리한 뒤 이력서 파일·공유 권한·최종 접수까지 확인해요.",
+   "category": "대학생활",
+   "minutes": 18,
+   "tags": [
+    "인턴",
+    "이력서",
+    "취업준비"
+   ],
+   "n": 45,
+   "slug": "university",
+   "href": "/harupyeon/tips/uni-first-resume/"
+  },
+  {
+   "id": "uni-leave-of-absence",
+   "title": "휴학하기 전에 확인할 것들",
+   "summary": "휴학 종류와 신청·승인부터 등록금 반환·이월, 장학금·대출, 복학까지 내 학교에서 확인할 조건을 정리해요.",
+   "category": "대학생활",
+   "minutes": 17,
+   "tags": [
+    "휴학",
+    "학사",
+    "복학"
+   ],
+   "n": 46,
+   "slug": "university",
+   "href": "/harupyeon/tips/uni-leave-of-absence/"
+  },
+  {
+   "id": "uni-credit-score",
+   "title": "신용점수는 대학생 때부터 쌓여요",
+   "summary": "조회와 대출 실행을 구분하고, 연체 예방·비금융정보 제출·오류 정정을 차근차근 확인해요.",
+   "category": "대학생활",
+   "minutes": 14,
+   "tags": [
+    "신용점수",
+    "체크카드",
+    "금융"
+   ],
+   "n": 47,
+   "slug": "university",
+   "href": "/harupyeon/tips/uni-credit-score/"
+  },
+  {
+   "id": "job-employment-contract",
+   "title": "근로계약서, 사인하기 전에 확인할 8줄",
+   "summary": "정규직·계약직·아르바이트 모두 계약서의 임금·시간·휴일·수습·갱신 조건을 확인하고 사본과 실제 근무기록을 남겨요.",
+   "category": "사회초년생",
+   "minutes": 14,
+   "tags": [
+    "근로계약서",
+    "노동법",
+    "첫직장"
+   ],
+   "n": 48,
+   "slug": "firstjob",
+   "href": "/harupyeon/tips/job-employment-contract/"
+  },
+  {
+   "id": "job-payslip-insurance",
+   "title": "첫 급여명세서, 왜 계약한 금액보다 적을까요",
+   "summary": "세전·실수령액부터 2026년 보험별 요율과 가입 예외, 3.3% 구분, 식대·초과근로·모르는 공제까지 실제 명세서와 대조해요.",
+   "category": "사회초년생",
+   "minutes": 18,
+   "tags": [
+    "급여명세서",
+    "4대보험",
+    "세금"
+   ],
+   "n": 49,
+   "slug": "firstjob",
+   "href": "/harupyeon/tips/job-payslip-insurance/"
+  },
+  {
+   "id": "job-first-salary-plan",
+   "title": "첫 월급, 들어올 돈과 나갈 돈부터 맞춰요",
+   "summary": "실입금액과 결제 달력부터 카드 중복계산, 연간 지출·비상금 준비, 적자 수습까지 가상 예시로 살펴봐요.",
+   "category": "사회초년생",
+   "minutes": 18,
+   "tags": [
+    "첫월급",
+    "생활비",
+    "예산",
+    "저축"
+   ],
+   "n": 50,
+   "slug": "firstjob",
+   "href": "/harupyeon/tips/job-first-salary-plan/"
+  },
+  {
+   "id": "job-rent-contract",
+   "title": "월세·전세 계약 체크리스트: 보증금을 지키는 순서",
+   "summary": "집·등기·당사자·특약을 확인하고 잔금, 주택 인도와 신고, 반환보증, 계약 종료까지 절차를 나눠 준비해요.",
+   "category": "사회초년생",
+   "minutes": 25,
+   "tags": [
+    "월세",
+    "전세",
+    "부동산계약",
+    "보증금"
+   ],
+   "n": 51,
+   "slug": "firstjob",
+   "href": "/harupyeon/tips/job-rent-contract/"
+  },
+  {
+   "id": "job-condolence-money",
+   "title": "경조사비, 정답 금액보다 내 형편과 관계를 먼저 봐요",
+   "summary": "금액표를 그대로 따르기보다 참석 방식과 예산을 정하고, 필요한 안내를 확인해요.",
+   "category": "사회초년생",
+   "minutes": 20,
+   "tags": [
+    "경조사비",
+    "축의금",
+    "조의금",
+    "예절"
+   ],
+   "n": 52,
+   "slug": "firstjob",
+   "href": "/harupyeon/tips/job-condolence-money/"
+  },
+  {
+   "id": "job-year-end-tax",
+   "title": "연말정산 처음이라면, 이 지도부터 보세요",
+   "summary": "귀속연도·공제·환급을 구분하고, 간소화 자료 확인부터 이직·퇴사한 해의 제출과 누락 수습까지 준비해요.",
+   "category": "사회초년생",
+   "minutes": 18,
+   "tags": [
+    "연말정산",
+    "세금",
+    "공제"
+   ],
+   "n": 53,
+   "slug": "firstjob",
+   "href": "/harupyeon/tips/job-year-end-tax/"
+  },
+  {
+   "id": "job-work-basics",
+   "title": "일 잘한다는 소리를 듣는 기본기: 보고, 메일, 질문",
+   "summary": "진행 상황, 필요한 결정, 질문할 지점을 분리하고 메일·기록으로 남기는 방법을 가상 예문으로 연습해요.",
+   "category": "사회초년생",
+   "minutes": 14,
+   "tags": [
+    "직장생활",
+    "커뮤니케이션",
+    "이메일"
+   ],
+   "n": 54,
+   "slug": "firstjob",
+   "href": "/harupyeon/tips/job-work-basics/"
+  },
+  {
+   "id": "job-unemployment-benefit",
+   "title": "퇴사와 실업급여, 순서를 알아야 받아요",
+   "summary": "피보험단위기간과 이직 사유를 확인하고, 서류 지연·신청·실업인정·근로 사실 신고를 단계별로 준비해요.",
+   "category": "사회초년생",
+   "minutes": 19,
+   "tags": [
+    "실업급여",
+    "퇴사",
+    "고용보험"
+   ],
+   "n": 55,
+   "slug": "firstjob",
+   "href": "/harupyeon/tips/job-unemployment-benefit/"
+  },
+  {
+   "id": "job-career-change",
+   "title": "첫 이직 경력기술서, 내 기여와 근거를 정리하는 법",
+   "summary": "실제 업무의 내 역할과 팀 성과를 나누고, 공개 가능한 근거로 경력을 설명해요. 재직 중 준비부터 제안 조건·인수인계까지 확인해요.",
+   "category": "사회초년생",
+   "minutes": 24,
+   "tags": [
+    "이직",
+    "경력기술서",
+    "커리어"
+   ],
+   "n": 56,
+   "slug": "firstjob",
+   "href": "/harupyeon/tips/job-career-change/"
+  },
+  {
+   "id": "momento-youth-notice-reading-guide",
+   "title": "청년 지원사업 공고 읽는 법 신청기간부터 제출서류까지",
+   "summary": "공고를 읽다가 “내가 신청할 수 있나?”에서 막혔다면, 조건과 예외를 나눠 보는 것부터 시작해 보세요. 자격을 판단하는 날짜, 준비할 서류, 제출 확인 방법을 설명하고 가상의 신청 일정도 끝까지 따라가 봐요.",
+   "category": "사회초년생",
+   "minutes": 16,
+   "tags": [
+    "청년정책",
+    "신청방법",
+    "공고체크리스트"
+   ],
+   "n": 57,
+   "slug": "firstjob",
+   "href": "/harupyeon/tips/momento-youth-notice-reading-guide/"
+  },
+  {
+   "id": "momento-gov24-document-checklist",
+   "title": "정부24에서 서류 발급 전 확인할 5가지: 제출처 요구사항과 발급일 기준",
+   "summary": "정부24 서류 발급 전 서류명, 공개 정보, 발급일과 제출 마감일, 전자증명서 제출 방식, 비용과 처리기간을 확인하는 방법입니다.",
+   "category": "사회초년생",
+   "minutes": 15,
+   "tags": [
+    "생활행정",
+    "정부24",
+    "서류발급"
+   ],
+   "n": 58,
+   "slug": "firstjob",
+   "href": "/harupyeon/tips/momento-gov24-document-checklist/"
+  },
+  {
+   "id": "job-business-card-etiquette",
+   "title": "처음 명함을 주고받을 때, 건네는 순간부터 보관까지",
+   "summary": "첫 미팅에서 명함을 건네고 이름을 확인하는 순서, 명함이 없을 때 쓸 말, 디지털 교환과 실수 수습 방법을 살펴봐요.",
+   "category": "사회초년생",
+   "minutes": 7,
+   "tags": [
+    "명함예절",
+    "첫직장",
+    "직장생활"
+   ],
+   "n": 59,
+   "slug": "firstjob",
+   "href": "/harupyeon/tips/job-business-card-etiquette/"
+  },
+  {
+   "id": "job-screen-sharing-privacy",
+   "title": "화상회의에서 화면을 공유하기 전, 창과 알림부터 확인해요",
+   "summary": "탭·창·전체 화면의 차이, 앱별 소리와 알림 설정, 잘못된 화면이 보였을 때 멈추고 확인하는 순서를 살펴봐요.",
+   "category": "사회초년생",
+   "minutes": 12,
+   "tags": [
+    "화상회의",
+    "화면공유",
+    "개인정보"
+   ],
+   "n": 60,
+   "slug": "firstjob",
+   "href": "/harupyeon/tips/job-screen-sharing-privacy/"
+  },
+  {
+   "id": "job-first-work-call",
+   "title": "처음 업무 전화를 받을 때, 메모와 다시 확인할 말부터 준비해요",
+   "summary": "소속 소개부터 전화 메모, 연락처 재확인, 보류·연결, 담당자 부재와 실수 수습까지 짧은 예문으로 준비해요.",
+   "category": "사회초년생",
+   "minutes": 8,
+   "tags": [
+    "업무전화",
+    "첫직장",
+    "전화메모",
+    "개인정보보호"
+   ],
+   "n": 61,
+   "slug": "firstjob",
+   "href": "/harupyeon/tips/job-first-work-call/"
+  },
+  {
+   "id": "uni-library-return-renewal",
+   "title": "도서관 책 반납일을 놓쳤다면, 연체 기준과 연장부터 확인해요",
+   "summary": "현재 대출기록과 연장 조건을 확인하고, 연체·반납함·타관반납·분실 상황을 내 도서관 기준으로 정리하는 순서를 알아봐요.",
+   "category": "대학생활",
+   "minutes": 8,
+   "tags": [
+    "도서관",
+    "반납",
+    "대출연장",
+    "연체",
+    "대학생활"
+   ],
+   "n": 62,
+   "slug": "university",
+   "href": "/harupyeon/tips/uni-library-return-renewal/"
+  },
+  {
+   "id": "uni-public-pc-printing",
+   "title": "공용 PC에서 서류를 출력했다면, 파일과 로그인도 챙겨요",
+   "summary": "도서관·복사집에서 출력할 때 남기기 쉬운 PDF, 로그인, 여분 출력물을 따로 확인하는 순서와 이미 자리를 떠났을 때의 대처를 알아봐요.",
+   "category": "대학생활",
+   "minutes": 7,
+   "tags": [
+    "공용PC",
+    "서류출력",
+    "개인정보",
+    "대학생활"
+   ],
+   "n": 63,
+   "slug": "university",
+   "href": "/harupyeon/tips/uni-public-pc-printing/"
+  },
+  {
+   "id": "job-email-attachment-check",
+   "title": "메일에 파일을 보냈는데 열리지 않는다고 할 때",
+   "summary": "첨부 사본과 공유 링크를 구분하고, 수신자 계정·권한·파일 버전을 확인한 뒤 안전하게 다시 보내는 순서를 알아봐요.",
+   "category": "사회초년생",
+   "minutes": 10,
+   "tags": [
+    "직장생활",
+    "이메일",
+    "첨부파일",
+    "공유권한"
+   ],
+   "n": 64,
+   "slug": "firstjob",
+   "href": "/harupyeon/tips/job-email-attachment-check/"
+  },
+  {
+   "id": "job-calendar-invitation-check",
+   "title": "회의 초대를 받았을 때, 참석 버튼 전에 확인할 것들",
+   "summary": "날짜와 시간대, 회의 장소부터 참석 응답·대안 제안·반복 일정까지 순서대로 확인해요.",
+   "category": "사회초년생",
+   "minutes": 8,
+   "tags": [
+    "첫직장",
+    "회의초대",
+    "캘린더",
+    "일정관리"
+   ],
+   "n": 65,
+   "slug": "firstjob",
+   "href": "/harupyeon/tips/job-calendar-invitation-check/"
+  },
+  {
+   "id": "uni-form-submission-confirmation",
+   "title": "구글폼 신청을 마쳤다면, 저장된 초안과 제출 완료를 구분해요",
+   "summary": "동아리·교육·행사 신청서를 작성한 뒤 무엇을 확인해야 할까요? 자동저장, 완료 화면, 응답 사본, 수정 링크를 구분하고 중복 제출을 줄이는 방법을 정리했어요.",
+   "category": "대학생활",
+   "minutes": 6,
+   "tags": [
+    "대학생활",
+    "온라인신청",
+    "구글폼",
+    "제출확인"
+   ],
+   "n": 66,
+   "slug": "university",
+   "href": "/harupyeon/tips/uni-form-submission-confirmation/"
+  },
+  {
+   "id": "job-spreadsheet-row-sorting",
+   "title": "엑셀 정렬 뒤 이름과 금액이 엇갈리지 않게 확인하는 법",
+   "summary": "명단의 모든 열을 함께 정렬하고, 머리글·빈 줄·고유번호를 확인해요. 짝이 틀렸을 때 되돌리는 순서도 알아봐요.",
+   "category": "사회초년생",
+   "minutes": 8,
+   "tags": [
+    "엑셀",
+    "스프레드시트",
+    "업무기초"
+   ],
+   "n": 67,
+   "slug": "firstjob",
+   "href": "/harupyeon/tips/job-spreadsheet-row-sorting/"
+  },
+  {
+   "id": "job-document-review-suggestions",
+   "title": "공유 문서를 고칠 때, 댓글과 제안 모드부터 골라요",
+   "summary": "검토를 부탁받았다면 본문 수정·질문 댓글·교체 제안을 나누고, 담당자의 적용과 최종 문장까지 확인해요.",
+   "category": "사회초년생",
+   "minutes": 8,
+   "tags": [
+    "공유문서",
+    "문서검토",
+    "직장생활"
+   ],
+   "n": 68,
+   "slug": "firstjob",
+   "href": "/harupyeon/tips/job-document-review-suggestions/"
+  },
+  {
+   "id": "uni-smartphone-document-scan",
+   "title": "휴대폰으로 서류를 스캔했다면, 마지막 PDF를 다시 열어 봐요",
+   "summary": "문서 스캔과 글자 추출을 구분하고, 모서리·페이지·작은 숫자까지 확인해 제출용 파일을 만들어요.",
+   "category": "대학생활",
+   "minutes": 7,
+   "tags": [
+    "문서스캔",
+    "PDF",
+    "디지털생활"
+   ],
+   "n": 69,
+   "slug": "university",
+   "href": "/harupyeon/tips/uni-smartphone-document-scan/"
+  },
+  {
+   "id": "job-file-access-request",
+   "title": "공유 링크에 “액세스 권한 필요”가 뜨면, 요청할 계정부터 확인해요",
+   "summary": "열리지 않는 링크를 받았을 때 계정과 필요한 권한을 확인하고, 소유자는 요청자·공유 범위를 살펴 처리해요.",
+   "category": "사회초년생",
+   "minutes": 6,
+   "tags": [
+    "공유링크",
+    "접근권한",
+    "디지털예절"
+   ],
+   "n": 70,
+   "slug": "firstjob",
+   "href": "/harupyeon/tips/job-file-access-request/"
+  },
+  {
+   "id": "job-gmail-search-labels",
+   "title": "Gmail에서 못 찾는 메일, 검색 조건을 줄이고 라벨로 남겨요",
+   "summary": "보낸 사람·기간·첨부파일로 메일을 찾고, 읽음 상태와 할 일을 구분해 필요한 자료를 다시 찾기 쉽게 정리해요.",
+   "category": "사회초년생",
+   "minutes": 7,
+   "tags": [
+    "Gmail",
+    "메일정리",
+    "업무습관"
+   ],
+   "n": 71,
+   "slug": "firstjob",
+   "href": "/harupyeon/tips/job-gmail-search-labels/"
+  }
+ ]
+}
