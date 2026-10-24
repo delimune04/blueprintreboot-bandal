@@ -69,3 +69,11 @@ test('atlas links the selected metric source outside its company button and sepa
  const summary=companySummary({ticker:'AAPL',name:'Apple',marketCap:100,asOf:'2026-10-24',sources:{marketCap:source}});
  const html=renderExplorerCards([summary],{sort:'marketCap'});assert(html.includes('Yahoo')||html.includes('Public Finance'));assert(html.includes('자료 기준 2026-10-23'));assert(html.includes('수집 2026-10-24'));assert(html.indexOf('</button><div class="atlas-sources">')>0);
 });
+
+test('partial company source maps and nullable source arrays do not break the atlas',()=>{
+ for(const sources of [{revenue:null,price:source,roe:undefined},[null,source,undefined]]){
+  const summary=companySummary({ticker:'XOM',name:'Exxon Mobil',marketCap:100,sources});
+  assert.equal(summary.sourceLabel,'Public Finance');
+  const html=renderExplorerCards([summary],{sort:'marketCap'});assert(html.includes('XOM'));assert(html.includes('Exxon Mobil'));
+ }
+});

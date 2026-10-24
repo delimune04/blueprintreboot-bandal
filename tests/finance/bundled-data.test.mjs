@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile, readdir } from 'node:fs/promises';
 import { createResearchService } from '../../hosting/finance/research.mjs';
+import { companySummary, renderExplorerCards } from '../../assetdist/finance/explorer.mjs';
 
 const assets = new URL('../../assetdist/', import.meta.url);
 const snapshots = new URL('finance/snapshots/', assets);
@@ -33,6 +34,10 @@ test('the real shipped research assets remain usable without live provider acces
     assert.ok(Number.isFinite(company.marketCap) && company.marketCap > 0, company.ticker);
     assert.ok(company.sources.marketCap?.url?.startsWith('https://finance.yahoo.com/'), company.ticker);
   }
+  const summaries = explorer.companies.map(companySummary);
+  assert.equal(summaries.length, 10);
+  assert.doesNotThrow(() => renderExplorerCards(summaries));
+  assert.match(renderExplorerCards(summaries), /XOM/);
   assert.equal(liveCalls, 0, 'fresh collected assets must not depend on production provider egress');
 });
 
