@@ -50,6 +50,9 @@ test('every new animation is opt-in, pausable, and reveals never hide content wi
   assert.match(script, /const STORE_KEY = 'bandal:motion'/);
   assert.match(script, /try \{\s*if \(userPaused\) localStorage/);
   assert.match(script, /prefers-reduced-motion: reduce/);
+  // Reveals added by page scripts after load (e.g. the rent comparison cards) are observed too.
+  assert.match(script, /new MutationObserver\([\s\S]*?\.bu-reveal[\s\S]*?watch\(/);
+  assert.match(script, /function revealAll\(\) \{ \$\$\('\.bu-reveal'\)\.forEach\(reveal\); \}/, 'pausing motion reveals elements added later as well');
 });
 
 test('pages on BANDAL UI load the font, the shared CSS/JS and restore the motion preference first', async () => {

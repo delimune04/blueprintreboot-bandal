@@ -56,27 +56,38 @@
   }));
   reduced.addEventListener?.('change', () => syncMotion(false));
 
-  /* Reveal once, then leave content visible. */
-  const reveals = $$('.bu-reveal');
-  $$('[data-bu-stagger]').forEach(group => {
-    $$('.bu-reveal', group).forEach((element, index) => element.style.setProperty('--bu-i', String(Math.min(index, 6))));
-  });
+  /* Reveal once, then leave content visible. Elements that page scripts add
+     later are picked up too, so nothing stays hidden behind its reveal. */
   function reveal(element) {
     if (element.classList.contains('is-visible')) return;
     element.classList.add('is-visible');
     $$('[data-bu-count]', element).forEach(countUp);
     if (element.hasAttribute('data-bu-count')) countUp(element);
   }
-  function revealAll() { reveals.forEach(reveal); }
-  if ('IntersectionObserver' in window) {
-    const observer = new IntersectionObserver(entries => entries.forEach(entry => {
-      if (!entry.isIntersecting) return;
-      reveal(entry.target);
-      observer.unobserve(entry.target);
-    }), { threshold: 0.1, rootMargin: '0px 0px -5% 0px' });
-    reveals.forEach(element => observer.observe(element));
-  } else {
-    revealAll();
+  function revealAll() { $$('.bu-reveal').forEach(reveal); }
+  const observer = 'IntersectionObserver' in window ? new IntersectionObserver(entries => entries.forEach(entry => {
+    if (!entry.isIntersecting) return;
+    reveal(entry.target);
+    observer.unobserve(entry.target);
+  }), { threshold: 0.1, rootMargin: '0px 0px -5% 0px' }) : null;
+  function watch(element) {
+    if (element.classList.contains('is-visible')) return;
+    const group = element.closest('[data-bu-stagger]');
+    if (group) element.style.setProperty('--bu-i', String(Math.min($$('.bu-reveal', group).indexOf(element), 6)));
+    if (observer && !motionOff()) observer.observe(element);
+    else reveal(element);
+  }
+  $$('.bu-reveal').forEach(watch);
+  if ('MutationObserver' in window) {
+    new MutationObserver(records => {
+      for (const record of records) {
+        for (const node of record.addedNodes) {
+          if (node.nodeType !== 1) continue;
+          if (node.matches('.bu-reveal')) watch(node);
+          $$('.bu-reveal', node).forEach(watch);
+        }
+      }
+    }).observe(document.body, { childList: true, subtree: true });
   }
   // Keyboard focus never lands in content that is still waiting for its reveal.
   document.addEventListener('focusin', event => {
