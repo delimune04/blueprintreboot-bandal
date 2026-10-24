@@ -51,7 +51,7 @@ into realized revenue. Five years of sourced daily prices are visible with selec
 
 DCF fetches annual OCF-minus-capex and share count from sources. Only growth, discount rate, terminal growth and horizon are editable. Anonymous EPS/revenue estimates are separate from named analyst ratings and targets. SEC debt notes provide dated instrument terms, maturity ladders, financing, collateral and convertible details where disclosed; coverage remains explicit.
 
-See `finance-data.md`, `finance-coverage.md`, `finance-analysts.md` and `finance-debt.md`. Korean DART integration is not implemented.
+See `finance-data.md`, `finance-coverage.md`, `finance-analysts.md` and `finance-debt.md`; the interface layer is in `finance-motion.md`. Korean DART integration is not implemented.
 
 Normalized, dated SEC snapshots and a collected company catalog back research when hosted provider access fails. Run `node scripts/refresh-finance-research.mjs` to refresh public snapshots before rebuilding and deploying. The UI displays collection time; these are not real-time financial feeds. The collector accepts any validated SEC ticker and bounded catalog batches; the explorer is generated from its verified index, rather than a hard-coded ticker list. Source-backed successful live lookups also enter a public-only R2 namespace, with exact identity and recursive private-field rejection. This cache never exposes private ledger or Quant objects.
 

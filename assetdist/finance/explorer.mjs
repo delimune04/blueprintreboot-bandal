@@ -9,10 +9,10 @@ const isNM=status=>['not-meaningful','not_meaningful','nm','N/M'].includes(statu
 const metric=(data,key)=>data.metrics?.find(item=>item.key===key);
 export function sourceMarkup(source, fallback={}){
   const s=source||fallback||{},url=s.url||s.sourceUrl;
-  const period=typeof s.period==='string'?s.period:s.period?.label||(s.start&&s.end?`${s.start} ~ ${s.end}`:s.period?.end?`${s.period.start||''} ~ ${s.period.end}`:s.periodEnd?(String(s.basis||'').includes('TTM')?'TTM ':'')+s.periodEnd:s.end||s.basis||'');
+  const period=typeof s.period==='string'?s.period:s.period?.label||(s.start&&s.end?`${s.start} ~ ${s.end}`:s.period?.end?`${s.period.start||''} ~ ${s.period.end}`:s.periodEnd?(String(s.basis||'').includes('TTM')?'TTM ':'')+s.periodEnd:s.end||''),basis=period?'':s.basis||'';
   let host='';try{host=new URL(url).hostname;}catch{}
   const label=s.provider||(host.endsWith('sec.gov')?'SEC EDGAR':host.includes('finance.yahoo.com')?'Yahoo Finance':host.includes('stockanalysis.com')?'Stock Analysis':s.title||s.tag||host||'출처 미제공');
-  const stamps=[[period,'기간'],[s.asOf,'자료 기준'],[s.filed,'공시일'],[s.publishedAt,'발표일'],[s.collectedAt||s.retrievedAt,'수집일'],[s.locator,'위치']].filter(([value])=>value).map(([value,name])=>`<span>${name} ${escape(name==='기간'||name==='위치'?value:date(value))}</span>`).join('');
+  const stamps=[[period,'기간'],[basis,'기준'],[s.asOf,'자료 기준'],[s.filed,'공시일'],[s.publishedAt,'발표일'],[s.collectedAt||s.retrievedAt,'수집일'],[s.locator,'위치']].filter(([value])=>value).map(([value,name])=>`<span>${name} ${escape(['기간','기준','위치'].includes(name)?value:date(value))}</span>`).join('');
   return `<span class="value-source">${url?`<a href="${escape(safeHref(url))}" target="_blank" rel="noopener noreferrer">${escape(label)} ↗</a>`:escape(label)}${stamps}</span>`;
 }
 export function companySummary(data){
