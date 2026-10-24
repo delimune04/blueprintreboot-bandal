@@ -15,6 +15,7 @@ import { REVIEW_KINDS, REVIEW_MAX_SNAPSHOTS, compareReviewSnapshots, exportRevie
 import type { ProjectReviewResponse, ReviewKind, ReviewRow } from "../lib/review/model.mjs";
 import "../lib/review/review.css";
 import { reviewReadiness } from "../lib/review/readiness.mjs";
+import { ReviewRecordNavigator } from "../components/ReviewRecordNavigator";
 import { ReviewWorkflow, ReviewContextEditor, FrozenWorkflowContext } from "../components/ReviewWorkflow";
 
 const LABELS: Record<ReviewKind, string> = { hypothesis: "Current hypothesis", decision: "Key decisions", failed_attempt: "Failed attempts", question: "Open questions", next_action: "Next actions" };
@@ -103,8 +104,9 @@ function ReviewEditor({ initial }: { initial: ProjectReviewResponse }) {
       <p className="muted-text">{t("Only linked project papers, linked note blocks and research pages assigned to this project are offered as evidence. Extract PDF text in Reader to select a specific page.")}</p>
     </Section>
     <Section title={t("Working review records")} description={t("Changes remain a draft until Save review. AI provenance marks pasted AI text; this editor does not generate or verify it.")}>
+      <ReviewRecordNavigator rows={draft.rows} ko={locale === "ko"} />
       <fieldset className="review-fieldset" disabled={readonly}>
-        {draft.rows.map((row, index) => <article className="review-record" key={row.id} id={`review-${row.id}`}>
+        {draft.rows.map((row, index) => <article className="review-record" key={row.id} id={`review-${row.id}`} tabIndex={-1}>
           <div className="review-record-heading"><span className="review-number">{index + 1}</span><label className="reader-field"><span>{t("Record kind")}</span><select value={row.kind} onChange={(event) => updateRow(row.id, { kind: event.target.value as ReviewKind })}>{REVIEW_KINDS.map((kind) => <option key={kind} value={kind}>{t(LABELS[kind])}</option>)}</select></label><label className="reader-field"><span>{t("Review status")}</span><select value={row.status} onChange={(event) => updateRow(row.id, { status: event.target.value as ReviewRow["status"] })}><option value="open">{t("Open · not reviewed")}</option><option value="reviewed">{t("Reviewed by a person")}</option></select></label><button className="icon-button" aria-label={t("Remove review record")} disabled={draft.rows.some(item => (item.context?.comparison_ids.includes(row.id) || item.context?.origin_decision_id === row.id))} title={draft.rows.some(item => (item.context?.comparison_ids.includes(row.id) || item.context?.origin_decision_id === row.id)) ? (locale === "ko" ? "연결된 결정과 인수인계에서 비교 연결을 먼저 해제하세요." : "Unlink dependent decisions and actions first.") : undefined} onClick={() => setDraft({ ...draft, rows: draft.rows.filter((item) => item.id !== row.id) })}><Trash2 size={15} /></button></div>
           <label className="reader-field"><span>{t("Research record")}</span><textarea rows={3} maxLength={10000} value={row.text} onChange={(event) => updateRow(row.id, { text: event.target.value })} /></label>
           <ReviewContextEditor row={row} rows={draft.rows} readonly={readonly} ko={locale === "ko"} update={updateRow} add={(item) => setDraft(current => ({ ...current, rows: [...current.rows, item] }))} />
