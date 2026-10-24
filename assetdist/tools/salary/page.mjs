@@ -86,7 +86,7 @@ if (form) {
       ['월 세전 급여', r.gross, `비과세 ${won(r.nonTaxable)} 포함`],
       ['국민연금', -r.pension, `기준소득월액 ${won(r.pensionBase)} × 4.75%`],
       ['건강보험', -r.health, '과세 급여 × 3.595%'],
-      ['장기요양보험', -r.care, '건강보험료 × 13.14%'],
+      ['장기요양보험', -r.care, '건강보험료 × 0.9448% ÷ 7.19%'],
       ['고용보험', -r.employment, '과세 급여 × 0.9%'],
       ['근로소득세', -r.incomeTax, `간이세액표 ${percent}% · 가족 ${input.family}명${input.children ? ` · 자녀 ${input.children}명` : ''}`],
       ['지방소득세', -r.localTax, '근로소득세 × 10%'],
