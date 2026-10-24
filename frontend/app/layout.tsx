@@ -16,7 +16,7 @@ export async function generateMetadata(): Promise<Metadata> {
     metadataBase: new URL(`${protocol}://${host}`),
     title: { default: PRODUCT_NAME, template: `%s · ${PRODUCT_NAME}` },
     description,
-    icons: { icon: [{ url: "/brand/labvium-symbol-v1.png", type: "image/png" }], apple: [{ url: "/brand/labvium-symbol-v1.png" }] },
+    icons: { icon: [{ url: "/brand/labvium-icon-v2.svg", type: "image/svg+xml" }, { url: "/brand/labvium-icon-v2.png", type: "image/png" }], apple: [{ url: "/brand/labvium-icon-v2.png" }] },
     openGraph: { title: PRODUCT_NAME, description, images: [{ url: "/og-labvium.png", width: 1200, height: 630, alt: `${PRODUCT_NAME} 연구 공간` }] },
     twitter: { card: "summary_large_image", title: PRODUCT_NAME, description, images: ["/og-labvium.png"] },
   };

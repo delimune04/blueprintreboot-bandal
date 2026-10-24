@@ -17,7 +17,7 @@ const V7_LINKS = [
 ];
 const V7_IDS = ["top", "navigation", "main", "hero-title", "horizon-sky", "horizon-moon", "constellation", "projects", "labvium-title", "harupyeon", "momento", "haru-title", "travel", "travel-title", "capella", "tokyo", "capella-title", "about", "about-title", "app-projects", "directory-title"];
 // Files the homepage expects from the existing BANDAL Site; everything else ships in bandal-home/.
-const SITE_ASSETS = ["/favicon.svg", "/horizon.png", "/crescent-flat.svg", "/transitions.css", "/transitions.js", "/LabVium/brand/labvium-symbol-v1.png", "/capella-icon-starlight-lens.png"];
+const SITE_ASSETS = ["/favicon.svg", "/horizon.png", "/crescent-flat.svg", "/transitions.css", "/transitions.js", "/LabVium/brand/labvium-symbol-v2.svg", "/capella-icon-starlight-lens.png"];
 
 test("BANDAL homepage keeps unrelated published links and anchors", async () => {
   const html = await read("index.html");
