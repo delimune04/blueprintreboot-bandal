@@ -61,13 +61,25 @@ way in, and clicking a pill opens that company.
 Atlas cards keep both the source's collection date and the snapshot's
 "수집" date, as `tests/finance/explorer.test.mjs` requires.
 
+## Review follow-ups (#3)
+
+- The embedded ledger is hidden, not destroyed, while a focus or visibility
+  re-check confirms the same account, and it stays mounted across Finance tab
+  switches, so unsaved ledger drafts survive. An account change or a failed
+  check still removes it and locks the page.
+- The strategy form saves against the revision it was filled from. Refreshing
+  the run list no longer hands it a newer revision, so another tab's change
+  returns the server's 409; the edits stay in the form and "최신 전략 불러오기"
+  reloads the latest version only when asked.
+- An anonymous browser ledger (`moaflow:browser:v1`) that cannot be parsed or
+  validated is no longer replaced by an empty ledger. Nothing is written over
+  it until the person chooses: download the original bytes, or keep them under
+  `moaflow:browser:v1:unreadable:<time>` (copied and verified first) and start
+  a new ledger. The regular full backup of the on-screen ledger is not offered
+  as a backup of that original.
+
 ## Left for an owner decision
 
-- `checkSession` runs on every window focus and removes the ledger iframe
-  before re-checking the account, so clicking from the embedded ledger back
-  onto Finance reloads it and loses unsaved input. It is an account-isolation
-  guard and was not changed; a narrower trigger (only after the page was
-  hidden) is possible.
 - Shared result pages (`?share=`) still show the research hero copy and load
   an atlas list they do not display.
 - The 5Y price chart draws one hover circle per trading day (~1,250 nodes).
@@ -76,7 +88,8 @@ Atlas cards keep both the source's collection date and the snapshot's
 
 `tests/finance/motion.test.mjs` runs with the other Finance tests and checks
 the published ids, the research first paint, same-origin assets, motion
-gating, the 11px floor and the basis label. The skin was also driven in
+gating, the 11px floor and the basis label. `tests/finance/review-guards.test.mjs`
+and `tests/moaflow/browser-ledger.test.mjs` cover the review follow-ups. The skin was also driven in
 Chromium against a local server serving these files, proxying public
 `/finance/api` reads from bandal.app and mocking signed-in Quant endpoints:
 desktop and phone views of research, company profile, glossary, compare,

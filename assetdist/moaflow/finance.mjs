@@ -73,6 +73,22 @@ export function validateState(s){
  check(s.settings&&money(s.settings.monthlyBudget)&&Number.isInteger(s.settings.reminderDays)&&s.settings.reminderDays>=0&&s.settings.reminderDays<=14&&typeof s.settings.notifications==='boolean'&&typeof s.settings.hideAmounts==='boolean','설정 값을 확인해 주세요.');
  return s;
 }
+// A stored browser ledger that cannot be read is reported, never replaced by an empty one.
+export function readStoredLedger(raw){
+ if(raw===null||raw===undefined||raw==='')return{status:'missing'};
+ let record;try{record=JSON.parse(raw);}catch{return{status:'invalid',raw,reason:'저장 형식을 읽을 수 없어요'};}
+ if(record===null)return{status:'missing'};
+ try{if(typeof record!=='object'||!record.state)throw new Error('가계부 자료가 비어 있어요');return{status:'valid',record:{...record,state:validateState(record.state)}};}
+ catch(error){return{status:'invalid',raw,reason:error.message||'가계부 자료를 확인할 수 없어요'};}
+}
+// Copies the unreadable original byte for byte and verifies it before freeing the main key.
+export function keepUnreadableLedger(storage,key,now=new Date()){
+ const raw=storage.getItem(key);if(raw===null)return null;
+ const copy=`${key}:unreadable:${now.toISOString()}`;
+ try{storage.setItem(copy,raw);}catch{throw new Error('브라우저 저장 공간이 부족해 원본을 따로 보관하지 못했어요. 원본을 먼저 내려받아 주세요.');}
+ if(storage.getItem(copy)!==raw)throw new Error('원본을 그대로 보관했는지 확인하지 못했어요. 원본을 먼저 내려받아 주세요.');
+ storage.removeItem(key);return copy;
+}
 export function ledger(state,asOf=today(),includePlanned=false){
  const accounts=new Map(state.accounts.map(a=>[a.id,a])),balances=Object.fromEntries(state.accounts.map(a=>[a.id,asOf<state.book.openingDate?0:a.openingBalance]));
  const journal=[];if(asOf<state.book.openingDate)return{balances,journal,assets:0,liabilities:0,netAssets:0};
