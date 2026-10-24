@@ -16,9 +16,10 @@ const tile=(name,color='blue')=>`<span class="metric-icon ${color}">${I(name)}</
 let session={authenticated:false},state=F.demoState(),revision=0,dirty=false,syncError='',saveVersion=0,saving=false,saveTimer,saveStatus='이 브라우저에 저장',modalType='',lastFocus,toastTimer;
 let month=F.monthOf(F.today()),page='dashboard',flowView='accounts',entryQuery='',entryType='all',entryStatus='all',entryPage=0,subscriptionFilter='active',shareIncludeAssets=false,shareDays=7,shareRows=[],shared=null,sharedError='',shareToken=new URLSearchParams(location.search).get('share'),memoryLinks={};
 let flowAccountId=null,riverExpanded='group:fixed',riverScene=null,motionPaused=false;
-let localStorageAvailable=true,accountChanged=false;const cloudKey=()=>`moaflow:account:${session.user?.key||'unknown'}:v1`;
+let localStorageAvailable=true,accountChanged=false,browserLedger={status:'missing'};const cloudKey=()=>`moaflow:account:${session.user?.key||'unknown'}:v1`;
 const storageKey=()=>state.sample?DEMO_KEY:session.authenticated?cloudKey():REAL_KEY;
 const read=(key)=>{try{return JSON.parse(localStorage.getItem(key)||'null');}catch{return null;}};
+const inspectBrowserLedger=()=>{let raw=null;try{raw=localStorage.getItem(REAL_KEY);}catch{}return browserLedger=F.readStoredLedger(raw);};
 const account=id=>state.accounts.find(a=>a.id===id),category=id=>state.categories.find(c=>c.id===id),accountName=id=>account(id)?.name||'계좌',categoryName=id=>category(id)?.name||'미분류';
 const money=n=>state.settings.hideAmounts?'••••':F.won(n),amount=n=>state.settings.hideAmounts?'••••':Math.round(n).toLocaleString('ko-KR');
 const visibleAmount=n=>`${amount(n)}${state.settings.hideAmounts?'':'<span class="unit">원</span>'}`;
@@ -32,12 +33,13 @@ const api=createAccountApi({getAccountKey:()=>session.authenticated?session.user
 }});
 function changedAccountView(){return `<section class="panel section-body account-lock"><h1>로그인한 계정이 바뀌었어요</h1><p>열어 둔 가계부를 다른 계정에 저장하지 않도록 멈췄어요. ${localStorageAvailable?'전송하지 못한 기록은 이전 계정의 자료로 이 브라우저에 보관했어요.':'브라우저에 보관하지 못한 기록이 있어요. 먼저 전체 백업을 저장해 주세요.'}</p><p>현재 계정으로 다시 열거나, 이전 계정으로 로그인한 뒤 남은 기록을 확인할 수 있어요.</p><div class="settings-buttons"><button class="btn" data-action="export-backup">전체 백업 저장</button><button class="btn primary" data-action="reload-session">현재 계정으로 다시 열기</button></div></section>`;}
 
-function persist(){try{localStorage.setItem(storageKey(),JSON.stringify({state,revision,dirty}));localStorageAvailable=true;}catch{localStorageAvailable=false;saveStatus='브라우저 저장 안 됨';toast('브라우저 저장 공간이 부족해요. 전체 백업을 내려받아 주세요.');}}
+function persist(){if(storageKey()===REAL_KEY&&browserLedger.status==='invalid'){saveStatus='저장 보류 · 이전 가계부 확인 필요';askBrowserRecovery();return false;}try{localStorage.setItem(storageKey(),JSON.stringify({state,revision,dirty}));localStorageAvailable=true;return true;}catch{localStorageAvailable=false;saveStatus='브라우저 저장 안 됨';toast('브라우저 저장 공간이 부족해요. 전체 백업을 내려받아 주세요.');return false;}}
+function askBrowserRecovery(){modalType='confirm';showModal('이전 가계부를 읽을 수 없어요','원본은 바꾸지 않았어요. 어떻게 할지 선택해 주세요.',`<p class="subtle">이 브라우저에 저장된 가계부를 열 수 없어요(${esc(browserLedger.reason||'형식 확인 필요')}). 원본을 그대로 내려받아 보관하거나, 원본을 이 브라우저의 별도 공간에 보관한 뒤 새 가계부를 시작할 수 있어요. 지금 화면의 예시나 새 기록을 내보내는 전체 백업은 이 원본의 백업이 아니에요.</p><div class="form-actions"><button class="btn" data-action="download-browser-original">원본 그대로 내려받기</button></div><div class="form-actions"><button class="btn" data-action="close-modal">취소</button><button class="btn danger" data-action="confirm-keep-browser-original">원본 보관 후 새로 시작</button></div>`);}
 function commit(message='저장했어요.'){
  try{F.validateState(state);}catch(error){toast(error.message);return false;}
- state.updatedAt=new Date().toISOString();saveVersion++;dirty=!state.sample&&session.authenticated;persist();
+ state.updatedAt=new Date().toISOString();saveVersion++;dirty=!state.sample&&session.authenticated;const saved=persist();
  if(dirty){saveStatus='계정에 저장 중';clearTimeout(saveTimer);saveTimer=setTimeout(saveCloud,300);}else saveStatus=state.sample?'예시로 체험 중':'이 브라우저에 저장';
- render();if(message&&localStorageAvailable)toast(message);return true;
+ render();if(message&&saved)toast(message);return true;
 }
 async function saveCloud(){
  if(saving||!dirty||state.sample||!session.authenticated||syncError||accountChanged)return;
@@ -157,7 +159,7 @@ function checkNotifications(){if(!state.settings.notifications||!('Notification'
 async function startReal(){
  closeModal();syncError='';dirty=false;
  if(session.authenticated){const data=await api('state');state=data.state?F.validateState(data.state):F.blankState();revision=data.revision;saveStatus=data.state?'계정에 저장됨':'내 가계부를 시작해요';}
- else{const cached=read(REAL_KEY);try{state=cached?.state?F.validateState(cached.state):F.blankState();}catch{state=F.blankState();}state.sample=false;revision=0;saveStatus='이 브라우저에 저장';}
+ else{const stored=inspectBrowserLedger();if(stored.status==='invalid')return askBrowserRecovery();state=stored.status==='valid'?stored.record.state:F.blankState();state.sample=false;revision=0;saveStatus='이 브라우저에 저장';}
  persist();navigate('dashboard');toast('나의 기록을 시작해 보세요.');
 }
 async function reloadCloud(){
@@ -237,6 +239,8 @@ async function handleAction(action,id,el){
   case'delete-category':if(state.entries.some(e=>e.categoryId===id)||state.subscriptions.some(s=>s.categoryId===id))return formError('사용 중인 분류예요. 연결된 기록을 먼저 변경해 주세요.');confirm('분류를 삭제할까요?','이 분류를 기록 선택지에서 지워요.','confirm-delete-category',id);break;
   case'confirm-delete-category':state.categories=state.categories.filter(c=>c.id!==id);closeModal();commit('분류를 삭제했어요.');break;
   case'start-real':await startReal();break;
+  case'download-browser-original':{let raw=null;try{raw=localStorage.getItem(REAL_KEY);}catch{}if(raw===null)return toast('내려받을 원본이 없어요.');download(raw,`모아흐름_브라우저원본_${F.today()}.txt`,'text/plain');toast('읽을 수 없던 원본을 그대로 내려받았어요.');break;}
+  case'confirm-keep-browser-original':{if(inspectBrowserLedger().status!=='invalid'){closeModal();break;}F.keepUnreadableLedger(localStorage,REAL_KEY);inspectBrowserLedger();closeModal();if(state.sample)await startReal();else commit('원본을 따로 보관하고 지금 가계부를 저장했어요.');break;}
   case'try-demo':if(dirty){await saveCloud();if(dirty)return toast('저장이나 백업을 마친 뒤 예시를 열어 주세요.');}persist();state=F.demoState();dirty=false;syncError='';saveStatus='예시로 체험 중';navigate('dashboard');break;
   case'reset-real':confirm('내 가계부를 새롭게 시작할까요?','현재 가계부의 거래·구독·계좌를 지우고 기본 계좌로 시작해요. 필요한 내용은 먼저 전체 백업으로 저장해 주세요. 이전에 만든 공유 자료는 공유 관리에서 따로 종료할 수 있어요.','confirm-reset-real','','<div class="form-actions"><button class="btn" data-action="export-backup">먼저 전체 백업</button></div>');break;
   case'confirm-reset-real':if(session.authenticated)revision=(await api('state')).revision;state=F.blankState();syncError='';closeModal();commit('새 가계부를 시작해요.');break;
@@ -330,7 +334,7 @@ async function init(){
    saveStatus=dirty?'기기 저장 · 동기화 필요':remote.state?'계정에 저장됨':'내 가계부를 시작해요';
   }catch{try{state=cached?.state?F.validateState(cached.state):F.blankState();revision=cached?.revision||0;dirty=!!cached?.dirty;}catch{state=F.blankState();}syncError='계정 자료를 불러오지 못했어요. 연결을 확인하고 최신 자료를 다시 열어 주세요.';saveStatus='연결 확인 필요';}
   memoryLinks=read('moaflow:share-links:'+session.user.key)||{};
- }else{const cached=read(REAL_KEY)||read(DEMO_KEY);try{state=cached?.state?F.validateState(cached.state):F.demoState();}catch{state=F.demoState();}saveStatus=state.sample?'예시로 체험 중':'이 브라우저에 저장';}
+ }else{const stored=inspectBrowserLedger();if(stored.status==='valid')state=stored.record.state;else{const demo=read(DEMO_KEY);try{state=demo?.state?F.validateState(demo.state):F.demoState();}catch{state=F.demoState();}}saveStatus=state.sample?'예시로 체험 중':'이 브라우저에 저장';}
  render();if(shareToken)await loadShared();else if(page==='sharing')loadShares();if(dirty&&!syncError)saveCloud();
  if('serviceWorker'in navigator&&isSecureContext)navigator.serviceWorker.register('/moaflow/sw.js',{scope:'/moaflow/'}).catch(()=>{});
  checkNotifications();setInterval(checkNotifications,60000);
