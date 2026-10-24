@@ -1,4 +1,13 @@
 import { buildFinancialFlow, calculateMetrics } from '../../assetdist/finance/research-model.mjs';
+import { createProfileSummaryService } from './profile-summary.mjs';
+import { buildFinancialInsights } from './insights.mjs';
+import { normalizeQuarterlyHistory, attachHistoricalValuations } from './history.mjs';
+import { industryBenchmarks } from './peers.mjs';
+import { createPriceService } from './prices.mjs';
+import { createDebtService } from './debt.mjs';
+import { createAnalystService, loadAnalystResearch } from './analysts.mjs';
+import { createProfileService, fetchPublicCompanyLogo } from './public-data.mjs';
+import { readPublicCache, writePublicCache } from './public-cache.mjs';
 import { createPublicDataService } from './public-data.mjs';
 import { loadCompanyOutlook } from './outlook.mjs';
 
@@ -173,15 +182,54 @@ export function metricsWithSources(financials, evidence, quote = {}) {
 
 export function createResearchService({ fetcher = globalThis.fetch, clock = () => Date.now() } = {}) {
   const publicMarket = createPublicDataService({ fetcher, clock });
-  async function decorate(payload, request, env, quote, alias) {
-    const ticker = payload.company.ticker, [sector, industry] = SECTORS[ticker] || ['기타', '분류 확인 중'];
+  const priceService = createPriceService({fetcher,clock});
+  const profileService = createProfileService({fetcher,clock});
+  const debtService = createDebtService({fetcher,clock});
+  const analystService = createAnalystService({fetcher,clock});
+  async function decorate(payload, request, env, quote, alias, rawFacts = null) {
+    const ticker = payload.company.ticker;
+    const [profileResult, priceResult, debtResult, analystPack] = await Promise.allSettled([
+      payload.company.profile || quote.profile || (!payload.collectedAt ? profileService.get(ticker) : null),
+      payload.priceHistory || (payload.collectedAt ? {status:'unavailable',points:[],reason:'이 수집본에는 일별 가격이 없습니다.'} : priceService.get(ticker)),
+      debtService.get(ticker,{cik:payload.company.cik,reports:payload.reports,assets:env.ASSETS,request,userAgent:env.SEC_USER_AGENT,allowNetwork:!payload.collectedAt,facts:rawFacts}),
+      (payload.analystResearch?.status==='available'?payload.analystResearch:null) || loadAnalystResearch(request,env,ticker,{clock})
+    ]);
+    const profileEnvelope=profileResult.status==='fulfilled'?profileResult.value:null;
+    const profile=profileEnvelope?.profile||profileEnvelope;
+    const [editedSector,editedIndustry] = SECTORS[ticker] || ['기타','분류 확인 중'];
+    const sector = profile?.sector || quote.profile?.sector || payload.company.sector || editedSector;
+    const industry = profile?.industry || quote.profile?.industry || payload.company.industry || editedIndustry;
+    const classificationSource = profile?.source || quote.profile?.source || payload.company.classificationSource || 'BANDAL 탐색용 편집 분류';
+    const priceHistory = priceResult.status==='fulfilled' ? priceResult.value : {status:'unavailable',points:[]};
+    const debtFetched=debtResult.status==='fulfilled'?debtResult.value:null;
+    const debt=debtFetched?.status!=='unavailable'&&debtFetched?debtFetched:payload.debt||debtFetched||{status:'unavailable',instruments:[],coverage:{reason:'부채 주석 수집을 확인하지 못했습니다.'}};
+    let analystResearch = analystPack.status==='fulfilled' ? analystPack.value : null;
+    if (!analystResearch && !payload.collectedAt) {try {analystResearch=await analystService(ticker);}catch{}}
+    const reviewedProfile=await createProfileSummaryService({assets:env.ASSETS,clock,request}).get(ticker);
+    const logo = payload.company.logo || quote.logo || profileEnvelope?.logo || null;
+    const company = {...payload.company,sector,industry,classificationSource,profile,
+      ...(logo?{logo:{...logo,url:logo.url?.startsWith('/finance/logos/')?logo.url:`/finance/api/companies/${ticker}/logo`,originalUrl:logo.originalUrl||logo.url}}:{}),
+      ...(reviewedProfile?.description?{description:reviewedProfile.description,descriptionSource:reviewedProfile.source,profileSummary:reviewedProfile}:profile?.description?{description:profile.description,descriptionSource:profile.source}:{})};
+    let peerBenchmarks = {metrics:{},status:'unavailable',reason:'동일 업종·동일 기준의 비교 표본이 부족합니다.'};
+    const peerIndex=await bundledSnapshot(request,env,'index');
+    if (peerIndex?.companies?.length && typeof classificationSource==='object') {
+      const peerRows=[];
+      for(const item of peerIndex.companies.filter(row=>row.industry===industry&&row.ticker!==ticker).slice(0,20)){
+        const peer=await bundledSnapshot(request,env,item.ticker);if(peer?.payload)peerRows.push({...peer.payload,metrics:metricsWithSources(peer.payload.financials,peer.payload.evidence,peer.payload.quote)});
+      }
+      peerBenchmarks=industryBenchmarks({...payload,company,quote,metrics:metricsWithSources(payload.financials,payload.evidence,quote)},peerRows);
+      for(const b of Object.values(peerBenchmarks.metrics))Object.assign(b,{value:b.mean,count:b.n,industry,methodology:peerBenchmarks.reason,note:'비교 표본: '+b.sample.map(row=>row.ticker).join(', ')+' · 기준일 '+b.dates.join(', ')});
+    }
     const outlook = await loadCompanyOutlook(request, env, ticker, { clock });
     const descriptionReference = outlook?.sources.find(source => outlook.business?.sourceIds?.includes(source.id));
     const descriptionSource = descriptionReference ? { provider: '기업 공식 발표', url: descriptionReference.url, publishedAt: descriptionReference.publishedAt, retrievedAt: descriptionReference.retrievedAt, basis: '사업 설명의 출처 기반 요약' } : null;
+    if(payload.evidence?.grossProfit?.derived&&ticker!=='IREN')payload.evidence.grossProfit.scope='공시 매출−원가 차감액 (원가 포함 범위 확인)';
     const flow = buildFinancialFlow(payload.financials, payload.period);
+    if(payload.evidence?.grossProfit?.derived&&ticker!=='IREN'){const gross=flow.nodes?.find(n=>n.id==='gross');if(gross)gross.label='매출−공시 원가';flow.note+=' 공시 원가의 감가상각 포함 범위를 별도 확인해야 하며, 계산 차감액을 표준 매출총이익과 동일시하지 않습니다.';}
     const accountingNotes = ticker === 'IREN' ? ['IREN의 매출원가는 감가상각·상각을 제외합니다. 직접원가 차감잔액을 다른 회사의 표준 매출총이익과 같은 기준으로 비교하면 안 됩니다.'] : [];
     if (ticker === 'IREN' && flow.nodes?.length) { const gross = flow.nodes.find(node => node.id === 'gross'); if (gross) gross.label = '직접원가 차감잔액'; const costs = flow.nodes.find(node => node.id === 'opex'); if (costs) costs.label = '기타 비용·상각·손상차손'; flow.note += ' IREN 직접원가는 감가상각·상각 제외 기준이며 잔여 영업비용에는 비현금 손상차손 등이 포함됩니다.'; }
     const metrics = metricsWithSources(payload.financials, payload.evidence, quote);
+    if(payload.evidence?.grossProfit?.derived&&ticker!=='IREN'){const m=metrics.find(m=>m.key==='grossMargin');if(m){m.label='공시 원가 차감률';m.explanation='공시된 매출에서 공시 원가를 뺀 계산 비율입니다. 기업에 따라 원가의 감가상각 포함 범위가 다르므로 표준 매출총이익률이나 산업 평균으로 직접 비교하지 않습니다.';}}
     if (outlook?.arr?.operating && finite(outlook.arr.operating.value)) {
       const metric = metrics.find(item => item.key === 'arr'), definition = outlook.arr, observed = definition.operating;
       const reference = outlook.sources.find(source => observed.sourceIds?.includes(source.id));
@@ -191,7 +239,7 @@ export function createResearchService({ fetcher = globalThis.fetch, clock = () =
     if (ticker === 'IREN') { const margin = metrics.find(metric => metric.key === 'grossMargin'); if (margin) { margin.label = '직접원가 차감잔액률'; margin.explanation = '감가상각·상각을 제외한 직접원가만 차감한 비율입니다. 일반 매출총이익률과 직접 비교하지 마세요.'; } }
     const consensus = quote.analystConsensus;
     const opinions = consensus && (consensus.analystCount > 0 || finite(consensus.targetMean)) ? { status: 'available', provider: quote.provider, retrievedAt: quote.retrievedAt, ratings: [], recommendation: consensus.recommendation || null, analystCount: consensus.analystCount || null, targetMean: consensus.targetMean ?? null, targetLow: consensus.targetLow ?? null, targetHigh: consensus.targetHigh ?? null, analystTargetPrice: consensus.targetMean ?? null, source: consensus.source || null, reason: 'Yahoo가 집계한 애널리스트 의견·목표가예요. 회사의 공식 가이던스나 개별 보고서 원문이 아니에요.' } : payload.opinions;
-    return { ...payload, company: { ...payload.company, sector, industry, ...(outlook?.business?.description ? { description: outlook.business.description, descriptionSource } : {}), classificationSource: 'BANDAL 탐색용 편집 분류' }, metrics, quote, flow, opinions, outlook, business: outlook?.business ? { ...outlook.business, descriptionSource } : null, arr: outlook?.arr || null, history: payload.history || [], accountingNotes,
+    return { ...payload, company: { ...company, ...(outlook?.business?.description ? { description: outlook.business.description, descriptionSource } : {}) }, priceHistory, debt, analystResearch, peerBenchmarks, insights:buildFinancialInsights({...payload,company,metrics,history:payload.quarterlyHistory||payload.history,annualHistory:payload.annualHistory||payload.history}), coverage:{scope:'SEC 등록 기업 · 공개된 항목만 표시',metrics:Object.fromEntries(metrics.map(m=>[m.key,{state:finite(m.value)?'available':m.status==='not-meaningful'?'not-meaningful':'unavailable',reason:m.reason||null}])),quarterly:{available:!!payload.quarterlyHistory?.quarters?.length,count:payload.quarterlyHistory?.quarters?.length||0},price:{available:priceHistory?.status==='available'},debt:debt?.coverage||null,analysts:analystResearch?.coverage||null}, metrics, quote, flow, opinions, outlook, business: outlook?.business ? { ...outlook.business, descriptionSource } : null, arr: outlook?.arr || null, history: attachHistoricalValuations(payload.quarterlyHistory || (payload.history?.metricSeries?payload.history:{status:'unavailable',quarters:[],metricSeries:{}}),priceHistory), annualHistory:payload.annualHistory || (Array.isArray(payload.history)?payload.history:[]), accountingNotes,
       fieldSources: { ...(payload.evidence || {}), ...(quote.evidence || {}) }, ...(alias?.correction ? alias : {}) };
   }
   const cache = new Map(), pending = new Map();
@@ -206,10 +254,10 @@ export function createResearchService({ fetcher = globalThis.fetch, clock = () =
     cache.set(key, { value, expires: clock() + ttl, bytes }); cacheBytes += bytes;
   }
   async function bundledSnapshot(request, env, name) {
-    if (!env.ASSETS?.fetch || !/^(?:catalog|[A-Z0-9.-]{1,12})$/.test(name)) return null;
+    if (!env.ASSETS?.fetch || !/^(?:catalog|index|[A-Z0-9.-]{1,12})$/.test(name)) return null;
     const key = 'snapshot:' + name, existing = cache.get(key);
     if (existing && existing.expires > clock()) return existing.value;
-    const max = name === 'catalog' ? 3 * 1024 * 1024 : 256 * 1024;
+    const max = name === 'catalog' ? 3 * 1024 * 1024 : 768 * 1024;
     try {
       const target = new URL(request.url);
       target.pathname = '/finance/snapshots/' + name + '.json'; target.search = ''; target.hash = '';
@@ -222,7 +270,9 @@ export function createResearchService({ fetcher = globalThis.fetch, clock = () =
       const bytes = new Uint8Array(size); let offset = 0; for (const chunk of chunks) { bytes.set(chunk, offset); offset += chunk.length; }
       const data = JSON.parse(new TextDecoder().decode(bytes)), collected = Date.parse(data?.collectedAt);
       if (data?.schemaVersion !== 1 || typeof data.collectedAt !== 'string' || !/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/.test(data.collectedAt) || !Number.isFinite(collected) || collected > clock() + 300000) return null;
-      if (name === 'catalog') {
+      if (name === 'index') {
+        if(!Array.isArray(data.companies)||data.companies.length>30000||!data.companies.every(c=>/^[A-Z0-9.-]{1,12}$/.test(c.ticker||'')&&typeof c.name==='string'))return null;
+      } else if (name === 'catalog') {
         if (!Array.isArray(data.companies) || !data.companies.length || data.companies.length > 30000 || data.source?.url !== TICKERS_URL) return null;
         if (!data.companies.every(company => /^[A-Z0-9.-]{1,12}$/.test(company.ticker || '') && typeof company.name === 'string' && company.name.length <= 300 && /^\d{1,10}$/.test(String(company.cik)))) return null;
       } else {
@@ -361,11 +411,14 @@ export function createResearchService({ fetcher = globalThis.fetch, clock = () =
     if (request.method !== 'GET') return json({ error: '기업 자료는 GET으로 조회해 주세요.' }, 405);
     const url = new URL(request.url), query = (url.searchParams.get('q') || '').trim();
     if (path === 'companies/explore') {
-      const loaded = await Promise.all(DIRECTORY.filter(company => company.ticker !== 'GOOG').map(async entry => {
-        const snapshot = await bundledSnapshot(request, env, entry.ticker), p = snapshot?.payload, quote = p?.quote || {}, f = p?.financials || {}, metric = key => p?.metrics?.find(item => item.key === key)?.value ?? null;
-        const [sector, industry] = SECTORS[entry.ticker] || ['기타', '분류 확인 중'];
-        return { ticker: entry.ticker, name: p?.company?.name || entry.name, sector, industry, price: quote.price ?? null, marketCap: quote.marketCap ?? null, per: quote.reportedPE > 0 ? quote.reportedPE : null, perStatus: quote.epsTTM <= 0 && finite(quote.epsTTM) ? 'not-meaningful' : quote.reportedPE > 0 ? 'reported' : 'unavailable', psr: quote.reportedPS ?? null, psrStatus: finite(quote.reportedPS) ? 'reported' : 'unavailable', roe: metric('roe'), epsTTM: quote.epsTTM ?? null,
-          revenue: f.revenue ?? null, netIncome: f.netIncome ?? null, period: p?.period || null, asOf: snapshot?.collectedAt || null, dataMode: snapshot ? 'snapshot' : 'identity-only', sources: p ? { revenue: p.evidence?.revenue, price: quote.evidence?.price, marketCap: quote.evidence?.marketCap, per: quote.evidence?.reportedPE || (quote.epsTTM <= 0 ? quote.evidence?.epsTTM : null), psr: quote.evidence?.reportedPS, roe: p.metrics?.find(item => item.key === 'roe')?.source } : {}, status: p?.status || 'unavailable', classificationSource: 'BANDAL 탐색용 편집 분류' };
+      const index=await bundledSnapshot(request,env,'index');
+      const entries=index?.companies?.length?index.companies:DIRECTORY.filter(company=>company.ticker!=='GOOG');
+      const loaded = await Promise.all(entries.slice(0,150).map(async entry => {
+        const snapshot = await bundledSnapshot(request, env, entry.ticker), p = snapshot?.payload, quote = p?.quote || {}, f = p?.financials || {}, storedMetrics=p?.metrics||metricsWithSources(f,p?.evidence,quote), metric = key => storedMetrics.find(item => item.key === key)?.value ?? null;
+        const [editedSector,editedIndustry] = SECTORS[entry.ticker] || ['기타','분류 확인 중'];
+        const sector=p?.company?.sector||quote.profile?.sector||editedSector,industry=p?.company?.industry||quote.profile?.industry||editedIndustry;
+        return { logo:p?.company?.logo||quote.logo?{...(p?.company?.logo||quote.logo),url:p?.company?.logo?.url?.startsWith('/finance/logos/')?p.company.logo.url:`/finance/api/companies/${entry.ticker}/logo`}:null,ticker: entry.ticker, name: p?.company?.name || entry.name, sector, industry, price: quote.price ?? null, marketCap: quote.marketCap ?? null, per: quote.reportedPE > 0 ? quote.reportedPE : null, perStatus: quote.epsTTM <= 0 && finite(quote.epsTTM) ? 'not-meaningful' : quote.reportedPE > 0 ? 'reported' : 'unavailable', psr: quote.reportedPS ?? null, psrStatus: finite(quote.reportedPS) ? 'reported' : 'unavailable', roe: metric('roe'), epsTTM: quote.epsTTM ?? null,
+          revenue: f.revenue ?? null, netIncome: f.netIncome ?? null, period: p?.period || null, asOf: snapshot?.collectedAt || null, dataMode: snapshot ? 'snapshot' : 'identity-only', sources: p ? { revenue: p.evidence?.revenue, price: quote.evidence?.price, marketCap: quote.evidence?.marketCap, per: quote.evidence?.reportedPE || (quote.epsTTM <= 0 ? quote.evidence?.epsTTM : null), psr: quote.evidence?.reportedPS, roe: storedMetrics.find(item => item.key === 'roe')?.source } : {}, status: p?.status || 'unavailable', classificationSource: 'BANDAL 탐색용 편집 분류' };
       }));
       return json({ companies: loaded, asOf: new Date(clock()).toISOString(), scope: '저장된 공개 데이터가 있는 주요 기업 · 전체 기업은 검색으로 탐색', rankingNote: '표시된 표본 내 순위이며 전세계 전체 기업 순위가 아닙니다. 공시 연도·시장 시각·연간/TTM 기준을 확인하세요.' });
     }
@@ -375,9 +428,19 @@ export function createResearchService({ fetcher = globalThis.fetch, clock = () =
       const results = companies.filter(company => `${company.ticker} ${company.name} ${company.aliases}`.toLocaleLowerCase().includes(needle)).sort((a, b) => (b.ticker.toLowerCase() === needle ? 1 : 0) - (a.ticker.toLowerCase() === needle ? 1 : 0) || a.ticker.localeCompare(b.ticker)).slice(0, 20).map(({ aliases, ...company }) => company);
       return json({ results, ...alias, resolvedTicker: alias.correction ? alias.resolvedTicker : results.length === 1 ? results[0].ticker : null, source: { ...source, retrievedAt: source.retrievedAt || new Date(clock()).toISOString() }, limitations: source.status === 'directory-only' ? ['SEC 목록을 불러오지 못해 주요 미국 기업 주소록만 검색했어요. 최신 재무 수치는 포함하지 않아요.'] : [...(source.status === 'snapshot' ? [`SEC 기업 목록 스냅샷 · 수집 ${source.collectedAt}${source.stale ? ' · 24시간 경과, 새 목록 조회 실패' : ''}`] : []), '현재 SEC에 등록된 미국 상장·공시 기업을 지원해요. 한국 주식 공시는 별도 제공자가 필요해요.'] });
     }
-    const alias = resolveTicker(path.slice('companies/'.length)), ticker = alias.resolvedTicker;
+    const suffix=path.slice('companies/'.length).split('/');
+    const alias = resolveTicker(suffix[0]), ticker = alias.resolvedTicker;
     if (!/^[A-Z0-9.-]{1,12}$/.test(ticker)) return json({ error: '유효한 SEC 종목코드를 입력해 주세요.' }, 422);
-    const snapshot = await bundledSnapshot(request, env, ticker);
+    let snapshot = await bundledSnapshot(request, env, ticker);
+    const stored=await readPublicCache(env,ticker,{clock});
+    if(stored&&(!snapshot||Date.parse(stored.collectedAt)>Date.parse(snapshot.collectedAt)))snapshot=stored;
+    if(suffix.length>1){
+      if(suffix.length!==2||!['prices','logo'].includes(suffix[1]))return json({error:'자료 경로를 확인해 주세요.'},404);
+      if(suffix[1]==='prices')return json(snapshot?.payload?.priceHistory||await priceService.get(ticker));
+      const descriptor=snapshot?.payload?.company?.logo||snapshot?.payload?.quote?.logo;
+      if(descriptor?.url?.startsWith('/finance/logos/')&&env.ASSETS?.fetch){const target=new URL(request.url);target.pathname=descriptor.url;target.search='';return env.ASSETS.fetch(new Request(target));}
+      try{const logo=await fetchPublicCompanyLogo(descriptor?.originalUrl||descriptor?.url,{fetcher});return new Response(logo.bytes,{headers:{'Content-Type':logo.contentType,'Cache-Control':'public, max-age=86400','X-Content-Type-Options':'nosniff','Content-Security-Policy':"default-src 'none'; sandbox"}});}catch{return new Response(null,{status:404,headers:{'Cache-Control':'public, max-age=300','X-Content-Type-Options':'nosniff'}});}
+    }
     if (snapshot && snapshotAge(snapshot) <= 24) return snapshotResponse(snapshot, ticker, env, 'collected-cache', request, alias);
     const { companies, source: catalogSource } = await catalog(env, request), entry = companies.find(company => company.ticker === ticker);
     if (!entry && snapshot) return snapshotResponse(snapshot, ticker, env, 'provider-unavailable', request, alias);
@@ -397,9 +460,11 @@ export function createResearchService({ fetcher = globalThis.fetch, clock = () =
     reports.push({ title: 'SEC EDGAR 전체 공시', type: 'IR', date: null, url: `https://www.sec.gov/edgar/browse/?CIK=${company.cik}&owner=exclude`, provider: 'SEC EDGAR' });
     const f = normalized.financials;
     const ratings = Object.entries(quote.analystRatings || {}).filter(([, count]) => Number.isInteger(count) && count >= 0).map(([rating, count]) => ({ rating, count }));
-    return json(await decorate({ company: { ...company, currency: 'USD' }, status: normalized.period ? 'available' : quote.status === 'available' ? 'partial' : 'unavailable', dataMode: 'live-source', asOf, period: normalized.period, financials: f, evidence: normalized.evidence, history: normalized.history, metrics: calculateMetrics(f, quote), flow: buildFinancialFlow(f, normalized.period), reports, swot: swotChecklist(f), quote,
+    const enriched=await decorate({ company: { ...company, currency: 'USD' }, status: normalized.period ? 'available' : quote.status === 'available' ? 'partial' : 'unavailable', dataMode: 'live-source', asOf, period: normalized.period, financials: f, evidence: normalized.evidence, annualHistory: normalized.history, quarterlyHistory:outcomes[0].status==='fulfilled'?normalizeQuarterlyHistory(outcomes[0].value,company.cik,{limit:8,asOf:asOf.slice(0,10)}):null, history: normalized.history, metrics: calculateMetrics(f, quote), flow: buildFinancialFlow(f, normalized.period), reports, swot: swotChecklist(f), quote,
       opinions: { status: ratings.length ? 'available' : 'unavailable', ratings, analystTargetPrice: quote.analystTargetPrice || null, provider: 'Alpha Vantage', retrievedAt: quote.retrievedAt || null, reason: ratings.length ? '제공자의 집계 의견이에요. 개별 보고서 원문·작성일·분석가 목록은 제공하지 않아요.' : '확인 가능한 애널리스트 리서치 제공자가 연결되지 않았어요. 공식 실적 원문을 먼저 확인해 주세요.' },
-      sources: [{ provider: 'SEC companyfacts', url: factsUrl, retrievedAt: fetchedAt.get(factsUrl) || null, status: normalized.period ? 'available' : 'unavailable' }, { provider: 'SEC submissions', url: submissionsUrl, retrievedAt: fetchedAt.get(submissionsUrl) || null, status: outcomes[1].status === 'fulfilled' && reports.some(report => report.provider === 'SEC EDGAR' && report.date) ? 'available' : 'unavailable' }, ...(quote.status === 'available' ? [{ provider: quote.provider, url: quote.sourceUrl, retrievedAt: quote.retrievedAt, status: 'available' }] : [])], limitations: [...limitations, ...normalized.warnings, ...(quote.status === 'unavailable' ? [quote.reason] : ['PER·PSR은 제공자의 TTM 지표이고, 나머지 SEC 수치는 연간 공시 기준이에요. 시점과 분모가 달라요.'])] }, request, env, quote, alias));
+      sources: [{ provider: 'SEC companyfacts', url: factsUrl, retrievedAt: fetchedAt.get(factsUrl) || null, status: normalized.period ? 'available' : 'unavailable' }, { provider: 'SEC submissions', url: submissionsUrl, retrievedAt: fetchedAt.get(submissionsUrl) || null, status: outcomes[1].status === 'fulfilled' && reports.some(report => report.provider === 'SEC EDGAR' && report.date) ? 'available' : 'unavailable' }, ...(quote.status === 'available' ? [{ provider: quote.provider, url: quote.sourceUrl, retrievedAt: quote.retrievedAt, status: 'available' }] : [])], limitations: [...limitations, ...normalized.warnings, ...(quote.status === 'unavailable' ? [quote.reason] : ['PER·PSR은 제공자의 TTM 지표이고, 나머지 SEC 수치는 연간 공시 기준이에요. 시점과 분모가 달라요.'])] }, request, env, quote, alias, outcomes[0].status==='fulfilled'?outcomes[0].value:null);
+    if(enriched.status==='available'||enriched.status==='partial')await writePublicCache(env,ticker,enriched,{clock});
+    return json(enriched);
   };
 }
 

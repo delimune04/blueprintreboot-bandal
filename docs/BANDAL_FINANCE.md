@@ -47,9 +47,15 @@ proxy handling. Public Yahoo Finance statistics supplement price, TTM metrics an
 estimates with a source field and date for each number. Current annual SEC
 figures and Yahoo TTM values are kept separate. Source-backed IREN/Apple
 business breakdowns and dated authored outlooks do not turn management targets
-into realized revenue. Korean DART integration is not implemented.
+into realized revenue. Five years of sourced daily prices are visible with selectable ranges, market timestamps and delay labels. Real company logos are validated and served locally. Metric explanations, formulas and sources sit in accessible i disclosures. Four-quarter histories use real quarterly facts, with gaps instead of fabricated values. Exact provider-industry peer samples expose their arithmetic mean, sample count, members and date basis; they are not full-market industry averages.
 
-Normalized, dated SEC snapshots and a collected company catalog back research when hosted provider access fails. Run `node scripts/refresh-finance-research.mjs` to refresh public snapshots before rebuilding and deploying. The UI displays collection time; these are not real-time financial feeds.
+DCF fetches annual OCF-minus-capex and share count from sources. Only growth, discount rate, terminal growth and horizon are editable. Anonymous EPS/revenue estimates are separate from named analyst ratings and targets. SEC debt notes provide dated instrument terms, maturity ladders, financing, collateral and convertible details where disclosed; coverage remains explicit.
+
+See `finance-data.md`, `finance-coverage.md`, `finance-analysts.md` and `finance-debt.md`. Korean DART integration is not implemented.
+
+Normalized, dated SEC snapshots and a collected company catalog back research when hosted provider access fails. Run `node scripts/refresh-finance-research.mjs` to refresh public snapshots before rebuilding and deploying. The UI displays collection time; these are not real-time financial feeds. The collector accepts any validated SEC ticker and bounded catalog batches; the explorer is generated from its verified index, rather than a hard-coded ticker list. Source-backed successful live lookups also enter a public-only R2 namespace, with exact identity and recursive private-field rejection. This cache never exposes private ledger or Quant objects.
+
+No system can guarantee that every company publicly discloses every requested item. A search identity does not imply complete statements, named analyst EPS estimates, ARR or all debt covenants. The UI distinguishes unavailable data, economically meaningless ratios, disclosed facts and reviewed coverage. Current hosting can fail direct SEC/Yahoo reads; collected dated assets provide resilience, and issuers without a collected copy remain subject to provider availability.
 
 `SEC_USER_AGENT` must identify the operator and contact email. Optional
 `ALPHAVANTAGE_API_KEY` enables the quote/overview provider where the subscription

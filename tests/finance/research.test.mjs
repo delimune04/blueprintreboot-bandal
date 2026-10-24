@@ -115,7 +115,7 @@ test('search and facts use fixed SEC destinations, declared user agent, caching 
   const count = p.calls.length;
   await handle(request('companies/NVDA?url=https://evil.example'), env, 'companies/NVDA');
   assert.equal(p.calls.length, count);
-  for (const call of p.calls) { assert.match(call.url, /^https:\/\/(?:www\.)?(?:sec\.gov|data\.sec\.gov|finance\.yahoo\.com|query1\.finance\.yahoo\.com)\//); if(call.url.includes('sec.gov'))assert.equal(call.options.headers['User-Agent'], env.SEC_USER_AGENT); assert.equal(call.options.redirect, 'error'); }
+  for (const call of p.calls) { assert.match(call.url, /^https:\/\/(?:www\.)?(?:sec\.gov|data\.sec\.gov|finance\.yahoo\.com|query1\.finance\.yahoo\.com|stockanalysis\.com)\//); if(call.url.includes('sec.gov'))assert.equal(call.options.headers['User-Agent'], env.SEC_USER_AGENT); assert.equal(call.options.redirect, 'error'); }
   assert(company.sources[0].retrievedAt);
 });
 test('missing operator identity and provider outages return official links and no fabricated financial numbers', async () => {
@@ -128,7 +128,7 @@ test('missing operator identity and provider outages return official links and n
   assert.equal(result.status, 'unavailable');
   assert(Object.values(result.financials).every(value => value === null));
   assert.equal(result.reports.find(item => item.provider === '기업 공식 IR').url, 'https://investor.nvidia.com/');
-  assert.equal(calls, 2, 'only the public Yahoo page and chart fallback are attempted without SEC identity');
+  assert.equal(calls, 6, 'public statistics, profile, history and analyst sources can be read without requesting SEC without identity');
   const unavailable = await handle(request('companies/WXYZ'), {}, 'companies/WXYZ');
   assert.equal(unavailable.status, 503);
 });
@@ -203,7 +203,7 @@ test('fresh normalized snapshots serve source-backed numbers with collection age
   assert.equal(data.sources[0].snapshotCollectedAt, collectedAt);
   assert.equal(data.quote.status, 'unavailable');
   assert.equal(external, 2, 'a missing stored market quote may try public Yahoo without relabeling annual SEC data');
-  assert.deepEqual(assets, [{ origin: 'https://bandal.app', pathname: '/finance/snapshots/NVDA.json', search: '' }, { origin: 'https://bandal.app', pathname: '/finance/outlooks/NVDA.json', search: '' }]);
+  assert.deepEqual(assets, [{ origin: 'https://bandal.app', pathname: '/finance/snapshots/NVDA.json', search: '' }, { origin: 'https://bandal.app', pathname: '/finance/debt/NVDA.json', search: '' }, { origin: 'https://bandal.app', pathname: '/finance/analysts/NVDA.json', search: '' }, { origin: 'https://bandal.app', pathname: '/finance/profiles/KOREAN.json', search: '' }, { origin: 'https://bandal.app', pathname: '/finance/snapshots/index.json', search: '' }, { origin: 'https://bandal.app', pathname: '/finance/outlooks/NVDA.json', search: '' }]);
   assert.match(data.limitations[0], /실시간 갱신 아님/);
   assert.match(response.headers.get('cache-control'), /no-store/);
 });

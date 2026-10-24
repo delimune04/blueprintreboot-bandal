@@ -17,3 +17,6 @@ exports/*
 !papers/.gitkeep
 !notes/.gitkeep
 !exports/.gitkeep
+
+# Public research collector resume state
+.cache/finance-research-checkpoint.json

@@ -15,6 +15,69 @@ function rejectFutureActual(value, retrievedAt) {
 const decodeAttribute = text => text.replaceAll('&amp;', '&').replaceAll('&quot;', '"').replaceAll('&#39;', "'");
 const unavailable = (ticker, retrievedAt, reason) => ({ status: 'unavailable', ticker, currency: 'USD', provider: 'Yahoo Finance', price: null, marketCap: null, reportedPE: null, reportedPS: null, evidence: {}, unavailableReasons: {}, retrievedAt, reason, sourceUrl: `https://finance.yahoo.com/quote/${ticker}/key-statistics/` });
 
+// Only deserialize response bodies already embedded in an ordinary public page.
+// In particular this never follows the quote endpoint with cookies or a crumb.
+function publishedResponses(html) {
+  const rows = [];
+  for (const [, attributes, body] of html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)) {
+    if (!/\btype=["']application\/json["']/i.test(attributes) || !/\bdata-sveltekit-fetched\b/.test(attributes) || body.length > 1024 * 1024) continue;
+    const rawUrl = /\bdata-url="([^"]+)"/.exec(attributes)?.[1];
+    try {
+      const url = new URL(decodeAttribute(rawUrl));
+      if (url.origin !== 'https://query1.finance.yahoo.com') continue;
+      const envelope = JSON.parse(body);
+      if (envelope.status !== 200 || typeof envelope.body !== 'string') continue;
+      rows.push({ url, payload: JSON.parse(envelope.body) });
+    } catch { /* Ignore unrelated or malformed page fragments. */ }
+  }
+  return rows;
+}
+const publicText = (value, max = 300) => typeof value === 'string' && value.trim() ? value.replace(/[\u0000-\u001f\u007f]/g, ' ').trim().slice(0, max) : null;
+function website(value) {
+  try { const url = new URL(value); return ['https:', 'http:'].includes(url.protocol) && !url.username && !url.password ? url.href : null; } catch { return null; }
+}
+
+export function safeYahooLogoUrl(value) {
+  if (typeof value !== 'string' || value.length > 1000) return null;
+  try {
+    const url = new URL(value);
+    if (url.origin !== 'https://s.yimg.com' || url.username || url.password || url.search || url.hash || /%|\.\./.test(url.pathname)) return null;
+    const direct = /^\/lg\/logos\/[A-Za-z0-9_-]{3,50}\/(?:light|dark)\/[a-fA-F0-9]{4,64}\.(?:png|webp|jpg|jpeg|avif)$/;
+    if (direct.test(url.pathname)) return url.href;
+    const nested = /^\/lo\/mysterio\/api\/[a-fA-F0-9]{64}\/finance\/resizefill_w[1-9]\d{0,2}_h[1-9]\d{0,2}\/(https:\/\/s\.yimg\.com\/lg\/logos\/[^?#]+)$/.exec(url.pathname);
+    return nested && direct.test(new URL(nested[1]).pathname) ? url.href : null;
+  } catch { return null; }
+}
+function logoFromResponses(responses, ticker, sourceUrl, retrievedAt) {
+  for (const { url, payload } of responses) {
+    if (url.pathname !== '/v7/finance/quote' || payload.quoteResponse?.error || !Array.isArray(payload.quoteResponse?.result)) continue;
+    const row = payload.quoteResponse.result.find(item => item?.symbol === ticker && ['EQUITY', 'ETF'].includes(item.quoteType));
+    const logoUrl = safeYahooLogoUrl(row?.companyLogoUrl) || safeYahooLogoUrl(row?.logoUrl);
+    if (logoUrl) return { url: logoUrl, source: { provider: 'Yahoo Finance', url: sourceUrl, field: 'quoteResponse.companyLogoUrl / logoUrl', retrievedAt, basis: '동일 티커의 공개 기업 로고' } };
+  }
+  return null;
+}
+function profileFromModules(modules, ticker, sourceUrl, retrievedAt) {
+  const p = modules.assetProfile;
+  if (!p || typeof p !== 'object') return null;
+  const source = { provider: 'Yahoo Finance', url: sourceUrl, field: 'assetProfile', retrievedAt, basis: '공개 기업 프로필; 발표 시점이 명시되지 않은 소개 정보' };
+  return { ticker, description: publicText(p.longBusinessSummary, 6000), industry: publicText(p.industry, 160), sector: publicText(p.sector, 120), industryKey: publicText(p.industryKey, 160), website: website(p.website), investorRelationsWebsite: website(p.irWebsite), country: publicText(p.country, 100), city: publicText(p.city, 100), fullTimeEmployees: scalar(p.fullTimeEmployees),
+    officers: Array.isArray(p.companyOfficers) ? p.companyOfficers.slice(0, 20).filter(o => publicText(o?.name)).map(o => ({ name: publicText(o.name, 160), title: publicText(o.title, 200), fiscalYear: scalar(o.fiscalYear), totalPay: number(o.totalPay), source })) : [], source };
+}
+
+export function parseYahooCompanyProfileHtml(html, ticker, retrievedAt = new Date().toISOString()) {
+  if (!validTicker(ticker) || typeof html !== 'string' || html.length > MAX_HTML) throw new Error('INVALID_PUBLIC_PAGE');
+  const responses = publishedResponses(html);
+  for (const { url, payload } of responses) {
+    if (url.pathname !== `/v10/finance/quoteSummary/${ticker}` || payload.quoteSummary?.error || payload.quoteSummary?.result?.length !== 1) continue;
+    const modules = payload.quoteSummary.result[0];
+    if (modules?.price?.symbol !== ticker || !['EQUITY', 'ETF'].includes(modules.price.quoteType)) continue;
+    const sourceUrl = `https://finance.yahoo.com/quote/${ticker}/profile/`, profile = profileFromModules(modules, ticker, sourceUrl, retrievedAt);
+    if (profile) return { status: 'available', ticker, profile, logo: logoFromResponses(responses, ticker, sourceUrl, retrievedAt), retrievedAt, source: profile.source };
+  }
+  throw new Error('PUBLIC_COMPANY_PROFILE_UNAVAILABLE');
+}
+
 export function parseYahooStatisticsHtml(html, ticker, retrievedAt = new Date().toISOString()) {
   if (!validTicker(ticker) || typeof html !== 'string' || html.length > MAX_HTML) throw new Error('INVALID_PUBLIC_PAGE');
   let modules = null;
@@ -85,6 +148,21 @@ export function parseYahooStatisticsHtml(html, ticker, retrievedAt = new Date().
   const estimatesInUSD = financialsInUSD || modules.earningsGaap?.financialCurrency === 'USD';
   result.nextQuarterEstimates = { earningsDate, isEarningsDateEstimate: e.isEarningsDateEstimate === true, periodEnd: providerDate(chart.currentPeriodEndDate), fiscalQuarter: typeof chart.currentFiscalQuarter === 'string' ? chart.currentFiscalQuarter : null, calendarQuarter: typeof chart.currentCalendarQuarter === 'string' ? chart.currentCalendarQuarter : null,
     epsAverage: estimatesInUSD ? number(e.earningsAverage) : null, epsLow: estimatesInUSD ? number(e.earningsLow) : null, epsHigh: estimatesInUSD ? number(e.earningsHigh) : null, revenueAverage: estimatesInUSD ? number(e.revenueAverage) : null, revenueLow: estimatesInUSD ? number(e.revenueLow) : null, revenueHigh: estimatesInUSD ? number(e.revenueHigh) : null, currency: estimatesInUSD ? 'USD' : null, source: { ...fdEvidence, url: sourceUrl, basis: `Yahoo earnings calendar 애널리스트 예상; EPS GAAP/조정 기준은 제공자가 명시하지 않아 확인 필요${estimatesInUSD ? '' : '; 예상 실적 통화 미확인으로 금액 비표시'}` } };
+  result.profile = profileFromModules(modules, ticker, sourceUrl, retrievedAt);
+  result.logo = logoFromResponses(publishedResponses(html), ticker, sourceUrl, retrievedAt);
+  result.marketState = publicText(p.marketState, 30);
+  result.exchangeTimezoneName = publicText(p.exchangeTimezoneName, 80);
+  result.delayMinutes = scalar(p.exchangeDataDelayedBy);
+  result.change = number(p.regularMarketChange);
+  // Yahoo quoteSummary percentage raw values are fractions (0.01 = 1%).
+  result.changePercent = number(p.regularMarketChangePercent) === null ? null : number(p.regularMarketChangePercent) * 100;
+  result.previousClose = number(p.regularMarketPreviousClose);
+  for (const [key, prefix] of [['preMarket', 'preMarket'], ['postMarket', 'postMarket']]) {
+    const observed = unixDate(p[prefix + 'Time']);
+    if (observed) rejectFutureActual(observed, retrievedAt);
+    const value = number(p[prefix + 'Price']);
+    result[key] = value !== null && observed ? { price: value, marketTime: observed, change: number(p[prefix + 'Change']), changePercent: number(p[prefix + 'ChangePercent']) === null ? null : number(p[prefix + 'ChangePercent']) * 100, source: { provider: 'Yahoo Finance', url: sourceUrl, field: `price.${prefix}Price`, asOf: observed, retrievedAt, basis: key === 'preMarket' ? '장전 가격' : '시간외 가격' } } : null;
+  }
   result.reason = result.price === null ? '공개 페이지에 가격이 없지만 확인 가능한 기본 지표를 표시해요.' : null;
   return result;
 }
@@ -130,3 +208,47 @@ export function createPublicDataService({ fetcher = globalThis.fetch, clock = ()
   };
 }
 export const fetchPublicMarketData = createPublicDataService();
+
+async function boundedPublicBody(response, maximum) {
+  if (!response.ok) { await response.body?.cancel(); throw new Error('PUBLIC_PROVIDER_UNAVAILABLE'); }
+  if (Number(response.headers.get('Content-Length')) > maximum) { await response.body?.cancel(); throw new Error('PUBLIC_RESPONSE_TOO_LARGE'); }
+  const reader = response.body?.getReader(); if (!reader) throw new Error('PUBLIC_EMPTY_RESPONSE');
+  const chunks = []; let length = 0;
+  while (true) { const { done, value } = await reader.read(); if (done) break; length += value.length; if (length > maximum) { await reader.cancel(); throw new Error('PUBLIC_RESPONSE_TOO_LARGE'); } chunks.push(value); }
+  const bytes = new Uint8Array(length); let offset = 0; for (const chunk of chunks) { bytes.set(chunk, offset); offset += chunk.length; }
+  return bytes;
+}
+
+export function createProfileService({ fetcher = globalThis.fetch, clock = () => Date.now() } = {}) {
+  const cache = new Map(), pending = new Map();
+  const get = async ticker => {
+    if (!validTicker(ticker)) throw new Error('INVALID_TICKER');
+    const found = cache.get(ticker); if (found?.expires > clock()) return found.value;
+    if (pending.has(ticker)) return pending.get(ticker);
+    const work = (async () => {
+      const retrievedAt = new Date(clock()).toISOString(); let value;
+      try {
+        const response = await fetcher(`https://finance.yahoo.com/quote/${ticker}/profile/`, { headers: { Accept: 'text/html' }, redirect: 'error', signal: AbortSignal.timeout(10000) });
+        value = parseYahooCompanyProfileHtml(new TextDecoder().decode(await boundedPublicBody(response, MAX_HTML)), ticker, retrievedAt);
+      } catch { value = { status: 'unavailable', ticker, profile: null, logo: null, retrievedAt, reason: '공개 기업 프로필을 현재 읽을 수 없습니다.', source: { provider: 'Yahoo Finance', url: `https://finance.yahoo.com/quote/${ticker}/profile/`, retrievedAt } }; }
+      if (cache.size >= 24) cache.delete(cache.keys().next().value);
+      cache.set(ticker, { value, expires: clock() + (value.status === 'available' ? 3600000 : 60000) }); return value;
+    })();
+    pending.set(ticker, work); try { return await work; } finally { pending.delete(ticker); }
+  };
+  get.get = get; return get;
+}
+export const fetchPublicCompanyProfile = createProfileService();
+
+export async function fetchPublicCompanyLogo(value, { fetcher = globalThis.fetch } = {}) {
+  const url = safeYahooLogoUrl(typeof value === 'string' ? value : value?.url);
+  if (!url) throw new Error('INVALID_PUBLIC_LOGO_URL');
+  const response = await fetcher(url, { headers: { Accept: 'image/png,image/webp,image/jpeg,image/avif' }, redirect: 'error', signal: AbortSignal.timeout(10000) });
+  const type = (response.headers.get('Content-Type') || '').split(';')[0].trim().toLowerCase();
+  const extensions = { 'image/png': 'png', 'image/webp': 'webp', 'image/jpeg': 'jpg', 'image/avif': 'avif' };
+  if (!extensions[type]) { await response.body?.cancel(); throw new Error('INVALID_PUBLIC_LOGO_TYPE'); }
+  const bytes = await boundedPublicBody(response, 128 * 1024);
+  const validMagic = type === 'image/png' ? bytes.length >= 8 && [137,80,78,71,13,10,26,10].every((v, i) => bytes[i] === v) : type === 'image/jpeg' ? bytes[0] === 255 && bytes[1] === 216 && bytes[2] === 255 : type === 'image/webp' ? new TextDecoder().decode(bytes.slice(0, 4)) === 'RIFF' && new TextDecoder().decode(bytes.slice(8, 12)) === 'WEBP' : bytes.length > 12 && new TextDecoder().decode(bytes.slice(4, 8)) === 'ftyp' && ['avif', 'avis'].includes(new TextDecoder().decode(bytes.slice(8, 12)));
+  if (!validMagic) throw new Error('INVALID_PUBLIC_LOGO_BYTES');
+  return { bytes, contentType: type, extension: extensions[type], sourceUrl: url };
+}

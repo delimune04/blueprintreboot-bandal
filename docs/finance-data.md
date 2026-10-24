@@ -16,14 +16,23 @@ becomes a substitute for a quote's exchange timestamp or a statement's fiscal en
 - `/finance/api/companies/:ticker` returns a complete public company payload.
   It does not read private Quant strategies, account balances or broker secrets.
 
-The 2026-10-24 collection has 10,425 searchable SEC identities and 10 curated
-market snapshots: NVDA, MSFT, AAPL, IREN, GOOGL, META, AMZN, TSLA, XOM and CVX.
-Nine have annual SEC facts plus Yahoo observations. XOM now maps to the current SEC catalog's ExxonMobil Holdings Corp
-(CIK 2115436); the prior operating entity was CIK 34088. The new entity has no
-usable annual statement facts in this acquisition, so its explicit `partial` snapshot preserves verified public
-Yahoo metrics with `period: null`, rather than discarding the quote or inventing
-annual statement values. A search match is not a promise that every metric exists.
-Sector/industry filters are labelled BANDAL editorial exploration categories.
+The searchable SEC identity catalog is separate from the verified snapshot index.
+The explorer uses `snapshots/index.json`; it is not restricted to the original ten
+companies. The collector accepts arbitrary SEC tickers or bounded catalog batches,
+and retains previous valid records after failures. See `finance-coverage.md`.
+Company identity alone does not guarantee disclosure of every metric.
+XOM's new holding-company CIK 2115436 can have partial annual data; predecessor
+CIK34088 statements are not silently relabeled as the new entity.
+Provider industry classifications take precedence when available. Exact-industry,
+same-definition observed peer samples disclose members, N and dates.
+
+Actual Yahoo logos are downloaded as validated raster assets and served locally.
+Profile summaries, five-year daily prices, quarterly history, anonymous consensus,
+named ratings and debt-note records retain independent source dates.
+`history` is the four-quarter view; `quarterlyHistory` stores up to eight raw
+normalized quarters for rolling valuation calculations. Storage omits recomputable
+history/metrics/fieldSources views to avoid duplicating evidence. Historical
+valuation gaps remain when EPS, shares, periods or split basis are not confirmed.
 
 ## Public market data
 
@@ -49,7 +58,7 @@ estimate periods and anticipated earnings dates are allowed and labelled forecas
 PE for actual or forecast losses is **N/M**, with its source and reason preserved.
 Negative EPS, ROE and income remain negative rather than being replaced by zero.
 
-The statistics reader is bounded to 3 MiB and 10 seconds; chart reads to 256 KiB.
+The statistics reader is bounded to 3 MiB and 10 seconds; short quote chart reads to 256 KiB; five-year histories to 768 KiB.
 Only fixed symbol-validated Yahoo destinations are allowed, redirects are rejected,
 and concurrent requests coalesce. Successful normalized values cache for five minutes,
 failures for one minute. Public page formats may change; failed parsing produces an

@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { createPublicDataService, parseYahooChart, parseYahooStatisticsHtml } from '../../hosting/finance/public-data.mjs';
+import { createPublicDataService, createProfileService, fetchPublicCompanyLogo, parseYahooChart, parseYahooCompanyProfileHtml, parseYahooStatisticsHtml, safeYahooLogoUrl } from '../../hosting/finance/public-data.mjs';
 
 const raw = value => ({ raw: value });
 const collected = '2026-10-24T04:20:00.000Z';
@@ -78,4 +78,44 @@ test('a restricted statistics page is not retried with credentials; a public cha
 test('provider failure and oversized responses remain missing without fabricated source values', async () => {
   const service = createPublicDataService({ clock: () => Date.parse(collected), fetcher: async () => new Response('x', {headers:{'Content-Length':String(4*1024*1024)}}) });
   const result = await service('IREN'); assert.equal(result.status,'unavailable'); assert.deepEqual(result.evidence,{}); assert.equal(result.price,null);
+});
+
+const actualLogo = 'https://s.yimg.com/lo/mysterio/api/5deeca7d05e5602ae350f5fe9d96f3c1936e51769d1184bc450aba55fb9a72c7/finance/resizefill_w50_h50/https://s.yimg.com/lg/logos/US0378331005/light/2e23b039.png';
+function logoPage(ticker, url = actualLogo) {
+  return `<script type="application/json" data-sveltekit-fetched data-url="https://query1.finance.yahoo.com/v7/finance/quote?symbols=${ticker}">${JSON.stringify({status:200,body:JSON.stringify({quoteResponse:{result:[{symbol:ticker,quoteType:'EQUITY',companyLogoUrl:url}],error:null}})})}</script>`;
+}
+test('logos come from the same ticker public quote record and retain their actual source', () => {
+  const found = parseYahooStatisticsHtml(page(modules('AAPL')) + logoPage('AAPL'), 'AAPL', collected);
+  assert.equal(found.logo.url, actualLogo); assert.equal(found.logo.source.retrievedAt, collected); assert.match(found.logo.source.field,/logoUrl/);
+  const unrelated = parseYahooStatisticsHtml(page(modules('IREN')) + logoPage('AAPL'), 'IREN', collected);
+  assert.equal(unrelated.logo, null);
+  assert.equal(parseYahooStatisticsHtml(page(modules('AAPL')) + logoPage('AAPL','https://attacker.example/logo.png'), 'AAPL', collected).logo,null);
+});
+test('profile parser reads published industry, business, website and officer content with provenance', () => {
+  const fixture = modules('AAPL'); fixture.assetProfile={industry:'Consumer Electronics',sector:'Technology',website:'https://www.apple.com',longBusinessSummary:'Designs and sells devices and related services.',fullTimeEmployees:150000,companyOfficers:[{name:'Named Officer',title:'CEO',fiscalYear:2025,totalPay:raw(100)}]};
+  const found=parseYahooCompanyProfileHtml(page(fixture)+logoPage('AAPL'),'AAPL',collected);
+  assert.equal(found.profile.industry,'Consumer Electronics'); assert.equal(found.profile.sector,'Technology'); assert.equal(found.profile.website,'https://www.apple.com/'); assert.match(found.profile.description,/devices/);
+  assert.equal(found.profile.officers[0].totalPay,100); assert.equal(found.profile.source.url,'https://finance.yahoo.com/quote/AAPL/profile/'); assert.equal(found.logo.url,actualLogo);
+  assert.throws(()=>parseYahooCompanyProfileHtml(page(fixture),'IREN',collected));
+  fixture.assetProfile.website='javascript:alert(1)'; assert.equal(parseYahooCompanyProfileHtml(page(fixture),'AAPL',collected).profile.website,null);
+});
+test('logo proxy permits only bounded Yahoo company raster assets and validates MIME and magic', async () => {
+  for (const value of ['https://s.yimg.com@evil.example/logo.png','http://s.yimg.com/lg/logos/US0378331005/light/2e23b039.png','https://s.yimg.com/lg/logos/US0378331005/light/2e23b039.svg','https://s.yimg.com/lo/mysterio/api/'+ 'a'.repeat(64) + '/finance/resizefill_w50_h50/https://evil.example/a.png', actualLogo+'?url=https://evil.example']) assert.equal(safeYahooLogoUrl(value),null,value);
+  const png=Uint8Array.from([137,80,78,71,13,10,26,10,1,2,3]);
+  const found=await fetchPublicCompanyLogo(actualLogo,{fetcher:async(url,init)=>{assert.equal(url,actualLogo); assert.equal(init.redirect,'error'); assert.equal(new Headers(init.headers).get('cookie'),null); return new Response(png,{headers:{'Content-Type':'image/png'}});}});
+  assert.equal(found.extension,'png'); assert.deepEqual(found.bytes,png);
+  await assert.rejects(fetchPublicCompanyLogo('https://evil.example/logo.png'),/INVALID_PUBLIC_LOGO_URL/);
+  await assert.rejects(fetchPublicCompanyLogo(actualLogo,{fetcher:async()=>new Response('<svg/>',{headers:{'Content-Type':'image/svg+xml'}})}),/TYPE/);
+  await assert.rejects(fetchPublicCompanyLogo(actualLogo,{fetcher:async()=>new Response('not an image',{headers:{'Content-Type':'image/png'}})}),/BYTES/);
+  await assert.rejects(fetchPublicCompanyLogo(actualLogo,{fetcher:async()=>new Response(png,{headers:{'Content-Type':'image/png','Content-Length':String(129*1024)}})}),/LARGE/);
+});
+test('separate public profile service coalesces, bounds and caches exact ticker requests', async () => {
+  let calls=0;const fixture=modules(); fixture.assetProfile={industry:'Data Centers'};
+  const get=createProfileService({clock:()=>Date.parse(collected),fetcher:async(url,init)=>{calls++;assert.equal(url,'https://finance.yahoo.com/quote/IREN/profile/');assert.equal(init.redirect,'error');return new Response(page(fixture));}});
+  const [a,b]=await Promise.all([get('IREN'),get.get('IREN')]); assert.equal(a.profile.industry,b.profile.industry); await get('IREN');assert.equal(calls,1);
+  await assert.rejects(get('../SECRET'),/TICKER/);
+});
+test('regular and after-hours prices retain separate timestamps and percentage units',()=>{
+  const fixture=modules();Object.assign(fixture.price,{regularMarketChange:raw(.25),regularMarketChangePercent:raw(.01),regularMarketPreviousClose:raw(24.75),marketState:'CLOSED',postMarketPrice:raw(25.5),postMarketTime:1792799990,postMarketChangePercent:raw(.02)});
+  const found=parseYahooStatisticsHtml(page(fixture),'IREN',collected);assert.equal(found.changePercent,1);assert.equal(found.postMarket.changePercent,2);assert.equal(found.marketState,'CLOSED');assert.notEqual(found.marketTime,found.postMarket.marketTime);
 });
