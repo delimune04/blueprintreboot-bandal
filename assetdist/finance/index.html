@@ -13,8 +13,8 @@
 <a class="brand" href="/finance/" aria-label="Bandal Finance 홈"><span class="brand-mark" aria-hidden="true">b<span>◐</span></span><span>BANDAL<span class="brand-sub">FINANCE</span></span></a>
 <p class="nav-label">MY FINANCE SPACE</p>
 <nav class="tabs" aria-label="금융 도구">
-<a class="tab active" href="#ledger" data-tab="ledger" aria-current="page"><span aria-hidden="true">▦</span><span>가계부<small>모아흐름</small></span><span class="tab-arrow" aria-hidden="true">↗</span></a>
-<a class="tab" href="#research" data-tab="research"><span aria-hidden="true">◴</span><span>주식 가치 분석<small>기업의 돈 흐름</small></span><span class="tab-arrow" aria-hidden="true">↗</span></a>
+<a class="tab active" href="#research" data-tab="research" aria-current="page"><span aria-hidden="true">◴</span><span>주식 가치 분석<small>기업의 돈 흐름</small></span><span class="tab-arrow" aria-hidden="true">↗</span></a>
+<a class="tab" href="#ledger" data-tab="ledger"><span aria-hidden="true">▦</span><span>가계부<small>수입·지출·구독</small></span><span class="tab-arrow" aria-hidden="true">↗</span></a>
 <a class="tab" href="#quant" data-tab="quant"><span aria-hidden="true">⌁</span><span>자동매매<small>나만의 Quant</small></span><span class="tab-arrow" aria-hidden="true">↗</span></a>
 </nav>
 <div class="sidebar-note"><span class="secure-dot" aria-hidden="true"></span><strong>나의 기록은 나에게만</strong><p>전략과 계좌 연결은 로그인한<br>본인 계정에서만 열립니다.</p></div>
@@ -26,17 +26,21 @@
 <div id="account-alert" class="notice error" role="alert" hidden></div>
 <section class="page-intro"><div><p class="eyebrow">A CLEARER VIEW OF YOUR MONEY</p><h1>돈의 흐름을,<br><span>나의 언어로.</span></h1><p class="intro-copy">일상의 가계부부터 기업의 가치와 나만의 투자 전략까지.<br class="wide-only"> 복잡한 숫자를 이해하기 쉬운 흐름으로 연결합니다.</p></div><div class="intro-art" aria-hidden="true"><div class="orbit orbit-one"></div><div class="orbit orbit-two"></div><div class="art-core">◐</div><span class="art-chip chip-one">수입 <i>↗</i></span><span class="art-chip chip-two">가치 <i>◴</i></span><span class="art-chip chip-three">전략 <i>⌁</i></span><div class="art-dot"></div></div></section>
 <section id="view-ledger" class="view" aria-labelledby="ledger-title">
-<div class="section-heading"><div><p class="eyebrow">01 / PERSONAL LEDGER</p><h2 id="ledger-title">내 돈이 머무는 곳, 모아흐름</h2><p>수입·지출, 월별 구독, 계좌 사이의 흐름을 한 공간에서 관리하세요.</p></div><a class="button secondary" href="/moaflow/" target="_top">모아흐름 전체 화면 ↗</a></div>
+<div class="section-heading"><div><p class="eyebrow">01 / PERSONAL LEDGER</p><h2 id="ledger-title">나의 수입과 지출, 가계부</h2><p>수입·지출, 월별 구독, 계좌 사이의 흐름을 한 공간에서 관리하세요.</p></div><a class="button secondary" href="/moaflow/?embedded=finance" target="_top">가계부 전체 화면 ↗</a></div>
 <div class="feature-strip"><div><span class="feature-icon">↗</span><span><strong>매일의 기록</strong><small>수입·지출과 나의 재무제표</small></span></div><div><span class="feature-icon">↻</span><span><strong>놓치지 않는 구독</strong><small>매달 돌아오는 결제일 관리</small></span></div><div><span class="feature-icon">⌁</span><span><strong>살아 있는 돈의 흐름</strong><small>계좌를 잇는 입자 애니메이션</small></span></div></div>
-<div class="ledger-frame-wrap"><div class="frame-label"><span class="status-dot"></span> 모아흐름 · 기존 기록과 연결됩니다 <a href="/moaflow/" target="_top">새 화면에서 열기 ↗</a></div><div id="ledger-mount"></div></div>
-<p class="fine-print">모아흐름은 별도 프로젝트로도 계속 이용할 수 있습니다. 이 화면은 같은 주소의 가계부를 연결하므로 기존 기록을 복사하거나 초기화하지 않습니다.</p>
+<div class="ledger-frame-wrap"><div class="frame-label"><span class="status-dot"></span> Bandal Finance 가계부 · 기존 기록과 연결됩니다 <a href="/moaflow/?embedded=finance" target="_top">새 화면에서 열기 ↗</a></div><div id="ledger-mount"></div></div>
+<p class="fine-print">가계부는 Bandal Finance의 내부 기능입니다. 기존에 기록한 수입·지출·구독·자산 데이터와 계정 저장을 그대로 연결하므로 기록을 다시 옮길 필요가 없습니다.</p>
 </section>
 <section id="view-research" class="view" aria-labelledby="research-title" hidden>
-<div class="section-heading"><div><p class="eyebrow">02 / COMPANY RESEARCH</p><h2 id="research-title">기업의 가치를 읽는 쉬운 방법</h2><p>무엇으로 벌고, 어디에 쓰는지. 숫자 뒤의 비즈니스를 살펴보세요.</p></div></div>
-<form id="company-search" class="search-form"><label class="sr-only" for="company-query">기업명 또는 미국 주식 티커</label><span aria-hidden="true">⌕</span><input id="company-query" name="query" placeholder="기업명 또는 티커 검색 · 예: NVIDIA, NVDA" maxlength="80" autocomplete="off" required><button class="button" type="submit">기업 찾기</button></form>
-<div class="quick-search" aria-label="빠른 기업 검색"><span>시작해 볼까요?</span><button type="button" data-company="NVDA">NVIDIA ↗</button><button type="button" data-company="AAPL">Apple ↗</button><button type="button" data-company="MSFT">Microsoft ↗</button><button type="button" data-company="GOOGL">Alphabet ↗</button></div>
+<div class="section-heading"><div><p class="eyebrow">02 / COMPANY RESEARCH</p><h2 id="research-title">숫자를 넘어, 기업을 탐험하세요.</h2><p>기업 지형도에서 출발해 돈의 흐름·전망·원본 자료를 이어서 살펴보세요.</p></div></div>
+<form id="company-search" class="search-form"><label class="sr-only" for="company-query">기업명 또는 미국 주식 티커</label><span aria-hidden="true">⌕</span><input id="company-query" name="query" placeholder="기업명 또는 티커 검색 · 예: IREN, Apple, AAPL" maxlength="80" autocomplete="off" required><button class="button" type="submit">기업 찾기</button></form>
+<div class="quick-search" aria-label="빠른 기업 검색"><span>시작해 볼까요?</span><button type="button" data-company="IREN">IREN ↗</button><button type="button" data-company="NVDA">NVIDIA ↗</button><button type="button" data-company="AAPL">Apple ↗</button><button type="button" data-company="MSFT">Microsoft ↗</button><button type="button" data-company="GOOGL">Alphabet ↗</button></div>
 <div id="search-results" aria-live="polite"></div><div id="research-status" class="notice" role="status" hidden></div>
-<div id="company-content"><div class="empty-state research-empty"><span class="empty-orbit" aria-hidden="true">◴</span><h3>한 기업의 이야기를 펼쳐보세요.</h3><p>공식 공시의 수익과 비용, 쉬운 지표 설명,<br>가정을 바꾸는 가치 계산기를 함께 볼 수 있습니다.</p><small>미국 SEC 공시 기반 · 실시간 주가 제공 여부는 데이터 출처에 표시됩니다.</small></div></div>
+<nav class="explorer-modes" aria-label="기업 분석 모드"><button type="button" data-explorer-mode="atlas" class="active" aria-pressed="true">기업 지형도 <small>탐색·순위</small></button><button type="button" data-explorer-mode="compare" aria-pressed="false">나란히 비교 <small>출처·기준 함께</small></button><button type="button" data-explorer-mode="guide" aria-pressed="false">투자 지표 사전 <small>쉬운 해석</small></button></nav>
+<div id="explorer-controls" class="explorer-controls"><div><label for="explorer-sector">업종</label><select id="explorer-sector"><option value="all">모든 업종</option></select></div><div><label for="explorer-sort">정렬 기준</label><select id="explorer-sort"><option value="marketCap">시가총액</option><option value="price">주가</option><option value="per">PER</option><option value="psr">PSR</option><option value="roe">ROE</option><option value="name">기업명</option></select></div><div><label for="explorer-direction">정렬 방향</label><select id="explorer-direction"><option value="desc">높은 값부터</option><option value="asc">낮은 값부터</option></select></div><p id="explorer-count">기업 자료 확인 중</p></div>
+<div id="explorer-content" aria-live="polite"><div class="loading-state">기업 지형도를 불러오고 있습니다.</div></div>
+<div id="compare-tray" class="compare-tray" hidden></div>
+<div id="company-content" hidden></div>
 </section>
 <section id="view-quant" class="view" aria-labelledby="quant-title" hidden>
 <div class="section-heading"><div><p class="eyebrow">03 / YOUR PRIVATE QUANT</p><h2 id="quant-title">나의 기준으로 만드는 투자 전략</h2><p>파라미터를 설정하고 모의투자로 확인한 뒤, 결과만 선택해서 공유하세요.</p></div><span class="privacy-badge">● 본인 계정 전용</span></div>
@@ -51,7 +55,7 @@
 </section></div>
 </section>
 <section id="shared-result" class="view" hidden aria-labelledby="shared-title"><div class="section-heading"><div><p class="eyebrow">SHARED PERFORMANCE</p><h2 id="shared-title">공유된 모의투자 수익률</h2><p>금액·전략 파라미터·계좌 연결은 포함하지 않습니다.</p></div></div><div id="shared-content" class="panel"></div></section>
-</main><footer class="footer"><span>© 2026 BANDAL STUDIO</span><div><a href="/moaflow/">모아흐름</a><a href="/privacy/">개인정보처리방침</a><a href="mailto:support@bandal.app">도움이 필요해요 ↗</a></div></footer>
+</main><footer class="footer"><span>© 2026 BANDAL STUDIO</span><div><a href="/finance/#ledger">가계부</a><a href="/privacy/">개인정보처리방침</a><a href="mailto:support@bandal.app">도움이 필요해요 ↗</a></div></footer>
 </div></div><div id="toast" role="status" aria-live="polite"></div>
 <script type="module" src="./app.mjs"></script>
 </body></html>

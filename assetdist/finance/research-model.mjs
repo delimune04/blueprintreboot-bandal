@@ -25,9 +25,17 @@ export function buildFinancialFlow(financials = {}, period = null) {
   const f = financials;
   const base = { nodes: [], links: [], currency: 'USD', period, status: 'unavailable', note: '같은 연간 기간의 매출·원가·영업비용·영업이익이 필요해요. 부문별 매출은 별도 IR 공시에서 확인해 주세요.' };
   const values = [f.revenue, f.costOfRevenue, f.grossProfit, f.operatingExpenses, f.operatingIncome];
-  if (!values.every(finite) || values.some(value => value < 0) || f.revenue <= 0) return base;
+  if (!values.every(finite) || [f.revenue, f.costOfRevenue, f.grossProfit, f.operatingExpenses].some(value => value < 0) || f.revenue <= 0) return base;
   const tolerance = Math.max(1, f.revenue * 0.00001);
   if (Math.abs(f.revenue - f.costOfRevenue - f.grossProfit) > tolerance || Math.abs(f.grossProfit - f.operatingExpenses - f.operatingIncome) > tolerance) return { ...base, note: '동일 기간 금액의 회계식이 맞지 않아 흐름선을 만들지 않았어요. 원문 공시의 조정 항목을 확인해 주세요.' };
+  if (f.operatingIncome < 0) {
+    const loss = -f.operatingIncome;
+    return { ...base, status: 'available', accountingLossBridge: true,
+      nodes: [{ id: 'revenue', label: '매출', value: f.revenue }, { id: 'cost', label: '매출원가', value: f.costOfRevenue }, { id: 'gross', label: '매출총이익', value: f.grossProfit }, { id: 'opex', label: '영업비용', value: f.operatingExpenses }, { id: 'profit', label: '영업손실 (회계상 차이)', value: f.operatingIncome, kind: 'loss' }],
+      links: [{ source: 'revenue', target: 'cost', value: f.costOfRevenue }, { source: 'revenue', target: 'gross', value: f.grossProfit }, { source: 'gross', target: 'opex', value: f.grossProfit }, { source: 'profit', target: 'opex', value: loss, kind: 'accounting-deficit' }].filter(link => link.value > 0),
+      note: '영업비용이 매출총이익을 초과한 차이를 음수 영업손실로 표시합니다. 손실 연결선은 회계상 차이를 설명하며 현금 유입·차입·자금조달을 뜻하지 않습니다. 비현금 상각·손상차손이 포함될 수 있어 현금흐름표와 구분하세요. 입자 속도는 연출입니다.',
+    };
+  }
   return {
     ...base, status: 'available',
     nodes: [{ id: 'revenue', label: '매출', value: f.revenue }, { id: 'cost', label: '매출원가', value: f.costOfRevenue }, { id: 'gross', label: '매출총이익', value: f.grossProfit }, { id: 'opex', label: '영업비용', value: f.operatingExpenses }, { id: 'profit', label: '영업이익', value: f.operatingIncome }],

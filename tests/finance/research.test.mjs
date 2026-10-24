@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { buildFinancialFlow, calculateDCF, calculateMetrics, dcfSensitivity } from '../../assetdist/finance/research-model.mjs';
-import { createResearchService, normalizeCompanyFacts, reportsFromSubmissions } from '../../hosting/finance/research.mjs';
+import { createResearchService, normalizeCompanyFacts, reportsFromSubmissions, metricsWithSources, resolveTicker } from '../../hosting/finance/research.mjs';
 
 const row = (val, fields = {}) => ({ val, start: '2025-01-01', end: '2025-12-31', filed: '2026-02-12', form: '10-K', accn: '0001045810-26-000001', ...fields });
 function factsFixture() {
@@ -115,7 +115,7 @@ test('search and facts use fixed SEC destinations, declared user agent, caching 
   const count = p.calls.length;
   await handle(request('companies/NVDA?url=https://evil.example'), env, 'companies/NVDA');
   assert.equal(p.calls.length, count);
-  for (const call of p.calls) { assert.match(call.url, /^https:\/\/(?:www\.)?(?:sec\.gov|data\.sec\.gov)\//); assert.equal(call.options.headers['User-Agent'], env.SEC_USER_AGENT); assert.equal(call.options.redirect, 'error'); }
+  for (const call of p.calls) { assert.match(call.url, /^https:\/\/(?:www\.)?(?:sec\.gov|data\.sec\.gov|finance\.yahoo\.com|query1\.finance\.yahoo\.com)\//); if(call.url.includes('sec.gov'))assert.equal(call.options.headers['User-Agent'], env.SEC_USER_AGENT); assert.equal(call.options.redirect, 'error'); }
   assert(company.sources[0].retrievedAt);
 });
 test('missing operator identity and provider outages return official links and no fabricated financial numbers', async () => {
@@ -128,7 +128,7 @@ test('missing operator identity and provider outages return official links and n
   assert.equal(result.status, 'unavailable');
   assert(Object.values(result.financials).every(value => value === null));
   assert.equal(result.reports.find(item => item.provider === '기업 공식 IR').url, 'https://investor.nvidia.com/');
-  assert.equal(calls, 0);
+  assert.equal(calls, 2, 'only the public Yahoo page and chart fallback are attempted without SEC identity');
   const unavailable = await handle(request('companies/WXYZ'), {}, 'companies/WXYZ');
   assert.equal(unavailable.status, 503);
 });
@@ -202,8 +202,8 @@ test('fresh normalized snapshots serve source-backed numbers with collection age
   assert.equal(data.evidence.revenue.filed, '2026-02-12');
   assert.equal(data.sources[0].snapshotCollectedAt, collectedAt);
   assert.equal(data.quote.status, 'unavailable');
-  assert.equal(external, 0);
-  assert.deepEqual(assets, [{ origin: 'https://bandal.app', pathname: '/finance/snapshots/NVDA.json', search: '' }]);
+  assert.equal(external, 2, 'a missing stored market quote may try public Yahoo without relabeling annual SEC data');
+  assert.deepEqual(assets, [{ origin: 'https://bandal.app', pathname: '/finance/snapshots/NVDA.json', search: '' }, { origin: 'https://bandal.app', pathname: '/finance/outlooks/NVDA.json', search: '' }]);
   assert.match(data.limitations[0], /실시간 갱신 아님/);
   assert.match(response.headers.get('cache-control'), /no-store/);
 });
@@ -242,4 +242,49 @@ test('missing, future-dated, wrong-company and malformed snapshots fall through 
     assert.equal(data.dataMode, 'live-source');
     assert.equal(data.financials.revenue, null);
   }
+});
+
+test('IFRS-only standard annual facts retain taxonomy and never substitute a foreign-currency observation', () => {
+  const f = {cik:1878848,facts:{'ifrs-full':{}}};
+  for(const [tag,value] of Object.entries({Revenue:1000,CostOfSales:700,ProfitLossFromOperatingActivities:-100,ProfitLoss:-150,CashFlowsFromUsedInOperatingActivities:70,PurchaseOfPropertyPlantAndEquipmentClassifiedAsInvestingActivities:50})) f.facts['ifrs-full'][tag]={units:{USD:[row(value,{form:'20-F'})]}};
+  f.facts['ifrs-full'].DilutedEarningsLossPerShare={units:{'USD/shares':[row(-1.5,{form:'20-F'})]}};
+  f.facts['ifrs-full'].Equity={units:{USD:[row(600,{start:undefined,form:'20-F'}),row(400,{start:undefined,end:'2024-12-31',form:'20-F'})]}};
+  const result=normalizeCompanyFacts(f,'1878848');
+  assert.equal(result.financials.revenue,1000);assert.equal(result.financials.netIncome,-150);assert.equal(result.financials.dilutedEPS,-1.5);assert.equal(result.financials.freeCashFlow,20);assert.equal(result.evidence.revenue.taxonomy,'ifrs-full');assert.equal(result.history.length,1);
+  f.facts['ifrs-full'].Revenue.units={EUR:[row(1000,{form:'20-F'})]};assert.equal(normalizeCompanyFacts(f,'1878848').financials.revenue,null);
+});
+
+test('a reconciled operating loss is a signed accounting gap, never positive profit or a funding claim', () => {
+  const flow=buildFinancialFlow({revenue:1000,costOfRevenue:400,grossProfit:600,operatingExpenses:900,operatingIncome:-300});
+  assert.equal(flow.status,'available');assert.equal(flow.accountingLossBridge,true);assert.equal(flow.nodes.find(n=>n.id==='profit').value,-300);assert.match(flow.nodes.find(n=>n.id==='profit').label,/영업손실/);
+  assert.equal(flow.links.filter(l=>l.target==='opex').reduce((s,l)=>s+l.value,0),900);assert.match(flow.note,/자금조달을 뜻하지/);
+});
+
+test('APPL is transparently corrected to the actual Apple ticker in search and direct company lookup', async () => {
+  assert.deepEqual(resolveTicker('appl'),{searchedAs:'APPL',resolvedTicker:'AAPL',correction:'APPL은 Apple의 종목코드 AAPL로 보정했어요.'});
+  const now=Date.parse('2026-10-24T12:00:00.000Z'),snap=await snapshotFixture('2026-10-24T11:00:00.000Z');
+  snap.payload.company={...snap.payload.company,ticker:'AAPL',name:'Apple Inc.',cik:'320193'};snap.payload.period.sourceUrl='https://www.sec.gov/Archives/edgar/data/320193/000032019326000001/0000320193-26-000001-index.htm';snap.payload.sources[0].url='https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json';
+  const catalog={schemaVersion:1,collectedAt:snap.collectedAt,source:{provider:'SEC EDGAR',url:'https://www.sec.gov/files/company_tickers.json'},companies:[{ticker:'AAPL',name:'Apple Inc.',cik:'320193'}]};
+  const handle=createResearchService({clock:()=>now,fetcher:async()=>{throw new Error('offline')}}),env2={ASSETS:assetBinding({'/finance/snapshots/AAPL.json':snap,'/finance/snapshots/catalog.json':catalog})};
+  const search=await(await handle(request('companies/search?q=APPL'),env2,'companies/search')).json();assert.equal(search.results[0].ticker,'AAPL');assert.equal(search.resolvedTicker,'AAPL');assert(search.correction);
+  const detail=await(await handle(request('companies/APPL'),env2,'companies/APPL')).json();assert.equal(detail.company.ticker,'AAPL');assert.equal(detail.searchedAs,'APPL');assert(detail.correction);
+});
+
+test('market TTM ratios carry their own field sources while annual SEC metrics keep a separate basis', () => {
+  const normalized=normalizeCompanyFacts(factsFixture(),'1045810'),source={provider:'Yahoo Finance',url:'https://finance.yahoo.com/quote/IREN/key-statistics/',asOf:'2026-10-23T20:00:00.000Z',basis:'TTM',retrievedAt:'2026-10-24T11:00:00.000Z'};
+  const metrics=metricsWithSources(normalized.financials,normalized.evidence,{provider:'Yahoo Finance',reportedPE:null,reportedPS:13.8,epsTTM:-2.17,forwardPE:null,roe:-23.4,unavailableReasons:{forwardPE:'N/M: negative forecast earnings'},evidence:{reportedPS:source,epsTTM:source,roe:source}});
+  const per=metrics.find(m=>m.key==='per');assert.equal(per.value,null);assert.equal(per.status,'not-meaningful');assert.match(per.reason,/N\/M/);assert.equal(per.source.provider,'Yahoo Finance');assert.equal(metrics.find(m=>m.key==='forwardPE').status,'not-meaningful');assert.equal(metrics.find(m=>m.key==='psr').source.asOf,'2026-10-23T20:00:00.000Z');assert.equal(metrics.find(m=>m.key==='roe').source.provider,'SEC EDGAR 공시에서 계산');assert.equal(metrics.find(m=>m.key==='roeTTM').value,-23.4);
+});
+
+test('explorer ranks only its labelled supported snapshot sample and does not turn missing data into zero', async () => {
+  const handle=createResearchService({fetcher:async()=>{throw new Error('no network')}}),data=await(await handle(request('companies/explore'),{ASSETS:assetBinding({})},'companies/explore')).json();
+  assert(data.companies.some(c=>c.ticker==='IREN'));assert(data.companies.some(c=>c.ticker==='AAPL'));assert.match(data.rankingNote,/전체 기업 순위가 아닙니다/);assert.equal(data.companies[0].price,null);assert.equal(data.companies[0].marketCap,null);
+});
+
+test('a partial public market snapshot keeps sourced ratios without asserting unavailable annual SEC facts', async () => {
+  const now=Date.parse('2026-10-24T12:00:00.000Z'),collectedAt='2026-10-24T11:00:00.000Z',sourceUrl='https://finance.yahoo.com/quote/XOM/key-statistics/';
+  const quote={status:'available',ticker:'XOM',currency:'USD',provider:'Yahoo Finance',price:150,reportedPE:20,reportedPS:2,retrievedAt:collectedAt,sourceUrl,marketTime:'2026-10-23T20:00:00.000Z',evidence:{reportedPE:{provider:'Yahoo Finance',url:sourceUrl,asOf:'2026-10-23T20:00:00.000Z',basis:'TTM'}}};
+  const snapshot={schemaVersion:1,collectedAt,source:'Yahoo Finance public observations; annual SEC unavailable',payload:{status:'partial',company:{ticker:'XOM',name:'ExxonMobil Holdings Corp',cik:'2115436',currency:'USD'},period:null,financials:{},evidence:{},quote,reports:[],sources:[{provider:'Yahoo Finance',url:sourceUrl,status:'available'}],limitations:['연간 SEC 수치는 확인되지 않았어요.']}};
+  let external=0;const handle=createResearchService({clock:()=>now,fetcher:async()=>{external++;throw new Error('network')}}),data=await(await handle(request('companies/XOM'),{ASSETS:assetBinding({'/finance/snapshots/XOM.json':snapshot})},'companies/XOM')).json();
+  assert.equal(data.status,'partial');assert.equal(data.period,null);assert.equal(data.metrics.find(m=>m.key==='per').value,20);assert.equal(data.metrics.find(m=>m.key==='per').source.provider,'Yahoo Finance');assert.equal(external,0);assert.match(data.limitations[0],/연간 SEC 재무 미확인/);assert.equal(data.sources.some(s=>s.provider==='SEC companyfacts'&&s.status==='available'),false);
 });

@@ -7,18 +7,19 @@ const home = (path) => new URL(`../../bandal-home/${path}`, import.meta.url);
 const read = (path) => readFile(home(path), "utf8");
 const attributes = (html, name) => [...html.matchAll(new RegExp(`\\s${name}="([^"]+)"`, "g"))].map((match) => match[1]);
 
-// Every link and anchor on the v7 homepage, as published at https://bandal.app/ on 2026-10-23.
+// Keep published non-finance links and anchors. The explicit Finance consolidation
+// replaces the old standalone MoaFlow homepage destination with /finance/#ledger.
 const V7_LINKS = [
-  "#main", "#top", "/moaflow/", "/LabVium", "/harupyeon/", "/travel/", "/capella/", "#about", "#projects",
+  "#main", "#top", "/LabVium", "/harupyeon/", "/travel/", "/capella/", "#about", "#projects",
   "mailto:support@bandal.app", "/LabVium/help/LabVium_User_Guide_KO.pdf", "https://momento-youth.blogspot.com/",
   "/harupyeon/tips/hs-ai-verification/", "/harupyeon/tips/uni-team-roles/", "/harupyeon/tips/job-subscription-audit/",
   "/capella/support/", "#app-projects", "/privacy/",
 ];
 const V7_IDS = ["top", "navigation", "main", "hero-title", "horizon-sky", "horizon-moon", "constellation", "projects", "labvium-title", "harupyeon", "momento", "haru-title", "travel", "travel-title", "capella", "tokyo", "capella-title", "about", "about-title", "app-projects", "directory-title"];
 // Files the homepage expects from the existing BANDAL Site; everything else ships in bandal-home/.
-const SITE_ASSETS = ["/favicon.svg", "/horizon.png", "/crescent-flat.svg", "/transitions.css", "/transitions.js", "/moaflow/mark.svg", "/LabVium/brand/labvium-symbol-v1.png", "/capella-icon-starlight-lens.png"];
+const SITE_ASSETS = ["/favicon.svg", "/horizon.png", "/crescent-flat.svg", "/transitions.css", "/transitions.js", "/LabVium/brand/labvium-symbol-v1.png", "/capella-icon-starlight-lens.png"];
 
-test("BANDAL homepage keeps every published link and anchor", async () => {
+test("BANDAL homepage keeps unrelated published links and anchors", async () => {
   const html = await read("index.html");
   const links = new Set(attributes(html, "href"));
   for (const link of V7_LINKS) assert.ok(links.has(link), `missing link ${link}`);
@@ -81,7 +82,6 @@ const PROJECTS = [
   { id: "harupyeon", href: "/harupyeon/", label: "HARUPYEON" },
   { id: "travel", href: "/travel/", label: "TRAVEL PLANNER" },
   { id: "capella", href: "/capella/", label: "CAPELLA CAMERA" },
-  { id: "moaflow", href: "/moaflow/", label: "MOAFLOW" },
   { id: "finance", href: "/finance/", label: "BANDAL FINANCE" },
 ];
 
@@ -121,8 +121,8 @@ test("desktop, compact menu, footer and directory keep the same project order", 
   const html = await read("index.html");
   const nav = navContent(html, 'id="navigation" class="primary-nav" aria-label="주 메뉴"');
   assert.deepEqual(attributes(nav, "href"), [...PROJECTS.map(project => project.href), "#about"]);
-  assert.deepEqual([...nav.matchAll(/<small aria-hidden="true">(\d{2})<\/small>/g)].map(match => match[1]), ["01", "02", "03", "04", "05", "06", "07"]);
-  assert.deepEqual([...nav.matchAll(/style="--i:(\d+)"/g)].map(match => Number(match[1])), [0, 1, 2, 3, 4, 5, 6]);
+  assert.deepEqual([...nav.matchAll(/<small aria-hidden="true">(\d{2})<\/small>/g)].map(match => match[1]), ["01", "02", "03", "04", "05", "06"]);
+  assert.deepEqual([...nav.matchAll(/style="--i:(\d+)"/g)].map(match => Number(match[1])), [0, 1, 2, 3, 4, 5]);
   const cards = [...html.matchAll(/<a class="directory-card[^>]+href="([^"]+)"[^>]*>([\s\S]*?)<\/a>/g)];
   assert.deepEqual(cards.map(match => match[1]), PROJECTS.map(project => project.href));
   for (const [index, card] of cards.entries()) {
@@ -131,17 +131,19 @@ test("desktop, compact menu, footer and directory keep the same project order", 
   const footer = navContent(html, 'aria-label="하단 메뉴"');
   const footerProjects = attributes(footer, "href").filter(href => PROJECTS.some(project => project.href === href));
   assert.deepEqual(footerProjects, PROJECTS.map(project => project.href));
-  // Numbered mobile links must remain usable after the seventh menu item is added.
+  // Every project and the Studio link remain usable in the compact menu.
   const css = await read("bandal-home.css"), script = await read("bandal-home.js");
   assert.match(css, /@media \(max-width:1020px\)/);
   assert.match(css, /overflow-y:auto/);
   assert.match(script, /matchMedia\('\(max-width: 1020px\)'\)/);
 });
 
-test("MoaFlow remains independent and the Finance hub links to all three modules", async () => {
+test("the ledger appears only inside Finance and the homepage has no standalone MoaFlow destination", async () => {
   const html = await read("index.html");
   const sections = projectSections(html);
-  assert.ok(sections.find(section => section.id === "moaflow").content.includes('href="/moaflow/"'));
+  assert.equal(sections.some(section => section.id === "moaflow"), false);
+  assert.equal(attributes(html, "href").some(href => href.startsWith("/moaflow")), false);
+  assert.doesNotMatch(html, /data-chapter(?:-link)?="moaflow"|id="moaflow-title"|MOAFLOW<\/p>/);
   const finance = sections.find(section => section.id === "finance");
   for (const tab of ["ledger", "analysis", "quant"]) assert.ok(finance.content.includes(`href="/finance/#${tab}"`));
 });

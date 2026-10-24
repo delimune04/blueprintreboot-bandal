@@ -1,13 +1,15 @@
-# BANDAL STUDIO homepage (v9 "night chapters + Finance")
+# BANDAL STUDIO homepage (v10 "Finance includes the ledger")
 
 Redesigned `https://bandal.app/` homepage. The page source lives in the BANDAL
 Site checkout (`assetdist/` root), not in this repository; this folder holds the
 new homepage files so they can be reviewed and then copied into that checkout.
 
 Baseline: the v7 homepage (`bandal:design` = `20261023-five-projects-v7`) as
-published on 2026-10-23. All of its copy, links, anchors (`#projects`,
+published on 2026-10-23. Its unrelated links, anchors (`#projects`,
 `#harupyeon`, `#momento`, `#travel`, `#capella`, `#tokyo`, `#about`,
-`#app-projects`) and accessibility affordances are kept.
+`#app-projects`) and accessibility affordances are kept. The user explicitly
+requested removal of MoaFlow as an independent homepage project in v10; the
+ledger is now presented through Bandal Finance.
 
 ## What changed
 
@@ -16,16 +18,14 @@ published on 2026-10-23. All of its copy, links, anchors (`#projects`,
 - **Hero**: same horizon, rising moon, constellation and orbit. Lights now
   travel along the orbit rings, the orbit and stars lean toward the pointer, and
   the headline recedes while the moon rises.
-- **Projects**: MoaFlow gets its own chapter (it was only in the nav and the
-  directory), so the order matches the navigation and directory: 01 LabVium,
-  02 Harupyeon, 03 Travel, 04 CAPELLA, 05 MoaFlow, 06 Bandal Finance.
-  MoaFlow keeps its independent page and chapter. Finance is a separate hub at
-  `/finance/`, linking the existing ledger with company analysis and Quant.
-  The hero scroll cue leads to LabVium; About is numbered 07. Each chapter has its own accent, a
-  parallax numeral and a glass card whose illustration animates in: flowing
-  money streams, a research map that draws itself, an article list that
-  staggers in with a count-up to the existing total, a route with a travelling
-  light, and a lens that focuses with a shutter flash.
+- **Projects**: the navigation, chapters and directory show 01 LabVium,
+  02 Harupyeon, 03 Travel, 04 CAPELLA and 05 Bandal Finance. The ledger is a
+  Finance module at `/finance/#ledger`, alongside company analysis and Quant.
+  MoaFlow no longer has a standalone homepage menu item, chapter, directory
+  card or footer link. Its existing application/data route stays intact for
+  Finance to use; this homepage change does not migrate financial records.
+  The hero scroll cue leads to LabVium; the hero lists 05 projects and About is
+  numbered 06. Each chapter retains its existing accent and motion behavior.
 - **Page**: background hue follows the chapter in view; marquee speeds up and
   leans with scroll; the About statement lights up word by word; chapter rail
   on wide screens; header hides on scroll down; directory cards have
@@ -41,10 +41,9 @@ published on 2026-10-23. All of its copy, links, anchors (`#projects`,
 - **Fix carried from v7**: on phones, sentences joined by a hidden `<br>` no
   longer run together ("쉽게.다음" → "쉽게. 다음").
 
-New copy that did not exist on v7 (please review): the MoaFlow chapter
-headline "내 돈의 흐름을, 한눈에." (built from the directory text), its
-description (from the MoaFlow page description), the "06 PROJECTS" hero
-footer label, and the chapter rail labels.
+Finance introduces the integrated ledger, company analysis and Quant modules.
+The main and module links all lead into `/finance/`; the homepage no longer
+presents the ledger as a separate product.
 
 ## Files
 
@@ -57,7 +56,7 @@ footer label, and the chapter rail labels.
 
 The page still uses these existing Site files unchanged: `/favicon.svg`,
 `/horizon.png`, `/crescent-flat.svg`, `/transitions.css`, `/transitions.js`,
-`/moaflow/mark.svg`, `/LabVium/brand/labvium-symbol-v1.png`,
+`/LabVium/brand/labvium-symbol-v1.png`,
 `/capella-icon-starlight-lens.png`.
 
 v7's `styles.css`, `studio-motion.css`, `project-panels.css`,
@@ -76,9 +75,9 @@ workflow. Only the Site owner publishes.
 ## Checks
 
 `frontend/tests/bandal-home.test.mjs` (part of `npm test` in `frontend/`)
-verifies that every v7 link and anchor is still present, that assets are
+verifies that unrelated v7 links and anchors remain, that assets are
 same-origin, and that every animation is gated by both motion settings.
 It also checks actual section order, visible chapter and directory numbers,
 primary/footer menu order, chapter jump targets, the LabVium scroll cue, and
-Finance module links. Publishing remains a separate Site operation; a GitHub
+Finance module links and absence of a standalone MoaFlow destination. Publishing remains a separate Site operation; a GitHub
 commit or merge alone does not verify deployment.

@@ -2,7 +2,9 @@
 
 `/finance/` combines the existing MoaFlow ledger, company research and a private
 Quant laboratory. Homepage order is LabVium, Harupyeon, Travel, CAPELLA,
-MoaFlow, Bandal Finance. MoaFlow remains available independently at `/moaflow/`.
+Bandal Finance. The existing ledger is presented inside Finance at `#ledger`;
+its legacy `/moaflow/` storage/API routes remain compatible, but it is no longer
+a separate homepage project. Embedded branding does not change stored records.
 
 ## Source and deployment
 
@@ -41,9 +43,11 @@ SEC EDGAR supplies company identity, annual USD standard-tag financials and
 filings. Each financial observation carries its period and source; unmatched
 periods are not mixed. Animated flow amounts must reconcile before drawing.
 DCF is an assumption-based calculator, with separate FCFF, FCFE and cash-flow
-proxy handling. Missing ARR, segment revenue and analyst opinions remain
-unavailable rather than being inferred from unrelated numbers. Coverage is
-SEC-listed issuers; Korean DART integration is not implemented.
+proxy handling. Public Yahoo Finance statistics supplement price, TTM metrics and analyst
+estimates with a source field and date for each number. Current annual SEC
+figures and Yahoo TTM values are kept separate. Source-backed IREN/Apple
+business breakdowns and dated authored outlooks do not turn management targets
+into realized revenue. Korean DART integration is not implemented.
 
 Normalized, dated SEC snapshots and a collected company catalog back research when hosted provider access fails. Run `node scripts/refresh-finance-research.mjs` to refresh public snapshots before rebuilding and deploying. The UI displays collection time; these are not real-time financial feeds.
 

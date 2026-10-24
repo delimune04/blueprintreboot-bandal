@@ -1,168 +1,141 @@
-# Bandal Finance research data and calculation contract
+# Bandal Finance company data contract
 
-## Source routes and configuration
+Bandal Finance combines annual SEC financial statements, publicly served Yahoo
+Finance observations, and reviewed source summaries. Each displayed value owns
+its own source URL, unit, reporting basis and date. A collection timestamp never
+becomes a substitute for a quote's exchange timestamp or a statement's fiscal end.
 
-`hosting/finance/research.mjs` exposes read-only `/finance/api/companies/search?q=…`
-and `/finance/api/companies/:ticker`. These routes contain public company data;
-they never read private Quant strategies, account balances or broker credentials.
-All outbound destinations are assembled from a validated ticker/CIK. User-supplied
-URLs are never fetched. Provider redirects are rejected.
+## Search and explorer
 
-| Variable | Purpose | Missing or restricted provider behavior |
-| --- | --- | --- |
-| `SEC_USER_AGENT` | Operator name and contact email in the SEC request header, e.g. `BANDAL Finance support@bandal.app` | Search only the small static identity/official-IR directory. Return financial values as `null` and explain the missing connection. |
-| `ALPHAVANTAGE_API_KEY` | Optional licensed server-side GLOBAL_QUOTE and OVERVIEW access | Price, provider TTM PER/PSR and analyst consensus stay unavailable. No key is embedded in client code or source links. |
+- `/finance/api/companies/search?q=...` searches the collected SEC company catalog.
+- `APPL` resolves to Apple's actual ticker `AAPL`. Search and direct lookup return
+  `searchedAs`, `resolvedTicker` and an explicit correction message.
+- `/finance/api/companies/explore` returns the curated, supported snapshot sample
+  with per-field sources and missing/N/M states. Its rankings are **within that
+  sample**, not worldwide company rankings.
+- `/finance/api/companies/:ticker` returns a complete public company payload.
+  It does not read private Quant strategies, account balances or broker secrets.
 
-The SEC company-ticker list is the dynamic search directory. A small fallback
-directory contains company identities and official IR URLs, without financial
-amounts or forecasts. The supported financial normalization is USD annual
-US-GAAP for SEC filers. Korean listings, IFRS-only tags and custom company tags
-are not silently treated as supported data.
+The 2026-10-24 collection has 10,425 searchable SEC identities and 10 curated
+market snapshots: NVDA, MSFT, AAPL, IREN, GOOGL, META, AMZN, TSLA, XOM and CVX.
+Nine have annual SEC facts plus Yahoo observations. XOM now maps to the current SEC catalog's ExxonMobil Holdings Corp
+(CIK 2115436); the prior operating entity was CIK 34088. The new entity has no
+usable annual statement facts in this acquisition, so its explicit `partial` snapshot preserves verified public
+Yahoo metrics with `period: null`, rather than discarding the quote or inventing
+annual statement values. A search match is not a promise that every metric exists.
+Sector/industry filters are labelled BANDAL editorial exploration categories.
 
-SEC responses are capped at 10 MiB, with a 12-second timeout and conservative
-per-isolate pacing; there is no retry loop after denial or throttling. Requests
-for the same document coalesce while in flight. The byte-limited in-memory
-cache holds at most 4 MiB of raw-equivalent JSON (parsed XBRL uses more memory),
-with 24-hour ticker and 1-hour facts/submissions TTLs. This is not a cross-region
-global rate limiter. Platform egress caching is requested; sustained multi-user
-deployment should use a centralized refresh/cache policy to enforce the SEC's
-aggregate access limit.
+## Public market data
 
-Alpha Vantage reads are capped at 512 KiB per response with 8-second timeouts.
-Successful snapshots cache for 6 hours, failed snapshots for 5 minutes. Quota or
-premium-access notices are treated as missing data. GLOBAL_QUOTE is presented
-as end-of-day data, never as a live executable quote. OVERVIEW currently needs
-the provider's applicable entitlement; the site operator must configure a key
-and plan that permits the intended display. No paid subscription is created by
-this code.
+`hosting/finance/public-data.mjs` reads only the already-public
+`https://finance.yahoo.com/quote/{ticker}/key-statistics/` page. It parses JSON
+already included in that page, validates the exact requested symbol and USD quote
+currency, and never executes page scripts. It does not request the authenticated
+quoteSummary API, obtain a crumb, create cookies, solve challenges or bypass a
+401/403/429. If the statistics page is unavailable, the fixed public chart route
+may provide its own price only; a chart cannot fill missing fundamental ratios.
 
-Primary references inspected during implementation (2026-10-24):
+Every observed field has `quote.evidence[field]` with provider, page URL, raw field
+name, unit, `asOf`/reporting period, retrieval time and basis. The adapter retains:
+price, market capitalization, trailing and forward PE, PSR, EPS, ROE, ROA, beta,
+EV, PBR, share count, reported cash/debt, TTM revenue/cash flows/margins, analyst
+aggregates and the upcoming earnings calendar's estimates where available.
+These are provider observations, not normalized SEC annual values.
+
+Financial-currency confirmation is separate from USD trading currency. A USD ADR
+cannot relabel non-USD EPS, income or cash flows as USD. Dates use raw Unix values
+before formatted text; future actual trade/reporting dates are rejected. Future
+estimate periods and anticipated earnings dates are allowed and labelled forecasts.
+PE for actual or forecast losses is **N/M**, with its source and reason preserved.
+Negative EPS, ROE and income remain negative rather than being replaced by zero.
+
+The statistics reader is bounded to 3 MiB and 10 seconds; chart reads to 256 KiB.
+Only fixed symbol-validated Yahoo destinations are allowed, redirects are rejected,
+and concurrent requests coalesce. Successful normalized values cache for five minutes,
+failures for one minute. Public page formats may change; failed parsing produces an
+explicit unavailable state and keeps prior dated snapshots rather than guessing.
+
+Optional `ALPHAVANTAGE_API_KEY` supports the pre-existing GLOBAL_QUOTE/OVERVIEW
+adapter. Without a key, the public Yahoo path is used; no paid provider key is
+required for the collected Yahoo observations. No provider key is exposed in
+source links or browser bundles.
+
+## Annual financials and derived metrics
+
+`SEC_USER_AGENT` identifies the operator and contact email for SEC requests.
+`normalizeCompanyFacts` supports standard USD US-GAAP and IFRS tags, selecting the
+latest annual 330–400 day period from 10-K/20-F filings and amendments. Durations
+must match both fiscal start and end; balance-sheet observations must match the
+selected year end. Later quarters/YTD cannot replace annual numerators.
+
+The payload includes revenue, direct costs, profit/loss, operating/cash flows,
+capital spending, FCF proxy, equity, assets/liabilities, EPS, shares, cash,
+R&D, SG&A, interest and tax when matching tags exist, plus five annual history
+points. Per-field evidence preserves taxonomy, tag, filing date, period and filing
+URL. Derived amounts identify formulas and inputs. Incomplete long-term debt tags
+are not silently called total company debt; provider-defined debt remains a
+separate Yahoo metric with its own source/basis.
+
+Annual ROE uses net income divided by positive average beginning/end equity.
+Annual EPS/margins/OCF-capex are separate from Yahoo TTM measures. Provider-reported
+PER/PSR are used on their reported TTM basis. Manual ratios still require explicit
+split-basis confirmation. Missing ARR is not inferred from sales. IREN's company-
+defined operating ARR is sourced separately from contracted ARR and future targets.
+
+## Income and business diagrams
+
+A positive operating-income flow reconciles revenue = direct costs + gross
+residual, and gross residual = operating costs + operating income. Inconsistent
+amounts disable the diagram instead of forcing a balance. A consistent operating
+loss is shown as a **negative loss node and an accounting deficit bridge**; this
+line is not a cash inflow, loan or financing source. Particle speed is styling.
+
+IREN's direct cost explicitly excludes depreciation/amortization. Its revenue-
+direct-cost residual is labelled **direct-cost contribution**, not comparable
+standard gross profit. Residual operating costs may include noncash impairment.
+Quarterly Apple product/service breakdowns and annual IREN business breakdowns
+retain their own distinct period frames and official source citations. They are
+not combined into one artificial statement or relabelled as each other's period.
+
+## Collected snapshots and outlook
+
+`node scripts/refresh-finance-research.mjs` performs normal sequential declared
+SEC reads and public Yahoo page reads, then atomically writes only normalized
+public observations to `assetdist/finance/snapshots/`. It never publishes or
+schedules itself, and preserves an older file after failure. Default collection
+covers the 10 curated symbols; `--tickers AAPL,IREN` performs a bounded refresh.
+
+Runtime ASSETS reads use fixed same-origin paths. Validated snapshots collected
+within 24 hours are preferred. After 24 hours the normal providers are tried; an
+older fallback is clearly marked. A stored Yahoo price retains its own exchange
+and retrieval times, not the page-view timestamp. Partial public-only snapshots
+must have no asserted annual SEC period/financials and must have validated Yahoo
+identity, currency and source provenance. Malformed/future/mismatched snapshots
+are rejected. Snapshot refresh requires a normal source build and Site publication;
+no recurring task was created.
+
+The outlook loader reads fixed reviewed source packs in `finance/outlooks/`.
+These are dated **AI-authored, source-based summaries**, not a live connected model.
+Official guidance, analyst estimates, reported results and inferences have distinct
+labels and citations. Future dates are never represented as completed results.
+Source packs become stale after seven days or after a scheduled earnings date.
+IREN's operational, contracted and target ARR stay separate. DCF is an explicitly
+assumed FCFF/FCFE/proxy calculator with nine-cell sensitivity; it is not an analyst
+rating, guaranteed fair value or trading signal.
+
+## Verification
+
+`node --test tests/finance/research.test.mjs tests/finance/public-data.test.mjs`
+covers exact symbol/currency/source dates, IFRS and annual period alignment,
+restatements, APPL correction, loss N/M, loss accounting bridges, mixed-basis
+provenance, public-provider limits, snapshot freshness, partial-data retention,
+explorer sample scope and DCF mathematics. Provider requests in tests are fixtures;
+actual collected snapshots retain their source evidence for independent review.
+
+References:
 
 - [SEC EDGAR APIs](https://www.sec.gov/search-filings/edgar-application-programming-interfaces)
-- [SEC developer FAQ and access policy](https://www.sec.gov/about/webmaster-frequently-asked-questions)
-- [Alpha Vantage quote endpoint](https://www.alphavantage.co/documentation/#latestprice)
-- [Alpha Vantage company overview](https://www.alphavantage.co/documentation/#company-overview)
-
-## Annual financial normalization
-
-Choose the most recent annual revenue period of 330–400 days from a 10-K,
-10-K/A, 20-F or 20-F/A. Every income/cash-flow duration used in metrics must
-match both its start and end. A later quarter or YTD value cannot replace an
-annual numerator. For duplicate periods, prefer the latest filed observation,
-including amendments. The API returns the period, filing date, tag, unit and
-SEC filing URL for each selected value.
-
-Gross profit may be derived as revenue minus cost of revenue. If operating
-expenses are absent, the residual gross profit minus operating income is marked
-as derived and may include other operating adjustments. Operating cash flow
-minus payments to acquire property, plant and equipment (or the standardized
-productive-assets tag) is explicitly a free cash-flow **proxy**, not normalized FCFF or FCFE. The productive-assets fallback includes software and other intangible assets,
-so its broader scope is explicitly warned in the response. Missing capital
-expenditure is never zero-filled. Debt is not inferred from ambiguous partial debt tags.
-
-ROE uses annual net income divided by average beginning/end equity, requiring
-positive average equity. The beginning equity observation must be about one
-year earlier. EPS is the reported diluted annual EPS. Current price is not
-divided automatically by an old EPS that may use another stock-split basis.
-When configured, PER and PSR use Alpha Vantage's reported TTM ratios and identify
-their distinct basis. Manual calculations require explicit `basisConfirmed`.
-ARR is always unavailable without a company-defined disclosure; ordinary sales
-are never relabeled as ARR.
-
-The money-flow diagram is an income-statement bridge:
-revenue → cost of revenue + gross profit → operating costs + operating profit.
-Each junction must reconcile to within the larger of USD 1 or 0.001% of sales.
-Negative or inconsistent flows disable the Sankey instead of hiding a loss.
-It is not a cash-flow statement or segment-revenue breakdown. Particle motion
-is visual styling, not a time series or a financial velocity measurement.
-
-## DCF assumptions
-
-`calculateDCF` is a pure calculation with explicit growth, discount, perpetual
-growth, horizon, share count and cash-flow type. Discount rate must exceed
-perpetual growth. Forecast horizon is 1–15 years. Non-finite inputs, nonpositive
-cash flow/share counts and singular Gordon formulas are rejected.
-
-- `ocf-capex-proxy` (default): discounts the historical cash-flow proxy and
-  returns an equity-reference value. Does **not** add cash or subtract debt;
-  warns that this is neither a proper FCFF nor FCFE valuation.
-- `fcff`: only for user-supplied unlevered free cash flow, discounted at its
-  appropriate rate; EV + cash − debt is the equity bridge.
-- `fcfe`: user-supplied equity cash flow; no duplicate cash/debt bridge.
-
-Results expose every forecast and present value, the terminal-value share,
-assumptions and a nine-cell growth/discount sensitivity. Values are assumptions,
-not a verified fair price, consensus target or trading instruction. Historical
-weighted-average diluted shares may be the only available share count; users
-must verify current share counts and splits before interpreting a per-share value.
-
-## Reports, opinions and unavailable information
-
-SEC submissions supply dated 10-K, 10-Q, 8-K and related filing links. An 8-K
-is described as an earnings filing only when Item 2.02 is actually present.
-Filing dates and reporting-period dates remain separate. The interface links
-to official IR for presentations, events and earnings calls; it does not invent
-future earnings dates or claim an earnings announcement is a future event.
-
-Configured Alpha Vantage OVERVIEW data can supply aggregate analyst rating
-counts and a target price. These are labeled provider aggregates with retrieval
-time, not individual analyst report titles or dates. Individual licensed
-sell-side report documents are not reproduced. Without the provider, the
-interface explains that analyst opinions are unavailable.
-
-SWOT content is labeled as a financial-data checklist and research questions.
-Only observed signs of operating profit/cash-flow proxy create quantitative
-strength/weakness text. Competitive advantages, regulation and growth are
-questions for original filings, not fabricated company-specific conclusions.
-
-## Validation
-
-`node --test tests/finance/research.test.mjs` covers period/unit alignment,
-restatements, missing values, flow reconciliation, DCF arithmetic and sensitivity,
-split-basis protection, SEC link validation, fixed provider destinations,
-response-size guards and provider failure behavior through mocked responses.
-Provider adapters remain separately subject to hosted networking, API plan,
-quota and display entitlement. Passing fixture tests alone does not establish
-that a production provider is connected.
-
-A direct live-provider smoke check on 2026-10-24 successfully loaded NVIDIA
-companyfacts and submissions, selected the annual 2025-01-27–2026-01-25 period,
-and produced a reconciled income flow. This validates local provider networking;
-hosted production networking remains a separate check.
-
-## Source-backed publication snapshots
-
-Hosted SEC egress was unavailable in production while the normal, declared local
-SEC API requests succeeded. To keep original filings usable in the hosted app,
-`node scripts/refresh-finance-research.mjs` ingests the official SEC endpoints
-sequentially and writes **normalized public data**, not raw XBRL, to
-`assetdist/finance/snapshots/`. This is an ordinary source-ingestion/cache path;
-it does not use third-party mirrors or circumvent SEC access controls. The
-script declares `SEC_USER_AGENT`, uses bounded reads, preserves old files after a
-failure, and never includes paid quote-provider credentials or private records.
-
-The 2026-10-24 collection produced a 10,425-company SEC ticker catalog and eight
-annual snapshots: NVDA, MSFT, AAPL, GOOGL, META, AMZN, TSLA and CVX. XOM had no
-usable standard annual revenue under the current conservative normalization;
-its financial snapshot was not generated. A catalog search match does not imply
-that a financial snapshot is available for that company. CVX's selected values
-did not support a reconciled income diagram, so its diagram remains unavailable.
-
-Runtime reads use the platform's ASSETS binding with fixed same-origin
-`/finance/snapshots/{validatedTicker}.json` paths. A validated snapshot collected
-within 24 hours is preferred. After 24 hours, runtime tries the normal live SEC
-API first and uses the older snapshot only if those facts are unavailable.
-Malformed, future-dated or mismatched-company snapshots are rejected.
-
-Snapshot responses expose `dataMode: "snapshot"`, `collectedAt`, and
-`snapshot: {collectedAt, ageHours, stale, reason}`. `asOf` stays at the collection
-time, every financial filing date remains unchanged, and the UI identifies the
-data as collected SEC filings rather than a fresh quote. The source timestamps
-and original SEC URLs are preserved. A stale fallback carries an explicit
-24-hour warning. Quote data still follows its independent provider status;
-the SEC snapshots never populate missing current prices, PER/PSR or ratings.
-
-Refresh is an explicit script plus normal build/publication operation. No
-background task or automatic deployment was created. The snapshot tests cover
-fresh/stale behavior, fixed paths, missing/corrupt files, catalog coverage and
-preservation of collection and filing dates.
+- [SEC access policy](https://www.sec.gov/about/webmaster-frequently-asked-questions)
+- [Yahoo IREN statistics](https://finance.yahoo.com/quote/IREN/key-statistics/)
+- [Yahoo Apple statistics](https://finance.yahoo.com/quote/AAPL/key-statistics/)
+- [Alpha Vantage documentation](https://www.alphavantage.co/documentation/)
