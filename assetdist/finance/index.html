@@ -3,10 +3,13 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#f6f3fc"><meta name="referrer" content="no-referrer">
 <meta name="description" content="가계부, 기업의 돈 흐름, 나만의 모의투자 전략을 연결하는 Bandal Finance.">
+<meta name="bandal:design" content="20261024-finance-motion-v2"><meta property="og:type" content="website"><meta property="og:locale" content="ko_KR"><meta property="og:url" content="https://bandal.app/finance/"><meta property="og:title" content="Bandal Finance · 돈의 흐름을 읽는 공간"><meta property="og:description" content="가계부, 기업의 돈 흐름, 나만의 모의투자 전략을 연결하는 Bandal Finance."><link rel="canonical" href="https://bandal.app/finance/">
 <title>Bandal Finance · 돈의 흐름을 읽는 공간</title>
-<link rel="icon" href="/moaflow/mark.svg" type="image/svg+xml"><link rel="stylesheet" href="./style.css">
+<link rel="icon" href="/moaflow/mark.svg" type="image/svg+xml"><link rel="stylesheet" href="/fonts/pretendard/pretendardvariable-dynamic-subset.css"><link rel="stylesheet" href="./style.css"><link rel="stylesheet" href="./finance-skin.css"><link rel="stylesheet" href="/transitions.css">
+<script>try{if(localStorage.getItem("bandal:motion")==="paused")document.documentElement.classList.add("motion-paused")}catch(e){}</script>
+<script src="./finance-motion.js" defer></script>
 </head>
-<body>
+<body data-finance-tab="research">
 <a class="skip" href="#main">본문으로 이동</a>
 <div class="layout">
 <aside class="sidebar">
@@ -21,17 +24,17 @@
 <a class="back-link" href="/">← BANDAL STUDIO</a>
 </aside>
 <div class="workspace">
-<header class="topbar"><div class="breadcrumb">BANDAL STUDIO <span>/</span> <strong>Finance</strong></div><div id="session" class="session"><span class="status-dot"></span><span>계정 확인 중</span></div></header>
+<header class="topbar"><div class="breadcrumb">BANDAL STUDIO <span>/</span> <strong>Finance</strong></div><div class="topbar-actions"><button class="motion-toggle" type="button" aria-pressed="false" title="애니메이션 끄기"><svg viewBox="0 0 20 20" width="16" height="16" aria-hidden="true"><path d="M7 5v10M13 5v10" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg><span>모션 끄기</span></button><div id="session" class="session"><span class="status-dot"></span><span>계정 확인 중</span></div></div></header>
 <main id="main" tabindex="-1">
 <div id="account-alert" class="notice error" role="alert" hidden></div>
-<section class="page-intro"><div><p class="eyebrow">A CLEARER VIEW OF YOUR MONEY</p><h1>돈의 흐름을,<br><span>나의 언어로.</span></h1><p class="intro-copy">일상의 가계부부터 기업의 가치와 나만의 투자 전략까지.<br class="wide-only"> 복잡한 숫자를 이해하기 쉬운 흐름으로 연결합니다.</p></div><div class="intro-art" aria-hidden="true"><div class="orbit orbit-one"></div><div class="orbit orbit-two"></div><div class="art-core">◐</div><span class="art-chip chip-one">수입 <i>↗</i></span><span class="art-chip chip-two">가치 <i>◴</i></span><span class="art-chip chip-three">전략 <i>⌁</i></span><div class="art-dot"></div></div></section>
-<section id="view-ledger" class="view" aria-labelledby="ledger-title">
+<section class="page-intro"><div class="intro-text"><p class="eyebrow">EXPLORE THE COMPANY ATLAS</p><h1>기업을 이해하는,<br><span>새로운 지도.</span></h1><p class="intro-copy">일상의 가계부부터 기업의 가치와 나만의 투자 전략까지.<br class="wide-only"> 복잡한 숫자를 이해하기 쉬운 흐름으로 연결합니다.</p></div><div class="intro-art" aria-hidden="true"><div class="orbit orbit-one"></div><div class="orbit orbit-two"></div><div class="art-core">◐</div><span class="art-chip chip-one">수입 <i>↗</i></span><span class="art-chip chip-two">가치 <i>◴</i></span><span class="art-chip chip-three">전략 <i>⌁</i></span><div class="art-dot"></div></div><div id="atlas-tape" class="atlas-tape" aria-hidden="true" hidden></div><div class="intro-aura" aria-hidden="true"><span></span><span></span><span></span></div></section>
+<section id="view-ledger" class="view" aria-labelledby="ledger-title" hidden>
 <div class="section-heading"><div><p class="eyebrow">01 / PERSONAL LEDGER</p><h2 id="ledger-title">나의 수입과 지출, 가계부</h2><p>수입·지출, 월별 구독, 계좌 사이의 흐름을 한 공간에서 관리하세요.</p></div><a class="button secondary" href="/moaflow/?embedded=finance" target="_top">가계부 전체 화면 ↗</a></div>
 <div class="feature-strip"><div><span class="feature-icon">↗</span><span><strong>매일의 기록</strong><small>수입·지출과 나의 재무제표</small></span></div><div><span class="feature-icon">↻</span><span><strong>놓치지 않는 구독</strong><small>매달 돌아오는 결제일 관리</small></span></div><div><span class="feature-icon">⌁</span><span><strong>살아 있는 돈의 흐름</strong><small>계좌를 잇는 입자 애니메이션</small></span></div></div>
 <div class="ledger-frame-wrap"><div class="frame-label"><span class="status-dot"></span> Bandal Finance 가계부 · 기존 기록과 연결됩니다 <a href="/moaflow/?embedded=finance" target="_top">새 화면에서 열기 ↗</a></div><div id="ledger-mount"></div></div>
 <p class="fine-print">가계부는 Bandal Finance의 내부 기능입니다. 기존에 기록한 수입·지출·구독·자산 데이터와 계정 저장을 그대로 연결하므로 기록을 다시 옮길 필요가 없습니다.</p>
 </section>
-<section id="view-research" class="view" aria-labelledby="research-title" hidden>
+<section id="view-research" class="view" aria-labelledby="research-title">
 <div class="section-heading"><div><p class="eyebrow">02 / COMPANY RESEARCH</p><h2 id="research-title">숫자를 넘어, 기업을 탐험하세요.</h2><p>기업 지형도에서 출발해 돈의 흐름·전망·원본 자료를 이어서 살펴보세요.</p></div></div>
 <form id="company-search" class="search-form"><label class="sr-only" for="company-query">기업명 또는 미국 주식 티커</label><span aria-hidden="true">⌕</span><input id="company-query" name="query" placeholder="기업명 또는 티커 검색 · 예: IREN, Apple, AAPL" maxlength="80" autocomplete="off" required><button class="button" type="submit">기업 찾기</button></form>
 <div class="quick-search" aria-label="빠른 기업 검색"><span>시작해 볼까요?</span><button type="button" data-company="IREN">IREN ↗</button><button type="button" data-company="NVDA">NVIDIA ↗</button><button type="button" data-company="AAPL">Apple ↗</button><button type="button" data-company="MSFT">Microsoft ↗</button><button type="button" data-company="GOOGL">Alphabet ↗</button></div>
@@ -55,7 +58,7 @@
 </section></div>
 </section>
 <section id="shared-result" class="view" hidden aria-labelledby="shared-title"><div class="section-heading"><div><p class="eyebrow">SHARED PERFORMANCE</p><h2 id="shared-title">공유된 모의투자 수익률</h2><p>금액·전략 파라미터·계좌 연결은 포함하지 않습니다.</p></div></div><div id="shared-content" class="panel"></div></section>
-</main><footer class="footer"><span>© 2026 BANDAL STUDIO</span><div><a href="/finance/#ledger">가계부</a><a href="/privacy/">개인정보처리방침</a><a href="mailto:support@bandal.app">도움이 필요해요 ↗</a></div></footer>
+</main><div class="footer-mark" aria-hidden="true"><span>BANDAL</span><i>◐</i><span>FINANCE</span></div><footer class="footer"><span>© 2026 BANDAL STUDIO</span><div><a href="/finance/#ledger">가계부</a><a href="/privacy/">개인정보처리방침</a><a href="mailto:support@bandal.app">도움이 필요해요 ↗</a></div></footer>
 </div></div><div id="toast" role="status" aria-live="polite"></div>
 <script type="module" src="./app.mjs"></script>
 </body></html>
