@@ -1,5 +1,5 @@
 @charset "UTF-8";
-/* BANDAL STUDIO homepage, v8 "night chapters".
+/* BANDAL STUDIO homepage, v9 "night chapters".
    Keeps the violet night, the D-shaped half moon and the rising horizon moon.
    Every decorative motion is optional: prefers-reduced-motion and the in-page
    motion toggle (.motion-paused) both leave a complete, static page. */
@@ -34,11 +34,11 @@
   --header-h:78px;
   transition:--ambient-a 1.2s ease,--ambient-b 1.2s ease;
 }
-:root[data-chapter=moaflow]{--ambient-a:#7a52c22e;--ambient-b:#5a3f9a1c}
 :root[data-chapter=labvium]{--ambient-a:#5e44b82e;--ambient-b:#3d2f8f22}
 :root[data-chapter=harupyeon]{--ambient-a:#8a479f30;--ambient-b:#4f2a7a1c}
 :root[data-chapter=travel]{--ambient-a:#4d58b82b;--ambient-b:#38368f22}
 :root[data-chapter=capella]{--ambient-a:#9a4b9a2b;--ambient-b:#5b2f7a1f}
+:root[data-chapter=finance]{--ambient-a:#586fb82e;--ambient-b:#52428f22}
 :root[data-chapter=about],:root[data-chapter=directory]{--ambient-a:#6a3fa526;--ambient-b:#3f2b8a1a}
 
 *,*:before,*:after{box-sizing:border-box}
@@ -171,7 +171,7 @@ a:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var
 .projects{position:relative}
 .project,.studio{position:relative;overflow:hidden;overflow:clip;padding:clamp(130px,13vw,184px) 0 clamp(96px,9vw,130px)}
 .project{--accent:#c9b5ef;--accent-hi:#e4d4fb;--accent-glow:#8e65d926;--accent-line:#c9b5ef8c;--accent-line-2:#c9b5ef59;--accent-spot:#c9b5ef29;--accent-soft:#c9b5ef17}
-#moaflow{--accent:#bba2f3;--accent-hi:#e6daff;--accent-glow:#8f6ad92b;--accent-line:#bba2f38c;--accent-line-2:#bba2f359;--accent-spot:#bba2f329;--accent-soft:#bba2f317}
+#finance{--accent:#a8b7ff;--accent-hi:#e0e6ff;--accent-glow:#6076d32b;--accent-line:#a8b7ff8c;--accent-line-2:#a8b7ff59;--accent-spot:#a8b7ff29;--accent-soft:#a8b7ff17}
 #labvium{--accent:#ab92f7;--accent-hi:#ddd2ff;--accent-glow:#6e55d32b;--accent-line:#ab92f78c;--accent-line-2:#ab92f759;--accent-spot:#ab92f729;--accent-soft:#ab92f717}
 #harupyeon{--accent:#d3a3ec;--accent-hi:#f3dcff;--accent-glow:#9a52c02b;--accent-line:#d3a3ec8c;--accent-line-2:#d3a3ec59;--accent-spot:#d3a3ec29;--accent-soft:#d3a3ec17}
 #travel{--accent:#9eabf6;--accent-hi:#dfe3ff;--accent-glow:#5662d02b;--accent-line:#9eabf68c;--accent-line-2:#9eabf659;--accent-spot:#9eabf629;--accent-soft:#9eabf617}
@@ -187,7 +187,6 @@ a:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var
 .project-icon,.project-icon-wrap{width:72px;height:72px;margin-bottom:32px}
 .project-icon{display:flex;align-items:center;justify-content:center;border:1px solid #c9b5ef38;border-radius:20px;background:linear-gradient(140deg,#44315e,#241831);box-shadow:0 16px 45px #9f64db26,inset 0 1px 0 #ffffff1a;transition:transform .7s var(--spring)}
 .project-icon img{display:block;width:100%;height:100%;object-fit:contain;border-radius:inherit}
-.project-icon--moaflow{border:0;background:none;box-shadow:0 16px 45px #9674d440}
 .project-icon--labvium{background:#f8f4ff;border-color:#c8b8e6;box-shadow:0 14px 40px #8b5cf626}
 .project-icon--labvium img{width:62px;height:62px}
 .project-icon--travel{color:#e0cff5;background:linear-gradient(140deg,#5b5aa0,#2c2147)}
@@ -491,9 +490,8 @@ details[open] summary>span{transform:rotate(45deg)}
   .studio-top{grid-template-columns:1fr;gap:36px}
 }
 
-/* Phone */
-@media (max-width:760px){
-  :root{--header-h:66px;--gutter:22px}
+/* Compact navigation accommodates every project without horizontal overflow. */
+@media (max-width:1020px){
   .masthead{gap:12px}
   .brand{font-size:19px;gap:8px}
   .brand-mark{width:16px;height:27px}
@@ -502,15 +500,24 @@ details[open] summary>span{transform:rotate(45deg)}
   .menu-toggle span{display:block;height:1.5px;width:18px;border-radius:2px;background:currentColor;transition:transform .45s var(--spring)}
   .menu-toggle[aria-expanded=true] span:first-child{transform:translateY(4.25px) rotate(45deg)}
   .menu-toggle[aria-expanded=true] span:last-child{transform:translateY(-4.25px) rotate(-45deg)}
-  .primary-nav{position:fixed;inset:0;z-index:1;display:flex;flex-direction:column;align-items:stretch;justify-content:center;gap:0;padding:90px 26px 60px;border:0;border-radius:0;background:radial-gradient(ellipse at 80% 10%,#4a2a7a66,transparent 60%),#0c0814f7;-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);font-size:30px;font-weight:700;letter-spacing:-.03em;opacity:0;visibility:hidden;transition:opacity .4s,visibility 0s .4s}
+  .primary-nav{position:fixed;inset:0;z-index:1;display:flex;flex-direction:column;align-items:stretch;justify-content:center;gap:0;padding:90px 26px 38px;overflow-y:auto;border:0;border-radius:0;background:radial-gradient(ellipse at 80% 10%,#4a2a7a66,transparent 60%),#0c0814f7;-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);font-size:clamp(21px,4.8vw,30px);font-weight:700;letter-spacing:-.03em;opacity:0;visibility:hidden;transition:opacity .4s,visibility 0s .4s}
   .primary-nav.is-open{opacity:1;visibility:visible;transition:opacity .4s,visibility 0s}
-  .primary-nav a{display:flex;align-items:baseline;gap:16px;padding:13px 4px;border-radius:0;border-bottom:1px solid var(--line);color:var(--ink);opacity:0;translate:0 18px;transition:opacity .45s ease,translate .6s var(--spring),color .3s}
+  .primary-nav a{display:flex;align-items:baseline;gap:16px;padding:10px 4px;border-radius:0;border-bottom:1px solid var(--line);color:var(--ink);opacity:0;translate:0 18px;transition:opacity .45s ease,translate .6s var(--spring),color .3s}
   .primary-nav a:hover{background:none;color:var(--lilac-hi)}
   .primary-nav.is-open a{opacity:1;translate:0 0;transition-delay:calc(.08s + var(--i,0) * .05s)}
   .primary-nav small{display:inline;font-size:11px;font-weight:600;letter-spacing:.14em;color:var(--lilac)}
   .menu-open{overflow:hidden}
   .menu-open .masthead{background:transparent;-webkit-backdrop-filter:none;backdrop-filter:none;box-shadow:none}
   .motion-toggle{width:44px;height:44px;min-height:44px;position:relative;z-index:2}
+}
+
+@media (max-width:1020px) and (max-height:640px){
+  .primary-nav{justify-content:flex-start;padding-top:80px;padding-bottom:24px}
+}
+
+/* Phone */
+@media (max-width:760px){
+  :root{--header-h:66px;--gutter:22px}
   .hero-sticky{min-height:720px;align-items:flex-start;padding:230px 22px 150px}
   .js .hero{height:calc(100svh + 240px);min-height:960px}
   .hero{--moon-shift:-88px}
@@ -591,3 +598,13 @@ details[open] summary>span{transform:rotate(45deg)}
   .stage-brand{font-size:20px}
   .stage-bar i{display:none}
 }
+
+/* Finance hub entry */
+.finance-services{display:grid;gap:10px;margin-top:28px}
+.finance-services a{display:grid;gap:8px;padding:18px 20px;border:1px solid var(--accent-line-2);border-radius:14px;background:var(--accent-soft)}
+.finance-services a:hover{border-color:var(--accent);background:var(--accent-spot)}
+.finance-services span{font-size:10px;letter-spacing:.12em;color:var(--accent)}
+.finance-services strong{font-size:19px;font-weight:650}
+.finance-services small{font-size:12px;color:var(--ink-2)}
+.symbol-finance{display:flex;align-items:center;justify-content:center;gap:2px;font-weight:700;color:#dce1ff;background:#a8b7ff12;border:1px solid #a8b7ff44}
+.symbol-finance span{font-size:18px}

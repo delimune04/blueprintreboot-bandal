@@ -1,0 +1,250 @@
+{
+  "version": 1,
+  "ticker": "AAPL",
+  "companyName": "Apple Inc.",
+  "asOf": "2026-10-24T04:13:36Z",
+  "mode": "curated-source-summary",
+  "label": "AI 작성·출처 기반 요약",
+  "periodLabel": "다음 실적 발표: FY2026 Q4 · 2026-09-26 종료 분기",
+  "nextEarnings": {
+    "date": "2026-11-02",
+    "time": "14:00",
+    "timezone": "America/Los_Angeles",
+    "status": "company-announced",
+    "period": "FY2026 Q4",
+    "sourceIds": [
+      "apple-event"
+    ]
+  },
+  "forecastPeriod": {
+    "label": "진행 중인 다음 분기: FY2027 Q1 (2026년 10~12월)",
+    "status": "unavailable",
+    "reason": "이 요약에서 확인한 FY2027 Q1 공식 매출·EPS 가이던스는 없습니다. 아래 예상치는 아직 발표되지 않은 FY2026 Q4를 대상으로 합니다."
+  },
+  "officialGuidance": {
+    "status": "partial",
+    "basis": "경영진 전망에 대한 Reuters 보도. 회사 원문 수치 가이던스와 출처를 구분합니다.",
+    "items": [
+      {
+        "label": "FY2026 Q4 매출 성장률 전망",
+        "text": "Reuters가 7월 실적발표 당시 경영진 전망을 전년 동기 대비 9~11%로 보도했습니다. 확정 실적이 아닙니다.",
+        "sourceIds": [
+          "apple-reuters"
+        ],
+        "valueRange": [
+          9,
+          11
+        ],
+        "unit": "% YoY",
+        "period": "FY2026 Q4",
+        "kind": "management-guidance"
+      },
+      {
+        "label": "FY2027 Q1 수치 가이던스",
+        "text": "진행 중인 10~12월 분기의 공식 수치 전망은 이 수집 자료에서 확인하지 못했습니다.",
+        "sourceIds": [
+          "apple-event"
+        ],
+        "period": "FY2027 Q1",
+        "status": "unavailable",
+        "kind": "management-guidance"
+      }
+    ]
+  },
+  "consensus": {
+    "status": "available",
+    "provider": "MarketBeat 공개 예상치",
+    "period": "FY2026 Q4",
+    "retrievedAt": "2026-10-24T04:13:36Z",
+    "basis": "출처 사이트의 집계 예상치이며 회사의 목표나 보장된 실적이 아닙니다. 애널리스트 수와 개별 추정 갱신 시각은 제공되지 않았습니다.",
+    "items": [
+      {
+        "label": "예상 매출",
+        "text": "공개 집계 예상 매출 1,133.1억 달러.",
+        "sourceIds": [
+          "apple-consensus"
+        ],
+        "value": 113310000000,
+        "unit": "USD",
+        "period": "FY2026 Q4",
+        "kind": "analyst-estimate"
+      },
+      {
+        "label": "예상 EPS",
+        "text": "공개 집계 예상 주당순이익 1.99달러. GAAP·조정 EPS 구분은 출처 정의를 확인해야 합니다.",
+        "sourceIds": [
+          "apple-consensus"
+        ],
+        "value": 1.99,
+        "unit": "USD/share",
+        "period": "FY2026 Q4",
+        "kind": "analyst-estimate"
+      }
+    ]
+  },
+  "summary": [
+    {
+      "text": "직전 공개 분기 FY2026 Q3 매출은 1,094.17억 달러, 희석 EPS는 2.02달러였습니다. 관세 환급이 EPS에 0.11달러, 매출총이익률에 약 2%p 유리하게 작용했습니다.",
+      "kind": "reported",
+      "sourceIds": [
+        "apple-q3-release",
+        "apple-q3-statements"
+      ]
+    },
+    {
+      "text": "다음 발표에서는 FY2026 Q4 예상치와 실제치를 같은 EPS 기준으로 비교해야 합니다. 관세 환급 효과를 반복 수익성으로 그대로 연장하지 않는 것이 중요합니다.",
+      "kind": "inference",
+      "sourceIds": [
+        "apple-q3-release",
+        "apple-consensus"
+      ]
+    },
+    {
+      "text": "서비스 성장과 부품 공급 제약이 동시에 관찰 포인트입니다. 매출 증가만으로 다음 분기의 이익률 개선을 단정할 수 없습니다.",
+      "kind": "inference",
+      "sourceIds": [
+        "apple-reuters"
+      ]
+    }
+  ],
+  "watchItems": [
+    {
+      "text": "FY2026 Q4 실적과 진행 중인 FY2027 Q1 가이던스를 구분해 확인하세요.",
+      "sourceIds": [
+        "apple-event",
+        "apple-consensus"
+      ]
+    },
+    {
+      "text": "서비스 매출 성장, iPhone 수요와 공급, 일회성 환급을 제외한 마진을 함께 보세요.",
+      "sourceIds": [
+        "apple-q3-release",
+        "apple-reuters"
+      ]
+    }
+  ],
+  "riskFactors": [
+    {
+      "text": "부품·제조 공급망 의존과 App Store 관련 규제 변화는 매출과 비용에 영향을 줄 수 있습니다.",
+      "sourceIds": [
+        "apple-q3-release",
+        "apple-reuters"
+      ]
+    }
+  ],
+  "business": {
+    "description": "iPhone·Mac·iPad·웨어러블 제품과 App Store·클라우드 등 서비스를 함께 운영하는 기기·서비스 생태계입니다.",
+    "period": {
+      "label": "FY2026 Q3 · 3개월",
+      "start": "2026-03-29",
+      "end": "2026-06-27",
+      "basis": "quarterly"
+    },
+    "currency": "USD",
+    "totalRevenue": 109417000000,
+    "segments": [
+      {
+        "id": "iphone",
+        "label": "iPhone",
+        "value": 54252000000,
+        "sourceIds": [
+          "apple-q3-statements"
+        ]
+      },
+      {
+        "id": "mac",
+        "label": "Mac",
+        "value": 10352000000,
+        "sourceIds": [
+          "apple-q3-statements"
+        ]
+      },
+      {
+        "id": "ipad",
+        "label": "iPad",
+        "value": 6191000000,
+        "sourceIds": [
+          "apple-q3-statements"
+        ]
+      },
+      {
+        "id": "wearables",
+        "label": "웨어러블·홈·액세서리",
+        "value": 7883000000,
+        "sourceIds": [
+          "apple-q3-statements"
+        ]
+      },
+      {
+        "id": "services",
+        "label": "서비스",
+        "value": 30739000000,
+        "sourceIds": [
+          "apple-q3-statements"
+        ]
+      }
+    ],
+    "income": {
+      "revenue": 109417000000,
+      "costOfRevenue": 54647000000,
+      "grossProfit": 54770000000,
+      "operatingExpenses": 19075000000,
+      "operatingIncome": 35695000000,
+      "netIncome": 29789000000,
+      "dilutedEPS": 2.02
+    },
+    "sourceIds": [
+      "apple-q3-statements"
+    ],
+    "notes": [
+      "이 사업별 흐름은 3개월 분기 수치입니다. 다른 탭의 연간·TTM 지표와 기간을 섞지 않습니다.",
+      "합계는 원문에 공시된 백만 달러 단위를 달러로 변환한 값입니다."
+    ]
+  },
+  "sources": [
+    {
+      "id": "apple-q3-release",
+      "url": "https://www.apple.com/newsroom/2026/07/apple-reports-third-quarter-results/",
+      "title": "Apple · FY2026 Q3 실적 발표",
+      "publishedAt": "2026-07-30",
+      "retrievedAt": "2026-10-24T04:13:36Z",
+      "provider": "Apple"
+    },
+    {
+      "id": "apple-q3-statements",
+      "url": "https://www.apple.com/newsroom/pdfs/fy2026q3/FY26_Q3_Consolidated_Financial_Statements.pdf",
+      "title": "Apple · FY2026 Q3 연결재무제표",
+      "publishedAt": "2026-07-30",
+      "retrievedAt": "2026-10-24T04:13:36Z",
+      "provider": "Apple"
+    },
+    {
+      "id": "apple-event",
+      "url": "https://investor.apple.com/investor-relations/default.aspx",
+      "title": "Apple Investor Relations · FY2026 Q4 예정 실적 발표",
+      "publishedAt": null,
+      "retrievedAt": "2026-10-24T04:13:36Z",
+      "provider": "Apple Investor Relations"
+    },
+    {
+      "id": "apple-reuters",
+      "url": "https://www.reuters.com/business/retail-consumer/apple-revenue-profits-beat-expectations-iphone-mac-sales-2026-07-30/",
+      "title": "Reuters · Apple Q3 실적과 경영진 전망 보도",
+      "publishedAt": "2026-07-30",
+      "retrievedAt": "2026-10-24T04:13:36Z",
+      "provider": "Reuters"
+    },
+    {
+      "id": "apple-consensus",
+      "url": "https://www.marketbeat.com/earnings/reports/2026-11-2-apple-inc-stock/",
+      "title": "MarketBeat · AAPL FY2026 Q4 공개 예상치",
+      "publishedAt": null,
+      "retrievedAt": "2026-10-24T04:13:36Z",
+      "provider": "MarketBeat"
+    }
+  ],
+  "limitations": [
+    "작성 시점의 공개 자료를 사람이 검토할 수 있게 구조화한 AI 작성 요약입니다. 사이트 방문 때 새 모델이 실행되는 기능은 아닙니다.",
+    "실적 발표 후에는 당시 예상치와 실제치가 달라질 수 있습니다. 매수·매도 추천이나 확정 적정주가를 제시하지 않습니다."
+  ]
+}

@@ -1,4 +1,4 @@
-/* BANDAL STUDIO homepage, v8. Content and navigation work without this file;
+/* BANDAL STUDIO homepage, v9. Content and navigation work without this file;
    it only adds reveals, scroll-linked depth and decorative motion. */
 (() => {
   'use strict';
@@ -69,7 +69,7 @@
   const menu = $('.menu-toggle');
   const nav = $('#navigation');
   const masthead = $('.masthead');
-  const phone = window.matchMedia('(max-width: 760px)');
+  const phone = window.matchMedia('(max-width: 1020px)');
   function setMenu(open, restoreFocus) {
     if (!menu || !nav) return;
     menu.setAttribute('aria-expanded', String(open));

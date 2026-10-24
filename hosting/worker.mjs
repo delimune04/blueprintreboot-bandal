@@ -1,4 +1,6 @@
 import { handleLabviumApi } from "./api.mjs";
+import { handleMoaflowApi } from "./moaflow/api.mjs";
+import { handleFinanceApi } from "./finance/api.mjs";
 
 const APP_PREFIX = "/LabVium";
 const LEGACY_PREFIX = "/ku-ai";
@@ -95,6 +97,28 @@ async function serveAssets(request, env, url) {
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
+    if (mountedAt(url.pathname, "/finance/api")) return handleFinanceApi(request, env, ctx);
+    if (url.pathname === "/finance") return redirectPath(url, "/finance/");
+    if (mountedAt(url.pathname, "/finance")) {
+      const response = await serveAssets(request, env, url);
+      const headers = new Headers(response.headers);
+      headers.set("Cache-Control", "private, no-store");
+      headers.set("Referrer-Policy", "no-referrer");
+      headers.set("X-Content-Type-Options", "nosniff");
+      headers.set("Content-Security-Policy", "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; frame-src 'self'; object-src 'none'; frame-ancestors 'self'; base-uri 'self'; form-action 'self'");
+      return new Response(response.body, { status: response.status, statusText: response.statusText, headers });
+    }
+    if (mountedAt(url.pathname, "/moaflow/api")) return handleMoaflowApi(request, env, ctx);
+    if (url.pathname === "/moaflow") return redirectPath(url, "/moaflow/");
+    if (mountedAt(url.pathname, "/moaflow")) {
+      const response = await serveAssets(request, env, url);
+      const headers = new Headers(response.headers);
+      headers.set("Referrer-Policy", "no-referrer");
+      headers.set("X-Content-Type-Options", "nosniff");
+      headers.set("Content-Security-Policy", "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; worker-src 'self'; object-src 'none'; frame-ancestors 'self'; base-uri 'self'; form-action 'self'");
+      if (url.pathname.endsWith("sw.js")) headers.set("Cache-Control", "no-cache");
+      return new Response(response.body,{status:response.status,statusText:response.statusText,headers});
+    }
     if (API_PREFIXES.some(prefix => mountedAt(url.pathname, prefix))) {
       // Sites dispatch, rather than browser JSON or URL parameters, supplies
       // this trusted identity header. Public anonymous visitors remain read-only.

@@ -5,7 +5,11 @@ import { test } from "node:test";
 // Isolate routing and ingress authorization from the separately tested API domain.
 const source = (await readFile(new URL("../worker.mjs", import.meta.url), "utf8"))
   .replace('import { handleLabviumApi } from "./api.mjs";',
-    'async function handleLabviumApi(request, env) { return Response.json({ path: new URL(request.url).pathname, marker: env.marker }); }');
+    'async function handleLabviumApi(request, env) { return Response.json({ path: new URL(request.url).pathname, marker: env.marker }); }')
+  .replace('import { handleMoaflowApi } from "./moaflow/api.mjs";',
+    'async function handleMoaflowApi(request) { return Response.json({ path: new URL(request.url).pathname, product: "moaflow" }); }')
+  .replace('import { handleFinanceApi } from "./finance/api.mjs";',
+    'async function handleFinanceApi(request) { return Response.json({ path: new URL(request.url).pathname, product: "finance" }); }');
 const worker = (await import(`data:text/javascript;base64,${Buffer.from(source).toString("base64")}`)).default;
 function request(path, options = {}) { return new Request(`https://bandal.app${path}`, options); }
 function assetEnv(files = {}) {
@@ -92,4 +96,32 @@ test("the dedicated LabVium hostname opens the research product without changing
   const response=await worker.fetch(new Request("https://labvium.bandal.app/?workspace=abc"),env);
   assert.equal(response.status,200);assert.equal(response.headers.get("location"),null);assert.equal(await response.text(),"labvium");
   assert.equal(await(await worker.fetch(new Request("https://bandal.app/"),env)).text(),"bandal");
+});
+test("Moaflow mounts its own API and canonical directory without swallowing another application",async()=>{
+  const env=assetEnv({"/index.html":"bandal","/moaflow/index.html":"moaflow"});
+  const redirect=await worker.fetch(request('/moaflow?share=fixture'),env);
+  assert.equal(redirect.status,308);assert.equal(redirect.headers.get('location'),'https://bandal.app/moaflow/?share=fixture');
+  const api=await worker.fetch(request('/moaflow/api/session'),env);assert.equal((await api.json()).product,'moaflow');
+  assert.equal((await worker.fetch(request('/moaflowish/api/session'),env)).status,404);
+});
+test("financial pages retain directory-index serving and their own security headers",async()=>{
+  const env=assetEnv({"/moaflow/index.html":"moaflow"});
+  const response=await worker.fetch(request('/moaflow/'),env);assert.equal(await response.text(),'moaflow');
+  assert.equal(response.headers.get('referrer-policy'),'no-referrer');assert(response.headers.get('content-security-policy').includes("script-src 'self'"));
+  assert.equal((await worker.fetch(request('/moaflow/',{method:'POST',body:'ignored'}),env)).status,405);
+});
+
+test("Finance has a separate canonical mount with same-origin embedded ledger and no fallback to other applications", async () => {
+  const env = assetEnv({ "/finance/index.html": "finance", "/index.html": "home", "/moaflow/index.html": "ledger" });
+  const redirect = await worker.fetch(request("/finance?share=test"), env);
+  assert.equal(redirect.status, 308);
+  assert.equal(redirect.headers.get("location"), "https://bandal.app/finance/?share=test");
+  assert.equal((await (await worker.fetch(request("/finance/api/session"), env)).json()).product, "finance");
+  const page = await worker.fetch(request("/finance/"), env);
+  assert.equal(await page.text(), "finance");
+  assert.match(page.headers.get("content-security-policy"), /frame-src 'self'/);
+  assert.match(page.headers.get("cache-control"), /no-store/);
+  assert.equal((await worker.fetch(request("/financeish/api/session"), env)).status, 404);
+  assert.equal((await worker.fetch(request("/finance/missing.js"), env)).status, 404);
+  assert.equal((await worker.fetch(request("/finance/", {method:"POST",body:"ignored"}), env)).status, 405);
 });

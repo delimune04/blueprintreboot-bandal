@@ -1,0 +1,333 @@
+{
+  "schemaVersion": 1,
+  "language": "ko",
+  "authoredAt": "2026-10-24T04:55:37.714Z",
+  "method": "reviewed-source-summary",
+  "companies": {
+    "NVDA": {
+      "ticker": "NVDA",
+      "description": "데이터센터용 AI 가속 컴퓨팅·네트워크 장비와 소프트웨어를 공급합니다. 게임용 GeForce와 전문가용 RTX 그래픽 제품, 자동차용 컴퓨팅 플랫폼도 판매합니다.",
+      "source": {
+        "provider": "Yahoo Finance",
+        "url": "https://finance.yahoo.com/quote/NVDA/profile/",
+        "field": "assetProfile",
+        "retrievedAt": "2026-10-24T04:46:02.754Z",
+        "basis": "공개 기업 프로필; 발표 시점이 명시되지 않은 소개 정보"
+      },
+      "authoredAt": "2026-10-24T04:50:38.372Z",
+      "sourceDescriptionSha256": "1cce008588eb28f4da8577a122b0f6c3028e1b38b7b283efe8295ae37dc0d745"
+    },
+    "MSFT": {
+      "ticker": "MSFT",
+      "description": "Microsoft 365·Windows·Dynamics와 같은 소프트웨어와 기업용 서비스를 제공합니다. 클라우드·AI 인프라, GitHub, LinkedIn, Xbox 등에서 사용량·구독·라이선스·광고 기반 사업을 운영합니다.",
+      "source": {
+        "provider": "Yahoo Finance",
+        "url": "https://finance.yahoo.com/quote/MSFT/profile/",
+        "field": "assetProfile",
+        "retrievedAt": "2026-10-24T04:46:32.836Z",
+        "basis": "공개 기업 프로필; 발표 시점이 명시되지 않은 소개 정보"
+      },
+      "authoredAt": "2026-10-24T04:50:38.372Z",
+      "sourceDescriptionSha256": "bd7f49d8dbe8233d47644c2b4bd11e1a254bbcde04b4336d178ff78b86a516be"
+    },
+    "AAPL": {
+      "ticker": "AAPL",
+      "description": "아이폰·맥·아이패드와 웨어러블·액세서리를 설계하고 판매합니다. App Store·AppleCare·클라우드와 음악·영상 등 구독 서비스가 기기 생태계를 연결합니다.",
+      "source": {
+        "provider": "Yahoo Finance",
+        "url": "https://finance.yahoo.com/quote/AAPL/profile/",
+        "field": "assetProfile",
+        "retrievedAt": "2026-10-24T04:46:48.406Z",
+        "basis": "공개 기업 프로필; 발표 시점이 명시되지 않은 소개 정보"
+      },
+      "authoredAt": "2026-10-24T04:50:38.372Z",
+      "sourceDescriptionSha256": "09882fcdcb971b51f3d82620cd12d8f6097fc4704954fdb6d3155ad6baf32da8"
+    },
+    "IREN": {
+      "ticker": "IREN",
+      "description": "데이터센터의 토지·전력 연결·냉각 시설부터 GPU·서버·네트워크와 관리 소프트웨어까지 직접 운영하는 AI 클라우드 기업입니다. AI 작업을 위한 컴퓨팅 서비스를 제공하며 비트코인 채굴 사업도 운영합니다.",
+      "source": {
+        "provider": "Yahoo Finance",
+        "url": "https://finance.yahoo.com/quote/IREN/profile/",
+        "field": "assetProfile",
+        "retrievedAt": "2026-10-24T04:47:04.386Z",
+        "basis": "공개 기업 프로필; 발표 시점이 명시되지 않은 소개 정보"
+      },
+      "authoredAt": "2026-10-24T04:50:38.372Z",
+      "sourceDescriptionSha256": "aa8323bf37c902a1fb55660f215005299273f7d181240d37a95db96b432c95a2"
+    },
+    "GOOGL": {
+      "ticker": "GOOGL",
+      "description": "검색·YouTube·Android 등 Google 서비스에서 광고, 구독, 앱·콘텐츠와 기기 사업을 운영합니다. Google Cloud는 기업용 AI·클라우드와 Workspace 협업 도구를 사용량·구독 방식으로 제공합니다.",
+      "source": {
+        "provider": "Yahoo Finance",
+        "url": "https://finance.yahoo.com/quote/GOOGL/profile/",
+        "field": "assetProfile",
+        "retrievedAt": "2026-10-24T04:47:19.048Z",
+        "basis": "공개 기업 프로필; 발표 시점이 명시되지 않은 소개 정보"
+      },
+      "authoredAt": "2026-10-24T04:50:38.372Z",
+      "sourceDescriptionSha256": "542de72b1d4f4cb8ffa0d9526d500b86a909ce77acac5ee1a32545aba7332a5a"
+    },
+    "META": {
+      "ticker": "META",
+      "description": "Facebook·Instagram·WhatsApp 등 소셜·메시징 서비스를 운영하고 앱과 기기에 AI 기능을 제공합니다. Reality Labs는 Quest와 AI 안경을 비롯한 VR·AR 기기·소프트웨어·콘텐츠를 개발합니다.",
+      "source": {
+        "provider": "Yahoo Finance",
+        "url": "https://finance.yahoo.com/quote/META/profile/",
+        "field": "assetProfile",
+        "retrievedAt": "2026-10-24T04:47:43.515Z",
+        "basis": "공개 기업 프로필; 발표 시점이 명시되지 않은 소개 정보"
+      },
+      "authoredAt": "2026-10-24T04:50:38.372Z",
+      "sourceDescriptionSha256": "800c6e1cccae7598cf6a3d97cfef1501b5fca000264d8d23f5765d1d9a8547d0"
+    },
+    "AMZN": {
+      "ticker": "AMZN",
+      "description": "온라인·오프라인 소매, 외부 판매자의 입점, 광고와 Prime 구독 서비스를 운영합니다. AWS는 기업과 개발자에게 컴퓨팅·저장·데이터베이스·AI 등 클라우드 서비스를 제공합니다.",
+      "source": {
+        "provider": "Yahoo Finance",
+        "url": "https://finance.yahoo.com/quote/AMZN/profile/",
+        "field": "assetProfile",
+        "retrievedAt": "2026-10-24T04:47:59.156Z",
+        "basis": "공개 기업 프로필; 발표 시점이 명시되지 않은 소개 정보"
+      },
+      "authoredAt": "2026-10-24T04:50:38.372Z",
+      "sourceDescriptionSha256": "5d3f6a75aee7791c1e82b0e882929ae21490a037aa2573cebbdb8b0315bb1fc3"
+    },
+    "TSLA": {
+      "ticker": "TSLA",
+      "description": "전기차를 제조·판매·리스하고 충전, 정비·보험, 소프트웨어 업그레이드와 자동차 규제 크레딧 사업을 운영합니다. 별도 에너지 부문에서는 Powerwall·Megapack 등 저장 장치와 태양광 설비를 판매·설치합니다.",
+      "source": {
+        "provider": "Yahoo Finance",
+        "url": "https://finance.yahoo.com/quote/TSLA/profile/",
+        "field": "assetProfile",
+        "retrievedAt": "2026-10-24T04:48:24.317Z",
+        "basis": "공개 기업 프로필; 발표 시점이 명시되지 않은 소개 정보"
+      },
+      "authoredAt": "2026-10-24T04:50:38.372Z",
+      "sourceDescriptionSha256": "b5a62203f593a822e656a59e290b6e504b67682a9394752af489f4a38a9b1b85"
+    },
+    "XOM": {
+      "ticker": "XOM",
+      "description": "원유·천연가스를 탐사·생산하고 연료·석유화학·특수 소재까지 제조·판매하는 통합 에너지 기업입니다. Exxon·Esso·Mobil 브랜드로 연료와 윤활유를 판매하며 탄소 포집·저배출 연료 등 사업도 추진합니다.",
+      "source": {
+        "provider": "Yahoo Finance",
+        "url": "https://finance.yahoo.com/quote/XOM/profile/",
+        "field": "assetProfile",
+        "retrievedAt": "2026-10-24T04:48:47.965Z",
+        "basis": "공개 기업 프로필; 발표 시점이 명시되지 않은 소개 정보"
+      },
+      "authoredAt": "2026-10-24T04:50:38.372Z",
+      "sourceDescriptionSha256": "ded8831cedcc9245d38d39c9ccf6bf70b55e7d300bc60604390d601338e4ddf3"
+    },
+    "CVX": {
+      "ticker": "CVX",
+      "description": "원유·천연가스의 탐사·생산·운송과 LNG 사업을 운영합니다. 정유·연료·윤활유 판매, 재생 연료와 석유화학 제품 제조까지 이어지는 통합 에너지 사업을 갖고 있습니다.",
+      "source": {
+        "provider": "Yahoo Finance",
+        "url": "https://finance.yahoo.com/quote/CVX/profile/",
+        "field": "assetProfile",
+        "retrievedAt": "2026-10-24T04:49:07.829Z",
+        "basis": "공개 기업 프로필; 발표 시점이 명시되지 않은 소개 정보"
+      },
+      "authoredAt": "2026-10-24T04:50:38.372Z",
+      "sourceDescriptionSha256": "2eee77e8cb847ef69290077b267cd6c1618d0f8bb957e5d913e6be6e7b06740d"
+    },
+    "AMD": {
+      "ticker": "AMD",
+      "description": "데이터센터용 EPYC CPU·Instinct AI 가속기와 PC·게임용 Ryzen·Radeon 반도체를 공급합니다. 임베디드 프로세서·FPGA·맞춤형 SoC 등도 장비 제조사와 클라우드 고객에게 판매합니다.",
+      "source": {
+        "provider": "Yahoo Finance",
+        "url": "https://finance.yahoo.com/quote/AMD/profile/",
+        "field": "assetProfile",
+        "retrievedAt": "2026-10-24T04:49:29.675Z",
+        "basis": "공개 기업 프로필; 발표 시점이 명시되지 않은 소개 정보"
+      },
+      "authoredAt": "2026-10-24T04:50:38.372Z",
+      "sourceDescriptionSha256": "ae0221c13536e598e32352ba0ae7322a5be85845fbc832cc583f7d6be75bc830"
+    },
+    "INTC": {
+      "ticker": "INTC",
+      "description": "PC용과 데이터센터용 CPU·GPU·네트워크 반도체를 설계·제조·판매합니다. Intel Foundry에서는 웨이퍼 제조·기판 등 반도체 생산 서비스를 제공하며 관련 컴퓨팅·연결 제품도 공급합니다.",
+      "source": {
+        "provider": "Yahoo Finance",
+        "url": "https://finance.yahoo.com/quote/INTC/profile/",
+        "field": "assetProfile",
+        "retrievedAt": "2026-10-24T04:49:56.559Z",
+        "basis": "공개 기업 프로필; 발표 시점이 명시되지 않은 소개 정보"
+      },
+      "authoredAt": "2026-10-24T04:50:38.372Z",
+      "sourceDescriptionSha256": "1645923ad4b85efa79edbb101934d56686776c86ed04d0fad195c1f945a40cf0"
+    },
+    "AVGO": {
+      "ticker": "AVGO",
+      "description": "네트워크·무선 통신·서버·스토리지 등에 쓰이는 반도체와 맞춤형 칩을 공급합니다. VMware 기반 사설 클라우드, 메인프레임과 보안 소프트웨어도 제공하는 반도체·기업용 소프트웨어 기업입니다.",
+      "source": {
+        "provider": "Yahoo Finance",
+        "url": "https://finance.yahoo.com/quote/AVGO/profile/",
+        "field": "assetProfile",
+        "retrievedAt": "2026-10-24T04:50:15.225Z",
+        "basis": "공개 기업 프로필; 발표 시점이 명시되지 않은 소개 정보"
+      },
+      "authoredAt": "2026-10-24T04:50:56.450Z",
+      "sourceDescriptionSha256": "0f7704cd5cd19d748ddb68fac26d2ad13048c0eed5b7f8666e6746c3722df1a3"
+    },
+    "ORCL": {
+      "ticker": "ORCL",
+      "description": "Oracle Database·MySQL과 ERP·인사·공급망 등 기업용 애플리케이션을 제공합니다. 클라우드 인프라와 소프트웨어 구독, 라이선스·유지보수, 서버·스토리지와 컨설팅을 함께 판매합니다.",
+      "source": {
+        "provider": "Yahoo Finance",
+        "url": "https://finance.yahoo.com/quote/ORCL/profile/",
+        "field": "assetProfile",
+        "retrievedAt": "2026-10-24T04:50:32.731Z",
+        "basis": "공개 기업 프로필; 발표 시점이 명시되지 않은 소개 정보"
+      },
+      "authoredAt": "2026-10-24T04:50:56.450Z",
+      "sourceDescriptionSha256": "11731f05e350cd0a87211fa18c8ed33e546ce919bffae64f277cf38cdd58484f"
+    },
+    "CRM": {
+      "ticker": "CRM",
+      "description": "기업의 영업·고객 서비스·마케팅·상거래를 연결하는 고객관계관리 플랫폼을 제공합니다. Agentforce의 AI 에이전트, Data 360·Informatica의 데이터 관리와 Slack 협업 도구를 결합해 기업 업무를 지원합니다.",
+      "source": {
+        "provider": "Yahoo Finance",
+        "url": "https://finance.yahoo.com/quote/CRM/profile/",
+        "field": "assetProfile",
+        "retrievedAt": "2026-10-24T04:50:58.413Z",
+        "basis": "공개 기업 프로필; 발표 시점이 명시되지 않은 소개 정보"
+      },
+      "authoredAt": "2026-10-24T04:51:23.311Z",
+      "sourceDescriptionSha256": "a2f91ab2c99eb44bf56deb2d27f97e9e2a6b37a2028599a1432bf9efe1c58631"
+    },
+    "ADBE": {
+      "ticker": "ADBE",
+      "description": "개인·기업의 이미지·영상·디자인 등 콘텐츠 제작과 출판을 돕는 소프트웨어를 제공합니다. 기업의 고객 경험·분석·상거래·광고를 관리하는 플랫폼과 문서·양식 관련 제품도 라이선스·서비스로 공급합니다.",
+      "source": {
+        "provider": "Yahoo Finance",
+        "url": "https://finance.yahoo.com/quote/ADBE/profile/",
+        "field": "assetProfile",
+        "retrievedAt": "2026-10-24T04:51:17.213Z",
+        "basis": "공개 기업 프로필; 발표 시점이 명시되지 않은 소개 정보"
+      },
+      "authoredAt": "2026-10-24T04:52:36.746Z",
+      "sourceDescriptionSha256": "0dc27e3d32d784ea5fea64075b9c3324fca3923b0de9c3002592c9681b8c368e"
+    },
+    "PLTR": {
+      "ticker": "PLTR",
+      "description": "정부·국방 고객용 Gotham과 기업용 Foundry로 서로 다른 데이터를 통합해 분석·운영 의사결정에 활용하도록 돕습니다. AIP는 대형 언어 모델을 조직의 데이터·업무와 연결하고 Apollo는 소프트웨어 배포·업데이트를 지원합니다.",
+      "source": {
+        "provider": "Yahoo Finance",
+        "url": "https://finance.yahoo.com/quote/PLTR/profile/",
+        "field": "assetProfile",
+        "retrievedAt": "2026-10-24T04:51:38.400Z",
+        "basis": "공개 기업 프로필; 발표 시점이 명시되지 않은 소개 정보"
+      },
+      "authoredAt": "2026-10-24T04:52:36.746Z",
+      "sourceDescriptionSha256": "4684c3e13d17631cf79fceaa8149bd01c51a07c614d4ff246563e6dec7b79746"
+    },
+    "COIN": {
+      "ticker": "COIN",
+      "description": "개인과 기관을 위한 암호자산 플랫폼을 운영합니다. 개인용 금융 계정과 기관용 중개·유동성 서비스를 제공하며 개발자가 블록체인 위에 서비스를 만들 수 있는 제품도 공급합니다.",
+      "source": {
+        "provider": "Yahoo Finance",
+        "url": "https://finance.yahoo.com/quote/COIN/profile/",
+        "field": "assetProfile",
+        "retrievedAt": "2026-10-24T04:52:03.507Z",
+        "basis": "공개 기업 프로필; 발표 시점이 명시되지 않은 소개 정보"
+      },
+      "authoredAt": "2026-10-24T04:52:36.746Z",
+      "sourceDescriptionSha256": "464aba4e017075b067ada24ef222b34289e966df2864cf1c44bd3fdae29a8338"
+    },
+    "MSTR": {
+      "ticker": "MSTR",
+      "description": "비트코인 보유를 핵심으로 하는 재무 전략을 운영하고 주식·채권 등 여러 증권을 통해 투자자의 비트코인 노출 경로를 제공합니다. 별도 소프트웨어 사업에서는 Strategy One·Mosaic으로 기업의 데이터 분석·AI 활용과 데이터 정의·거버넌스를 지원합니다.",
+      "source": {
+        "provider": "Yahoo Finance",
+        "url": "https://finance.yahoo.com/quote/MSTR/profile/",
+        "field": "assetProfile",
+        "retrievedAt": "2026-10-24T04:52:23.830Z",
+        "basis": "공개 기업 프로필; 발표 시점이 명시되지 않은 소개 정보"
+      },
+      "authoredAt": "2026-10-24T04:53:58.041Z",
+      "sourceDescriptionSha256": "9d221510ca9994277ccd9891a7521bd870079ff9cafa354907409d1c030edc40"
+    },
+    "RIOT": {
+      "ticker": "RIOT",
+      "description": "미국에서 비트코인 채굴과 관련 데이터센터 인프라를 운영합니다. 엔지니어링 부문은 배전 장비와 주문형 전기 제품을 설계·제조·설치해 산업·공공·데이터센터 고객에게 공급합니다.",
+      "source": {
+        "provider": "Yahoo Finance",
+        "url": "https://finance.yahoo.com/quote/RIOT/profile/",
+        "field": "assetProfile",
+        "retrievedAt": "2026-10-24T04:52:49.711Z",
+        "basis": "공개 기업 프로필; 발표 시점이 명시되지 않은 소개 정보"
+      },
+      "authoredAt": "2026-10-24T04:53:58.041Z",
+      "sourceDescriptionSha256": "8626e599d5705eebc42b9b7162cc92f0496baa506dc4785363445d1900d58e77"
+    },
+    "MARA": {
+      "ticker": "MARA",
+      "description": "에너지와 디지털 인프라를 운영하며 비트코인 채굴과 AI 연산에 전력을 활용합니다. 남는 에너지와 유휴 전력의 수익화를 추구하고 전력 관리·AI 추론용 인프라를 함께 운영합니다.",
+      "source": {
+        "provider": "Yahoo Finance",
+        "url": "https://finance.yahoo.com/quote/MARA/profile/",
+        "field": "assetProfile",
+        "retrievedAt": "2026-10-24T04:53:09.901Z",
+        "basis": "공개 기업 프로필; 발표 시점이 명시되지 않은 소개 정보"
+      },
+      "authoredAt": "2026-10-24T04:53:58.041Z",
+      "sourceDescriptionSha256": "b89e3dfb9318669cfe6085a67b25f0c2ff97f85d972f6566c0df849ba0ae517b"
+    },
+    "HUT": {
+      "ticker": "HUT",
+      "description": "전력·디지털 인프라·컴퓨팅을 연결해 에너지 집약적 고객을 지원하는 인프라 플랫폼입니다. 부지 개발·전력 운영 관리, 비트코인 채굴·장비 호스팅과 데이터센터·클라우드 서비스를 제공합니다.",
+      "source": {
+        "provider": "Yahoo Finance",
+        "url": "https://finance.yahoo.com/quote/HUT/profile/",
+        "field": "assetProfile",
+        "retrievedAt": "2026-10-24T04:53:35.309Z",
+        "basis": "공개 기업 프로필; 발표 시점이 명시되지 않은 소개 정보"
+      },
+      "authoredAt": "2026-10-24T04:53:58.041Z",
+      "sourceDescriptionSha256": "d59268849e50fa4dabd7ae54288acb0f3ea0b208a0f55539d5d33cdd379af39c"
+    },
+    "WULF": {
+      "ticker": "WULF",
+      "description": "미국에서 디지털 인프라와 채굴 시설을 보유하고 직접 개발·운영합니다. 비용과 공급 안정성을 고려해 조달한 전력으로 비트코인 채굴과 고성능 컴퓨팅 작업을 지원합니다.",
+      "source": {
+        "provider": "Yahoo Finance",
+        "url": "https://finance.yahoo.com/quote/WULF/profile/",
+        "field": "assetProfile",
+        "retrievedAt": "2026-10-24T04:53:59.398Z",
+        "basis": "공개 기업 프로필; 발표 시점이 명시되지 않은 소개 정보"
+      },
+      "authoredAt": "2026-10-24T04:54:50.292Z",
+      "sourceDescriptionSha256": "2ca50aac7be5deb81d14d836cdd36c3e3d27a94f41e7e006c35fd285e2811fab"
+    },
+    "CIFR": {
+      "ticker": "CIFR",
+      "description": "미국에서 비트코인 채굴과 고성능 컴퓨팅(HPC) 호스팅을 위한 대규모 데이터센터를 개발·운영합니다. 대형 클라우드 고객을 위한 HPC 시설을 개발하고 비트코인 채굴 데이터센터의 전력도 운영합니다.",
+      "source": {
+        "provider": "Yahoo Finance",
+        "url": "https://finance.yahoo.com/quote/CIFR/profile/",
+        "field": "assetProfile",
+        "retrievedAt": "2026-10-24T04:54:23.695Z",
+        "basis": "공개 기업 프로필; 발표 시점이 명시되지 않은 소개 정보"
+      },
+      "authoredAt": "2026-10-24T04:54:50.292Z",
+      "sourceDescriptionSha256": "daabc0a5a46410c5a0cad16b7194fc0dcfc434045faa90905fed9fc87baa5818"
+    },
+    "CLSK": {
+      "ticker": "CLSK",
+      "description": "미주 지역에서 비트코인 채굴 사업을 운영합니다. 직접 소유하거나 임대한 데이터센터와 전력 자산을 확보해 채굴에 필요한 인프라를 운영합니다.",
+      "source": {
+        "provider": "Yahoo Finance",
+        "url": "https://finance.yahoo.com/quote/CLSK/profile/",
+        "field": "assetProfile",
+        "retrievedAt": "2026-10-24T04:54:44.532Z",
+        "basis": "공개 기업 프로필; 발표 시점이 명시되지 않은 소개 정보"
+      },
+      "authoredAt": "2026-10-24T04:55:37.714Z",
+      "sourceDescriptionSha256": "8a0ebf0ca789c91068144e536b0e93b4320f3c308e6d676ca4bb95d80e57716a"
+    }
+  }
+}

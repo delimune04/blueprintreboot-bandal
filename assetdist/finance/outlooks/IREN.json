@@ -1,0 +1,254 @@
+{
+  "version": 1,
+  "ticker": "IREN",
+  "companyName": "IREN Limited",
+  "asOf": "2026-10-24T04:13:36Z",
+  "mode": "curated-source-summary",
+  "label": "AI 작성·출처 기반 요약",
+  "periodLabel": "다음 실적 발표: FY2027 Q1 · 2026-09-30 종료 분기",
+  "nextEarnings": {
+    "date": "2026-11-05",
+    "time": "17:00",
+    "timezone": "America/New_York",
+    "status": "company-announced",
+    "period": "FY2027 Q1",
+    "sourceIds": [
+      "iren-event"
+    ]
+  },
+  "forecastPeriod": {
+    "label": "진행 중인 다음 분기: FY2027 Q2 (2026년 10~12월)",
+    "status": "partial",
+    "reason": "분기 매출·EPS 공식 가이던스는 확인하지 못했습니다. 아래 2026년 말 운영 ARR 목표는 분기 GAAP 매출 전망과 다릅니다."
+  },
+  "officialGuidance": {
+    "status": "partial",
+    "basis": "회사 발표의 운영·계약 지표와 향후 목표를 구분합니다.",
+    "items": [
+      {
+        "label": "운영 ARR · 2026-08-26 기준",
+        "text": "당시 이미 운영 중인 용량의 연환산 운영 매출 지표는 10억 달러였습니다.",
+        "sourceIds": [
+          "iren-fy26"
+        ],
+        "value": 1000000000,
+        "unit": "USD/year run-rate",
+        "effectiveAt": "2026-08-26",
+        "kind": "reported"
+      },
+      {
+        "label": "계약 ARR · 2026년 용량",
+        "text": "8월 27일 발표에서 2026년 용량의 계약 ARR는 40억 달러였습니다. 이미 인식한 연간 매출을 뜻하지 않습니다.",
+        "sourceIds": [
+          "iren-fy26"
+        ],
+        "value": 4000000000,
+        "unit": "USD/year run-rate",
+        "effectiveAt": "2026-08-27",
+        "kind": "reported"
+      },
+      {
+        "label": "운영 전환 목표 · 2026-12-31",
+        "text": "회사는 40억 달러 ARR의 연말 운영 전환을 목표로 제시했습니다. 시운전·검증·고객 인수에 따라 매출 반영이 달라집니다.",
+        "sourceIds": [
+          "iren-fy26"
+        ],
+        "value": 4000000000,
+        "unit": "USD/year run-rate",
+        "targetDate": "2026-12-31",
+        "kind": "management-guidance"
+      },
+      {
+        "label": "Horizon 2~4 인도 목표",
+        "text": "Horizon 2~4는 2026년 4분기 인도를 목표로 제시됐습니다.",
+        "sourceIds": [
+          "iren-fy26"
+        ],
+        "period": "calendar Q4 2026",
+        "kind": "management-guidance"
+      }
+    ]
+  },
+  "consensus": {
+    "status": "partial",
+    "provider": "MarketBeat 공개 예상치",
+    "period": "FY2027 Q1",
+    "retrievedAt": "2026-10-24T04:13:36Z",
+    "basis": "공개 페이지의 예상치입니다. 해당 페이지의 최근 실적 이력은 FY2026 Q3에 머물러 있어 집계 갱신 범위에 주의해야 합니다. 최신 전체 시장 컨센서스로 보장하지 않습니다.",
+    "items": [
+      {
+        "label": "예상 매출",
+        "text": "공개 페이지에 표시된 예상 매출은 2억 2,950만 달러입니다.",
+        "sourceIds": [
+          "iren-consensus"
+        ],
+        "value": 229500000,
+        "unit": "USD",
+        "period": "FY2027 Q1",
+        "kind": "analyst-estimate"
+      },
+      {
+        "label": "예상 EPS",
+        "text": "공개 페이지에 표시된 예상 EPS는 -0.665달러입니다. GAAP·조정 여부와 갱신 시각은 출처에서 추가 확인해야 합니다.",
+        "sourceIds": [
+          "iren-consensus"
+        ],
+        "value": -0.665,
+        "unit": "USD/share",
+        "period": "FY2027 Q1",
+        "kind": "analyst-estimate"
+      }
+    ]
+  },
+  "summary": [
+    {
+      "text": "최신 공개 연간 실적의 AI 클라우드 매출은 1억 2,880만 달러, 비트코인 채굴 매출은 5억 7,820만 달러였습니다. 운영 ARR와 계약 ARR는 이 GAAP 매출과 다른 지표입니다.",
+      "kind": "reported",
+      "sourceIds": [
+        "iren-fy26"
+      ]
+    },
+    {
+      "text": "다음 발표에서는 계약 용량이 실제 운영과 인식 매출로 전환되는 속도를 살펴볼 필요가 있습니다. ARR 40억 달러를 다음 분기 매출로 해석하면 안 됩니다.",
+      "kind": "inference",
+      "sourceIds": [
+        "iren-fy26",
+        "iren-event"
+      ]
+    }
+  ],
+  "watchItems": [
+    {
+      "text": "Horizon 2~4의 시운전·고객 인수와 연말 운영 ARR 진척을 확인하세요.",
+      "sourceIds": [
+        "iren-fy26"
+      ]
+    },
+    {
+      "text": "AI 클라우드 확대가 채굴 축소와 함께 분기 매출 구성에 어떻게 반영되는지 보세요.",
+      "sourceIds": [
+        "iren-fy26"
+      ]
+    }
+  ],
+  "riskFactors": [
+    {
+      "text": "고객 인수·GPU 및 전력 인프라 인도가 늦어지면 계약 지표와 매출 시점이 달라질 수 있습니다.",
+      "sourceIds": [
+        "iren-fy26"
+      ]
+    },
+    {
+      "text": "GAAP 순손실에는 비현금 손상차손이 크게 포함됐으므로 현금 유출과 손익을 분리해서 읽어야 합니다.",
+      "sourceIds": [
+        "iren-fy26"
+      ]
+    }
+  ],
+  "arr": {
+    "definition": "계약된 가동 GPU의 시간당 요금 × 연간 8,760시간에 스토리지·부가 서비스의 연환산 매출을 더한 회사 운영 지표입니다. GAAP 매출이 아니며 인식 매출은 더 낮을 수 있습니다.",
+    "currency": "USD",
+    "sourceIds": [
+      "iren-fy26"
+    ],
+    "operating": {
+      "value": 1000000000,
+      "effectiveAt": "2026-08-26",
+      "label": "운영 ARR",
+      "sourceIds": [
+        "iren-fy26"
+      ]
+    },
+    "contracted": {
+      "value": 4000000000,
+      "effectiveAt": "2026-08-27",
+      "capacityPeriod": "2026 capacity",
+      "label": "계약 ARR",
+      "sourceIds": [
+        "iren-fy26"
+      ],
+      "dateBasis": "회사 실적발표일의 현황. 개별 계약 체결일을 뜻하지 않습니다."
+    },
+    "target": {
+      "value": 4000000000,
+      "targetDate": "2026-12-31",
+      "label": "운영 전환 목표 ARR",
+      "conditions": "시운전·테스트·고객 인수 및 이용률·요금 가정에 따름",
+      "sourceIds": [
+        "iren-fy26"
+      ]
+    }
+  },
+  "business": {
+    "description": "전력·데이터센터·GPU 인프라와 소프트웨어를 결합한 AI 클라우드 플랫폼으로, 채굴 사업에서 AI 컴퓨팅으로 용량을 전환하고 있습니다.",
+    "period": {
+      "label": "FY2026 · 12개월",
+      "start": "2025-07-01",
+      "end": "2026-06-30",
+      "basis": "annual"
+    },
+    "currency": "USD",
+    "totalRevenue": 707000000,
+    "segments": [
+      {
+        "id": "ai-cloud",
+        "label": "AI 클라우드 서비스",
+        "value": 128800000,
+        "sourceIds": [
+          "iren-fy26"
+        ]
+      },
+      {
+        "id": "bitcoin",
+        "label": "비트코인 채굴",
+        "value": 578200000,
+        "sourceIds": [
+          "iren-fy26"
+        ]
+      }
+    ],
+    "income": {
+      "revenue": 707000000,
+      "costOfRevenueExcludingDepreciation": 219700000,
+      "netIncome": -702600000,
+      "noncashImpairment": 638800000
+    },
+    "sourceIds": [
+      "iren-fy26"
+    ],
+    "notes": [
+      "회사가 표시한 매출원가 2억 1,970만 달러는 감가상각·상각비를 제외합니다. 이를 일반적인 GAAP 총원가와 섞어 매출총이익률을 만들지 않습니다.",
+      "연간 매출과 연환산 운영 ARR는 다르며, 계약·향후 목표도 실현 매출로 취급하지 않습니다."
+    ]
+  },
+  "sources": [
+    {
+      "id": "iren-fy26",
+      "url": "https://iren.gcs-web.com/news-releases/news-release-details/iren-reports-fy26-results",
+      "title": "IREN · FY2026 실적 및 사업 업데이트",
+      "publishedAt": "2026-08-27",
+      "retrievedAt": "2026-10-24T04:13:36Z",
+      "provider": "IREN"
+    },
+    {
+      "id": "iren-event",
+      "url": "https://www.globenewswire.com/news-release/2026/10/22/3386871/0/en/iren-to-release-q1-fy27-results-on-november-5-2026.html",
+      "title": "IREN · FY2027 Q1 예정 실적 발표 공지",
+      "publishedAt": "2026-10-22",
+      "retrievedAt": "2026-10-24T04:13:36Z",
+      "provider": "IREN / GlobeNewswire"
+    },
+    {
+      "id": "iren-consensus",
+      "url": "https://www.marketbeat.com/earnings/reports/2026-11-5-iris-energy-ltd-stock/",
+      "title": "MarketBeat · IREN FY2027 Q1 공개 예상치",
+      "publishedAt": null,
+      "retrievedAt": "2026-10-24T04:13:36Z",
+      "provider": "MarketBeat"
+    }
+  ],
+  "limitations": [
+    "AI 작성·출처 기반 보관 요약이며 방문할 때 새 모델이 실행되거나 실시간 예측을 생성하지 않습니다.",
+    "ARR 목표는 회사 가정이고 예상 EPS·매출은 외부 제공자의 추정입니다. 기업의 실현 실적·매매 추천과 구분합니다."
+  ]
+}
