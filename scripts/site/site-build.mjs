@@ -4,11 +4,15 @@
 //
 //   <!-- generated:salary-table -->   연봉별 실수령액 rows from salary.mjs + tax-table.json
 //   <!-- generated:related ids=a,b --> Harupyeon cards from harupyeon/catalog.json
+//   <!-- generated:tools-* -->         tool menu, footer and hub cards from tools/tools.json
+//   <!-- generated:adsense -->         AdSense tag from scripts/site/adsense.json (absent while unset)
+//   <!-- generated:ads-privacy -->     the matching ad disclosure on /privacy/ and /tools/
 //   bandal-home/sitemap.xml            every page whose canonical URL is itself
+//   bandal-home/ads.txt                only while an AdSense client is set
 //
-//   node scripts/site/tools-build.mjs          write
-//   node scripts/site/tools-build.mjs --check  fail if anything is out of date
-import { readFile, readdir, writeFile } from "node:fs/promises";
+//   node scripts/site/site-build.mjs          write
+//   node scripts/site/site-build.mjs --check  fail if anything is out of date
+import { readFile, readdir, rm, writeFile } from "node:fs/promises";
 import { join, relative, resolve } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 
@@ -99,11 +103,56 @@ export async function toolRenderers() {
   };
 }
 
-export async function build() {
+// AdSense: Google's ads.txt certification ID and the pages that may carry ads.
+// Ads run only on self-canonical 반달 도구함 and 하루편 pages; the homepage carries
+// the verification meta alone. CAPELLA, Travel, privacy and legal pages never do.
+const ADS_TXT_TAG = "f08c47fec0942fa0";
+
+export function adsenseClient(config) {
+  const client = config?.client ?? null;
+  if (client === null) return null;
+  if (typeof client !== "string" || !/^ca-pub-\d{16}$/.test(client)) {
+    throw new Error(`scripts/site/adsense.json: client must look like ca-pub-0000000000000000, got ${JSON.stringify(client)}`);
+  }
+  return client;
+}
+
+export function adsenseHead(client, kind) {
+  if (!client) return "";
+  const meta = `<meta name="google-adsense-account" content="${client}">`;
+  if (kind === "verify") return meta;
+  return `${meta}\n<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${client}" crossorigin="anonymous"></script>`;
+}
+
+export function withAdsenseHead(html, block) {
+  const stripped = html.replace(/\n?<!-- generated:adsense -->[\s\S]*?<!-- \/generated:adsense -->\n?/g, "");
+  if (!block) return stripped;
+  return stripped.replace("</head>", `\n<!-- generated:adsense -->\n${block}\n<!-- /generated:adsense -->\n</head>`);
+}
+
+export const adsTxt = (client) => (client ? `google.com, ${client.replace(/^ca-/, "")}, DIRECT, ${ADS_TXT_TAG}\n` : null);
+
+export function adsPrivacy(client, where) {
+  if (!client) return "";
+  const body = '<p>반달 도구함과 하루편 자료실에는 Google AdSense 광고가 표시될 수 있어요. Google을 비롯한 제3자 광고 사업자는 쿠키를 사용해 이 사이트나 다른 사이트를 방문한 기록을 바탕으로 광고를 게재할 수 있어요.</p><p>맞춤 광고는 <a class="bu-link" href="https://adssettings.google.com/" rel="noopener noreferrer">Google 광고 설정</a>에서 끌 수 있고, Google이 파트너 사이트의 정보를 사용하는 방식은 <a class="bu-link" href="https://policies.google.com/technologies/partner-sites" rel="noopener noreferrer">Google 안내</a>에서 확인할 수 있어요. 광고가 있어도 계산기에 입력한 값을 BANDAL 서버로 보내지 않는 것은 그대로예요. CAPELLA·여행 설계·개인정보 안내 페이지에는 광고를 넣지 않아요.</p>';
+  return where === "tools"
+    ? `<p><strong>광고</strong>: ${body.slice(3)}`
+    : `<section class="privacy-ads bu-reveal" aria-labelledby="ads-title"><h2 id="ads-title">광고 (Google AdSense)</h2>${body}</section>`;
+}
+
+const selfCanonical = (html, url) => /<link rel="canonical" href="([^"]+)"/.exec(html)?.[1] === url;
+
+export async function build({ config } = {}) {
+  const client = adsenseClient(config ?? JSON.parse(await readFile(join(repo, "scripts/site/adsense.json"), "utf8")));
   const related = await relatedRenderer();
   const rows = await salaryRows();
   const tool = await toolRenderers();
   const stale = [];
+  const sync = async (file, html, original) => {
+    if (html === original) return;
+    stale.push(relative(repo, file));
+    if (!check) await writeFile(file, html);
+  };
   for (const file of await htmlFiles(join(assets, "tools"))) {
     const original = await readFile(file, "utf8");
     let html = fill(original, "salary-table", () => rows, file).html;
@@ -111,11 +160,22 @@ export async function build() {
     html = fill(html, "tools-bar", tool.bar, file).html;
     html = fill(html, "tools-footer", tool.footer, file).html;
     html = fill(html, "tools-cards", tool.cards, file).html;
+    html = fill(html, "ads-privacy", () => adsPrivacy(client, "tools"), file).html;
     html = html.replace(/(<!-- generated:tools-count -->)[\s\S]*?(<!-- \/generated:tools-count -->)/g, `$1${tool.count()}$2`);
-    if (html !== original) {
-      stale.push(relative(repo, file));
-      if (!check) await writeFile(file, html);
-    }
+    html = withAdsenseHead(html, adsenseHead(client, "ads"));
+    await sync(file, html, original);
+  }
+  for (const file of await htmlFiles(join(assets, "harupyeon"))) {
+    const original = await readFile(file, "utf8");
+    const url = `https://bandal.app/harupyeon/${relative(join(assets, "harupyeon"), file).replace(/\\/g, "/").replace(/index\.html$/, "")}`;
+    await sync(file, withAdsenseHead(original, selfCanonical(original, url) ? adsenseHead(client, "ads") : ""), original);
+  }
+  for (const [file, render] of [
+    [join(home, "index.html"), (html) => withAdsenseHead(html, adsenseHead(client, "verify"))],
+    [join(assets, "privacy/index.html"), (html) => fill(html, "ads-privacy", () => adsPrivacy(client, "hub")).html],
+  ]) {
+    const original = await readFile(file, "utf8");
+    await sync(file, render(original), original);
   }
   const map = await sitemap();
   const mapPath = join(home, "sitemap.xml");
@@ -124,13 +184,20 @@ export async function build() {
     stale.push(relative(repo, mapPath));
     if (!check) await writeFile(mapPath, map);
   }
+  const txtPath = join(home, "ads.txt");
+  const txt = adsTxt(client);
+  const existing = await readFile(txtPath, "utf8").catch(() => null);
+  if (existing !== txt) {
+    stale.push(relative(repo, txtPath));
+    if (!check) await (txt === null ? rm(txtPath, { force: true }) : writeFile(txtPath, txt));
+  }
   return stale;
 }
 
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   const stale = await build();
   if (check && stale.length) {
-    console.error(`Generated blocks are out of date: ${stale.join(", ")}\nRun node scripts/site/tools-build.mjs`);
+    console.error(`Generated blocks are out of date: ${stale.join(", ")}\nRun node scripts/site/site-build.mjs`);
     process.exit(1);
   }
   console.log(check ? "Generated blocks are up to date." : `Updated ${stale.length} file(s)${stale.length ? `: ${stale.join(", ")}` : ""}.`);

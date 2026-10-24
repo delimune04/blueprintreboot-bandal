@@ -22,7 +22,7 @@ The source of each page lives in this repository under `assetdist/` and
 | Command | Produces |
 | --- | --- |
 | `node scripts/site/harupyeon-shell.mjs` | Applies the shell to newly generated Harupyeon pages. It is safe to re-run and skips pages that already have it. It also rewrites `assetdist/harupyeon/catalog.json`. |
-| `node scripts/site/tools-build.mjs` | Builds the tool menu, footer and hub cards from `assetdist/tools/tools.json`. It also generates the 연봉별 실수령액 table from `salary.mjs`, the Harupyeon related cards from `catalog.json`, and `bandal-home/sitemap.xml` from each page's canonical URL. `--check` fails when anything is stale, and CI runs it. |
+| `node scripts/site/site-build.mjs` | Builds the tool menu, footer and hub cards from `assetdist/tools/tools.json`. It also generates the 연봉별 실수령액 table from `salary.mjs`, the Harupyeon related cards from `catalog.json`, `bandal-home/sitemap.xml` from each page's canonical URL, and the AdSense tag, `ads.txt` and ad disclosure from `scripts/site/adsense.json`. Run it after `harupyeon-shell.mjs`. `--check` fails when anything is stale, and CI runs it. |
 | `python3 scripts/site/wage-tax-table.py <별표2 text> <json>` | Writes `tools/salary/tax-table.json` from the `pdftotext -layout` output of 소득세법 시행령 [별표 2]. It refuses gaps and non-monotonic columns. |
 | `node scripts/site/check-baseline.mjs <site>/assetdist` | Lists Site files that changed after the 2026-10-24 baseline, so they are merged by hand instead of overwritten. |
 
@@ -37,13 +37,48 @@ The source of each page lives in this repository under `assetdist/` and
 
 1. Open fresh BANDAL Site source as described in `hosting/ROOT_INTEGRATION.md`.
 2. Run `node scripts/site/check-baseline.mjs <site>/assetdist`. Merge anything it lists by hand.
-3. Copy `assetdist/{bandal-ui,harupyeon,travel,capella,privacy,tools}` into the Site's `assetdist/`. Copy `bandal-home/{index.html,bandal-home.css,bandal-home.js,sitemap.xml}` into its root.
+3. Copy `assetdist/{bandal-ui,harupyeon,travel,capella,privacy,tools}` into the Site's `assetdist/`. Copy `bandal-home/{index.html,bandal-home.css,bandal-home.js,sitemap.xml}` into its root, plus `bandal-home/ads.txt` once AdSense is set.
 4. Rebuild and validate with `hosting/build-site.mjs` and `hosting/validate-artifact.mjs`. Then save and deploy through the Site workflow.
-5. Hosted checks still to do: `/`, each subpage, `/tools/*` on a phone and a desktop, the CAPELLA photo preview with a real photo, and a citation lookup against the live Crossref API.
+5. Hosted checks still to do: `/`, each subpage, `/tools/*` on a phone and a desktop, the CAPELLA photo preview with a real photo, a citation lookup against the live Crossref API, and `https://bandal.app/ads.txt` once AdSense is set.
+
+## AdSense
+
+The site is ready for AdSense but ships no ad code until a publisher ID is set.
+
+| Page | With a publisher ID set |
+| --- | --- |
+| `/tools/` and the 5 tools | `google-adsense-account` meta + the AdSense script (Auto ads) |
+| 하루편 list, categories and the 2 articles whose canonical URL is on bandal.app | same |
+| Homepage | `google-adsense-account` meta only, for site verification; no ads |
+| `/privacy/` and `/tools/#privacy` | an ad disclosure section (Google cookies, opt-out links) |
+| Site root | `ads.txt` with `google.com, pub-…, DIRECT, f08c47fec0942fa0` |
+| CAPELLA, Travel, privacy and legal pages | never; the CAPELLA policy states that its pages carry no ads |
+
+Steps:
+
+1. Sign in at <https://adsense.google.com> with the account that should receive payments, choose "Get started" and enter `bandal.app`. The account page shows the publisher ID (`ca-pub-` + 16 digits).
+2. Put that ID in `scripts/site/adsense.json` (`"client": "ca-pub-…"`), run `node scripts/site/site-build.mjs`, commit, and publish as above (including `ads.txt`).
+3. In AdSense → Sites → bandal.app, confirm the site (meta tag or ads.txt method; both are present) and request review. Approval is Google's decision and can take days to weeks.
+4. Before or right after approval, turn on the European regulations message in AdSense → Privacy & messaging, so visitors from the EEA, UK and Switzerland get Google's certified consent prompt.
+5. After approval, turn on Auto ads for bandal.app. To place fixed ad units later, create them in AdSense and add the slots to the tool pages.
+
+Setting `client` back to `null` and rebuilding removes every trace again (verified by test).
+
+## GPT/Codex에게 넘길 지시문
+
+```text
+delimune04/blueprintreboot-bandal의 main 브랜치(PR #7 머지 이후)를 BANDAL Site(bandal.app)에 반영해 줘.
+1. hosting/ROOT_INTEGRATION.md 순서대로 Site 최신 소스를 연다.
+2. node scripts/site/check-baseline.mjs <Site>/assetdist 를 실행해서 changed/missing 으로 나온 파일은 덮어쓰지 말고 내용을 비교해 수동 병합한다.
+3. 이 저장소의 assetdist/{bandal-ui,harupyeon,travel,capella,privacy,tools} 를 Site의 assetdist/ 로 복사한다.
+4. bandal-home/{index.html,bandal-home.css,bandal-home.js,sitemap.xml} 를 Site 루트(assetdist/)로 복사한다. bandal-home/ads.txt 가 있으면 함께 복사한다.
+5. hosting/build-site.mjs 로 빌드하고 hosting/validate-artifact.mjs 로 검증한 뒤, Site 워크플로로 save → deploy 한다.
+6. 배포 후 /, /harupyeon/, /travel/, /capella/, /privacy/, /tools/ 와 도구 5개, /sitemap.xml 이 200으로 열리는지 확인하고 결과를 알려 줘.
+LabVium(/LabVium)과 Finance(/finance/), 그 밖의 기존 서비스 파일은 건드리지 마.
+```
 
 ## Revenue notes for 반달 도구함
 
 - Each tool page has a canonical URL, JSON-LD (WebApplication and BreadcrumbList), a dated basis section and links into Harupyeon. That gives it a chance to earn search traffic for queries such as "연봉 실수령액 계산기", "글자수 세기" and "학점 계산기".
-- No ad or analytics code is included. Adding an ad network takes three steps: approval for the domain, an `ads.txt` at the Site root, and an update to the privacy hub and the `/tools/#privacy` section. The text on those pages currently states that nothing leaves the browser.
 - Travel already carries the existing Travelpayouts flight search referral. These changes do not alter it.
-- 69 of the 71 Harupyeon articles declare the momento-youth blog post as their canonical URL. Search engines therefore credit the blog, not bandal.app, which is a deliberate choice by the content generator. The sitemap lists only pages whose canonical URL is on bandal.app.
+- 69 of the 71 Harupyeon articles declare the momento-youth blog post as their canonical URL. Search engines therefore credit the blog, not bandal.app, which is a deliberate choice by the content generator. The sitemap and the ad tag cover only pages whose canonical URL is on bandal.app.

@@ -1,5 +1,5 @@
 {
- "note": "Single list of 반달 도구함 tools. scripts/site/tools-build.mjs renders the tool menu, the hub cards and the footer from it.",
+ "note": "Single list of 반달 도구함 tools. scripts/site/site-build.mjs renders the tool menu, the hub cards and the footer from it.",
  "tools": [
   {
    "slug": "salary",

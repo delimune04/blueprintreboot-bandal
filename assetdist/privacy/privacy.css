@@ -46,3 +46,12 @@
 }
 .privacy-contact h2 { margin: 0; font-size: 1.3rem; font-weight: 780; letter-spacing: -0.03em; }
 .privacy-contact p { max-width: 36rem; margin: 0.4rem 0 0; color: var(--bu-copy); }
+.privacy-ads {
+  margin-top: clamp(2rem, 5vw, 3rem);
+  padding: clamp(1.25rem, 3vw, 1.75rem);
+  border: 1px solid var(--bu-line);
+  border-radius: var(--bu-radius-lg);
+  background: #fff;
+}
+.privacy-ads h2 { margin: 0 0 0.6rem; font-size: 1.2rem; font-weight: 780; letter-spacing: -0.03em; }
+.privacy-ads p { margin: 0.5rem 0 0; color: var(--bu-copy); line-height: 1.8; }

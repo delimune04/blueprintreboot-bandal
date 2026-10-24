@@ -1,0 +1,4 @@
+{
+ "note": "Set client to your AdSense publisher ID (ca-pub- followed by 16 digits), then run node scripts/site/site-build.mjs. null keeps every page free of ad code. See docs/BANDAL_SITE_REFRESH.md > AdSense.",
+ "client": null
+}

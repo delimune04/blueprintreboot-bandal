@@ -9,6 +9,7 @@ import { byTerm, convert, neededAverage, summarize, truncate2 } from '../../asse
 import { impliedRate, legalCapRate, monthlyCost, rentForDeposit } from '../../assetdist/tools/rent/rent.mjs';
 import { STYLES, apa, bibtex, chicago, fromCrossref, ieee, mla, parseDoi } from '../../assetdist/tools/cite/cite.mjs';
 import { koreanAmount, parseAmount } from '../../assetdist/tools/common.mjs';
+import { adsPrivacy, adsTxt, adsenseClient, adsenseHead, withAdsenseHead } from '../../scripts/site/site-build.mjs';
 
 const assets = new URL('../../assetdist/', import.meta.url);
 const read = (path) => readFileSync(new URL(path, assets), 'utf8');
@@ -134,7 +135,7 @@ test('amount parsing understands Korean units', () => {
 
 test('tool pages are generated, self-canonical and list the same registry', () => {
   const root = fileURLToPath(new URL('../../', import.meta.url));
-  execFileSync(process.execPath, ['scripts/site/tools-build.mjs', '--check'], { cwd: root, stdio: 'pipe' });
+  execFileSync(process.execPath, ['scripts/site/site-build.mjs', '--check'], { cwd: root, stdio: 'pipe' });
   const { tools } = JSON.parse(read('tools/tools.json'));
   const sitemap = readFileSync(new URL('../../bandal-home/sitemap.xml', import.meta.url), 'utf8');
   for (const page of ['/tools/', ...tools.map((t) => t.href)]) {
@@ -144,7 +145,7 @@ test('tool pages are generated, self-canonical and list the same registry', () =
     for (const t of tools) assert(html.includes(`href="${t.href}"`), `${page} links ${t.href}`);
     if (page !== '/tools/') assert(html.includes(`<a href="${page}" aria-current="page">`), page);
     for (const json of html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)) JSON.parse(json[1]);
-    assert.doesNotMatch(html, /<!-- generated:[\w-]+[^>]*-->\s*<!-- \/generated/, `${page} has an empty generated block`);
+    assert.doesNotMatch(html, /<!-- generated:(?!ads-privacy)[\w-]+[^>]*-->\s*<!-- \/generated/, `${page} has an empty generated block`);
   }
   for (const loc of sitemap.matchAll(/<loc>https:\/\/bandal\.app\/([^<]*)<\/loc>/g)) {
     const path = loc[1];
@@ -158,4 +159,29 @@ test('tool pages are generated, self-canonical and list the same registry', () =
     const hosts = [...page.matchAll(/https?:\/\/([\w.-]+)/g)].map((m) => m[1]);
     assert.deepEqual([...new Set(hosts)].filter((h) => h !== 'doi.org'), t.slug === 'cite' ? ['api.crossref.org'] : [], t.slug);
   }
+});
+
+test('AdSense stays off until a publisher ID is configured, then lands only where allowed', () => {
+  const config = JSON.parse(readFileSync(new URL('../../scripts/site/adsense.json', import.meta.url), 'utf8'));
+  assert.equal(adsenseClient({ client: null }), null);
+  assert.throws(() => adsenseClient({ client: 'pub-123' }), /ca-pub-/);
+  const client = adsenseClient({ client: 'ca-pub-1234567890123456' });
+  assert.equal(adsTxt(client), 'google.com, pub-1234567890123456, DIRECT, f08c47fec0942fa0\n');
+  assert.equal(adsTxt(null), null);
+  const page = '<!doctype html><html><head><title>t</title></head><body></body></html>';
+  const tagged = withAdsenseHead(page, adsenseHead(client, 'ads'));
+  assert.match(tagged, /<meta name="google-adsense-account" content="ca-pub-1234567890123456">\n<script async src="https:\/\/pagead2\.googlesyndication\.com\/pagead\/js\/adsbygoogle\.js\?client=ca-pub-1234567890123456" crossorigin="anonymous"><\/script>\n<!-- \/generated:adsense -->\n<\/head>/);
+  assert.equal(withAdsenseHead(tagged, adsenseHead(client, 'ads')), tagged, 'idempotent');
+  assert.equal(withAdsenseHead(tagged, ''), page, 'unsetting removes every trace');
+  assert.doesNotMatch(adsenseHead(client, 'verify'), /<script/, 'the homepage only verifies ownership');
+  assert.match(adsPrivacy(client, 'hub'), /adssettings\.google\.com/);
+  assert.equal(adsPrivacy(null, 'hub'), '');
+  // With the committed config, no page ships ad code and no ads.txt exists.
+  if (adsenseClient(config) === null) {
+    assert(!existsSync(new URL('../../bandal-home/ads.txt', import.meta.url)));
+    for (const file of ['tools/index.html', 'tools/salary/index.html', 'harupyeon/index.html', 'privacy/index.html']) assert.doesNotMatch(read(file), /adsbygoogle|google-adsense-account/, file);
+  }
+  // Pages that promise no ads never get the tag, whatever the config says.
+  for (const file of ['capella/index.html', 'capella/support/index.html', 'capella/privacy/index.html', 'travel/index.html', 'privacy/index.html']) assert.doesNotMatch(read(file), /adsbygoogle/, file);
+  assert.doesNotMatch(readFileSync(new URL('../../scripts/site/site-build.mjs', import.meta.url), 'utf8'), /join\(assets, "(capella|travel)/, 'the ad loop never walks CAPELLA or Travel');
 });
