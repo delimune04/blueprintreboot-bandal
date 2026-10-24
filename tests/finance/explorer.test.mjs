@@ -171,4 +171,3 @@ test('quarter chart basis uses explicit type and does not confuse comparison men
  const explicit=renderMetricHistory([{...point,periodType:'ttm',source:{basis:'분기 말 시점의 최근 4개 분기 이익 합계'}}],'PER','배');assert.match(explicit,/최근 4분기 · TTM/);
  const explicitQuarter=renderMetricHistory([{...point,periodType:'quarter',source:{basis:'분기 단위이며 TTM 비교와는 별도'}}],'EPS','USD/주');assert.match(explicitQuarter,/최근 4분기 · 분기</);
 });
-
