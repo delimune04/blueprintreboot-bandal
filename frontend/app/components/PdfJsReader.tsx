@@ -188,8 +188,13 @@ function ContinuousPdfPage({
         textLayerContainer.style.setProperty("--scale-round-x", "1px");
         textLayerContainer.style.setProperty("--scale-round-y", "1px");
         renderTask = page.render({ canvas, canvasContext, viewport: pageViewport, ...(geometry.transform ? { transform: geometry.transform } : {}) }) as RenderTaskLike;
+        // A zoom can cancel this generation while PDF text is still loading.
+        // Observe canvas rejection immediately and never mount stale text layers.
+        const canvasPromise = renderTask.promise;
+        void canvasPromise.catch(() => {});
         textLayer = await createPdfTextLayer({ page, container: textLayerContainer, viewport: pageViewport });
-        await Promise.all([renderTask.promise, textLayer.render()]);
+        if (cancelled) { textLayer.cancel(); return; }
+        await Promise.all([canvasPromise, textLayer.render()]);
         if (!cancelled) onRendered(pageNumber, Math.max(0, performance.now() - startedAt));
       } catch (error) {
         if (!cancelled && (error as { name?: string } | null)?.name !== "RenderingCancelledException") onRenderError(error);

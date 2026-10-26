@@ -59,8 +59,10 @@ function hooksHarness() {
     unmount() { effects.forEach(effect => effect?.cleanup?.()); },
   };
 }
-function compile(path, hooks, mocks = {}) {
-  const source = readFileSync(new URL(path, import.meta.url), "utf8");
+function compile(path, hooks, mocks = {}, expose = []) {
+  // Export private components in this in-memory test module only. Production
+  // keeps its public component boundary unchanged.
+  const source = readFileSync(new URL(path, import.meta.url), "utf8") + (expose.length ? `\nexport { ${expose.join(", ")} };` : "");
   const compiled = ts.transpileModule(source, { compilerOptions: { module: ts.ModuleKind.CommonJS, jsx: ts.JsxEmit.ReactJSX, target: ts.ScriptTarget.ES2022 } }).outputText;
   const compiledModule = { exports: {} };
   new Function("require", "module", "exports", compiled)(name => {
@@ -218,4 +220,73 @@ test("mobile companion keeps AI controls interactive and error feedback height b
   const rules = [...css.matchAll(/([^{}]+)\{([^{}]*)\}/g)];
   assert.ok(rules.some(([, selector, body]) => selector.includes(".reader-companion-slot") && selector.includes(".reader-selection-assistant") && /pointer-events:\s*auto/.test(body)));
   assert.ok(rules.some(([, selector, body]) => selector.trim() === ".reader-render-error-banner" && /min-height:\s*0/.test(body)));
+});
+
+function pageRenderingHarness(t) {
+  const oldWindow = globalThis.window;
+  globalThis.window = { devicePixelRatio: 1 };
+  const hooks = hooksHarness(), layers = [], tasks = [], rendered = [], errors = [];
+  const canvas = { width: 0, height: 0, style: {}, getContext: () => ({}) };
+  const textContainer = { children: [], style: { setProperty() {} }, replaceChildren() { this.children = []; } };
+  const page = {
+    getViewport: ({ scale }) => ({ width: 600 * scale, height: 800 * scale, scale }),
+    render() {
+      let resolve, reject;
+      const promise = new Promise((yes, no) => { resolve = yes; reject = no; });
+      const task = { promise, resolve, cancellations: 0, cancel() { this.cancellations++; reject(Object.assign(new Error("Cancelled fixture canvas"), { name: "RenderingCancelledException" })); } };
+      tasks.push(task); return task;
+    },
+    cleanup() {},
+  };
+  const { ContinuousPdfPage } = compile("../app/components/PdfJsReader.tsx", hooks.hooks, {
+    "../lib/api/client": {},
+    "../lib/pdf/pdfjs-adapter": {
+      createPdfTextLayer({ viewport, container }) {
+        let resolve;
+        const promise = new Promise(yes => { resolve = yes; });
+        const layer = { scale: viewport.scale, renderCalls: 0, cancelCalls: 0,
+          render() { this.renderCalls++; container.children.push(`text at ${this.scale}`); return Promise.resolve(); },
+          cancel() { this.cancelCalls++; },
+        };
+        layers.push({ layer, resolve: () => resolve(layer) }); return promise;
+      },
+    },
+    "../lib/i18n/LocaleProvider": { useI18n: () => ({ locale: "en", t: text => text }) },
+    "./ReaderPdfDownload": {},
+  }, ["ContinuousPdfPage"]);
+  const props = { document: { getPage: async () => page }, pageNumber: 1, zoom: 1, viewportRoot: null, active: true, highlights: [], defaultPageSize: { width: 600, height: 800 }, onRendered: (...value) => rendered.push(value), onRenderError: error => errors.push(error) };
+  let unmounted = false;
+  const unmount = () => { if (unmounted) return; unmounted = true; hooks.unmount(); };
+  t.after(() => { unmount(); globalThis.window = oldWindow; });
+  hooks.start(() => ContinuousPdfPage(props), tree => {
+    tree.props.ref.current = {};
+    nodes(tree, node => node.type === "canvas")[0].props.ref.current = canvas;
+    nodes(tree, node => node.props?.className === "textLayer reader-text-layer")[0].props.ref.current = textContainer;
+  });
+  return { layers, tasks, rendered, errors, textContainer, unmount, async ready() { await settle(); hooks.flush(); }, async zoom(value) { props.zoom = value; hooks.rerender(); await settle(); hooks.flush(); } };
+}
+
+test("cancelled rapid zoom generations never append late text into the current PDF page", async t => {
+  const ui = pageRenderingHarness(t);
+  await ui.ready(); await ui.zoom(1.5); await ui.zoom(.5);
+  assert.equal(ui.layers.length, 3);
+  assert.equal(ui.tasks[0].cancellations, 1); assert.equal(ui.tasks[1].cancellations, 1);
+  // Finish the newest canvas/text first, then allow older text loading to finish.
+  ui.tasks[2].resolve(); ui.layers[2].resolve(); await settle();
+  assert.deepEqual(ui.textContainer.children, ["text at 0.5"]);
+  ui.layers[1].resolve(); ui.layers[0].resolve(); await settle();
+  assert.deepEqual(ui.textContainer.children, ["text at 0.5"], "Stale layers must not duplicate selectable text");
+  assert.deepEqual(ui.layers.map(({ layer }) => layer.renderCalls), [0, 0, 1]);
+  assert.deepEqual(ui.layers.map(({ layer }) => layer.cancelCalls), [1, 1, 0]);
+  assert.equal(ui.rendered.length, 1); assert.deepEqual(ui.errors, []);
+});
+
+test("a text layer resolving after page unmount is cancelled without rendering or unhandled canvas rejection", async t => {
+  const ui = pageRenderingHarness(t); await ui.ready(); ui.unmount();
+  // Waiting a turn while text loading is pending catches an unobserved canvas
+  // rejection, rather than only checking cancellation once both promises settle.
+  await settle(); ui.layers[0].resolve(); await settle();
+  assert.equal(ui.tasks[0].cancellations, 1);
+  assert.equal(ui.layers[0].layer.renderCalls, 0); assert.equal(ui.layers[0].layer.cancelCalls, 1);
+  assert.deepEqual(ui.textContainer.children, []); assert.deepEqual(ui.rendered, []); assert.deepEqual(ui.errors, []);
 });
