@@ -290,3 +290,59 @@ test("a text layer resolving after page unmount is cancelled without rendering o
   assert.equal(ui.layers[0].layer.renderCalls, 0); assert.equal(ui.layers[0].layer.cancelCalls, 1);
   assert.deepEqual(ui.textContainer.children, []); assert.deepEqual(ui.rendered, []); assert.deepEqual(ui.errors, []);
 });
+
+test("PDF page draft commits and cancels truthfully, with keyboard navigation confined to the viewport", async t => {
+  const previous = { window: globalThis.window, ResizeObserver: globalThis.ResizeObserver };
+  const memory = new Map(), storage = { getItem: key => memory.get(key) ?? null, setItem: (key, value) => memory.set(key, value) };
+  const frames = new Map(); let frameId = 0, loads = 0;
+  globalThis.window = { localStorage: storage, sessionStorage: storage, requestAnimationFrame(callback) { const id = ++frameId; frames.set(id, callback); return id; }, cancelAnimationFrame: id => frames.delete(id), addEventListener() {}, removeEventListener() {} };
+  globalThis.ResizeObserver = class { observe() {} disconnect() {} };
+  const hooks = hooksHarness(), viewport = { clientWidth: 768, clientHeight: 600, scrollTop: 0, querySelectorAll: () => [], querySelector: () => null, getBoundingClientRect: () => ({ top: 0 }), addEventListener() {}, removeEventListener() {} };
+  const { PdfJsReader } = compile("../app/components/PdfJsReader.tsx", hooks.hooks, {
+    "../lib/api/client": { paperPdfUrl: () => "/test-pdf" },
+    "../lib/pdf/pdfjs-adapter": { createPdfLoadingTask: async () => { loads++; return { promise: Promise.resolve({ numPages: 3, getPage: async () => ({ getViewport: () => ({ width: 600, height: 800 }) }), destroy() {} }), destroy() {} }; }, readPdfNetworkDiagnostics: () => ({}) },
+    "../lib/i18n/LocaleProvider": { useI18n: () => ({ locale: "en", t: text => text }) },
+    "./ReaderPdfDownload": { ReaderPdfDownload: () => null },
+  });
+  t.after(() => { hooks.unmount(); Object.assign(globalThis, previous); });
+  hooks.start(() => PdfJsReader({ paperId: "fixture-paper" }), tree => {
+    nodes(tree, node => node.props?.className === "reader-document-workspace")[0].props.ref.current = { clientWidth: 800 };
+    nodes(tree, node => node.props?.className === "reader-canvas-viewport")[0].props.ref(viewport);
+  });
+  await settle(); hooks.flush(); await settle();
+  let tree = hooks.flush();
+
+  const input = () => nodes(hooks.flush(), node => node.type === "input" && node.props["aria-label"] === "PDF page number")[0];
+  const draft = value => { input().props.onChange({ target: { value } }); hooks.flush(); };
+  const key = (value, composing = false) => input().props.onKeyDown({ key: value, nativeEvent: { isComposing: composing }, preventDefault() {} });
+  draft("3"); key("Enter"); assert.equal(input().props.value, "3");
+  draft("999"); key("Enter"); assert.equal(input().props.value, "3", "Same-page boundary commits reset the input");
+  draft("-5"); input().props.onBlur(); assert.equal(input().props.value, "1");
+  draft("1.9"); key("Enter"); assert.equal(input().props.value, "1");
+  draft("2"); key("Escape"); assert.equal(input().props.value, "1");
+  input().props.onBlur(); assert.equal(input().props.value, "1", "Escape must not later commit a stale draft on blur");
+  draft("2"); key("Enter", true); assert.equal(input().props.value, "2");
+  key("Escape");
+  const viewportNode = () => nodes(hooks.flush(), node => node.props?.className === "reader-canvas-viewport")[0];
+  assert.equal(viewportNode().props.tabIndex, 0);
+  let prevented = 0;
+  const press = (key, overrides = {}) => viewportNode().props.onKeyDown({ key, target: viewport, currentTarget: viewport, nativeEvent: { isComposing: false }, preventDefault() { prevented++; }, ...overrides });
+  press("n"); assert.equal(input().props.value, "2");
+  press("n"); assert.equal(input().props.value, "3");
+  const frameBeforeBoundary = frameId;
+  const treeBeforeBoundary = hooks.flush();
+  press("n"); assert.equal(input().props.value, "3");
+  assert.equal(frameId, frameBeforeBoundary, "Last-page next must not schedule a scroll");
+  assert.equal(hooks.flush(), treeBeforeBoundary, "Last-page next must not update component state");
+  press("p"); assert.equal(input().props.value, "2");
+  assert.equal(prevented, 3);
+  for (const props of [{target: {}}, {ctrlKey:true}, {metaKey:true}, {altKey:true}, {shiftKey:true}, {nativeEvent:{isComposing:true}}]) press("n", props);
+  for (const key of ["ArrowLeft", "ArrowRight", "PageDown", "PageUp"]) press(key);
+  assert.equal(input().props.value, "2"); assert.equal(prevented, 3);
+  press("p"); assert.equal(input().props.value, "1");
+  const frameAtFirst = frameId, treeAtFirst = hooks.flush();
+  press("p");
+  assert.equal(frameId, frameAtFirst, "First-page previous must not schedule a scroll");
+  assert.equal(hooks.flush(), treeAtFirst, "First-page previous must not update component state");
+  assert.equal(prevented, 4);
+});

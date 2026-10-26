@@ -821,3 +821,7 @@ tbody tr:hover { background: var(--color-surface-subtle); }
 }
 
 .reader-companion-slot .reader-selection-assistant { pointer-events: auto; }
+
+/* Reader-only keyboard guidance stays readable above the dark PDF canvas. */
+.reader-navigation-hint { flex: 0 0 auto; margin: 0; padding: var(--space-1) var(--space-3); color: var(--color-text-secondary); background: var(--color-surface); font-size: var(--font-size-xs); line-height: 1.5; border-bottom: var(--rule-faint); }
+.reader-canvas-viewport:focus-visible { outline: 2px solid var(--blue-600); outline-offset: -2px; }

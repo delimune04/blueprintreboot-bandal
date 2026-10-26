@@ -9,6 +9,7 @@ import { DEFAULT_ZOOM, MAX_ZOOM, MIN_ZOOM, ZOOM_STEP, canvasRenderGeometry, clas
 import { readPageSelection, type PdfPageSelection } from "../lib/pdf/selection-coordinates.mjs";
 import { readReaderPreferences, updateReaderPreferences, type ReaderHighlight } from "../lib/reader/browser-reader-state.mjs";
 import { useI18n } from "../lib/i18n/LocaleProvider";
+import { normalizePdfPageInput, pdfPageShortcut } from "../lib/pdf/page-navigation.mjs";
 import { visiblePdfPage } from "../lib/reader/visible-pdf-page.mjs";
 import { ReaderPdfDownload } from "./ReaderPdfDownload";
 import "./ReaderMemoRails.css";
@@ -491,8 +492,10 @@ export function PdfJsReader({
   }, [state.zoom, viewMode]);
 
   const setPage = useCallback((requestedPage: number) => {
-    if (state.mode !== "ready") return;
+    if (state.mode !== "ready" || !Number.isFinite(requestedPage)) return;
     const pageNumber = Math.min(state.totalPages, Math.max(1, Math.trunc(requestedPage)));
+    // A clamped jump can stay on the same page; synchronize the field even then.
+    setPageInput(String(pageNumber));
     pendingLayoutAnchorRef.current = null;
     if (pageNavigationFrameRef.current !== null) window.cancelAnimationFrame(pageNavigationFrameRef.current);
     setState((current) => ({ ...current, pageNumber, rendering: current.pageNumber === pageNumber ? current.rendering : true, errorKind: null, message: "" }));
@@ -517,9 +520,7 @@ export function PdfJsReader({
     if (!saved.ok) setPreferenceMessage(saved.message);
   }, [paperId, state.mode, state.pageNumber]);
   const commitPageInput = () => {
-    const requestedPage = Number.parseInt(pageInput, 10);
-    if (!Number.isFinite(requestedPage)) return setPageInput(String(state.pageNumber));
-    setPage(requestedPage);
+    setPage(normalizePdfPageInput(pageInput, state.pageNumber, state.totalPages));
   };
   const setManualZoom = (requestedZoom: number) => {
     if (!Number.isFinite(requestedZoom)) return;
@@ -572,7 +573,7 @@ export function PdfJsReader({
       {!fallbackActive ? <div className="reader-toolbar" role="toolbar" aria-label={t("PDF page and zoom controls")}>
         <div className="reader-toolbar__group" aria-label={t("Page navigation")}>
           <button className="reader-control" type="button" aria-label={t("Previous PDF page")} disabled={!controlsReady || state.pageNumber <= 1} onClick={() => setPage(state.pageNumber - 1)}><ChevronLeft size={16} />{t("Previous")}</button>
-          <label className="reader-page-field"><span>{t("Page")}</span><input aria-label={t("PDF page number")} type="number" inputMode="numeric" min={1} max={Math.max(1, state.totalPages)} value={pageInput} disabled={!controlsReady} onChange={(event) => setPageInput(event.target.value)} onBlur={commitPageInput} onKeyDown={(event) => { if (event.key === "Enter") commitPageInput(); }} /><span aria-live="polite">{t("of {count}", { count: state.totalPages || "?" })}</span></label>
+          <label className="reader-page-field"><span>{t("Page")}</span><input aria-label={t("PDF page number")} type="number" inputMode="numeric" min={1} max={Math.max(1, state.totalPages)} value={pageInput} disabled={!controlsReady} onChange={(event) => setPageInput(event.target.value)} onBlur={commitPageInput} onKeyDown={(event) => { if (event.nativeEvent.isComposing) return; if (event.key === "Enter") { event.preventDefault(); commitPageInput(); } else if (event.key === "Escape") { event.preventDefault(); setPageInput(String(state.pageNumber)); } }} /><span aria-live="polite">{t("of {count}", { count: state.totalPages || "?" })}</span></label>
           <button className="reader-control" type="button" aria-label={t("Next PDF page")} disabled={!controlsReady || state.pageNumber >= state.totalPages} onClick={() => setPage(state.pageNumber + 1)}>{t("Next")}<ChevronRight size={16} /></button>
         </div>
         <div className="reader-toolbar__group" aria-label={t("PDF zoom controls")}>
@@ -588,10 +589,18 @@ export function PdfJsReader({
       </div> : null}
         {!fallbackActive && (state.mode === "error" || state.errorKind !== null) ? <div className="reader-render-state reader-render-error-banner" role="alert"><AlertCircle size={22} aria-hidden="true" /><div><h2>{state.errorKind === "unavailable" ? "Local PDF service unavailable" : state.errorKind === "not-found" ? "Managed PDF missing" : "PDF.js Reader unavailable"}</h2><p>{state.message || "The managed PDF could not be displayed."}</p><div className="reader-error-actions"><button className="reader-control" type="button" onClick={() => setLoadAttempt((value) => value + 1)}>{t("Retry PDF.js")}</button><button className="reader-control reader-control--secondary" type="button" onClick={() => setFallbackActive(true)}>{t("Use native viewer fallback")}</button></div></div></div> : null}
       {!fallbackActive ? selectionActions : null}
+      {!fallbackActive && controlsReady ? <p className="reader-navigation-hint" id="pdf-navigation-hint">{locale === "ko" ? "PDF 영역에 초점을 두고 N: 다음 페이지 · P: 이전 페이지. 방향키와 Page Up/Down은 스크롤합니다." : "Focus the PDF area: N for next page · P for previous page. Arrow keys and Page Up/Down scroll."}</p> : null}
       {annotationActions}
       <div ref={documentWorkspaceRef} className="reader-document-workspace" data-memo-layout={memoLayout} data-memo-visible={memoRailsVisible} data-memo-paper-id={paperId} data-native-fallback={fallbackActive}>
       <aside className="reader-memo-rail reader-memo-rail--left" data-memo-rail="left" aria-label={locale === "ko" ? "논문 왼쪽 여백 메모" : "Notes in the left paper margin"} />
-      <div ref={setViewportElement} className="reader-canvas-viewport">
+      <div ref={setViewportElement} className="reader-canvas-viewport" tabIndex={!fallbackActive && controlsReady ? 0 : undefined} role="region" aria-label={locale === "ko" ? "PDF 키보드 읽기 영역" : "PDF keyboard reading area"} aria-describedby={!fallbackActive && controlsReady ? "pdf-navigation-hint" : undefined} onKeyDown={(event) => {
+        const step = pdfPageShortcut({ key: event.key, viewportFocused: event.target === event.currentTarget, altKey: event.altKey, ctrlKey: event.ctrlKey, metaKey: event.metaKey, shiftKey: event.shiftKey, isComposing: event.nativeEvent.isComposing, defaultPrevented: event.defaultPrevented });
+        if (!step || fallbackActive || !controlsReady) return;
+        const requestedPage = state.pageNumber + step;
+        if (requestedPage < 1 || requestedPage > state.totalPages) return;
+        event.preventDefault();
+        setPage(requestedPage);
+      }}>
         {fallbackContent}
         {!fallbackActive && pdfDocument ? <div className="reader-pdf-page-stack">{Array.from({ length: state.totalPages }, (_, index) => index + 1).map((pageNumber) => <ContinuousPdfPage key={pageNumber} document={pdfDocument} pageNumber={pageNumber} zoom={state.zoom} viewportRoot={viewportRoot} active={state.pageNumber === pageNumber} defaultPageSize={pageSize.width ? pageSize : { width: 612, height: 792 }} highlights={highlights.filter((highlight) => highlight.pageNumber === pageNumber)} onRendered={onRendered} onRenderError={onRenderError} onSelectionChange={onSelectionChange} />)}</div> : null}
         {!fallbackActive && state.mode === "loading" ? <div className="reader-render-state" role="status"><LoaderCircle className="loading-icon" size={22} aria-hidden="true" /><div><h2>{t("Loading PDF.js Reader")}</h2><p>{t("Loading the managed PDF through the local same-origin endpoint.")}</p></div></div> : null}

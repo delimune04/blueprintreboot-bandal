@@ -856,3 +856,15 @@ contains the existing ledger, source-backed public company research and private 
 simulations. See [implementation and operational limits](docs/BANDAL_FINANCE.md)
 and [existing Quant runner connection](docs/finance-quant-runner.md).
 GitHub changes and BANDAL Site deployments are separate operations.
+
+## PDF reader navigation (2026-10-27)
+
+PDF page entry now displays the actual bounded page after Enter or blur, including
+requests that resolve to the current first/last page. Empty, fractional or malformed
+entries restore the current page; Escape cancels an uncommitted entry.
+Focus the PDF reading region with Tab to use **N** for the next page and **P** for
+the previous page. These shortcuts apply only while that region itself has focus;
+note fields, IME, modifier shortcuts, arrow-key panning and Page Up/Down scrolling
+keep their existing behavior. At the first/last page, stepping beyond the document
+leaves the reading position unchanged. Existing 10–300% zoom, fit modes and the
+separate summary/notes window remain available; the main PDF window must stay open.
