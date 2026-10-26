@@ -495,7 +495,7 @@ export function PdfJsReader({
     const pageNumber = Math.min(state.totalPages, Math.max(1, Math.trunc(requestedPage)));
     pendingLayoutAnchorRef.current = null;
     if (pageNavigationFrameRef.current !== null) window.cancelAnimationFrame(pageNavigationFrameRef.current);
-    setState((current) => ({ ...current, pageNumber, rendering: true, errorKind: null, message: "" }));
+    setState((current) => ({ ...current, pageNumber, rendering: current.pageNumber === pageNumber ? current.rendering : true, errorKind: null, message: "" }));
     pageNavigationFrameRef.current = window.requestAnimationFrame(() => {
       pageNavigationFrameRef.current = null;
       const viewport = viewportRootRef.current;

@@ -121,10 +121,12 @@ test("explicit fit-page after a scrolled manual zoom reveals the whole current p
 test("reselecting fit-page realigns a scrolled page even when its zoom does not change", async t => {
   const ui = harness(); t.after(() => ui.unmount()); await ui.mount();
   ui.click("Fit PDF page to available space"); const zoom = ui.zoom(); ui.position(5, .75);
+  assert.equal(nodes(ui.tree, node => node.props?.className === "reader-render-progress").length, 0, "Fixture has finished rendering");
   ui.click("Fit PDF page to available space");
   assert.equal(ui.zoom(), zoom);
   const page = ui.viewport.querySelector("#pdf-page-5").getBoundingClientRect(), viewportTop = ui.viewport.getBoundingClientRect().top;
   assert.equal(page.top, viewportTop); assert.ok(page.bottom <= viewportTop + ui.viewport.clientHeight);
+  assert.equal(nodes(ui.tree, node => node.props?.className === "reader-render-progress").length, 0, "Same-scale realignment must not wait for a render that will never start");
   assert.equal(ui.loads, 1);
 });
 test("an explicit page jump supersedes a pending zoom anchor", async t => {
