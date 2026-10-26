@@ -4,6 +4,8 @@ import { Bold, ChevronLeft, ChevronRight, Eye, FileText, Heading2, Italic, Link2
 import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties, type KeyboardEvent as ReactKeyboardEvent, type MouseEvent as ReactMouseEvent, type PointerEvent as ReactPointerEvent, type ReactNode } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
+import { createPortal } from "react-dom";
+import { useReaderCompanion } from "../hooks/useReaderCompanion";
 import { EmptyState, ErrorState, LoadingState, UnavailableState } from "../components/AsyncStates";
 import { Breadcrumbs } from "../components/Breadcrumbs";
 import { PdfJsReader } from "../components/PdfJsReader";
@@ -282,7 +284,8 @@ function candidateReviewFailure(error: unknown): Pick<CandidateReviewState, "sta
 
 
 function ReaderWorkspace({ snapshot }: { snapshot: ReaderSnapshot }) {
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
+  const companion = useReaderCompanion(snapshot.paper.title, locale);
   const extendedReaderCommands = getWorkspaceMode() !== "local";
   const searchParams = useSearchParams();
   const readerSearch = searchParams.toString();
@@ -363,7 +366,7 @@ function ReaderWorkspace({ snapshot }: { snapshot: ReaderSnapshot }) {
   const [candidateReview, setCandidateReview] = useState<CandidateReviewState>(() => initialCandidateReview() as CandidateReviewState);
   const [tagBook, setTagBook] = useState<TagBookState>({ status: "idle" });
   const closeMobilePanel = useCallback(() => setResearchPanelCollapsed(true), []);
-  const mobilePanelRef = useModalFocus<HTMLElement>({ active: narrowReader && !researchPanelCollapsed && !metadataReviewOpen && !linkPopoverOpen, onRequestClose: closeMobilePanel, restoreFocusRef: mobilePanelTriggerRef });
+  const mobilePanelRef = useModalFocus<HTMLElement>({ active: !companion.detached && narrowReader && !researchPanelCollapsed && !metadataReviewOpen && !linkPopoverOpen, onRequestClose: closeMobilePanel, restoreFocusRef: mobilePanelTriggerRef });
   useEffect(() => {
     const preferences = readReaderPreferences(browserStorage(), snapshot.paper.paper_id);
     setReaderHighlights(preferences.value.highlights);
@@ -1129,6 +1132,7 @@ function ReaderWorkspace({ snapshot }: { snapshot: ReaderSnapshot }) {
       : textarea?.selectionEnd ?? currentValue.length;
     if (action === "link" && explicitLinkUrl === undefined) {
       linkSelectionRef.current = { start: selectionStart, end: selectionEnd };
+      if (companion.detached) companion.attach();
       setLinkPopoverOpen(true);
       return;
     }
@@ -1274,12 +1278,16 @@ function ReaderWorkspace({ snapshot }: { snapshot: ReaderSnapshot }) {
   };
   const layoutStyle = { "--reader-research-width": `${researchPanelWidth}px` } as CSSProperties;
   return (
-    <div className="reader-workspace">
+    <div className="reader-workspace" data-companion-open={companion.detached}>
       <header className="reader-workspace__chrome">
         <h1 className="sr-only">Reader: {editor.metadata.draft.title || snapshot.paper.title}</h1>
         <span className="reader-workspace__navigation-slot" aria-hidden="true" />
         <Breadcrumbs items={[{ label: t("Library"), href: "/library" }, { label: editor.metadata.draft.title || snapshot.paper.title, href: detailHref }, { label: t("Reader") }]} />
         <div className="reader-workspace__utilities" aria-label={t("Reader utilities")}>
+          <button className="reader-control reader-control--secondary" type="button" onClick={() => {
+            if (companion.detached) companion.attach();
+            else if (companion.open()) { setResearchPanelCollapsed(false); setActiveUtility(null); }
+          }}>{t(companion.detached ? "Bring notes back" : "Dual monitor · notes window")}</button>
           <button ref={mobilePanelTriggerRef} className="reader-control reader-control--secondary reader-mobile-panel-toggle" type="button" aria-controls="reader-research-panel" aria-expanded={!researchPanelCollapsed} onClick={() => setResearchPanelCollapsed((current) => !current)}>{t("Notes and blocks")}</button>
           <button
             className={activeUtility === "tags" ? "reader-control reader-control--active" : "reader-control reader-control--secondary"}
@@ -1295,10 +1303,14 @@ function ReaderWorkspace({ snapshot }: { snapshot: ReaderSnapshot }) {
           ><FileText size={15} />{t("Full Text")}</button>
           {snapshot.paper.lifecycle_state !== "active" ? <StatusBadge>{snapshot.paper.lifecycle_state}</StatusBadge> : null}
         </div>
+      {companion.blocked ? <p role="status" className="reader-companion-message">{t("Allow pop-ups for this site, then choose the notes window again. Nothing was moved.")}</p> : null}
       </header>
       <div ref={readerLayoutRef} className={`${activeUtility ? "reader-layout reader-layout--with-utility" : "reader-layout"}${researchPanelResizing ? " is-resizing" : ""}`} data-research-collapsed={researchPanelCollapsed} style={layoutStyle}>
-        {narrowReader && !researchPanelCollapsed ? <button className="reader-mobile-panel-backdrop" aria-label={t("Close research panel")} type="button" onClick={() => setResearchPanelCollapsed(true)} /> : null}
-        <aside ref={mobilePanelRef} id="reader-research-panel" className="reader-research-panel" aria-label={t("Paper Note and Note Blocks")} data-collapsed={researchPanelCollapsed} role={narrowReader && !researchPanelCollapsed ? "dialog" : undefined} aria-modal={narrowReader && !researchPanelCollapsed ? true : undefined}>
+        {!companion.detached && narrowReader && !researchPanelCollapsed ? <button className="reader-mobile-panel-backdrop" aria-label={t("Close research panel")} type="button" onClick={() => setResearchPanelCollapsed(true)} /> : null}
+        <div ref={companion.slot} className="reader-companion-slot" />
+        {companion.host ? createPortal(<>
+          {companion.detached ? <header className="reader-companion-heading"><strong>{snapshot.paper.title}</strong><p>{t("Move this window to your second monitor. Keep the PDF window open; notes and page links stay connected.")}</p><button className="reader-control" type="button" onClick={companion.attach}>{t("Bring notes back")}</button><button className="reader-control reader-control--secondary" type="button" onClick={() => setAiRequest({ token: Date.now(), action: "summary", selection: null })}>{t("Summarize paper with AI")}</button></header> : null}
+        <aside ref={mobilePanelRef} id="reader-research-panel" className="reader-research-panel" aria-label={t("Paper Note and Note Blocks")} data-collapsed={researchPanelCollapsed} role={!companion.detached && narrowReader && !researchPanelCollapsed ? "dialog" : undefined} aria-modal={!companion.detached && narrowReader && !researchPanelCollapsed ? true : undefined}>
           {researchPanelCollapsed ? (
             <button className="reader-research-panel__collapse" type="button" aria-label={t("Expand research panel")} onClick={() => setResearchPanelCollapsed(false)}><ChevronRight size={16} /></button>
           ) : (
@@ -1310,7 +1322,7 @@ function ReaderWorkspace({ snapshot }: { snapshot: ReaderSnapshot }) {
                     <span>{[editor.metadata.draft.journal, editor.metadata.draft.year].filter(Boolean).join(" · ") || "Citation metadata is incomplete."}</span>
                     {editor.metadata.draft.doi ? <span className="reader-paper-context__identifier">DOI {editor.metadata.draft.doi}</span> : snapshot.paper.arxiv_id ? <span className="reader-paper-context__identifier">arXiv {snapshot.paper.arxiv_id}</span> : null}
                   </div>
-                  <button className="reader-research-panel__collapse" type="button" aria-label={t("Collapse research panel")} onClick={() => setResearchPanelCollapsed(true)}><ChevronLeft size={16} /></button>
+                  <button hidden={companion.detached} className="reader-research-panel__collapse" type="button" aria-label={t("Collapse research panel")} onClick={() => setResearchPanelCollapsed(true)}><ChevronLeft size={16} /></button>
                 </div>
                 <label className="reader-paper-context__status"><span>{t("Reading status")}</span><StatusBadge>{readingStatus}</StatusBadge><select value={readingStatus} disabled={mutationBusy} onChange={(event) => void saveReadingStatus(event.target.value as "unread" | "reading" | "read" | "finished")}><option value="unread">{t("Unread")}</option><option value="reading">{t("Reading")}</option><option value="read">{t("Read")}</option><option value="finished">{t("Finished")}</option></select></label>
                 {readingStatusMessage ? <p className="reader-editor__status" role="status">{t(readingStatusMessage)}</p> : null}
@@ -1359,7 +1371,7 @@ function ReaderWorkspace({ snapshot }: { snapshot: ReaderSnapshot }) {
               <button className="reader-control" type="button" disabled={!metadataChanged.length || mutationBusy || Boolean(editor.metadata.activeSave) || editor.metadata.saveState === "changed_elsewhere"} onClick={saveMetadata}>
                 <Save size={15} />{editor.metadata.saveState === "saving" ? "Saving…" : "Save Metadata"}
               </button>
-              <button ref={metadataTriggerRef} className="reader-control reader-control--secondary" type="button" disabled={enrichment.status === "saving" || mutationBusy} onClick={() => { setMetadataReviewOpen(true); void fetchMetadataCandidates(enrichment.status === "conflict"); }}><RotateCcw size={15} />{t(enrichment.status === "loading" ? "Checking…" : "Find updates")}</button>
+              <button ref={metadataTriggerRef} className="reader-control reader-control--secondary" type="button" disabled={enrichment.status === "saving" || mutationBusy} onClick={() => { if (companion.detached) companion.attach(); setMetadataReviewOpen(true); void fetchMetadataCandidates(enrichment.status === "conflict"); }}><RotateCcw size={15} />{t(enrichment.status === "loading" ? "Checking…" : "Find updates")}</button>
               {editor.metadata.saveState === "changed_elsewhere" ? <>
                 <button className="reader-control reader-control--secondary" type="button" disabled={editor.metadata.remoteRevision === editor.metadata.revision} onClick={() => updateMetadata((current) => {
                   const kept = keepMyRevisionDraft(current);
@@ -1455,7 +1467,16 @@ function ReaderWorkspace({ snapshot }: { snapshot: ReaderSnapshot }) {
             </>
           )}
         </aside>
-        {!researchPanelCollapsed && !narrowReader ? (
+      <ReaderSelectionAssistant key={`${snapshot.paper.paper_id}:${aiRequest?.token ?? "closed"}`} paperId={snapshot.paper.paper_id} request={aiRequest} onClose={() => setAiRequest(null)} onUseDraft={(text) => {
+        if (noteUnavailable) { setSelectionMessage("The Paper Note is unavailable. Copy the AI draft before leaving."); return; }
+        updateNote((current) => {
+          const draft = `${current.draft.trimEnd()}\n\n${text}\n`;
+          return { ...editRevisionDraft(current, draft), status: "dirty", message: "AI draft appended. Verify it against the source and choose Save explicitly." };
+        });
+        setActiveResearchTab("note"); setResearchPanelCollapsed(false);
+      }} />
+        </>, companion.host) : null}
+        {!companion.detached && !researchPanelCollapsed && !narrowReader ? (
           <div
             className="reader-panel-resize"
             role="separator"
@@ -1554,14 +1575,7 @@ function ReaderWorkspace({ snapshot }: { snapshot: ReaderSnapshot }) {
           </aside>
         ) : null}
       </div>
-      <ReaderSelectionAssistant key={`${snapshot.paper.paper_id}:${aiRequest?.token ?? "closed"}`} paperId={snapshot.paper.paper_id} request={aiRequest} onClose={() => setAiRequest(null)} onUseDraft={(text) => {
-        if (noteUnavailable) { setSelectionMessage("The Paper Note is unavailable. Copy the AI draft before leaving."); return; }
-        updateNote((current) => {
-          const draft = `${current.draft.trimEnd()}\n\n${text}\n`;
-          return { ...editRevisionDraft(current, draft), status: "dirty", message: "AI draft appended. Verify it against the source and choose Save explicitly." };
-        });
-        setActiveResearchTab("note"); setResearchPanelCollapsed(false);
-      }} />
+
       {linkPopoverOpen ? (
         <div className="metadata-review-backdrop" role="presentation">
           <form ref={linkDialogRef} className="reader-link-dialog" role="dialog" aria-modal="true" aria-labelledby="paper-note-link-title" onSubmit={(event) => { event.preventDefault(); if (!linkUrl.trim()) return; formatPaperNote("link", linkUrl.trim()); closeLinkPopover(); }}>

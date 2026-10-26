@@ -795,3 +795,29 @@ tbody tr:hover { background: var(--color-surface-subtle); }
   .reader-workspace__chrome { padding-block: var(--space-1); }
   .reader-selection-capture { max-height: 7rem; overflow-y: auto; }
 }
+
+/* A single live editor is moved, not copied, into the companion window. */
+.reader-companion-slot { grid-area: research; min-width: 0; min-height: 0; }
+.reader-companion-host { height: 100%; min-height: 0; }
+.reader-companion-host > .reader-research-panel { height: 100%; }
+.reader-workspace[data-companion-open="true"] .reader-layout { grid-template-areas: "stage"; grid-template-columns: minmax(0, 1fr); }
+.reader-workspace[data-companion-open="true"] .reader-companion-slot { display: none; }
+.reader-companion-window { margin: 0; overflow: auto; background: var(--color-canvas); }
+.reader-companion-window .reader-companion-host { min-height: 100vh; height: auto; }
+.reader-companion-heading { padding: 1rem; border-bottom: var(--border); background: var(--color-surface); }
+.reader-companion-heading strong { display: block; overflow-wrap: anywhere; }
+.reader-companion-heading p { font-size: .875rem; margin: .5rem 0; }
+.reader-companion-heading button { margin-right: .5rem; margin-top: .25rem; }
+.reader-companion-window .reader-research-panel { position: static; width: 100%; max-width: none; height: auto; max-height: none; transform: none; visibility: visible; border: 0; }
+.reader-companion-window .reader-research-panel__content { overflow: visible; }
+.reader-companion-window .reader-selection-assistant { position: fixed; inset: 0; width: 100%; max-width: none; max-height: 100vh; }
+.reader-companion-message { margin: 0; padding: .5rem 1rem; font-size: .875rem; }
+.reader-zoom-select { min-height: 2rem; min-width: 5rem; border: var(--border); border-radius: var(--radius-sm); background: var(--color-surface); color: var(--color-text); }
+.reader-render-error-banner { flex: 0 0 auto; max-height: 10rem; overflow: auto; padding: .75rem; background: var(--color-surface); }
+.reader-render-error-banner { min-height: 0; }
+@media (max-width: 56.25rem) {
+  .reader-companion-slot { position: absolute; inset: 0; pointer-events: none; }
+  .reader-companion-slot .reader-research-panel { pointer-events: auto; }
+}
+
+.reader-companion-slot .reader-selection-assistant { pointer-events: auto; }

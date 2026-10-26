@@ -1,4 +1,9 @@
 export const READER_KO: Record<string, string> = {
+  "Choose PDF zoom percentage": "PDF 확대 비율 선택",
+  "Dual monitor · notes window": "듀얼 모니터 · 요약·노트 창",
+  "Bring notes back": "한 화면으로 합치기",
+  "Allow pop-ups for this site, then choose the notes window again. Nothing was moved.": "팝업이 차단됐습니다. 이 사이트의 팝업을 허용한 뒤 요약·노트 창을 다시 눌러 주세요. 편집 내용은 그대로입니다.",
+  "Move this window to your second monitor. Keep the PDF window open; notes and page links stay connected.": "이 창을 다른 모니터로 옮기세요. PDF 창은 열어 두세요. 노트 편집과 원문 페이지 이동이 연결됩니다.",
   "Notes and blocks": "노트와 블록", "Note": "노트", "Blocks": "블록", "Details": "상세 정보",
   "Reader": "리더", "Library": "라이브러리", "Paper Note": "논문 노트", "Note Blocks": "노트 블록",
   "Previous": "이전", "Next": "다음", "Page": "페이지", "of {count}": "/ {count}",

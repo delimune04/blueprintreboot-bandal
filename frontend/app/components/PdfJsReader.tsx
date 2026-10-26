@@ -449,7 +449,7 @@ export function PdfJsReader({
       ? fitWidthZoom({ availableWidth: viewport.clientWidth, pageWidth: pageSize.width, horizontalPadding: PDF_VIEWPORT_PADDING })
       : fitPageZoom({ availableWidth: viewport.clientWidth, availableHeight: viewport.clientHeight, pageWidth: pageSize.width, pageHeight: pageSize.height, horizontalPadding: PDF_VIEWPORT_PADDING, verticalPadding: PDF_VIEWPORT_PADDING });
     if (preservePosition && state.zoom !== zoom) captureLayoutAnchor();
-    setState((current) => current.zoom === zoom ? current : { ...current, zoom, rendering: true });
+    setState((current) => current.zoom === zoom ? current : { ...current, zoom, rendering: true, errorKind: null, message: "" });
   }, [captureLayoutAnchor, pageSize, state.zoom]);
 
   useEffect(() => {
@@ -490,7 +490,7 @@ export function PdfJsReader({
     const pageNumber = Math.min(state.totalPages, Math.max(1, Math.trunc(requestedPage)));
     pendingLayoutAnchorRef.current = null;
     if (pageNavigationFrameRef.current !== null) window.cancelAnimationFrame(pageNavigationFrameRef.current);
-    setState((current) => ({ ...current, pageNumber, rendering: true }));
+    setState((current) => ({ ...current, pageNumber, rendering: true, errorKind: null, message: "" }));
     pageNavigationFrameRef.current = window.requestAnimationFrame(() => {
       pageNavigationFrameRef.current = null;
       const viewport = viewportRootRef.current;
@@ -517,10 +517,11 @@ export function PdfJsReader({
     setPage(requestedPage);
   };
   const setManualZoom = (requestedZoom: number) => {
+    if (!Number.isFinite(requestedZoom)) return;
     const zoom = Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, requestedZoom));
     if (zoom !== state.zoom) captureLayoutAnchor();
     setViewMode("manual");
-    setState((current) => current.zoom === zoom ? current : { ...current, zoom, rendering: true });
+    setState((current) => current.zoom === zoom ? current : { ...current, zoom, rendering: true, errorKind: null, message: "" });
   };
   const chooseFitMode = (mode: Exclude<PdfViewMode, "manual">) => {
     setViewMode(mode);
@@ -534,7 +535,7 @@ export function PdfJsReader({
     setState((current) => current.pageNumber === pageNumber ? { ...current, rendering: false } : current);
     setDiagnostics((current) => ({ ...current, renderCount: current.renderCount + 1, firstPageRenderDurationMs: current.firstPageRenderDurationMs ?? durationMs }));
   }, []);
-  const onRenderError = useCallback((error: unknown) => setState((current) => ({ ...current, mode: "error", rendering: false, ...classifyPdfError(error, "render") })), []);
+  const onRenderError = useCallback((error: unknown) => setState((current) => ({ ...current, rendering: false, ...classifyPdfError(error, "render") })), []);
   useEffect(() => {
     if (!viewportRoot || state.mode !== "ready") return;
     let frame: number | null = null;
@@ -570,12 +571,14 @@ export function PdfJsReader({
           <button className={viewMode === "fit-width" ? "reader-control reader-control--active" : "reader-control reader-control--secondary"} type="button" title={t("Fit PDF to available width")} aria-label={t("Fit PDF to available width")} aria-pressed={viewMode === "fit-width"} disabled={!controlsReady} onClick={() => chooseFitMode("fit-width")}>{t("Fit width")}</button>
           <button className={viewMode === "fit-page" ? "reader-control reader-control--active" : "reader-control reader-control--secondary"} type="button" title={t("Fit PDF page to available space")} aria-label={t("Fit PDF page to available space")} aria-pressed={viewMode === "fit-page"} disabled={!controlsReady} onClick={() => chooseFitMode("fit-page")}>{t("Fit page")}</button>
           <button className="reader-control" type="button" aria-label={t("Zoom out")} title={t("Zoom out")} disabled={!controlsReady || state.zoom <= MIN_ZOOM} onClick={() => setManualZoom(state.zoom - ZOOM_STEP)}><ZoomOut size={16} /><span className="sr-only">{t("Zoom out")}</span></button>
-          <output className="reader-zoom-value" aria-live="polite">{Math.round(state.zoom * 100)}% <span className="sr-only">{viewMode === "manual" ? "manual zoom" : viewMode.replace("-", " ")}</span></output>
+          <select aria-label={t("Choose PDF zoom percentage")} className="reader-zoom-select" value="" disabled={!controlsReady} onChange={(event) => setManualZoom(Number(event.target.value))}><option value="">{Math.round(state.zoom * 100)}%</option>{[10, 25, 50, 75, 100, 125, 150, 200, 300].map(percent => <option key={percent} value={percent / 100}>{percent}%</option>)}</select>
+          <output className="reader-zoom-value sr-only" aria-live="polite">{Math.round(state.zoom * 100)}% <span className="sr-only">{viewMode === "manual" ? "manual zoom" : viewMode.replace("-", " ")}</span></output>
           <button className="reader-control" type="button" aria-label={t("Zoom in")} title={t("Zoom in")} disabled={!controlsReady || state.zoom >= MAX_ZOOM} onClick={() => setManualZoom(state.zoom + ZOOM_STEP)}><ZoomIn size={16} /><span className="sr-only">{t("Zoom in")}</span></button>
           <button className="reader-control reader-control--secondary" type="button" aria-label={t("Set manual zoom to 100 percent")} title={t("Set manual zoom to 100 percent")} disabled={!controlsReady || (viewMode === "manual" && state.zoom === DEFAULT_ZOOM)} onClick={() => setManualZoom(DEFAULT_ZOOM)}><RotateCcw size={16} /><span className="sr-only">{t("Manual 100 percent")}</span></button>
         </div>
         <ReaderPdfDownload key={paperId} paperId={paperId} title={paperTitle} />
       </div> : null}
+        {!fallbackActive && (state.mode === "error" || state.errorKind !== null) ? <div className="reader-render-state reader-render-error-banner" role="alert"><AlertCircle size={22} aria-hidden="true" /><div><h2>{state.errorKind === "unavailable" ? "Local PDF service unavailable" : state.errorKind === "not-found" ? "Managed PDF missing" : "PDF.js Reader unavailable"}</h2><p>{state.message || "The managed PDF could not be displayed."}</p><div className="reader-error-actions"><button className="reader-control" type="button" onClick={() => setLoadAttempt((value) => value + 1)}>{t("Retry PDF.js")}</button><button className="reader-control reader-control--secondary" type="button" onClick={() => setFallbackActive(true)}>{t("Use native viewer fallback")}</button></div></div></div> : null}
       {!fallbackActive ? selectionActions : null}
       {annotationActions}
       <div ref={documentWorkspaceRef} className="reader-document-workspace" data-memo-layout={memoLayout} data-memo-visible={memoRailsVisible} data-memo-paper-id={paperId} data-native-fallback={fallbackActive}>
@@ -585,7 +588,6 @@ export function PdfJsReader({
         {!fallbackActive && pdfDocument ? <div className="reader-pdf-page-stack">{Array.from({ length: state.totalPages }, (_, index) => index + 1).map((pageNumber) => <ContinuousPdfPage key={pageNumber} document={pdfDocument} pageNumber={pageNumber} zoom={state.zoom} viewportRoot={viewportRoot} active={state.pageNumber === pageNumber} defaultPageSize={pageSize.width ? pageSize : { width: 612, height: 792 }} highlights={highlights.filter((highlight) => highlight.pageNumber === pageNumber)} onRendered={onRendered} onRenderError={onRenderError} onSelectionChange={onSelectionChange} />)}</div> : null}
         {!fallbackActive && state.mode === "loading" ? <div className="reader-render-state" role="status"><LoaderCircle className="loading-icon" size={22} aria-hidden="true" /><div><h2>{t("Loading PDF.js Reader")}</h2><p>{t("Loading the managed PDF through the local same-origin endpoint.")}</p></div></div> : null}
         {!fallbackActive && state.mode === "ready" && state.rendering ? <div className="reader-render-progress" role="status">{t("Rendering page {page}…", { page: state.pageNumber })}</div> : null}
-        {!fallbackActive && state.mode === "error" ? <div className="reader-render-state" role="alert"><AlertCircle size={22} aria-hidden="true" /><div><h2>{state.errorKind === "unavailable" ? "Local PDF service unavailable" : state.errorKind === "not-found" ? "Managed PDF missing" : "PDF.js Reader unavailable"}</h2><p>{state.message || "The managed PDF could not be displayed."}</p><div className="reader-error-actions"><button className="reader-control" type="button" onClick={() => setLoadAttempt((value) => value + 1)}>{t("Retry PDF.js")}</button><button className="reader-control reader-control--secondary" type="button" onClick={() => setFallbackActive(true)}>{t("Use native viewer fallback")}</button></div></div></div> : null}
       </div>
       <aside className="reader-memo-rail reader-memo-rail--right" data-memo-rail="right" aria-label={locale === "ko" ? "논문 오른쪽 여백 메모" : "Notes in the right paper margin"} />
       <aside className="reader-memo-rail reader-memo-rail--mobile" data-memo-rail="mobile" aria-label={locale === "ko" ? "논문 아래 메모 공간" : "Notes below the paper"} />

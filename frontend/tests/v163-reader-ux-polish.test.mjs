@@ -7,7 +7,7 @@ import { fitPageZoom, fitWidthZoom } from "../app/lib/pdf/reader-controller.mjs"
 test("fit width and fit page use available PDF stage dimensions without changing DPR geometry", () => {
   assert.equal(fitWidthZoom({ availableWidth: 648, pageWidth: 600, horizontalPadding: 48 }), 1);
   assert.equal(fitPageZoom({ availableWidth: 648, availableHeight: 848, pageWidth: 600, pageHeight: 800, horizontalPadding: 48, verticalPadding: 48 }), 1);
-  assert.equal(fitWidthZoom({ availableWidth: 120, pageWidth: 600 }), 0.5);
+  assert.equal(fitWidthZoom({ availableWidth: 120, pageWidth: 600 }), 0.2);
   assert.equal(fitPageZoom({ availableWidth: 2400, availableHeight: 3200, pageWidth: 600, pageHeight: 800 }), 3);
 });
 

@@ -130,3 +130,18 @@ npx eslint app/views/ResearchWorkspaceView.tsx app/views/DiscoverView.tsx app/vi
 Additional account login, live discovery, cross-device persistence, visual and
 restore acceptance checks belong to the integration owner. Record their actual
 results separately; source-level parity does not establish them.
+
+## Reader zoom and two-screen notes (2026-10-26)
+
+The managed PDF reader supports 10–300% zoom presets and width/page fitting,
+including below 50% for short or narrow viewports. A page render failure leaves
+navigation/zoom available and displays retry/fallback actions above the document.
+
+Use **Dual monitor · notes window** to move the existing notes/blocks and optional
+AI source-review panel into a companion window, then drag that window to another
+monitor. This moves one live React editor, rather than duplicating editable state.
+Source-page links still control the original PDF. Close the companion or choose
+**Bring notes back** to return it without saving or discarding drafts. Keep the
+original PDF window open. Popup blocking is reported without changing the layout.
+Link and metadata dialogs return to the main window before opening. No screen
+permission, account/data sharing change, or additional model connection is used.

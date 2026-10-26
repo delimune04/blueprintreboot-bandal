@@ -143,7 +143,7 @@ test("manual zoom limits keep the same paragraph and disable only the exhausted 
   for (let i = 0; i < 20 && !disabled("Zoom in"); i++) { ui.click("Zoom in"); sameAnchor(ui, anchor); }
   assert.equal(ui.zoom(), 3); assert.ok(disabled("Zoom in")); assert.ok(!disabled("Zoom out"));
   for (let i = 0; i < 20 && !disabled("Zoom out"); i++) { ui.click("Zoom out"); sameAnchor(ui, anchor); }
-  assert.equal(ui.zoom(), .5); assert.ok(disabled("Zoom out")); assert.ok(!disabled("Zoom in"));
+  assert.equal(ui.zoom(), .1); assert.ok(disabled("Zoom out")); assert.ok(!disabled("Zoom in"));
 });
 
 test("a later explicit navigation replaces an earlier queued page jump", async t => {
