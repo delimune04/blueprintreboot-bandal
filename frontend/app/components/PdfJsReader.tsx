@@ -531,6 +531,9 @@ export function PdfJsReader({
   const chooseFitMode = (mode: Exclude<PdfViewMode, "manual">) => {
     setViewMode(mode);
     applyFitMode(mode, true);
+    // An explicit whole-page fit should reveal the whole current page,
+    // rather than retain a scrolled reading point from manual zoom.
+    if (mode === "fit-page") setPage(state.pageNumber);
   };
   const onVisible = useCallback((pageNumber: number) => {
     if (initialPageRef.current !== null || pendingLayoutAnchorRef.current !== null) return;

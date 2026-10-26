@@ -84,20 +84,48 @@ function harness() {
   }; return ui;
 }
 function sameAnchor(ui, expected) { const actual = ui.anchor(); assert.equal(actual?.page, expected.page); assert.ok(Math.abs(actual.relative - expected.relative) < 1e-9, JSON.stringify({ actual, expected })); }
-for (const label of ["Zoom in", "Zoom out", "Set manual zoom to 100 percent", "Fit PDF page to available space"]) {
+for (const label of ["Zoom in", "Zoom out", "Set manual zoom to 100 percent"]) {
   test(`${label} preserves the paragraph in the viewport center`, async t => { const ui = harness(); t.after(() => ui.unmount()); await ui.mount(); ui.position(); const anchor = ui.anchor(); ui.click(label); sameAnchor(ui, anchor); assert.equal(ui.loads, 1, "Zoom must not reload the PDF"); });
 }
-test("repeated manual zoom and fit-mode switches retain the same source position", async t => {
+test("repeated manual zoom and fit-width switches retain the same source position", async t => {
   const ui = harness(); t.after(() => ui.unmount()); await ui.mount(); ui.position(7, .42); const anchor = ui.anchor();
-  for (const label of ["Zoom in", "Zoom in", "Zoom out", "Fit PDF page to available space", "Fit PDF to available width", "Set manual zoom to 100 percent", "Zoom in", "Fit PDF to available width"]) { ui.click(label); sameAnchor(ui, anchor); ui.rendered(); } assert.equal(ui.loads, 1);
+  for (const label of ["Zoom in", "Zoom in", "Zoom out", "Fit PDF to available width", "Set manual zoom to 100 percent", "Zoom in", "Fit PDF to available width"]) { ui.click(label); sameAnchor(ui, anchor); ui.rendered(); } assert.equal(ui.loads, 1);
 });
 test("rapid zoom clicks retain the first anchor until the final geometry commits", async t => {
   const ui = harness(); t.after(() => ui.unmount()); await ui.mount(); ui.position(); const anchor = ui.anchor();
   ui.click("Zoom in", { frame: false }); ui.scroll(); ui.click("Zoom in", { frame: false }); ui.click("Zoom out", { frame: false }); ui.frames(); sameAnchor(ui, anchor); assert.equal(ui.loads, 1);
 });
-test("rapid fit/manual switches do not restore an intermediate position", async t => {
-  const ui = harness(); t.after(() => ui.unmount()); await ui.mount(); ui.position(); const anchor = ui.anchor();
-  ui.click("Fit PDF page to available space", { frame: false }); ui.click("Zoom in", { frame: false }); ui.click("Fit PDF to available width", { frame: false }); ui.frames(); sameAnchor(ui, anchor);
+test("an explicit fit-page destination wins over intermediate manual and fit-width anchors", async t => {
+  const ui = harness(); t.after(() => ui.unmount()); await ui.mount(); ui.position();
+  ui.click("Fit PDF page to available space", { frame: false }); ui.click("Zoom in", { frame: false }); ui.click("Fit PDF to available width", { frame: false }); ui.frames();
+  assert.equal(ui.anchor().page, 6);
+  assert.equal(ui.viewport.querySelector("#pdf-page-6").getBoundingClientRect().top, ui.viewport.getBoundingClientRect().top);
+  assert.equal(ui.loads, 1);
+});
+
+test("explicit fit-page after a scrolled manual zoom reveals the whole current page", async t => {
+  const ui = harness(); t.after(() => ui.unmount()); await ui.mount();
+  ui.click("Set manual zoom to 100 percent"); ui.position(7, .8);
+  const viewportTop = ui.viewport.getBoundingClientRect().top;
+  assert.ok(ui.viewport.querySelector("#pdf-page-7").getBoundingClientRect().top < viewportTop, "Fixture starts with the page top clipped");
+  ui.click("Fit PDF page to available space");
+  const page = ui.viewport.querySelector("#pdf-page-7").getBoundingClientRect();
+  assert.equal(page.top, viewportTop, "An explicit whole-page command aligns the current page top");
+  assert.ok(page.bottom <= viewportTop + ui.viewport.clientHeight);
+  assert.ok(600 * ui.zoom() <= ui.viewport.clientWidth - 48);
+  assert.equal(ui.anchor().page, 7); assert.equal(ui.loads, 1);
+  ui.rendered(); ui.frames();
+  assert.equal(ui.viewport.querySelector("#pdf-page-7").getBoundingClientRect().top, viewportTop, "Late canvas completion cannot restore the clipped anchor");
+});
+
+test("reselecting fit-page realigns a scrolled page even when its zoom does not change", async t => {
+  const ui = harness(); t.after(() => ui.unmount()); await ui.mount();
+  ui.click("Fit PDF page to available space"); const zoom = ui.zoom(); ui.position(5, .75);
+  ui.click("Fit PDF page to available space");
+  assert.equal(ui.zoom(), zoom);
+  const page = ui.viewport.querySelector("#pdf-page-5").getBoundingClientRect(), viewportTop = ui.viewport.getBoundingClientRect().top;
+  assert.equal(page.top, viewportTop); assert.ok(page.bottom <= viewportTop + ui.viewport.clientHeight);
+  assert.equal(ui.loads, 1);
 });
 test("an explicit page jump supersedes a pending zoom anchor", async t => {
   const ui = harness(); t.after(() => ui.unmount()); await ui.mount(); ui.position(); ui.click("Zoom in", { frame: false }); ui.changeProps({ pageJump: { page: 3, token: 1 } }); ui.frames();
