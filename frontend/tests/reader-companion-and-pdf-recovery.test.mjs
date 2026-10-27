@@ -346,3 +346,41 @@ test("PDF page draft commits and cancels truthfully, with keyboard navigation co
   assert.equal(hooks.flush(), treeAtFirst, "First-page previous must not update component state");
   assert.equal(prevented, 4);
 });
+
+test("PDF zoom preset reflects selection across keyboard-equivalent steps and fit transitions", async t => {
+  const previous = { window: globalThis.window, ResizeObserver: globalThis.ResizeObserver };
+  const memory = new Map(), storage = { getItem: key => memory.get(key) ?? null, setItem: (key, value) => memory.set(key, value) };
+  const frames = new Map(); let frameId = 0, loads = 0;
+  globalThis.window = { localStorage: storage, sessionStorage: storage, requestAnimationFrame(callback) { const id = ++frameId; frames.set(id, callback); return id; }, cancelAnimationFrame: id => frames.delete(id), addEventListener() {}, removeEventListener() {} };
+  globalThis.ResizeObserver = class { observe() {} disconnect() {} };
+  const hooks = hooksHarness(), viewport = { clientWidth: 768, clientHeight: 600, scrollTop: 0, querySelectorAll: () => [], querySelector: () => null, getBoundingClientRect: () => ({ top: 0 }), addEventListener() {}, removeEventListener() {} };
+  const { PdfJsReader } = compile("../app/components/PdfJsReader.tsx", hooks.hooks, {
+    "../lib/api/client": { paperPdfUrl: () => "/test-pdf" },
+    "../lib/pdf/pdfjs-adapter": { createPdfLoadingTask: async () => { loads++; return { promise: Promise.resolve({ numPages: 3, getPage: async () => ({ getViewport: () => ({ width: 600, height: 800 }) }), destroy() {} }), destroy() {} }; }, readPdfNetworkDiagnostics: () => ({}) },
+    "../lib/i18n/LocaleProvider": { useI18n: () => ({ locale: "en", t: text => text }) },
+    "./ReaderPdfDownload": { ReaderPdfDownload: () => null },
+  });
+  t.after(() => { hooks.unmount(); Object.assign(globalThis, previous); });
+  hooks.start(() => PdfJsReader({ paperId: "fixture-paper" }), tree => {
+    nodes(tree, node => node.props?.className === "reader-document-workspace")[0].props.ref.current = { clientWidth: 800 };
+    nodes(tree, node => node.props?.className === "reader-canvas-viewport")[0].props.ref(viewport);
+  });
+  await settle(); hooks.flush(); await settle();
+  let tree = hooks.flush();
+
+  const select = () => nodes(hooks.flush(), node => node.type === "select" && node.props["aria-label"] === "Choose PDF zoom percentage")[0];
+  const options = () => nodes(select(), node => node.type === "option");
+  const choose = value => { select().props.onChange({ target: { value: String(value) } }); hooks.flush(); };
+  choose(0.75);
+  assert.equal(select().props.value, 0.75);
+  assert.equal(options().filter(option => option.props.value === 0.75).length, 1);
+  const next = options()[options().findIndex(option => option.props.value === select().props.value) + 1].props.value;
+  assert.equal(next, 1, "ArrowDown from 75% advances to 100%, not 10%");
+  choose(next); assert.equal(select().props.value, 1);
+  choose(1.22);
+  assert.equal(select().props.value, 1.22);
+  assert.deepEqual(options().map(option => option.props.value), [0.1, 0.25, 0.5, 0.75, 1, 1.22, 1.25, 1.5, 2, 3]);
+  choose(1.25); assert.equal(options().length, 9);
+  for (const value of [0.1, 3, 0.5, 1]) { choose(value); assert.equal(select().props.value, value); }
+  assert.equal(loads, 1, "Changing zoom never reloads the PDF document");
+});

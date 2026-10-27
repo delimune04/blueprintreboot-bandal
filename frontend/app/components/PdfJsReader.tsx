@@ -10,6 +10,7 @@ import { readPageSelection, type PdfPageSelection } from "../lib/pdf/selection-c
 import { readReaderPreferences, updateReaderPreferences, type ReaderHighlight } from "../lib/reader/browser-reader-state.mjs";
 import { useI18n } from "../lib/i18n/LocaleProvider";
 import { normalizePdfPageInput, pdfPageShortcut } from "../lib/pdf/page-navigation.mjs";
+import { pdfZoomSelection } from "../lib/pdf/zoom-selection.mjs";
 import { visiblePdfPage } from "../lib/reader/visible-pdf-page.mjs";
 import { ReaderPdfDownload } from "./ReaderPdfDownload";
 import "./ReaderMemoRails.css";
@@ -568,6 +569,7 @@ export function PdfJsReader({
   if (fallbackActive) fallbackContent = <NativePdfFallback pdfUrl={pdfUrl} paperId={paperId} paperTitle={paperTitle} onRetry={() => { setFallbackActive(false); setLoadAttempt((value) => value + 1); }} />;
 
   const controlsReady = state.mode === "ready";
+  const zoomSelection = pdfZoomSelection(state.zoom);
   return (
     <div className="pdfjs-reader">
       {!fallbackActive ? <div className="reader-toolbar" role="toolbar" aria-label={t("PDF page and zoom controls")}>
@@ -580,7 +582,7 @@ export function PdfJsReader({
           <button className={viewMode === "fit-width" ? "reader-control reader-control--active" : "reader-control reader-control--secondary"} type="button" title={t("Fit PDF to available width")} aria-label={t("Fit PDF to available width")} aria-pressed={viewMode === "fit-width"} disabled={!controlsReady} onClick={() => chooseFitMode("fit-width")}>{t("Fit width")}</button>
           <button className={viewMode === "fit-page" ? "reader-control reader-control--active" : "reader-control reader-control--secondary"} type="button" title={t("Fit PDF page to available space")} aria-label={t("Fit PDF page to available space")} aria-pressed={viewMode === "fit-page"} disabled={!controlsReady} onClick={() => chooseFitMode("fit-page")}>{t("Fit page")}</button>
           <button className="reader-control" type="button" aria-label={t("Zoom out")} title={t("Zoom out")} disabled={!controlsReady || state.zoom <= MIN_ZOOM} onClick={() => setManualZoom(state.zoom - ZOOM_STEP)}><ZoomOut size={16} /><span className="sr-only">{t("Zoom out")}</span></button>
-          <select aria-label={t("Choose PDF zoom percentage")} className="reader-zoom-select" value="" disabled={!controlsReady} onChange={(event) => setManualZoom(Number(event.target.value))}><option value="">{Math.round(state.zoom * 100)}%</option>{[10, 25, 50, 75, 100, 125, 150, 200, 300].map(percent => <option key={percent} value={percent / 100}>{percent}%</option>)}</select>
+          <select aria-label={t("Choose PDF zoom percentage")} className="reader-zoom-select" value={zoomSelection.value} disabled={!controlsReady} onChange={(event) => setManualZoom(Number(event.target.value))}>{zoomSelection.options.map(option => <option key={option.value} value={option.value}>{option.percent}%{option.custom ? (locale === "ko" ? " · 현재" : " · current") : ""}</option>)}</select>
           <output className="reader-zoom-value sr-only" aria-live="polite">{Math.round(state.zoom * 100)}% <span className="sr-only">{viewMode === "manual" ? "manual zoom" : viewMode.replace("-", " ")}</span></output>
           <button className="reader-control" type="button" aria-label={t("Zoom in")} title={t("Zoom in")} disabled={!controlsReady || state.zoom >= MAX_ZOOM} onClick={() => setManualZoom(state.zoom + ZOOM_STEP)}><ZoomIn size={16} /><span className="sr-only">{t("Zoom in")}</span></button>
           <button className="reader-control reader-control--secondary" type="button" aria-label={t("Set manual zoom to 100 percent")} title={t("Set manual zoom to 100 percent")} disabled={!controlsReady || (viewMode === "manual" && state.zoom === DEFAULT_ZOOM)} onClick={() => setManualZoom(DEFAULT_ZOOM)}><RotateCcw size={16} /><span className="sr-only">{t("Manual 100 percent")}</span></button>

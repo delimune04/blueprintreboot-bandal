@@ -868,3 +868,12 @@ note fields, IME, modifier shortcuts, arrow-key panning and Page Up/Down scrolli
 keep their existing behavior. At the first/last page, stepping beyond the document
 leaves the reading position unchanged. Existing 10–300% zoom, fit modes and the
 separate summary/notes window remain available; the main PDF window must stay open.
+
+## PDF zoom preset continuity (2026-10-28)
+
+The PDF zoom percentage selector now keeps the actual selected percentage active.
+Arrow keys move to the neighbouring preset rather than jumping back to 10%.
+A non-preset fit/custom percentage is inserted in numeric order and labelled
+“current”; choosing a preset removes that temporary option. Existing fit modes,
+10–300% limits, reading-position preservation and dual-monitor notes are unchanged.
+This change does not modify PDF files, notes, shared records or permissions.
