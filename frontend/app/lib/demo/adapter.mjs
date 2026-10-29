@@ -1,3 +1,4 @@
+import { createLibraryQueryMatcher } from "../../../../hosting/domain/library-search.mjs";
 import { continuityResponse, continuityCommand, getContinuity, continuityRevision } from "../continuity/model.mjs";
 import { DEMO_PAPERS, DEMO_TAGS } from "./seed.mjs";
 import { cachedBrowserPdfUrl, configureBrowserWorkspace, getBrowserWorkspaceStorage, getBrowserPdfRecord, cacheBrowserPdfUrl, revokeBrowserPdfUrl } from "./browser-storage.mjs";
@@ -380,8 +381,8 @@ async function route(parts, method, body, params, state, effects) {
     if (path === "settings/summary") return settings(state);
     if (path === "papers") {
       const archive = choice(params.get("archive_status") || "active", ["active", "archived", "all"]);
-      const q = (params.get("q") || "").toLowerCase();
-      const items = state.papers.filter((paper) => (archive === "all" || paper.archived === (archive === "archived")) && (!params.get("tag") || paper.tags.includes(params.get("tag"))) && (!params.get("year") || paper.metadata.year === params.get("year")) && (!params.get("status") || paper.status === params.get("status")) && (!q || `${paper.metadata.title} ${paper.metadata.authors} ${paper.metadata.abstract} ${paper.tags.join(" ")}`.toLowerCase().includes(q))).map(listItem);
+      const matchesQuery = createLibraryQueryMatcher(params.get("q") || "");
+      const items = state.papers.filter((paper) => (archive === "all" || paper.archived === (archive === "archived")) && (!params.get("tag") || paper.tags.includes(params.get("tag"))) && (!params.get("year") || paper.metadata.year === params.get("year")) && (!params.get("status") || paper.status === params.get("status")) && matchesQuery(`${paper.metadata.title} ${paper.metadata.authors} ${paper.metadata.abstract} ${paper.tags.join(" ")}`)).map(listItem);
       return page(items, params);
     }
     if (path === "projects") return page(state.projects.map(projectItem), params);

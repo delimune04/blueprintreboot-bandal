@@ -384,3 +384,19 @@ def test_openapi_documents_paper_contracts_pagination_enum_and_404() -> None:
     assert detail_schema["properties"]["keywords"]["type"] == "array"
     assert all(detail_schema["properties"][field]["type"] == "string" for field in ("journal", "abstract", "arxiv_id"))
     assert rich_fields <= set(detail_schema["example"])
+
+
+def test_library_query_terms_normalize_without_mutating_and_keep_filters(papers) -> None:
+    from copy import deepcopy
+    papers.append({**paper_item("multi", "Muon Tomography"), "year": "2026", "status": "unread", "tags": ["method"], "_search_text": "Muon Tomography\nAda\n10.1234/a-b\nStraße\nᴬ"})
+    before = deepcopy(papers)
+    client = client_for(papers)
+    for q in ["tomography muon", " ＭＵＯＮ　ＴＯＭＯＧＲＡＰＨＹ ", "Ada 10.1234/A-B", "strasse tomography", "a tomography"]:
+        response = client.get("/papers", params={"q": q}).json()
+        assert [p["paper_id"] for p in response["items"]] == ["multi"]
+    assert client.get("/papers", params={"q":"muon absent"}).json()["total"] == 0
+    assert client.get("/papers", params={"q":"muon", "status":"reading"}).json()["total"] == 0
+    assert client.get("/papers", params={"q":"muon", "tag":"method", "year":"2026", "status":"unread"}).json()["total"] == 1
+    beyond = client.get("/papers", params={"q":"muon", "limit":1, "offset":1}).json()
+    assert beyond["total"] == 1 and beyond["items"] == []
+    assert papers == before

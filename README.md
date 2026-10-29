@@ -887,3 +887,13 @@ three conditions, returns to the first page and restores search focus while
 preserving the selected sort. No saved project or draft is changed.
 Validation: 678 frontend/domain/hosting tests, TypeScript, changed-file ESLint,
 native and demo builds; independent project review 21 tests passed.
+
+## Finding a saved paper in Library
+
+Library search accepts space-separated required words in any order, including
+full-width text and extra whitespace. Existing tag, year, reading and archive
+filters still combine with the query before pagination. Punctuation remains
+literal (for example a DOI); no regular-expression or quoted-phrase syntax is
+introduced. This changes matching only, not stored data or permissions. Each
+runtime retains its existing search fields; local Python retains Unicode
+case-folding, while browser and hosted JavaScript retain lowercase matching.

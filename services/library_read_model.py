@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import hashlib
 import math
+import unicodedata
 from pathlib import Path
 from typing import Any, Mapping, TypedDict
 
@@ -281,7 +282,7 @@ def filter_paper_list_items(
     public bibliographic fields and never consults PDFs or filesystem paths.
     """
 
-    normalized_q = q.strip().casefold()
+    query_terms = unicodedata.normalize("NFKC", q).casefold().split()
     normalized_tag = tag.strip().casefold()
     normalized_year = year.strip()
     normalized_status = status.strip().casefold()
@@ -290,7 +291,8 @@ def filter_paper_list_items(
         search_text = str(getattr(paper, "search_text", "") or paper.get("_search_text", "")).casefold() or "\n".join(
             [paper["title"], paper["first_author"], *paper["tags"]]
         ).casefold()
-        if normalized_q and normalized_q not in search_text:
+        search_text = unicodedata.normalize("NFKC", search_text).casefold()
+        if not all(term in search_text for term in query_terms):
             continue
         if normalized_tag and not any(item.casefold() == normalized_tag for item in paper["tags"]):
             continue

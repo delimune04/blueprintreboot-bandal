@@ -301,3 +301,21 @@ test("aborted requests never persist a command", async () => {
   await assert.rejects(request("/papers", { signal: controller.signal }), { name: "AbortError" });
   assert.equal(storage.getItem(DEMO_STORAGE_KEY), null);
 });
+
+test("Library query words are order independent and keep exact filters, pagination and storage", async () => {
+  const { request, storage } = workspace();
+  await read(request, "/papers");
+  const before = storage.getItem(DEMO_STORAGE_KEY);
+  for (const q of ["tomography muon", "  ＴＯＭＯＧＲＡＰＨＹ　ＭＵＯＮ  ", "muon\ncounts", "muon muon"]) {
+    const result = await read(request, `/papers?q=${encodeURIComponent(q)}`);
+    assert.deepEqual(result.items.map(p => p.paper_id), ["demo-muon"]);
+  }
+  assert.equal((await read(request, "/papers?q=muon+seismic")).total, 0);
+  assert.equal((await read(request, "/papers?q=muon&status=reading")).total, 0);
+  assert.equal((await read(request, "/papers?q=muon&tag=tomography&year=2026&status=unread")).total, 1);
+  const next = await read(request, "/papers?q=muon&limit=1&offset=1");
+  assert.equal(next.total, 1); assert.equal(next.items.length, 0); assert.equal(next.has_more, false);
+  assert.equal((await read(request, "/papers?q=%20%20%09")).total, 3);
+  assert.equal((await read(request, "/papers?q=%5B%5D%2A")).total, 0);
+  assert.equal(storage.getItem(DEMO_STORAGE_KEY), before);
+});
