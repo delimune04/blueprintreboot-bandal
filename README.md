@@ -877,3 +877,13 @@ A non-preset fit/custom percentage is inserted in numeric order and labelled
 “current”; choosing a preset removes that temporary option. Existing fit modes,
 10–300% limits, reading-position preservation and dual-monitor notes are unchanged.
 This change does not modify PDF files, notes, shared records or permissions.
+
+### 2026-10-29 — Project keyword search and filter recovery
+
+Project search now matches all whitespace-separated words across name,
+description and tags, regardless of word order, with Unicode NFKC normalization.
+Status and priority remain intersecting filters. Reset filters clears those
+three conditions, returns to the first page and restores search focus while
+preserving the selected sort. No saved project or draft is changed.
+Validation: 678 frontend/domain/hosting tests, TypeScript, changed-file ESLint,
+native and demo builds; independent project review 21 tests passed.

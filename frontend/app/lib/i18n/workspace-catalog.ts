@@ -1,4 +1,5 @@
 export const WORKSPACE_KO: Record<string, string> = {
+  "Matches every search word across project names, descriptions and tags.": "이름·설명·태그에 입력한 검색어가 모두 있는 프로젝트를 찾습니다.",
   "Active filters": "적용한 필터", "Remove filter: {label}": "필터 해제: {label}",
   "No active papers": "활성 논문이 없습니다", "No papers yet": "아직 저장한 논문이 없습니다",
   "Pending search": "검색 적용 대기", "Clearing search": "검색 해제 중",

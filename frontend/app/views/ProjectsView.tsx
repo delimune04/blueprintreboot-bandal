@@ -5,7 +5,7 @@ import { useI18n } from "../lib/i18n/LocaleProvider";
 import { Plus, X } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { FormEvent } from "react";
 import { DataTableShell } from "../components/DataTableShell";
 import { EmptyState, ErrorState, LoadingState, UnavailableState } from "../components/AsyncStates";
@@ -29,6 +29,8 @@ import {
   persistRevisionDraft,
   readPersistentRevisionDraft,
 } from "../lib/drafts/revision-draft.mjs";
+
+import { filterProjectCollection } from "../lib/projects/collection.mjs";
 
 const EMPTY_PROJECT: EditableProjectMetadata = {
   name: "",
@@ -55,6 +57,7 @@ export function ProjectsView() {
   const [offset, setOffset] = useState(0);
   const pageSize = 20;
   const [search, setSearch] = useState("");
+  const searchRef = useRef<HTMLInputElement>(null);
   const [statusFilter, setStatusFilter] = useState("");
   const [priorityFilter, setPriorityFilter] = useState("");
   const [sort, setSort] = useState<"updated" | "name" | "priority">("updated");
@@ -71,10 +74,8 @@ export function ProjectsView() {
   const dirtyCreate = showCreate && JSON.stringify(createState.draft) !== JSON.stringify(createState.baseline);
   const visibleProjects = useMemo(() => {
     if (resource.status !== "success") return [];
-    const query = search.trim().toLocaleLowerCase();
     const priorityRank: Record<string, number> = { high: 0, normal: 1, low: 2 };
-    return resource.data
-      .filter((project) => (!query || [project.name, project.description, ...project.tags].join(" ").toLocaleLowerCase().includes(query)) && (!statusFilter || project.status === statusFilter) && (!priorityFilter || project.priority === priorityFilter))
+    return filterProjectCollection(resource.data, search, statusFilter, priorityFilter)
       .sort((left, right) => {
         if (sort === "updated") return right.updated_at.localeCompare(left.updated_at) || left.name.localeCompare(right.name);
         if (sort === "priority") return (priorityRank[left.priority] ?? 9) - (priorityRank[right.priority] ?? 9) || left.name.localeCompare(right.name);
@@ -195,11 +196,13 @@ export function ProjectsView() {
       {resource.status === "success" ? (
         <Section title={t("All projects")} description={t(`${visibleProjects.length} Project${visibleProjects.length === 1 ? "" : "s"}.`)}>
           <Toolbar label={t("Project collection filters")}>
-            <label className="library-filter-field library-toolbar__search"><span>{t("Search")}</span><span className="search-shell"><input type="search" value={search} placeholder={t("Name, description, or tag…")} onChange={(event) => { setSearch(event.target.value); setOffset(0); }} /></span></label>
+            <label className="library-filter-field library-toolbar__search"><span>{t("Search")}</span><span className="search-shell"><input ref={searchRef} type="search" aria-describedby="project-search-help" value={search} placeholder={t("Name, description, or tag…")} onChange={(event) => { setSearch(event.target.value); setOffset(0); }} /></span></label>
             <label className="library-filter-field"><span>{t("Status")}</span><select className="library-filter" value={statusFilter} onChange={(event) => { setStatusFilter(event.target.value); setOffset(0); }}><option value="">{t("All statuses")}</option><option value="active">{t("Active")}</option><option value="paused">{t("Paused")}</option><option value="done">{t("Done")}</option><option value="archived">{t("Archived")}</option></select></label>
             <label className="library-filter-field"><span>{t("Priority")}</span><select className="library-filter" value={priorityFilter} onChange={(event) => { setPriorityFilter(event.target.value); setOffset(0); }}><option value="">{t("All priorities")}</option><option value="high">{t("High")}</option><option value="normal">{t("Normal")}</option><option value="low">{t("Low")}</option></select></label>
             <label className="library-filter-field"><span>{t("Sort")}</span><select className="library-filter" value={sort} onChange={(event) => { setSort(event.target.value as typeof sort); setOffset(0); }}><option value="updated">{t("Recently updated")}</option><option value="name">{t("Name")}</option><option value="priority">{t("Priority")}</option></select></label>
+            <button type="button" className="reader-control reader-control--secondary" disabled={!search && !statusFilter && !priorityFilter} onClick={() => { setSearch(""); setStatusFilter(""); setPriorityFilter(""); setOffset(0); searchRef.current?.focus(); }}>{t("Reset filters")}</button>
           </Toolbar>
+          <p id="project-search-help" className="muted-text">{t("Matches every search word across project names, descriptions and tags.")}</p>
           {visibleProjects.length === 0 ? (
             <EmptyState title={resource.data.length ? t("No matching projects") : t("No projects yet")} description={resource.data.length ? t("Change the filters to see more projects.") : t("Create a project when you are ready to connect related work.")} />
           ) : (
