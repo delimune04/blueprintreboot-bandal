@@ -897,3 +897,12 @@ literal (for example a DOI); no regular-expression or quoted-phrase syntax is
 introduced. This changes matching only, not stored data or permissions. Each
 runtime retains its existing search fields; local Python retains Unicode
 case-folding, while browser and hosted JavaScript retain lowercase matching.
+
+## Research search result provenance — 2026-10-31
+
+Saved-evidence search now shows the actual applied term beside its results.
+Editing the input leaves previous results labelled until Search is chosen.
+In-flight and failed requests identify their submitted term, and a failed retry
+preserves the last successful result snapshot. Korean/English messages clarify
+zero results and unsubmitted edits without changing retrieval, stored records,
+PDFs or permissions. See `docs/labvium-research-search-20261031.md`.
