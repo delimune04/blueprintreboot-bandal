@@ -106,3 +106,58 @@ test('English labels and escaped query do not inject HTML',async()=>{
   const {h,requests}=fixture('en'); edit(h,'<img src=x>'); submit(h); requests[0].resolve({items:[]}); await settle();
   edit(h,'new term'); const output=html(h.render()); assert.match(output,/Applied search term/); assert.match(output,/Choose Search to apply/); assert.match(output,/&lt;img src=x&gt;/); assert.doesNotMatch(output,/<img src=x>/); h.unmount();
 });
+
+function historyBrowser(state = null) {
+  const listeners = new Map();
+  const writes = [];
+  return {
+    location: {pathname:'/LabVium/search'},
+    history: {state, replaceState(next, title, url) { this.state=next; writes.push({next,title,url}); }},
+    addEventListener(name, fn) { if (!listeners.has(name)) listeners.set(name,new Set()); listeners.get(name).add(fn); },
+    removeEventListener(name, fn) { listeners.get(name)?.delete(fn); },
+    dispatch(name) { listeners.get(name)?.forEach(fn=>fn()); }, writes,
+    listeners,
+  };
+}
+const historyKey='labvium.research-search.v1';
+function withBrowser(state, run) {
+  const previous=globalThis.window;
+  const browser=historyBrowser(state); globalThis.window=browser;
+  return Promise.resolve().then(()=>run(browser)).finally(()=>{ if(previous===undefined)delete globalThis.window;else globalThis.window=previous; });
+}
+test('history restores query after mount without requests or cached results and preserves router fields on edit',()=>withBrowser({router:{index:3},[historyKey]:{scope:'browser:test:workspace',query:' caprock '}},async browser=>{
+  const {h,requests}=fixture(); h.render();
+  assert.match(html(h.render()),/value=" caprock "/); assert.match(html(h.render()),/검색어를 복원했습니다/);
+  assert.equal(requests.length,0); assert.equal(browser.writes.length,0);
+  edit(h,'new term'); assert.equal(browser.history.state.router.index,3); assert.equal(browser.history.state[historyKey].query,'new term');
+  assert.equal(browser.writes[0].url,undefined); assert.doesNotMatch(html(h.render()),/검색어를 복원했습니다/);
+  edit(h,''); assert.equal(browser.history.state[historyKey].query,'');
+  h.unmount(); assert.equal([...browser.listeners.values()].every(set=>!set.size),true);
+}));
+test('popstate restore aborts pending request and ignores its late data, then searches only on submit',()=>withBrowser(null,async browser=>{
+  const {h,requests}=fixture(); h.render(); edit(h,'first'); submit(h);
+  browser.history.state={[historyKey]:{scope:'browser:test:workspace',query:'restored'}}; browser.dispatch('popstate');
+  assert.equal(requests[0].options.signal.aborted,true); requests[0].resolve({items:[row]}); await settle();
+  const output=html(h.render()); assert.match(output,/value="restored"/); assert.doesNotMatch(output,/Evidence|검색 중|적용 검색어/);
+  submit(h); assert.equal(requests.length,2); requests[1].resolve({items:[]}); await settle();
+  assert.match(html(h.render()),/<strong>restored<\/strong>/); h.unmount();
+}));
+test('other workspace history and new history entry start empty, without leaking old results',()=>withBrowser({[historyKey]:{scope:'cloud:another:workspace',query:'private query'}},async browser=>{
+  const {h,requests}=fixture(); h.render(); assert.equal(input(h.render()).props.value,'');
+  edit(h,'caprock'); submit(h); requests[0].resolve({items:[row]}); await settle();
+  browser.history.state=null; browser.dispatch('popstate'); assert.equal(input(h.render()).props.value,''); assert.doesNotMatch(html(h.render()),/Evidence/); h.unmount();
+}));
+test('unrelated navigation does not restore or write onto destination history',()=>withBrowser(null,async browser=>{
+  const {h}=fixture();h.render(); edit(h,'caprock'); const count=browser.writes.length;
+  browser.location.pathname='/LabVium/library'; browser.history.state={router:'destination'}; browser.dispatch('bandal-demo:navigation');
+  assert.equal(input(h.render()).props.value,'caprock'); assert.equal(browser.writes.length,count);
+  edit(h,'late edit'); assert.deepEqual(browser.history.state,{router:'destination'}); h.unmount();
+}));
+test('unavailable history does not prevent an explicit search',()=>withBrowser(null,async browser=>{
+  Object.defineProperty(browser.history,'state',{get(){throw Error('Unavailable');}});
+  const {h,requests}=fixture();h.render();edit(h,'caprock');submit(h);
+  assert.equal(requests.length,1); requests[0].resolve({items:[row]});await settle();assert.match(html(h.render()),/Evidence/);h.unmount();
+}));
+test('English restored notice is explicit and query HTML remains escaped',()=>withBrowser({[historyKey]:{scope:'browser:test:workspace',query:'<img src=x>'}},async()=>{
+  const {h}=fixture('en');h.render();const output=html(h.render());assert.match(output,/Search term restored. Choose Search/);assert.doesNotMatch(output,/<img src=x>/);h.unmount();
+}));

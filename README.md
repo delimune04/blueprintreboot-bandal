@@ -906,3 +906,11 @@ In-flight and failed requests identify their submitted term, and a failed retry
 preserves the last successful result snapshot. Korean/English messages clarify
 zero results and unsubmitted edits without changing retrieval, stored records,
 PDFs or permissions. See `docs/labvium-research-search-20261031.md`.
+
+## Saved-evidence search continuity — 2026-11-01
+
+Returning from a cited result or reloading restores the research search input
+in the same browser history entry and workspace. Choose Search to retrieve
+current evidence; results are never cached or fetched automatically. Existing
+applied-term/error safety is retained. Search terms stay out of URLs and shared
+records. See `docs/labvium-search-continuity-20261101.md`.
