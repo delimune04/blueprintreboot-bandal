@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Archive, CheckCircle2, Download, ExternalLink, Plus, RefreshCw, Save, Trash2 } from "lucide-react";
 import { Breadcrumbs } from "../components/Breadcrumbs";
 import { PageHeader } from "../components/PageHeader";
@@ -15,6 +15,7 @@ import { REVIEW_KINDS, REVIEW_MAX_SNAPSHOTS, compareReviewSnapshots, exportRevie
 import type { ProjectReviewResponse, ReviewKind, ReviewRow } from "../lib/review/model.mjs";
 import "../lib/review/review.css";
 import { reviewReadiness } from "../lib/review/readiness.mjs";
+import { focusNewReviewRecord } from "../lib/review/focus-new-record.mjs";
 import { ReviewRecordNavigator } from "../components/ReviewRecordNavigator";
 import { ReviewWorkflow, ReviewContextEditor, FrozenWorkflowContext } from "../components/ReviewWorkflow";
 
@@ -30,6 +31,7 @@ function ReviewEditor({ initial }: { initial: ProjectReviewResponse }) {
   const [selectedSnapshot, setSelectedSnapshot] = useState(initial.dossier.snapshots.at(-1)?.snapshot_id || "");
   const [busy, setBusy] = useState(false);
   const [notice, setNotice] = useState("");
+  const pendingRowFocus = useRef<string | null>(null);
   const viewer = getWorkspaceRole() === "viewer";
   const archived = saved.project_status === "archived";
   const readonly = viewer || archived || busy;
@@ -62,6 +64,20 @@ function ReviewEditor({ initial }: { initial: ProjectReviewResponse }) {
     window.addEventListener("beforeunload", unload); document.addEventListener("click", navigate, true);
     return () => { window.removeEventListener("beforeunload", unload); document.removeEventListener("click", navigate, true); };
   }, [dirty, t]);
+  // Only an explicit addition requests focus. Loading, typing and saving do not.
+  useEffect(() => {
+    const identity = pendingRowFocus.current;
+    pendingRowFocus.current = null;
+    if (!identity) return;
+    if (!readonly && draft.rows.some(row => row.id === identity)) {
+      focusNewReviewRecord(document, identity);
+    }
+  }, [draft.rows, readonly]);
+  function addRow(row: ReviewRow) {
+    if (readonly || draft.rows.length >= 100) return;
+    pendingRowFocus.current = row.id;
+    setDraft(current => current.rows.length >= 100 ? current : { ...current, rows: [...current.rows, row] });
+  }
   function updateRow(identity: string, changes: Partial<ReviewRow>) { setDraft((current) => ({ ...current, rows: current.rows.map((row) => row.id === identity ? { ...row, ...changes } : row) })); }
   async function refresh() {
     if (busy || (dirty && !window.confirm(t("Discard the unsaved changes to this review?")))) return;
@@ -94,7 +110,7 @@ function ReviewEditor({ initial }: { initial: ProjectReviewResponse }) {
     {archived ? <StatusBadge tone="amber"><Archive size={13} />{t("Restore this project before editing its review.")}</StatusBadge> : null}
     {notice ? <p role="status" className="reader-editor__status">{notice}</p> : null}
     {saved.evidence_change_count ? <p className="review-warning"><Link href={`/projects/${saved.project_id}/continuity`}>{locale === "ko" ? `${saved.evidence_change_count}개 기록에 연결된 근거 변경을 재검토해 주세요. 새 인수인계 스냅샷을 확정하기 전에 검토 결론을 저장하세요.` : `${saved.evidence_change_count} records depend on open evidence notices. Review them before freezing a new handoff.`}</Link></p> : null}
-    <ReviewWorkflow rows={draft.rows} readonly={readonly} ko={locale === "ko"} update={updateRow} add={(row) => setDraft(current => ({ ...current, rows: [...current.rows, row] }))} />
+    <ReviewWorkflow rows={draft.rows} readonly={readonly} ko={locale === "ko"} update={updateRow} add={addRow} />
     <Section title={t("Evidence coverage")} description={t("Coverage counts reviewed hypotheses, decisions and failed attempts with a source in this project. It does not measure correctness.")}>
       <div className="review-coverage"><strong>{coverage.coverage_percent === null ? t("No reviewed claims yet") : `${coverage.sourced_reviewed_claims} / ${coverage.reviewed_claims} (${coverage.coverage_percent}%)`}</strong><span>{t("{count} open records", { count: coverage.open_rows })}</span><span>{t("{count} questions or actions without sources", { count: coverage.unsourced_questions_actions })}</span></div>
       {coverage.unsourced_reviewed_rows.length ? <p className="review-warning">{t("Reviewed substantive claims without evidence cannot be frozen. Add a project source or return the record to open review.")}</p> : null}
@@ -109,14 +125,14 @@ function ReviewEditor({ initial }: { initial: ProjectReviewResponse }) {
         {draft.rows.map((row, index) => <article className="review-record" key={row.id} id={`review-${row.id}`} tabIndex={-1}>
           <div className="review-record-heading"><span className="review-number">{index + 1}</span><label className="reader-field"><span>{t("Record kind")}</span><select value={row.kind} onChange={(event) => updateRow(row.id, { kind: event.target.value as ReviewKind })}>{REVIEW_KINDS.map((kind) => <option key={kind} value={kind}>{t(LABELS[kind])}</option>)}</select></label><label className="reader-field"><span>{t("Review status")}</span><select value={row.status} onChange={(event) => updateRow(row.id, { status: event.target.value as ReviewRow["status"] })}><option value="open">{t("Open · not reviewed")}</option><option value="reviewed">{t("Reviewed by a person")}</option></select></label><button className="icon-button" aria-label={t("Remove review record")} disabled={draft.rows.some(item => (item.context?.comparison_ids.includes(row.id) || item.context?.origin_decision_id === row.id))} title={draft.rows.some(item => (item.context?.comparison_ids.includes(row.id) || item.context?.origin_decision_id === row.id)) ? (locale === "ko" ? "연결된 결정과 인수인계에서 비교 연결을 먼저 해제하세요." : "Unlink dependent decisions and actions first.") : undefined} onClick={() => setDraft({ ...draft, rows: draft.rows.filter((item) => item.id !== row.id) })}><Trash2 size={15} /></button></div>
           <label className="reader-field"><span>{t("Research record")}</span><textarea rows={3} maxLength={10000} value={row.text} onChange={(event) => updateRow(row.id, { text: event.target.value })} /></label>
-          <ReviewContextEditor row={row} rows={draft.rows} readonly={readonly} ko={locale === "ko"} update={updateRow} add={(item) => setDraft(current => ({ ...current, rows: [...current.rows, item] }))} />
+          <ReviewContextEditor row={row} rows={draft.rows} readonly={readonly} ko={locale === "ko"} update={updateRow} add={addRow} />
           <div className="review-record-fields"><label className="reader-field"><span>{t("Owner")}</span><input value={row.owner} maxLength={200} onChange={(event) => updateRow(row.id, { owner: event.target.value })} /></label><label className="reader-field"><span>{t("Due date")}</span><input type="date" value={row.due_date} onChange={(event) => updateRow(row.id, { due_date: event.target.value })} /></label><label className="reader-field"><span>{t("Content provenance")}</span><select value={row.provenance} onChange={(event) => updateRow(row.id, { provenance: event.target.value as ReviewRow["provenance"] })}><option value="manual">{t("Manual research")}</option><option value="ai">{t("AI draft · unverified")}</option></select></label></div>
           {row.provenance === "ai" ? <p className="muted-text">{t("AI-origin wording remains labeled even after human review. Compare every claim with the original evidence.")}</p> : null}
           <div className="review-source-list">{row.source_links.map((reference) => { const key = reviewSourceKey(reference), found = saved.sources.find((source) => source.key === key); return <div className="review-source" key={key}>{found ? <><Link href={found.url}>{found.label} <ExternalLink size={12} /></Link><details><summary>{t("Inspect source excerpt")}</summary><pre>{found.excerpt}</pre></details></> : <span className="review-warning">{t("Missing or outside project")}</span>}<button className="text-link" onClick={() => updateRow(row.id, { source_links: row.source_links.filter((source) => reviewSourceKey(source) !== key) })}>{t("Remove reference")}</button></div>; })}</div>
           <label className="reader-field"><span>{t("Add project evidence")}</span><select value="" disabled={readonly || row.source_links.length >= 10} onChange={(event) => { const source = saved.sources.find((item) => item.key === event.target.value); if (source && !row.source_links.some((item) => reviewSourceKey(item) === source.key)) updateRow(row.id, { source_links: [...row.source_links, source.reference] }); }}><option value="">{t("Select a linked source location")}</option>{saved.sources.filter((source) => !row.source_links.some((reference) => reviewSourceKey(reference) === source.key)).map((source) => <option key={source.key} value={source.key}>{source.label}</option>)}</select></label>
           {!row.source_links.length ? <p className="muted-text">{t(["question", "next_action"].includes(row.kind) ? "No source linked. This is a question or proposed action, not an established fact." : "No source linked. Keep this claim open until its evidence is recorded.")}</p> : null}
         </article>)}
-        <div className="review-actions"><button className="reader-control reader-control--secondary" disabled={readonly || draft.rows.length >= 100} onClick={() => setDraft({ ...draft, rows: [...draft.rows, newReviewRow()] })}><Plus size={15} />{t("Add review record")}</button><button className="reader-control" disabled={readonly || draft.rows.some((row) => !row.text.trim()) || (!dirty && !saved.draft_sources_stale)} onClick={() => void save()}><Save size={15} />{t("Save review")}</button><StatusBadge tone={dirty ? "amber" : "slate"}>{t(dirty ? "Unsaved changes" : "Saved")}</StatusBadge></div>
+        <div className="review-actions"><button className="reader-control reader-control--secondary" disabled={readonly || draft.rows.length >= 100} onClick={() => addRow(newReviewRow())}><Plus size={15} />{t("Add review record")}</button><button className="reader-control" disabled={readonly || draft.rows.some((row) => !row.text.trim()) || (!dirty && !saved.draft_sources_stale)} onClick={() => void save()}><Save size={15} />{t("Save review")}</button><StatusBadge tone={dirty ? "amber" : "slate"}>{t(dirty ? "Unsaved changes" : "Saved")}</StatusBadge></div>
       </fieldset>
     </Section>
     <Section title={t("Human review checklist")} description={t("Confirm that each section was considered, including sections where nothing has been recorded. This records your judgment, not external certification.")}>

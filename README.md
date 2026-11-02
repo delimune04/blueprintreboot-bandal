@@ -914,3 +914,11 @@ in the same browser history entry and workspace. Choose Search to retrieve
 current evidence; results are never cached or fetched automatically. Existing
 applied-term/error safety is retained. Search terms stay out of URLs and shared
 records. See `docs/labvium-search-continuity-20261101.md`.
+
+
+## Review record entry focus — 2026-11-03
+
+Explicitly adding a comparison, decision, first action or review record now moves
+focus to the new editor. Derived evidence and text remain intact; initial loading,
+ordinary editing and refresh do not move focus. See
+`docs/labvium-review-focus-20261103.md`.
