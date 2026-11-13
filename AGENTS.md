@@ -200,3 +200,19 @@ reuses existing architecture and contracts;
 is easiest to verify with deterministic tests;
 introduces the least new state and hidden behavior;
 keeps the local-first research workflow understandable to one user.
+
+
+# BANDAL Cloudflare migration and multi-agent work
+
+The user has explicitly authorized a full BANDAL.app Cloudflare migration, independent Google/GitHub login, preservation of existing services and user data, and a GitHub-based multi-agent workflow. This authorization applies only to the personal fork.
+
+- Read `docs/CLOUDFLARE_MIGRATION_PLAN.md` before infrastructure, authentication, or data-migration work.
+- Preserve all existing service routes, public assets, user records, private files, owner boundaries, and legacy API aliases.
+- Treat the existing ChatGPT Sites identity header as a legacy identity source only. It is not portable to Cloudflare. Build a verified mapping to an immutable internal user ID; never merge accounts solely by email.
+- Use separate agent branches and pull requests for concurrent AI work. Protect `main`; do not let agents edit shared migrations/auth/routing files concurrently.
+- Never provide autonomous agents production Cloudflare credentials, production data access, OAuth client secrets, or DNS write permission.
+- Preview deployments must use isolated non-production D1/R2 resources and synthetic data.
+- Do not change production DNS, production secrets, production data, OAuth provider settings, or production deployment without explicit owner approval.
+- Do not delete source data during migration. Require a tested backup/restore drill, row/object reconciliation, and rollback plan before cutover.
+- The existing Sites-hosted production service must remain available until Cloudflare acceptance tests pass and the owner approves cutover.
+- For the migration-specific branch, a scoped documentation/guardrail PR is permitted; production publication remains a separate owner-controlled operation.
